@@ -1,6 +1,6 @@
 signature HTMLParser =
 sig
     
-    val parse : HTMLLexeme.lexeme list -> HTMLParseTree.parsetree list;
+    val parse : string -> HTMLParseTree.parsetree list;
 
 end
