@@ -19,7 +19,7 @@ fun getTagAttributes ((_, attributes) : tag) = attributes;
 type text = string;
 fun getText (text : text) = text;
 
-datatype lexeme = startTag of tag
-                | endTag of tag
-                | Text of text;
+datatype lexeme = StartTagLexeme of tag
+                | EndTagLexeme of tag
+                | TextLexeme of text;
 end
