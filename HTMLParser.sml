@@ -20,19 +20,24 @@ fun tagAttributes tag = mapAttributes (fn tuple => tuple) tag;
 (* Given a string containing fairly valid HTML, return a parse tree of
 the HTML. *)
 fun parsefun (StartTagLexeme tag :: lexemes) tagstack = 
-    let val (children, childrest) = parsefun lexemes (HTMLLexer.tagName tag :: tagstack);
-        val (successors, succrest) = parsefun childrest tagstack
+    let val tagName = (HTMLLexer.tagName tag);
+        val (children, childrest) = findChildren tagName lexemes tagstack;
+        val (successors, succrest) = parsefun childrest tagstack;
     in (Tag (tag, children) :: successors, succrest) end
   | parsefun (EndTagLexeme tag :: lexemes) (headtag :: tagstack) =
     if HTMLLexer.tagName tag = headtag then ([], lexemes)
-    else if List.exists (fn y => HTMLLexer.tagName tag = y) tagstack then ([], EndTagLexeme tag :: lexemes)
+    else if List.exists (fn x => HTMLLexer.tagName tag = x) tagstack then ([], EndTagLexeme tag :: lexemes)
     else parsefun lexemes tagstack
   | parsefun (EndTagLexeme _ :: lexemes) [] = parsefun lexemes []
   | parsefun (TextLexeme text :: lexemes) stacktop =
     let val (successors, lexemerest) = parsefun lexemes stacktop
     in (Text text :: successors, lexemerest) end
   | parsefun _ [] = ([], [])
-  | parsefun [] _ = ([], []);
+  | parsefun [] _ = ([], [])
+and findChildren "br" lexemes tagstack = ([], lexemes)
+  | findChildren "hr" lexemes tagstack = ([], lexemes)
+  | findChildren parentName lexemes tagstack = 
+    parsefun lexemes (parentName :: tagstack);
 
 fun parse string = let fun worker (tree, []) = tree
                          | worker (tree, lexemes) =
