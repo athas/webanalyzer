@@ -1,6 +1,11 @@
 (* Functions for parsing robots robots.txt and then query for allowed paths *)
 
+(* reference string used to hold the disallowed paths from robots.txt, 
+   so it can be search later *)
 val disallowedPaths : string list ref = ref [];
+
+(* de-refs disallowedPaths. Used when searching by 'isPathAllowed' *)
+fun getDisallowedPaths() = !disallowedPaths
 
     
 (* http://www.robotstxt.org/wc/norobots.html *)
@@ -85,7 +90,6 @@ fun initRobotsTxt robotsStr =
 
     end
 
-fun getDisallowedPaths() = !disallowedPaths
 
 (* Scans the disallowedPaths, that was created at by initRobotsTxt
    and check that no elements prefixes the given path *)
