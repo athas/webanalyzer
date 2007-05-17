@@ -9,7 +9,7 @@ sig
              
     val tagName : tag -> string;
     val getAttribute : string -> tag -> string option;
-    val 'b mapAttributes : (string * string -> 'b) -> tag -> 'b list;
+    val mapAttributes : (string * string -> 'b) -> tag -> 'b list;
 
     val textContents : text -> string;
 
