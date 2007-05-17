@@ -1,11 +1,5 @@
-(* this fun parses robots.txt *)
+(* Functions for parsing robots robots.txt and then query for allowed paths *)
 
-load "Regex";
-use "helpFun.sml";
-
-(* GLOBAL VARS *)
-
-val programUserAgent = "webanalyzer";
 val disallowedPaths : string list ref = ref [];
 
     

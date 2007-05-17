@@ -1,10 +1,3 @@
-exception IOError of string;
-
-fun readFrom fileName = 
-    let val istream = TextIO.openIn fileName
-        handle Io _ => raise IOError fileName
-    in TextIO.inputAll istream before
-       TextIO.closeIn istream end;
 
 local
     fun unparse' (HTMLParser.Tag (tag, children)) =
