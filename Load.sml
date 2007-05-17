@@ -1,2 +1,2 @@
-app use ["HTMLLexeme.sml", "HTMLLexer.sig", "HTMLLexer.sml", "HTMLParseTree.sml", "HTMLParser.sig", "HTMLParser.sml"];
+app use ["HTMLLexer.sig", "HTMLLexer.sml", "HTMLParser.sig", "HTMLParser.sml"];
 
