@@ -29,15 +29,17 @@ in
 fun convertEntities string = implode (convertEntities' (explode string) [] []);
 end
 
+val properString = implode o map Char.toLower o explode o Substring.string;
+
 (* Use substrings for representing text. *)
 type tag = substring * (substring * substring) list;
-fun tagName ((name, _) : tag) = Substring.string name;
+fun tagName ((name, _) : tag) = properString name;
 fun getAttribute name (_, attributes) = 
-    case List.find (fn (attrname, value) => name = Substring.string attrname) attributes of
+    case List.find (fn (attrname, value) => name = properString attrname) attributes of
         SOME (_, value) => SOME (convertEntities (Substring.string value))
       | NONE => NONE;
 fun mapAttributes f (_, attributes)= 
-    map (fn (name, value) => f (Substring.string name, 
+    map (fn (name, value) => f (properString name,
                                 convertEntities (Substring.string value)))
         attributes;
 
