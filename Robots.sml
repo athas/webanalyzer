@@ -1,4 +1,11 @@
-(* Functions for parsing robots robots.txt and then query for allowed paths *)
+(* 
+
+   Functions for parsing robots robots.txt and then query for allowed paths 
+  
+   For reference, look at: http://www.robotstxt.org/wc/norobots.html 
+
+*)
+
 
 (* reference string used to hold the disallowed paths from robots.txt, 
    so it can be search later *)
@@ -8,8 +15,7 @@ val disallowedPaths : string list ref = ref [];
 fun getDisallowedPaths() = !disallowedPaths
 
     
-(* http://www.robotstxt.org/wc/norobots.html *)
-
+(* Initializes the 'disallowedPaths' from the content of a robots.txt *)
 fun initRobotsTxt robotsStr = 
     let
         (* break up in user agents and convert the substring list to string list *)
@@ -28,9 +34,10 @@ fun initRobotsTxt robotsStr =
                         (* extract the user-agent string, which is the
                            first string until the first \n in the list *)
                         val userAgent = trimStr (String.substring(s, 
-                                                                 0, 
-                                                                 getFirstIndexOf(#"\n", 
-                                                                                 s)));
+                                                                  0, 
+                                                                  getFirstIndexOf(#"\n", s)
+                                                                 )
+                                                );
                     in
                         (* match the userAgent against this crawlers own
                            name and * which applys to all *)
@@ -39,14 +46,15 @@ fun initRobotsTxt robotsStr =
                         else
                             filterOtherUserAgents' ret ss
                     end
-
-                    
             in
               filterOtherUserAgents' [] strLst  
             end
 
+        (* String list containing info from Robots.txt that is of interest for our webcrawler *)
         val useableAgents = filterOtherUserAgents userAgents;
 
+        (* Takes a String list and removes all information except
+           the paths that follows from a 'Disallow:' *)
         fun makeDisallowLst strLst =
             let
                 fun makeDisallowLst' ret [] = ret
@@ -82,12 +90,9 @@ fun initRobotsTxt robotsStr =
                                         )
                               );
     in
-        disallowedPaths := disallowLst;
-        disallowLst
-        
-    (* save the final disallow lis in a public variable so 
-       it can be assesed later by the query function *)
-
+        (* save the final disallow lis in a public variable so 
+           it can be assesed later by the query function *)
+        disallowedPaths := disallowLst
     end
 
 
@@ -97,7 +102,7 @@ fun isPathAllowed path =
     not 
         (
          List.exists 
-             ( fn disallowedPath => (String.isPrefix disallowedPath path) )
+             (fn disallowedPath => (String.isPrefix disallowedPath path))
              (getDisallowedPaths())
         )
     
