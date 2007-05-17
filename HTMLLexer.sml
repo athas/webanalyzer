@@ -133,10 +133,9 @@ fun lexer _ _ _ (New i) #"<" =
     Done (makeStartTag (i, c) [], New (i + c + 1))
   | lexer _ makeEndTag _ (LexingTagName (true, (i, c))) #">" =
     Done (makeEndTag (i, c) [], New (i + c + 1))
-  | lexer _ _ _ (LexingTagName (endTag, (i, c))) #" " =
-    LexingAttributes (endTag, (i, c), [], i + c + 1)
-  | lexer _ _ _ (LexingTagName (endTag, (i, c))) _ =
-    LexingTagName (endTag, (i, c + 1))
+  | lexer _ _ _ (LexingTagName (endTag, (i, c))) char =
+    if Char.isSpace char then LexingAttributes (endTag, (i, c), [], i + c + 1)
+    else LexingTagName (endTag, (i, c + 1))
   | lexer _ _ _ (LexingAttributes (endTag, tagNameIndices, attributeIndices, i)) #" " =
     LexingAttributes (endTag, tagNameIndices, attributeIndices, i + 1)
   | lexer _ _ _ (LexingAttributes (endTag, tagNameIndices, attributeIndices, i)) #"/" =
