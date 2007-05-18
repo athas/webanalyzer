@@ -70,13 +70,16 @@ val getAndParse = (HTMLParser.parse o Http.getURI)
 
 fun main (arg :: _) = 
     let val uri = Http.buildURI (NONE, arg)
-        val robotstxt = (Http.getURI (Http.buildURI (NONE, (concat [Http.protocolFromURI uri,
-                                                                    "://",
-                                                                    Http.serverFromURI uri,
-                                                                    "/robots.txt"]))))
-                        handle Http.Error (Http.HTTP (404, _)) => ""
+        val robotsuri = Http.buildURI (NONE, Http.protocolFromURI uri
+                                             ^ "://"
+                                             ^ Http.serverFromURI uri
+                                             ^ "/robots.txt")
+        val robotstxt = (Http.getURI robotsuri) 
+            handle Http.Error (Http.HTTP (404, _)) => ""
+                 | Http.Error (Http.General s) => (print s; raise Fail "")
     in Robots.initRobotsTxt robotstxt;
-       unparse (getAndParse uri)
+       map (fn link => print link before print "\n") (getLinks (getAndParse uri));
+       ()
     end
   | main [] = print "Not enough arguments\n";
 
