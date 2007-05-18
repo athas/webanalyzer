@@ -1,10 +1,9 @@
 signature deHTMLifier =
 sig
-    type text = string;
+    type text;
 
            
-    datatype TextDirection = LeftToRigt
-                       | RightToLeft;
+    datatype TextDirection = LeftToRigt | RightToLeft;
 
     datatype WordAttribute = Language of string
                            | Emphasized

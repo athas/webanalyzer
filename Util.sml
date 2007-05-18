@@ -122,9 +122,9 @@ let fun trySocket () =
                                   else SOME ip
     end) handle Fail _ => NONE
     fun tryPing () = 
-    let val ping = if unix() then "ping -c 1 " ^ name
+    let val host = if unix() then "host " ^ name
                    else "ping -n 1 " ^ name
-        val status = run ping
+        val status = run host
         val output = case status of SOME str => str 
                                   | NONE     => ""
         val match = Regex.regexec regexp_ip [] output
