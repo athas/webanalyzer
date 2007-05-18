@@ -6,6 +6,8 @@
 
 *)
 
+structure Robots :> Robots =
+struct
 
 (* reference string used to hold the disallowed paths from robots.txt, 
    so it can be search later *)
@@ -106,3 +108,5 @@ fun isPathAllowed path =
              (getDisallowedPaths())
         )
     
+
+end;
