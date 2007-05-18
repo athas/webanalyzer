@@ -41,7 +41,7 @@ fun initRobotsTxt robotsStr =
                     in
                         (* match the userAgent against this crawlers own
                            name and * which applys to all *)
-                        if ((userAgent = "*") orelse (userAgent = programUserAgent)) then
+                        if ((userAgent = "*") orelse (userAgent = Config.HttpUserAgent ())) then
                             filterOtherUserAgents' ((s) :: ret) (ss)
                         else
                             filterOtherUserAgents' ret ss
