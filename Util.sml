@@ -139,6 +139,10 @@ in  case trySocket() of SOME ip => ip | NONE =>
     )
 end;
 
+fun assoc x list = case List.find (fn (y, _) => x = y) list
+                    of SOME (_, value) => SOME (value)
+                     | NONE => NONE;
+
 end;
 
 
