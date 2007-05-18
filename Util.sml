@@ -174,8 +174,15 @@ fun getFirstIndexOf (chr, str) =
     end
 
 (* trims a string from spaces in front and back *)
-fun trimStr str = hd (String.tokens Char.isSpace str)
+fun trimStr str = 
+    (* If trimStr gets a empty string or string of spaces then
+       String.tokens returns a empty list. To deal with this we have
+       the case to check for empty list and return empty string *)
+    case (String.tokens Char.isSpace str) of
+        [] => ""
+      (* if it aint a empty list then the first element in the list is
+         the string of interes *)
+      | strLst => List.hd strLst
 
 end;
           
-
