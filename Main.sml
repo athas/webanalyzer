@@ -76,9 +76,11 @@ fun main (arg :: _) =
                                              ^ "/robots.txt")
         val robotstxt = (Http.getURI robotsuri) 
             handle Http.Error (Http.HTTP (404, _)) => ""
-                 | Http.Error (Http.General s) => (print s; raise Fail "")
     in Robots.initRobotsTxt robotstxt;
-       map (fn link => print link before print "\n") (getLinks (getAndParse uri));
+       map (fn link => print link before print "\n") (getLinks (getAndParse uri))
+       handle Http.Error (Http.HTTP (404, _)) => []
+            | Http.Error (Http.General s) => (print s; print "\n"; raise Fail "General")
+            | Http.Error (Http.Socket s) => (print s; print "\n"; raise Fail "");
        ()
     end
   | main [] = print "Not enough arguments\n";
