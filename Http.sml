@@ -374,15 +374,12 @@ in response end;
 (* getURI: URI -> string
 
    getURI vil foretage en http-get forespørgsel via enten proxy eller
-   direkte. Svaret bliver et html-dokument *) 
+   direkte.*) 
 fun getURI uri = 
 let val (ctype, content) = (requestURI (getResponse, "GET") uri)
                            handle Error e => raise Error e
                                 |       _ => raise Error(General "Unknown failure")
-in  if (lowercase ctype) = "text/html" then content
-    else raise Error(General ("content-type " ^ ctype ^
-			      " not expected"))
-end;
+in content end;
 
 (* buildURI': URI option * string -> URI
 
