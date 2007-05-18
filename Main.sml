@@ -29,29 +29,40 @@ fun unparse tags = (map unparse' tags; ());
 
 end
 
-fun getLinks [] = []
-  | getLinks htmlTree = 
+fun getLinks htmlTree = 
     let
-        fun getLinks' (ret, HTMLParser.Tag (tag, [])) = ret
-          | getLinks' (ret, HTMLParser.Tag (tag, child :: rest)) =     
-            if ((HTMLParser.tagName tag) = "a") then
-                case (HTMLParser.getAttribute "href" tag) of
-                    SOME str => getLinks' ((str :: ret), child) @ getLinks (rest)
-                    (* we know this is a link tag, if we get NONE then
-                       it is a ill-formed HTML tag, so just move on *)
-                  | NONE => getLinks' (ret, child) @ getLinks (rest)
-            else if ((HTMLParser.tagName tag) = "frame" orelse 
-                     (HTMLParser.tagName tag) = "iframe") then
-                case (HTMLParser.getAttribute "src" tag) of
-                    SOME str => getLinks' ((str :: ret), child) @ getLinks (rest)
-                    (* ill-formed HTML tag, just move on *)
-                  | NONE => getLinks' (ret, child) @ getLinks (rest)
-                (* None of the tags we are looking for so just move on *)
-            else
-                getLinks' (ret, child) @ getLinks (rest)
-          | getLinks' (ret, HTMLParser.Text t) = ret
+        (* takes a parsetree list and processes down it by calling
+           getLinks' on the children of the tree *)
+        fun getChildren' (ret, []) = ret
+          | getChildren' (ret, (child :: rest)) =
+            getLinks' (ret, child) @ getChildren' ([], rest)
+    
+        (* Checks each parsetree for Tag's and if the tags are what
+           wee looks for then it scans the tags known link attributes
+           and adds then return all these links. 
+
+           AND because these to functions are mutually recursive *)
+        and getLinks' (ret, HTMLParser.Text t) = ret
+          | getLinks' (ret, HTMLParser.Tag (tag, [])) = ret
+          | getLinks' (ret, HTMLParser.Tag (tag, children)) =     
+            let
+                (* Scan the tags attribute for its know link 'attr'
+                   and return the attribute data *)
+                fun checkAttribute (ret, tag, attr, chilren) =
+                    case (HTMLParser.getAttribute attr tag) of
+                        SOME str => getChildren' (str :: ret, children)
+                        (* NONE means ill formed HTML tag so just move on *)
+                      | NONE => getChildren' (ret, children) 
+            in
+                case HTMLParser.tagName tag of
+                    "a" => checkAttribute(ret, tag, "href", children)
+                  | "frame" => checkAttribute(ret, tag, "src", children)
+                  | "iframe" => checkAttribute(ret, tag, "src", children)
+                  (* If no of the above cases just move on to next tag in the parsetree *)
+                  | _ => getChildren' (ret, children)
+            end;
     in
-        getLinks'([], List.hd htmlTree) @ getLinks (List.tl htmlTree)
+        getChildren'([], htmlTree)
     end
 
 
