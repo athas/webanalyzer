@@ -9,4 +9,11 @@ sig type 'a sock = ('a, Socket.active Socket.stream) Socket.sock
     val gethostbyname: string -> string
 
     val assoc: ''a -> (''a * 'b) list -> 'b option
+
+    val readFrom: string -> string
+    val getFirstIndexOf: char * string -> int
+    val trimStr: string -> string
+
+    exception IOError of string
+                                 
 end;

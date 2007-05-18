@@ -143,9 +143,6 @@ fun assoc x list = case List.find (fn (y, _) => x = y) list
                     of SOME (_, value) => SOME (value)
                      | NONE => NONE;
 
-end;
-
-
 (* Basic IO stuff *)
 exception IOError of string;
 
@@ -175,3 +172,7 @@ fun getFirstIndexOf (chr, str) =
 
 (* trims a string from spaces in front and back *)
 fun trimStr str = hd (String.tokens Char.isSpace str)
+
+end;
+          
+

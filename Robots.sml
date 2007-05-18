@@ -33,9 +33,9 @@ fun initRobotsTxt robotsStr =
                         
                         (* extract the user-agent string, which is the
                            first string until the first \n in the list *)
-                        val userAgent = trimStr (String.substring(s, 
+                        val userAgent = Util.trimStr (String.substring(s, 
                                                                   0, 
-                                                                  getFirstIndexOf(#"\n", s)
+                                                                  Util.getFirstIndexOf(#"\n", s)
                                                                  )
                                                 );
                     in
