@@ -97,15 +97,37 @@ fun safeRemove filename = (FileSys.remove filename)
 
    Kører program og returnerer SOME stdout, eller NONE
    ved fejl. Mosml-modulet har en tilsvarende funktion,
-   som desværre ikke synes at virke under win32. *)
-fun run line = 
-let val temp = tmpName()
-    val command = line ^ " > " ^ temp
-    val status = Process.system command
-in  (if status = Process.failure then NONE 
-     else SOME (readFile temp)) 
-    before safeRemove temp
-end;
+   som desværre ikke synes at virke under win32. 
+
+   ADD: At default this code didn't take advantage of the Unix module
+   as it does in gethostbyname so we added so it calls the command
+   directly by Unix.execute and returns the output back in a stream
+   instead of saving the output in a lame file and then reading it
+   back an deleting it *) 
+fun run line =
+    let
+        fun runWindows line = 
+            let val temp = tmpName()
+                val command = line ^ " > " ^ temp
+                val status = Process.system command
+            in  (if status = Process.failure then NONE 
+                 else SOME (readFile temp)) 
+                before safeRemove temp
+            end;
+            
+        fun runUnix line = 
+            SOME (
+            TextIO.inputAll(
+            #1 (Unix.streamsOf
+                    (Unix.execute("/bin/sh" , ["-c", line]))))) 
+            handle Fail s => NONE
+    in
+        if unix() then
+            runUnix line
+        else
+            runWindows line
+            
+    end;
        
 (* gethostbyname: string -> string
 
@@ -114,10 +136,11 @@ end;
    dette fejler, kaldes ping, som findes både på unix og
    win32, og resultatet trækkes ud herfra. Hvis alt går galt,
    kastes en Fail-undtagelse. *)
+
 fun gethostbyname name = if numericAddress name then name else
 let fun trySocket () = 
    (let val ip = Socket.getinetaddr (Socket.inetAddr name 80)
-    in  if ip = "0.0.0.0" orelse 
+    in if ip = "0.0.0.0" orelse 
            ip = "255.255.255.255" then NONE
                                   else SOME ip
     end) handle Fail _ => NONE
