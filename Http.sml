@@ -286,8 +286,7 @@ fun headResponse socket =
      val cType = default "text/html" (get (header, "content-type"))
      val _ = if (lowercase cType) = "text/html" then ()
              else raise Content cType
- in  l end
-) handle Header str => NONE;
+ in l end) handle Header str => NONE;
 
 (* requestHTTPbyServer : (('a, active stream) sock -> 'a * string) -> 
                          pf_inet sock_addr -> 'a
@@ -295,17 +294,17 @@ fun headResponse socket =
    Laver http-forespørgsel som angivet ved request-strengen og 
    håndterer svaret ved hjælp af receiver. *)
 fun requestHTTPbyServer (receiver, request) addr =
-let 
-    val server = Socket.getinetaddr addr
-    val socket = Socket.inetStream()
-in (Socket.connect(socket, addr)
-    handle Fail str => raise Error (Socket ("Error connecting to " ^ 
-                                            server ^ ": " ^ str));
-    writeSocket socket request;
-    receiver socket before 
-    Socket.close socket
-   ) handle e => (Socket.close socket; raise e)
-end;
+    let 
+        val server = Socket.getinetaddr addr
+        val socket = Socket.inetStream()
+    in (Socket.connect(socket, addr)
+        handle Fail str => raise Error (Socket ("Error connecting to " ^ 
+                                                server ^ ": " ^ str));
+        writeSocket socket request;
+        receiver socket before 
+        Socket.close socket)
+       handle e => (Socket.close socket; raise e)
+    end;
 
 (* requestHTTP: (('a, active stream) sock -> 'a * string) ->
                 address -> 'a 
@@ -314,7 +313,7 @@ end;
    Svaret bestemmes af receiver. *)
 
 fun requestHTTP (receiver, request) host = 
-   requestHTTPbyServer (receiver, request) (resolveAddress host);
+    requestHTTPbyServer (receiver, request) (resolveAddress host);
 
 (* HTTP-forespørgsler udenfor diku skal gennem en proxy-server.
    Sidder man ikke på diku er proxy-serveren dog ikke tilgængelig.
@@ -327,11 +326,7 @@ val proxy = "proxy:8080";
 datatype Config = Automatic of Socket.pf_inet Socket.sock_addr
                 | Proxy of Socket.pf_inet Socket.sock_addr
                 | Direct;
-val method = 
-(let val addr = resolveAddress (parseAddress proxy)
- in  ref (Automatic addr)
- end
-)handle _ => ref Direct; 
+val method = ref (Automatic (resolveAddress (parseAddress proxy))) handle _ => ref Direct; 
 
 (* buildReq: string * string * string -> string 
 
@@ -366,17 +361,15 @@ case method of Direct =>
    der fungerede blive brugt. *)
 fun requestURI (receiver, action) uri = 
 let val response = case !method of 
-        Automatic addr => 
-    let fun proxyOff () = method := Direct
-        fun proxyOn  () = method := Proxy addr
-    in  ( requestURI' (receiver, action) (Proxy addr) uri 
-          before proxyOn()
-        ) handle _ => ( requestURI' (receiver, action) Direct uri 
-                        before proxyOff()
-                      )
-    end
-                   | m => requestURI' (receiver, action) m uri
-in  response end;
+        Automatic addr => let fun proxyOff () = method := Direct
+                              fun proxyOn  () = method := Proxy addr
+                          in (requestURI' (receiver, action) (Proxy addr) uri
+                              before proxyOn())
+                             handle _ => (requestURI' (receiver, action) Direct uri 
+                                          before proxyOff())
+                          end
+      | m => requestURI' (receiver, action) m uri
+in response end;
 
 (* getURI: URI -> string
 
@@ -432,9 +425,10 @@ end;
    uri, hvis ny location gives. Der kastes HTTP 
    undtagelser hvis kommunikation med server slår fejl. *)
 fun canonicalURI orig = 
-let fun getHead uri = requestURI (headResponse, "HEAD") uri
-in  case (getHead orig) of NONE => orig
-                     | SOME uri => buildURI'(SOME orig, uri)
+    let fun getHead uri = requestURI (headResponse, "HEAD") uri
+            handle Error (HTTP (int, string)) => NONE
+    in case (getHead orig) of NONE => orig
+                            | SOME uri => buildURI'(SOME orig, uri)
 end;
 
 (* buildURI: URI option * string -> URI
@@ -445,12 +439,12 @@ end;
    partielle eller absolutte uri løses også ved forespørgsel
    hos server. *)
 fun buildURI (SOME uri, new) = 
-(  (canonicalURI (buildURI'(SOME uri, new))
-   )handle Error _ => buildURI(NONE, new)
-         |       _ => raise badURI)
+    (canonicalURI (buildURI'(SOME uri, new))
+     handle Error _ => buildURI(NONE, new)
+          |       _ => raise badURI)
   | buildURI (NONE, new) = 
-(  canonicalURI (buildURI'(NONE, new))
-   handle _ => raise badURI)
+    (canonicalURI (buildURI'(NONE, new))
+     handle _ => raise badURI)
 
 (* occurrences: string -> string list 
 
