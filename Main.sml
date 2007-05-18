@@ -66,7 +66,18 @@ fun getLinks htmlTree =
     end
 
 
-fun main (arg :: _) = unparse ((HTMLParser.parse o Http.getURI o Http.buildURI) (NONE, arg))
+val getAndParse = (HTMLParser.parse o Http.getURI)
+
+fun main (arg :: _) = 
+    let val uri = Http.buildURI (NONE, arg)
+        val robotstxt = (Http.getURI (Http.buildURI (NONE, (concat [Http.protocolFromURI uri,
+                                                                    "://",
+                                                                    Http.serverFromURI uri,
+                                                                    "/robots.txt"]))))
+                        handle Http.Error (Http.HTTP (404, _)) => ""
+    in Robots.initRobotsTxt robotstxt;
+       unparse (getAndParse uri)
+    end
   | main [] = print "Not enough arguments\n";
 
-val _ = main (CommandLine.arguments ());
+(*val _ = main (CommandLine.arguments ());*)
