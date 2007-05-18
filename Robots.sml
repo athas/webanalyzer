@@ -39,7 +39,8 @@ fun initRobotsTxt robotsStr =
                                                                   0, 
                                                                   Util.getFirstIndexOf(#"\n", s)
                                                                  )
-                                                );
+                                                     (* Handle exception of substring*)
+                                                ) handle Subscript => "";
                     in
                         (* match the userAgent against this crawlers own
                            name and * which applys to all *)

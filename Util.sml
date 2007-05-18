@@ -161,11 +161,14 @@ fun getFirstIndexOf (chr, str) =
     let
         fun getFirstIndexOf' chr index "" = index
           | getFirstIndexOf' chr index str =
-            if (String.sub (str, index) = chr) then
-                index
+            if (String.size str) <   index then
+                if (String.sub (str, index) = chr) then
+                    index
+                else
+                    getFirstIndexOf' chr (index+1) str
             else
-                getFirstIndexOf' chr (index+1) str
-                
+                (* if we checked the hole string and didnt find anything then return 0 *)
+                0
     in
         getFirstIndexOf' chr 0 str 
     end
