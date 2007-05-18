@@ -7,7 +7,10 @@ local
     (* Known HTML entities and the characters they map to. *)
     val HTMLentities = [("lt", #"<"),
                         ("gt", #">"),
-                        ("amp", #"&")];
+                        ("amp", #"&"),
+                        ("quot", #"\""),
+                        ("apos", #"'"),
+                        ("nbsp", chr(160))];
 
     (* Find a replacement for the provided entity name. If the entity
     nam is not known, the full identity (including ampersand and
