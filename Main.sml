@@ -1,4 +1,3 @@
-
 local
     fun unparse' (HTMLParser.Tag (tag, children)) =
         let
@@ -30,7 +29,7 @@ fun unparse tags = (map unparse' tags; ());
 
 end
 
-fun main (arg :: _) = unparse (HTMLParser.parse (readFrom arg))
+fun main (arg :: _) = unparse ((HTMLParser.parse o Http.getURI o Http.buildURI) (NONE, arg))
   | main [] = print "Not enough arguments\n";
 
 val _ = main (CommandLine.arguments ());
