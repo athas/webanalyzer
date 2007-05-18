@@ -1,6 +1,8 @@
 structure HTMLLexer :> HTMLLexer =
 struct
 
+open Util;
+
 local 
     (* Known HTML entities and the characters they map to. *)
     val HTMLentities = [("lt", #"<"),
@@ -10,7 +12,7 @@ local
     (* Find a replacement for the provided entity name. If the entity
     nam is not known, the full identity (including ampersand and
     semicolon) will be returned. *)
-    fun entityReplacement entity = case assoc HTMLentities entity of
+    fun entityReplacement entity = case assoc entity HTMLentities of
                                        SOME replacement => [replacement]
                                      | NONE => #"&" :: explode entity @ [#";"]
 
