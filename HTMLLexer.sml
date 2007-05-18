@@ -86,6 +86,7 @@ datatype lexerstate = Done of (lexeme * lexerstate)
                     | LexingAttributeName of bool * tagNameIndices * attributeIndices list * attributeNameIndices
                     | LexingAttributeValueStart of bool * tagNameIndices * attributeIndices list * attributeNameIndices * int
                     | LexingAttributeValue of bool * tagNameIndices * attributeIndices list * attributeNameIndices * attributeValueIndices
+                    | LexingAttributeValueSingleQuote of bool * tagNameIndices * attributeIndices list * attributeNameIndices * attributeValueIndices
                     | LexingUndelimitedAttributeValue of bool * tagNameIndices * attributeIndices list * attributeNameIndices * attributeValueIndices
                     | New of int;
 local
@@ -193,12 +194,18 @@ fun lexer _ _ _ (New i) #"<" =
     LexingAttributeName (endTag, tagNameIndices, attributeIndices, (i, c + 1))
   | lexer _ _ _ (LexingAttributeValueStart (endTag, tagNameIndices, attributeIndices, attributeNameIndices, i)) #"\"" =
     LexingAttributeValue (endTag, tagNameIndices, attributeIndices, attributeNameIndices, (i + 1, 0))
+  | lexer _ _ _ (LexingAttributeValueStart (endTag, tagNameIndices, attributeIndices, attributeNameIndices, i)) #"'" =
+    LexingAttributeValueSingleQuote (endTag, tagNameIndices, attributeIndices, attributeNameIndices, (i + 1, 0))
   | lexer _ _ _ (LexingAttributeValueStart (endTag, tagNameIndices, attributeIndices, attributeNameIndices, i)) _ =
     LexingUndelimitedAttributeValue (endTag, tagNameIndices, attributeIndices, attributeNameIndices, (i, 1))
   | lexer _ _ _ (LexingAttributeValue (endTag, tagNameIndices, attributeIndices, attributeNameIndices, (i, c))) #"\"" =
     LexingAttributes (endTag, tagNameIndices, (attributeNameIndices, (i, c)) :: attributeIndices, i + c + 1)
   | lexer _ _ _ (LexingAttributeValue (endTag, tagNameIndices, attributeIndices, attributeNameIndices, (i, c))) _ =
     LexingAttributeValue (endTag, tagNameIndices, attributeIndices, attributeNameIndices, (i, c + 1))
+  | lexer _ _ _ (LexingAttributeValueSingleQuote (endTag, tagNameIndices, attributeIndices, attributeNameIndices, (i, c))) #"'" =
+    LexingAttributes (endTag, tagNameIndices, (attributeNameIndices, (i, c)) :: attributeIndices, i + c + 1)
+  | lexer _ _ _ (LexingAttributeValueSingleQuote (endTag, tagNameIndices, attributeIndices, attributeNameIndices, (i, c))) _ =
+    LexingAttributeValueSingleQuote (endTag, tagNameIndices, attributeIndices, attributeNameIndices, (i, c + 1))
   | lexer _ _ _ (LexingUndelimitedAttributeValue (endTag, tagNameIndices, attributeIndices, attributeNameIndices, (i, c))) #" " =
     LexingAttributes (endTag, tagNameIndices, (attributeNameIndices, (i, c)) :: attributeIndices, i + c + 1)
   | lexer makeStartTag _ _ (LexingUndelimitedAttributeValue (false, tagNameIndices, attributeIndices, attributeNameIndices, (i, c))) #">" =
