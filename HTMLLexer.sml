@@ -2,18 +2,21 @@ structure HTMLLexer :> HTMLLexer =
 struct
 
 local 
+    (* Known HTML entities and the characters they map to. *)
     val HTMLentities = [("lt", #"<"),
                         ("gt", #">"),
                         ("amp", #"&")];
 
-    fun assoc ((potentialKey, value) :: rest) key = if potentialKey = key then SOME(value)
-                                                    else assoc rest key
-      | assoc [] key = NONE
-
+    (* Find a replacement for the provided entity name. If the entity
+    nam is not known, the full identity (including ampersand and
+    semicolon) will be returned. *)
     fun entityReplacement entity = case assoc HTMLentities entity of
                                        SOME replacement => [replacement]
                                      | NONE => #"&" :: explode entity @ [#";"]
-                                               
+
+    (* Iterate through a list of characters, looking for HTML
+    entities, and return a list of characters with the HTML entities
+    replaced by the character they map to. *)
     fun convertEntities' (#"&" :: rest) [] acc = convertEntities' rest [#"&"] acc
       | convertEntities' (char :: rest) [] acc = convertEntities' rest [] (acc @ [char])
       | convertEntities' (#";" :: rest) (#"&" :: entrest) acc = 
@@ -26,9 +29,13 @@ local
       | convertEntities' [] entacc acc = entacc @ acc
       | convertEntities' input entacc acc = raise Fail "Impossible situation.";
 in
+(* Iterate through a string, looking for HTML entities, and return
+astring with the HTML entities replaced by the character they map
+to. *)
 fun convertEntities string = implode (convertEntities' (explode string) [] []);
 end
 
+(* A function for extracting a string from a substring. *)
 val properString = implode o map Char.toLower o explode o Substring.string;
 
 (* Use substrings for representing text. *)
@@ -50,13 +57,16 @@ datatype lexeme = StartTagLexeme of tag
                 | EndTagLexeme of tag
                 | TextLexeme of text;
 
-(* (Beginning, chars since beginning) indices. *)
+(* (Beginning, chars since beginning) indices, defined as types for
+readability. *)
 type runningIndices = int * int;
 type tagNameIndices = runningIndices;
 type attributeNameIndices = runningIndices;
 type attributeValueIndices = runningIndices;
 type attributeIndices = attributeNameIndices * attributeValueIndices;
 
+(* Datatype used by the lexer function to keep track of its
+progress. *)
 datatype lexerstate = Done of (lexeme * lexerstate)
                     | LexingText of runningIndices
                     | LexingTag of runningIndices
@@ -75,22 +85,46 @@ datatype lexerstate = Done of (lexeme * lexerstate)
                     | New of int;
 local
 
+(* Given a string and a list of tuples containing ((beginning1,size1),
+(beginning1,size2))-indices into the string, create a list of tuples
+containing strings extracted from string using the indices. *)
 fun findAttributes string attributeList = map (fn ((ni, nc), (vi, vc)) =>
                                                   (Substring.substring(string, ni, nc),
                                                    Substring.substring(string, vi, vc)))
                                               attributeList;
 
+(* Given a string, an (index, size)-tuple, and a list of attribute
+indices (see findAttributes), create a StartTagLexeme with information
+extracted from the string. *)
 fun makeStartTag string (ti, tc) attributeIndicesList =
     StartTagLexeme (Substring.substring (string, ti, tc),
                     findAttributes string attributeIndicesList);
 
+(* Given a string, an (index, size)-tuple, and a list of attribute
+indices (see findAttributes), create an EndTagLexeme with information
+extracted from the string. *)
 fun makeEndTag string (ti, tc) attributeIndicesList =
     EndTagLexeme (Substring.substring (string, ti, tc),
                   findAttributes string attributeIndicesList);
 
+(* Given a string and an (index, size)-tuple, create a TextLexeme with
+information extracted from the string. *)
 fun makeText string (ti, tc) =
     TextLexeme (Substring.substring (string, ti, tc));
 
+(* Lex a sequence of characters into a lexeme. Returns lexer states
+that should be used for a subsequent call to the function. The Done
+state is returned when a full lexeme has been lexed. 
+
+1. argument: a function for creating start tag lexemes.
+
+2. argument: a function for creating end tag lexemes.
+
+3. argument: a function for creating text lexemes.
+
+4. argument: the lexer state.
+
+5. argument: a character. *)
 fun lexer _ _ _ (New i) #"<" =
     LexingTag (i + 1, 0)
   | lexer _ _ _ (New i) _ =
@@ -170,6 +204,10 @@ fun lexer _ _ _ (New i) #"<" =
     LexingUndelimitedAttributeValue (endTag, tagNameIndices, attributeIndices, attributeNameIndices, (i, c + 1))
   | lexer _ _ _ (Done _) _ = raise Fail "Lexer should not be passed Done state.";
 
+(* Given a lexer function, a lexer state, a character getter, a
+character source and a list of lexemes lexed so far, return a list of
+the lexemes that can be lexed from the characters extracted from the
+character source. *)
 fun reader' lexer state getc cs lexemes = 
     case getc cs of
         SOME (c, cs) => (case lexer state c of
@@ -177,6 +215,9 @@ fun reader' lexer state getc cs lexemes =
                            | Other => reader' lexer Other getc cs lexemes)
       | NONE => (lexemes, cs);
 
+(* Given a string, a character getter and a character source, return a
+list of lexemes that can be lexed from characters extracted by the
+character source. *)
 fun reader string getc cs = SOME (reader' (lexer (makeStartTag string)
                                                  (makeEndTag string)
                                                  (makeText string))
