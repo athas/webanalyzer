@@ -177,6 +177,14 @@ Her skal de egentlige analyser foretages, modulet får den
 afHTMLificerede tekst fra \textit{Find tekst} modulet og udfører de
 af brugeren valgte tekstanalyser.
 
+Til beregning af både lixtal og FKRT skal bruges informationer om
+bl.a. antal ord og antal sætninger. Det vil resultere i dobbeltarbejde
+hvis flere analyser beregner disse tal, så vi vil lave en forudgående
+indsamling af informationer om teksten, der kan være relevante for
+flere af analyserne. Man kan også tænke sig at der skal tilføjes nye
+tekstanalyser og det vil i den forbindelse også lette arbejdet med at
+implementere disse.
+
 Output fra tekstanalysemodulet er en datastruktur der meget ligner
 input, men som i stedet for semantisk information har fået tilknyttet
 læsesværhedsgrad-data til de leksikale enheder (afsnit, sætninger og
