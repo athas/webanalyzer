@@ -207,7 +207,19 @@ fun trimStr str =
         [] => ""
       (* if it aint a empty list then the first element in the list is
          the string of interes *)
-      | strLst => List.hd strLst
+      | strLst => List.hd strLst                                        
+
+(* x member y: ''a * ''a list -> bool
+
+   Does x occur in the list y? *)
+infix 0 member;
+fun x member y = List.exists (fn z => z = x) y;
+
+
+(* concatMap func lst: ('a -> 'b list) -> 'a list -> 'b list
+
+   Maps func over the elements in lst, concatenating the results. *)
+fun concatMap f [] = []
+  | concatMap f (x::xs) = (f x) @ concatMap f xs
 
 end;
-          
