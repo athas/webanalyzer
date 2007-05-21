@@ -53,17 +53,17 @@ fun getLinks htmlTree absoluteURI =
                    relativePath so we always get a absolute path to
                    follow. And also return it as a URI *)
                 fun makeURI path =
-                    if not ((String.isPrefix "http://" path) orelse 
-                            (String.isPrefix "www."path)) 
-                    then Http.buildURI(absoluteURI, path)
-                    else Http.buildURI(NONE, path)
+                    if (String.isPrefix "http://" path)
+                    then Http.buildURI(NONE, path)
+                    else Http.buildURI(absoluteURI, path)
 
                 (* Scan the tags attribute for its known link 'attr'
                    and returns the attribute data *)
                 fun checkAttribute (ret, tag, attr, chilren) =
                     case (HTMLParser.getAttribute attr tag) of
-                        SOME str => getChildren' ((makeURI str) :: ret, 
-                                                  children)
+                        SOME str => if String.isPrefix "mailto:" str
+                                    then getChildren' (ret, children)
+                                    else getChildren' ((makeURI str) :: ret, children)
                         (* NONE means ill formed HTML tag so just move on *)
                       | NONE => getChildren' (ret, children) 
             in
