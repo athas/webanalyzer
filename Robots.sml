@@ -98,6 +98,8 @@ fun initRobotsTxt robotsStr =
         disallowedPaths := disallowLst
     end
 
+fun clearRobotsTxt () = () before disallowedPaths := [];
+
 
 (* Scans the disallowedPaths, that was created at by initRobotsTxt
    and check that no elements prefixes the given path *)
