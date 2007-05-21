@@ -1,0 +1,30 @@
+digraph g
+{
+//size="8,11"
+//margin=5
+//rankdir="LR";
+node[shape=box];
+//edge[arrowsize=0.7, len=0.7]
+
+Brugerinput[label="Brugerinput"];
+ParseSide[label="HTML-parsing"];
+HentSide[label="Hent side"];
+FindLinks[label="Find Links"];
+afHTMLificering[label="Find tekst, afHTMLificering"];
+Tekstanalyse[label="Tekstanalyse"]
+
+Brugerinput -> "Domæne check, indlæsning af robots.txt"
+               -> HentSide [label="URL"];
+FindLinks -> HentSide [label="URL"]
+
+HentSide -> ParseSide [label="HTML"];
+
+
+ParseSide -> afHTMLificering [label="Parsetræ"];
+ParseSide -> FindLinks [label="Parsetræ"]
+
+afHTMLificering -> Tekstanalyse [label="Semantisk teksttræ"];
+Tekstanalyse -> "Resultatopsamling" -> "Generer index HTML-side" [label="Resultater"]
+Tekstanalyse -> "Generer individuel HTML-side" [label="Resultater"]
+
+}

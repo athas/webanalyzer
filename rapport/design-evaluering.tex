@@ -1,0 +1,52 @@
+\documentclass[a4paper,oneside,article]{article}
+\usepackage[T1]{fontenc}
+\usepackage{textcomp}
+\usepackage[utf8]{inputenc}
+\usepackage[danish]{babel}
+\usepackage[garamond]{mathdesign}
+
+
+\renewcommand{\ttdefault}{pcr} % bedre typewriter font
+\renewcommand{\rmdefault}{ugm} % garamond
+
+
+\usepackage{lettrine}
+
+%\overfullrule=5pt
+
+\title{Konklusion på design--evaluering  \\
+       \small{Førsteårsprojekt}}
+
+\author
+{
+  Gruppe 1:\\
+  Troels Henriksen (athas@sigkill.dk)\\
+  Jesper Reenberg (reenberg@kampsax.dtu.dk)\\
+  Martin Dybdal (dybber@dybber.dk)\\ \\
+  Vejledere: Dina og Kasper
+}
+
+
+\pagestyle{plain}
+
+\date{\today}
+
+\begin{document}
+\maketitle
+
+Vi har selv prøvet at komme med noget efterkritik af vores
+design--specifikation, da gruppen vi havde udvekslet med ikke havde
+nogle konkrete kommentarer til vores design. Deres eneste kommentarer
+var at vores dataflow--diagram måske skulle være et bilag og at der
+manglede en forklaring af \textit{robots.txt}.
+
+Vi havde selv fundet en enkelt ændring som vi vil lave. Til beregning
+af både lixtal og FKRT skal bruges informationer om bl.a. antal ord og
+antal sætninger. Det vil resultere i dobbeltarbejde hvis flere
+analyser beregner disse tal, så vi vil lave en forudgående indsamling
+af informationer om teksten, der kan være relevante for flere af
+analyserne. Man kan også tænke sig at der skal tilføjes nye
+tekstanalyser og det vil i den forbindelse også lette arbejdet med at
+implementere disse.
+
+\end{document}

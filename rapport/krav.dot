@@ -1,0 +1,36 @@
+digraph G
+{
+
+size="8,11"
+margin=5
+rankdir="LR";
+node[fontsize=10, shape=none];
+edge[arrowsize=0.7, len=0.7]
+
+
+// K1[label="1 Analyse af et helt websted"]
+// K2[label="2 Analysemetoder"]
+
+// K1 -> "1.1 Respekter robots.txt";
+// K1 -> "1.2 Dybde af crawling";
+
+// K2 -> "2.1 LIX";
+// K2 -> "2.2 FKRT";
+// K2 -> "2.3 Stavekontrol" -> "2.3.1 Flere sprog";
+// K2 -> "2.4 Gentagne ord";
+// K2 -> "2.5 Sidesværhedsgrad";
+
+K3[label="3 Analyse baseret på HTML"]
+
+K3 -> "3.1 <em> og <strong>";
+K3 -> "3.2 <hN>";
+K3 -> "3.3 <abbr> og <acronym>";
+K3 -> "3.4 Citater";
+K3 -> "3.5 Andre sprog";
+K3 -> "3.6 <kbd>, <var> og <code>";
+K3 -> "3.7 <bdo>";
+
+"8 Håndtering af HTML" -> "8.1 Indkodning"
+
+
+}
