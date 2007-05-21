@@ -284,8 +284,6 @@ fun headResponse socket =
      val l  = if isSome l' then l' 
               else get(header, "content-location")
      val cType = default "text/html" (get (header, "content-type"))
-     val _ = if (lowercase cType) = "text/html" then ()
-             else raise Content cType
  in l end) handle Header str => NONE;
 
 (* requestHTTPbyServer : (('a, active stream) sock -> 'a * string) -> 
