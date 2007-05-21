@@ -1,3 +1,5 @@
+open TextIO;
+
 local
     fun unparse' (HTMLParser.Tag (tag, children)) =
         let
@@ -81,7 +83,7 @@ fun main (arg :: _) =
        handle Http.Error (Http.HTTP (404, _)) => []
             | Http.Error (Http.General s) => (print s; print "\n"; raise Fail "General")
             | Http.Error (Http.Socket s) => (print s; print "\n"; raise Fail "");
-       ()
+       flushOut stdOut
     end
   | main [] = print "Not enough arguments\n";
 
