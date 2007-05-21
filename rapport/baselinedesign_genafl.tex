@@ -47,17 +47,22 @@
 
 \section{Overordnet designfilosofi}
 
-Vores program er ikke interaktivt, men kører derimod som et {\em
-  batch--job} med en fra starten af veldefineret afslutning (når alle
-sider er blevet analyseret), i modsætning til interaktive programmer,
-som kører indtil brugeren vælger at afslutte dem. Da programmet
-ydermere er baseret på at foretage gradvist mere raffinerede
-bearbejdninger af det indkommende data har vi valgt at lave et
-overordnet {\em dataflow}--design som beskriver hvordan data bliver
-ført rundt i programmet. Programmeringssproget Standard ML er velegnet
-til en sådan opgave --- manglen på objektorienterede faciliteter vil
-ikke blive mærket, og programmets relativt korte og simple kørselstid
-betyder at manglen på mutérbar tilstand ikke vil være et problem.
+Vi har valgt at basere vores programimplementation på et {\em
+  dataflow}-design, hvori fokus er hvorledes data bliver ført rundt i
+programmets moduler. Idet vores program ikke er interaktivt, men
+derimod kører som et {\em batch--job} med en fra starten af
+veldefineret afslutning (når alle sider er blevet analyseret), i
+modsætning til interaktive programmer, som kører indtil brugeren
+vælger at afslutte dem, er et dataflow-design velegnet, da vi kan være
+sikre på i hvilken rækkefølge indkommende data skal behandles. Da
+programmet ydermere er baseret på at foretage gradvist mere
+raffinerede bearbejdninger af det indkommende data er et
+dataflow-diagram velegnet til at vise hvorledes den i starten ``rå''
+og ustrukturerede data bliver destilleret ned til den endelige
+analyse. Programmeringssproget Standard ML er velegnet til en sådan
+opgave --- manglen på objektorienterede faciliteter vil ikke blive
+mærket, og programmets relativt korte og simple kørselstid betyder at
+manglen på mutérbar tilstand ikke vil være et problem.
 
 Her følger vores Dataflow diagram.
 \subsection{Dataflow diagram}
