@@ -435,11 +435,9 @@ end;
    hos server. *)
 fun buildURI (SOME uri, new) = 
     (canonicalURI (buildURI'(SOME uri, new))
-     handle Error _ => buildURI(NONE, new)
-          |       _ => raise badURI)
+     handle Error _ => buildURI(NONE, new))
   | buildURI (NONE, new) = 
-    (canonicalURI (buildURI'(NONE, new))
-     handle _ => raise badURI)
+    (canonicalURI (buildURI'(NONE, new)))
 
 end;
 
