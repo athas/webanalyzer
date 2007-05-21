@@ -101,6 +101,33 @@ HTML-parsingen er et ordinært parsetræ som så i senere moduler bruges
 til både at danne et mere højniveau-træ over teksten, og til at finde
 links til andre sider som skal hentes.
 
+Parseren er, for at lette implementationen, opdelt i to primære dele -
+en lexer, der opdeler den inkommende sekvens af tegn i en liste af
+leksikalske enheder uden nærmere struktur, og en egentlig parser, som
+omdanner listen af de leksikale enheder til et struktureret
+parsetræ. Lexeren er specificeret med en SML-signatur, men det er ikke
+hensigten at denne bruges af andet end parser-modulet, og resten af
+programmet vil ikke være påvirket af parsertrinnets toparts-opdeling.
+
+De leksikale enheder produceret af lexeren vil være af tre forskellige
+typer - begyndelsestags, afslutningstags og tekstelementer. De to
+tag-typer vil indeholde information om navnet på det relevante tag,
+samt en liste indeholdende attribut/værdi-tupler. Tekstelementer vil
+indeholde information om den sekvens af tegn de repræsenterer.
+
+Det af parseren producerede parsetræ består af knuder, repræsenterende
+tags, og blade, repræsenterende tekst. En knude kan have nul eller
+flere undergrene der angiver de HTML-elementer der findes mellem
+start- og slut-tagget (nul undergrene kunne f.eks. være et
+``\texttt{<br />}''-element), hvor hver undergren igen kan være enten
+en knude eller et blad. For eksempel vil HTML-strengen
+``\texttt{<strong>}\texttt{<em>}Vigtigt!\texttt{</em>} Parseren skal
+fungere\texttt{</strong>}'' bestå af en knude med to undergrene -
+endnu en knude og et blad indeholdende tekst. Undergrenene skal være
+ordnede i samme rækkefølge som deres optræden i det oprindelige
+HTML-dokument. En knude indeholder information om hvilket tag den
+repræsenterer, samt eventuelle HTML-attributes tagget har.
+
 \subsection{Find links}
 Dette modul skal ud fra HTML-parsetræet genereret af HTML-parseren,
 lave en liste af de links som linker til andre sider på samme domæne.
