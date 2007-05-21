@@ -12,10 +12,6 @@ sig
     val serverFromURI : URI -> string
     val pathFromURI : URI -> string
 
-    (* Skanner html-side for uri. Det kan ikke garanteres,
-       at alle returnerede uri'er er gyldige. *)
-    val occurrences: string -> string list
-
    (* Failure kan indeholde tre forskellige 
       fejlmeddelelser. HTTP har en status-kode 
       defineret i http-protokollen og dernæst en

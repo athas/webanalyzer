@@ -410,7 +410,7 @@ in  if isSome origin then
         val name = #1 server'
         val port = #2 server'
         val path' = default "/" path
-    in  (protocol', name, port, Path.mkCanonical path') end
+    in (protocol', name, port, Path.mkCanonical path') end
 end;
 
 (* canonicalURI: URI -> URI
@@ -440,51 +440,6 @@ fun buildURI (SOME uri, new) =
   | buildURI (NONE, new) = 
     (canonicalURI (buildURI'(NONE, new))
      handle _ => raise badURI)
-
-(* occurrences: string -> string list 
-
-   Skanner strengen for alt hvad der kan ligne uri'er, mere
-   konkret kombinationer af følgende strenge. Altså kan der
-   bliver fundet ugyldige uri'er som ikke er indeni anker-tags.
-     href =  uri
-     rel  = "uri"
-     src  = 'uri' *)
-local
- val head = "((rel)|(href)|(src))[[:space:]]*=[[:space:]]*";
- val regstr1 = head ^ "([^'\"[:space:]][^>[:space:]]+)"; 
- val regstr2 = head ^ "\"([^\"]*)\"";    
- val regstr3 = head ^ "'([^']*)'"; 
- val regexp1 = Regex.regcomp regstr1 [Regex.Extended, Regex.Icase];
- val regexp2 = Regex.regcomp regstr2 [Regex.Extended, Regex.Icase];
- val regexp3 = Regex.regcomp regstr3 [Regex.Extended, Regex.Icase];
-
- fun unique [] = []
-   | unique (x::xs) =
- let fun rem(_, []) = []
-       | rem(r, s::ss) = if (lowercase s) = r then rem(r, ss)
-                         else s :: rem(r, ss)
- in  x :: unique (rem (lowercase x, xs)) end
-in
- fun occurrences html =
- let fun get v = Substring.string (Vector.sub (v,5))
-     val match1 = Regex.map regexp1 get html
-     val match2 = Regex.map regexp2 get html
-     val match3 = Regex.map regexp3 get html
-     val match = match1 @ match2 @ match3
-     open Substring
-     fun fix s = string (takel (fn c => c <> #"#") (all s))
-     val match' = map fix match
- in  unique match' end
-end;
-
-(* local
-    val uri = buildURI'(NONE, "http://www.diku.dk/students")
-    val refs = occurrences (getURI uri);
-    fun inside (x, ys) = List.exists (fn y => x = y) ys
-    val ok = inside("http://www.diku.dk/students/", refs)
-in  
-    val _ = if ok then print "ok\n" else print "argh\n"
-end; *)
 
 end;
 
