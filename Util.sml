@@ -186,7 +186,7 @@ fun getFirstIndexOf (chr, str) =
     let
         fun getFirstIndexOf' chr index "" = index
           | getFirstIndexOf' chr index str =
-            if (String.size str) <   index then
+            if index < (String.size str) then
                 if (String.sub (str, index) = chr) then
                     index
                 else
