@@ -116,11 +116,13 @@ fun run line =
             end;
             
         fun runUnix line = 
-            SOME (
-            TextIO.inputAll(
-            #1 (Unix.streamsOf
-                    (Unix.execute("/bin/sh" , ["-c", line]))))) 
-            handle Fail s => NONE
+            let
+                val pr = Unix.execute("/bin/sh" , ["-c", line])
+            in
+                (SOME (TextIO.inputAll(#1 (Unix.streamsOf pr)))
+                 handle Fail s => NONE)
+                before Unix.reap pr
+            end
     in
         if unix() then
             runUnix line
