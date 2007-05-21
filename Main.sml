@@ -31,12 +31,6 @@ fun unparse tags = (map unparse' tags; ());
 
 end
 
-fun makeRelativeFromAbsoluteURI uri = Http.buildURI(NONE,
-                                                    Http.protocolFromURI uri ^ 
-                                                    Http.serverFromURI uri ^
-                                                    Path.dir (Http.pathFromURI uri))
-    
-
 fun getLinks htmlTree absoluteURI = 
     let
         (* takes a parsetree list and processes down it by calling
@@ -96,7 +90,7 @@ fun main (arg :: _) =
         val robotstxt = (Http.getURI robotsuri) 
             handle Http.Error (Http.HTTP (404, _)) => ""
     in Robots.initRobotsTxt robotstxt;
-       map (fn link => print (Http.stringFromURI link) before print "\n") (getLinks (getAndParse uri) (SOME (makeRelativeFromAbsoluteURI uri)))
+       map (fn link => print (Http.stringFromURI link) before print "\n") (getLinks (getAndParse uri) (SOME uri))
        handle Http.Error (Http.HTTP (404, _)) => []
             | Http.Error (Http.General s) => (print s; print "\n"; raise Fail "General")
             | Http.Error (Http.Socket s) => (print s; print "\n"; raise Fail "");
