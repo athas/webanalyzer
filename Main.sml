@@ -1,4 +1,6 @@
 open TextIO;
+open Http;
+open List;
 
 local
     fun unparse' (HTMLParser.Tag (tag, children)) =
@@ -54,8 +56,8 @@ fun getLinks htmlTree absoluteURI =
                    follow. And also return it as a URI *)
                 fun makeURI path =
                     if (String.isPrefix "http://" path)
-                    then Http.buildURI(NONE, path)
-                    else Http.buildURI(absoluteURI, path)
+                    then buildURI(NONE, path)
+                    else buildURI(absoluteURI, path)
 
                 (* Scan the tags attribute for its known link 'attr'
                    and returns the attribute data *)
@@ -79,22 +81,51 @@ fun getLinks htmlTree absoluteURI =
     end
 
 
-val getAndParse = (HTMLParser.parse o Http.getURI)
+val getAndParse = (HTMLParser.parse o getURI)
+
+fun findStartURI URI = if Robots.isPathAllowed (stringFromURI URI)
+                       then URI
+                       else let val rootURI = buildURI (SOME URI, "/") in
+                                print (stringFromURI URI);
+                                print " is off-limits to crawlers, trying ";
+                                print (stringFromURI rootURI);
+                                "instead.\n";
+                                rootURI
+                            end
+
+val visitedPages : URI list ref = ref [];
+
+fun visit uri = if exists (fn x => x = uri) (!visitedPages) then ()
+                else (visitedPages := uri :: !visitedPages;
+                      print "Visiting ";
+                      print (stringFromURI uri);
+                      print "\n";
+                      flushOut stdOut;
+                      map (fn link => (print "Seeing ";
+                                       print (stringFromURI link);
+                                       print "\n";
+                                       flushOut stdOut;
+                                       visit link))
+                          (getLinks (getAndParse uri) (SOME uri));
+                      ())
+                     handle Error (HTTP (404, _)) => ()
+                          | Error (General s) => (print s; print "\n"; raise Fail "General")
+                          | Error (Socket s) => (print s; print "\n"; raise Fail "");
 
 fun main (arg :: _) = 
-    let val uri = Http.buildURI (NONE, arg)
-        val robotsuri = Http.buildURI (NONE, Http.protocolFromURI uri
-                                             ^ "://"
-                                             ^ Http.serverFromURI uri
-                                             ^ "/robots.txt")
-        val robotstxt = (Http.getURI robotsuri) 
-            handle Http.Error (Http.HTTP (404, _)) => ""
-    in Robots.initRobotsTxt robotstxt;
-       map (fn link => print (Http.stringFromURI link) before print "\n") (getLinks (getAndParse uri) (SOME uri))
-       handle Http.Error (Http.HTTP (404, _)) => []
-            | Http.Error (Http.General s) => (print s; print "\n"; raise Fail "General")
-            | Http.Error (Http.Socket s) => (print s; print "\n"; raise Fail "");
-       flushOut stdOut
+    let val uri = buildURI (NONE, arg)
+        val robotsuri = buildURI (NONE, protocolFromURI uri
+                                        ^ "://"
+                                        ^ serverFromURI uri
+                                        ^ "/robots.txt")
+        val robotstxt = (getURI robotsuri)
+            handle Error (HTTP (404, _)) => ""
+        val _ = Robots.initRobotsTxt robotstxt;
+        val starturi = findStartURI uri
+    in 
+        visit starturi;
+        print "Done!\n";
+        flushOut stdOut
     end
   | main [] = print "Not enough arguments\n";
 
