@@ -110,7 +110,7 @@ fun visit uri = if exists (fn x => x = uri) (!visitedPages) then ()
                       ())
                      handle Error (HTTP (404, _)) => ()
                           | Error (General s) => (print s; print "\n"; raise Fail "General")
-                          | Error (Socket s) => (print s; print "\n"; raise Fail "");
+                          | Error (Socket s) => (print s; print "\n"; raise Fail "Socket");
 
 fun main (arg :: _) = 
     let val uri = buildURI (NONE, arg)
