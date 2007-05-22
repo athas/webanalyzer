@@ -36,7 +36,7 @@ local
                   "noscript"] @ headings;
 
     (* Tags that shouldn't cause any end of paragraphs and newlines. *)
-    val inline = ["span", "font", "a", "bdo", "address", "center"
+    val inline = ["span", "font", "a", "bdo", "address", "center",
                   "blockquote", "q", "cite",
                   "var", "kbd", "samp",
                   "sub", "sup", "big", "small"]
