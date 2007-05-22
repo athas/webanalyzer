@@ -36,6 +36,8 @@ fun filterhtml _ [] = []
              :: (filterhtml filters xs)
 
 val standardfilter = [ByTagName "script",
-                      ByTagName "style"];
+                      ByTagName "style",
+                      ByTagName "colgroup",
+                      ByTagName "col"];
 
 end
