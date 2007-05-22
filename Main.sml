@@ -113,19 +113,19 @@ fun visit uri = if exists (fn x => x = uri) (!visitedPages) then ()
                           | Error (Socket s) => (print s; print "\n"; raise Fail "Socket");
 
 fun main (arg :: _) = 
-    let val uri = Http.buildURI (NONE, arg)
-        val robotsuri = Http.buildURI (NONE, Http.protocolFromURI uri
-                                             ^ "://"
-                                             ^ Http.serverFromURI uri
-                                             ^ "/robots.txt")
-        val robotstxt = (Http.getURI robotsuri) 
-            handle Http.Error (Http.HTTP (404, _)) => ""
-    in Robots.initRobotsTxt robotstxt;
-       map (fn link => print (Http.stringFromURI link) before print "\n") (getLinks (getAndParse uri) (SOME uri))
-       handle Http.Error (Http.HTTP (404, _)) => []
-            | Http.Error (Http.General s) => (print s; print "\n"; raise Fail "General")
-            | Http.Error (Http.Socket s) => (print s; print "\n"; raise Fail "");
-       flushOut stdOut
+    let val uri = buildURI (NONE, arg)
+        val robotsuri = buildURI (NONE, protocolFromURI uri
+                                        ^ "://"
+                                        ^ serverFromURI uri
+                                        ^ "/robots.txt")
+        val robotstxt = (getURI robotsuri)
+            handle Error (HTTP (404, _)) => ""
+        val _ = Robots.initRobotsTxt robotstxt;
+        val starturi = findStartURI uri
+    in 
+        visit starturi;
+        print "Done!\n";
+        flushOut stdOut
     end
   | main [] = print "Not enough arguments\n";
 
