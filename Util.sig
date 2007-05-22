@@ -15,5 +15,8 @@ sig type 'a sock = ('a, Socket.active Socket.stream) Socket.sock
     val trimStr: string -> string
 
     exception IOError of string
-                                 
+
+    val member : ''a * ''a list -> bool
+    val concatMap : ('a -> 'b list) -> 'a list -> 'b list;
+    val SOMEs : 'a option list -> 'a list
 end;

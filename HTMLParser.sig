@@ -31,4 +31,7 @@ sig
     (* Makes a parsetree list of a given string *)
     val parse : string -> parsetree list;
 
+    (* Finds a subtree in the given parsetree list, given its tagname *)
+    val find : string -> parsetree list -> parsetree option
+
 end

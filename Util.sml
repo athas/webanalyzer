@@ -222,4 +222,12 @@ fun x member y = List.exists (fn z => z = x) y;
 fun concatMap f [] = []
   | concatMap f (x::xs) = (f x) @ concatMap f xs
 
+(* SOMEs : 'a option list -> 'a list
+ 
+   Takes a list of options and returns all the SOME-values. *)
+fun SOMEs xs = foldl (fn (SOME x, b) => x :: b
+                            | (NONE, b) => b)
+                          []
+                          xs;
+
 end;

@@ -44,4 +44,17 @@ fun parse string = let fun worker (tree, []) = tree
                            tree @ (worker o parsefun lexemes) []
                    in worker ([], (lex string)) end;
 
+(* findElement : string -> parsetree list -> parsetree option
+
+   Finds the first subtree in lst with tag-name y.
+   Only searches the top level of given the parsetree list. *)
+fun find y [] = NONE
+  | find y ((x as (Tag (tag, subtrees))) :: xs) =
+        if y = tagName tag
+        then SOME x
+        else (case find y subtrees of
+                 SOME z => SOME z
+               | NONE => find y xs)
+  | find y (_ :: xs) = find y xs;
+
 end
