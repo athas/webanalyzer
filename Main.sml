@@ -65,7 +65,8 @@ fun getLinks htmlTree absoluteURI =
                     case (HTMLParser.getAttribute attr tag) of
                         SOME str => if String.isPrefix "mailto:" str
                                     then getChildren' (ret, children)
-                                    else getChildren' ((makeURI str) :: ret, children)
+                                    else (getChildren' ((makeURI str) :: ret, children) 
+                                          handle Http.Error (General _) => getChildren' (ret, children))
                         (* NONE means ill formed HTML tag so just move on *)
                       | NONE => getChildren' (ret, children) 
             in
