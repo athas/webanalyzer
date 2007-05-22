@@ -41,21 +41,20 @@ fun mapLinks function htmlTree =
         fun getChildren' (ret, []) = ret
           | getChildren' (ret, (child :: rest)) =
             getLinks' (ret, child) @ getChildren' ([], rest)
-    
+            
         (* Checks each parsetree for Tag's and if the tags are what
            we looks for then it scans the tags known link attributes
            and adds then return all these links. 
-
            'AND' because these to functions are mutually recursive *)
         and getLinks' (ret, Text t) = ret
           | getLinks' (ret, Tag (tag, [])) = ret
           | getLinks' (ret, Tag (tag, children)) =     
-                case tagName tag of
-                    "a" => function tag :: getChildren' (ret, children)
-                  | "frame" => function tag :: getChildren' (ret, children)
-                  | "iframe" => function tag :: getChildren' (ret, children)
-                  (* If none of the above cases just move on to next tag in the parsetree *)
-                  | _ => getChildren' (ret, children)
+            case tagName tag of
+                "a" => function tag :: getChildren' (ret, children)
+              | "frame" => function tag :: getChildren' (ret, children)
+              | "iframe" => function tag :: getChildren' (ret, children)
+              (* If none of the above cases just move on to next tag in the parsetree *)
+              | _ => getChildren' (ret, children)
     in
         getChildren'([], htmlTree)
     end
@@ -76,12 +75,11 @@ fun getLinks htmlTree absoluteURI =
                                 (SOME (makeURI str) handle Http.Error (General _) => NONE)
                             else NONE
               | NONE => NONE
-                         
+                        
         fun maybeGetLink "a" tag = checkAttribute tag "href"
           | maybeGetLink "frame" tag = checkAttribute tag "src"
           | maybeGetLink "iframe" tag = checkAttribute tag "src"
           | maybeGetLink _ _ = NONE
-            
     in
         map valOf (filter Option.isSome (mapLinks (fn tag => maybeGetLink (tagName tag) tag) htmlTree))
     end
