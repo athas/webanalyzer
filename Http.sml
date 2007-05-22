@@ -282,8 +282,10 @@ fun headResponse socket =
      val _ = if status < 200 orelse status >= 400 
              then raise Error (HTTP (status, "")) else () 
      val l' = get(header, "location")
-     val l  = if isSome l' then l' 
-              else get(header, "content-location")
+     val l  = if isSome l' then l'
+              (* HTTP RFC §14.14: The Content-Location value is not a
+              replacement for the original requested URI; *)
+              else (*get(header, "content-location")*) NONE
      val cType = default "text/html" (get (header, "content-type"))
  in l end) handle Header str => NONE;
 
@@ -350,7 +352,7 @@ case method of Direct =>
     end
 | Proxy addr => 
     let val request = buildReq(action, stringFromURI uri, serverFromURI uri)  
-    in  requestHTTPbyServer (receiver, request) addr end
+    in requestHTTPbyServer (receiver, request) addr end
 | _ => raise Error(General "Bad getURI' method");
 
 (* requestURI: (('a, active stream) sock -> 'a * string) -> URI -> 'a 
