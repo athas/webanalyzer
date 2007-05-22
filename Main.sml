@@ -93,27 +93,29 @@ fun findStartURI URI = if Robots.isPathAllowed (stringFromURI URI)
                             end
 
 val visitedPages : URI list ref = ref [];
-val maxDepth = 2;
 
-fun visit uri depth = if depth >= maxDepth orelse 
-                         exists (fn x => x = uri) (!visitedPages) then ()
-                      else (visitedPages := uri :: !visitedPages;
-                            print "Visiting ";
-                            print (stringFromURI uri);
-                            print "\n";
-                            flushOut stdOut;
-                            map (fn link => (print "Seeing ";
-                                             print (stringFromURI link);
-                                             print "\n";
-                                             flushOut stdOut;
-                                             visit link (depth + 1)))
-                                (getLinks (getAndParse uri) (SOME uri));
-                            ())
-                           handle Error (HTTP (_, _)) => ()
-                                | Error (General s) => (print s; print "\n"; raise Fail "General")
-                                | Error (Socket s) => (print s; print "\n"; raise Fail "Socket");
+fun visit maxdepth uri depth = 
+    if depth >= maxdepth orelse 
+       exists (fn x => x = uri) (!visitedPages) then ()
+    else (visitedPages := uri :: !visitedPages;
+          print "Visiting ";
+          print (stringFromURI uri);
+          print "\n";
+          flushOut stdOut;
+          map (fn link => (print "Seeing ";
+                           print (stringFromURI link);
+                           print "\n";
+                           flushOut stdOut;
+                           visit maxdepth link (depth + 1)))
+              (getLinks (getAndParse uri) (SOME uri));
+          ())
+         handle Error (HTTP (code, _)) => ()
+              | Error (General s) => (print s; print "\n"; raise Fail "General")
+              | Error (Socket s) => (print s; print "\n"; raise Fail "Socket");
 
-fun main (arg :: _) = 
+val standardMaxDepth = 1;
+
+fun main (arg :: rest) = 
     let val uri = buildURI (NONE, arg)
         val robotsuri = buildURI (NONE, protocolFromURI uri
                                         ^ "://"
@@ -126,7 +128,9 @@ fun main (arg :: _) =
     in 
         (* Useful when used interactively. *)
         visitedPages := [];
-        visit starturi 0;
+        case rest of
+            (maxdepth :: _) => visit (Option.valOf (Int.fromString maxdepth)) starturi 0
+          | _ => visit standardMaxDepth starturi 0;
         print "Done!\n";
         flushOut stdOut
     end
