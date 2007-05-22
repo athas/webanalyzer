@@ -96,7 +96,9 @@ val visitedPages : URI list ref = ref [];
 
 fun visit maxdepth uri depth = 
     if depth >= maxdepth orelse 
-       exists (fn x => x = uri) (!visitedPages) then ()
+       contentTypeFromURI uri <> "text/html" orelse
+       exists (fn x => x = uri) (!visitedPages) 
+    then ()
     else (visitedPages := uri :: !visitedPages;
           print "Visiting ";
           print (stringFromURI uri);
