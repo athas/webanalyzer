@@ -114,7 +114,8 @@ end;
 type URI = string     (* protokol   *)
          * string     (* værts-navn *)
          * int option (* værts-port *)
-         * string;    (* sti *)
+         * string     (* sti *)
+         * string;    (* content-type *)
 
 (* protocolFromURI: URI -> string
    serverFromURI:   URI -> string
@@ -123,11 +124,12 @@ type URI = string     (* protokol   *)
 
    stringFromURI bygger en komplet uri som streng. 
    De andre returnerer blot enkelte elementer. *)
-fun protocolFromURI (protocol, _, _, _) = protocol;
-fun serverFromURI (_, server, port, _) = server ^ 
+fun protocolFromURI (protocol, _, _, _, _) = protocol;
+fun serverFromURI (_, server, port, _, _) = server ^ 
     (if not (Option.isSome port) then "" 
      else ":" ^ Int.toString (Option.valOf port));
-fun pathFromURI (_, _, _, path) = path;
+fun pathFromURI (_, _, _, path, _) = path;
+fun contentTypeFromURI (_, _, _, _, contentType) = contentType
 fun stringFromURI uri = 
     (protocolFromURI uri) ^ "://" ^ (serverFromURI uri) ^ (pathFromURI uri);
     
@@ -278,16 +280,16 @@ fun getResponse socket =
    en Content undtagelse. *)
 exception Content of string;
 fun headResponse socket =
-(let val (status, header) = readResponseHeader socket
-     val _ = if status < 200 orelse status >= 400 
-             then raise Error (HTTP (status, "")) else () 
-     val l' = get(header, "location")
-     val l  = if isSome l' then l'
-              (* HTTP RFC §14.14: The Content-Location value is not a
-              replacement for the original requested URI; *)
-              else (*get(header, "content-location")*) NONE
-     val cType = default "text/html" (get (header, "content-type"))
- in l end) handle Header str => NONE;
+    let val (status, header) = readResponseHeader socket
+        val _ = if status < 200 orelse status >= 400 
+                then raise Error (HTTP (status, "")) else () 
+        val l' = get(header, "location")
+        val l  = if isSome l' then l'
+                 (* HTTP RFC §14.14: The Content-Location value is not a
+                    replacement for the original requested URI; *)
+                 else (*get(header, "content-location")*) NONE
+        val cType = default "text/html" (get (header, "content-type"))
+    in (l, cType) end handle Header str => (NONE, "text/html");
 
 (* requestHTTPbyServer : (('a, active stream) sock -> 'a * string) -> 
                          pf_inet sock_addr -> 'a
@@ -342,9 +344,9 @@ fun buildReq (action, path, host) = action ^ " " ^ path ^ " HTTP/1.1\r\n" ^
     og uri, mens svaret bestemmes af receiver-funktionen. *)
 fun requestURI' (receiver, action) method uri = 
 case method of Direct =>
-    let val (protocol, host, port, path) = uri 
+    let val (protocol, host, port, path, _) = uri 
         val server = (host, port)
-        val request = buildReq(action, path, serverFromURI uri)
+        val request = buildReq (action, path, serverFromURI uri)
         (* val request = buildReq(action, path) *)
     in
         if protocol = "http" then requestHTTP (receiver, request) server
@@ -411,8 +413,9 @@ fun buildURI' (origin : URI option, str) =
                 val name = #1 server'
                 val port = if isSome (#2 server') then (#2 server')
                            else #3 origin'
+                val contentType = #5 origin'
             in  
-                (protocol', name, port, path') 
+                (protocol', name, port, path', contentType)
             end 
         else if not (isSome server) then 
             raise badURI 
@@ -424,7 +427,7 @@ fun buildURI' (origin : URI option, str) =
                 val port = #2 server'
                 val path' = default "/" path
             in 
-                (protocol', name, port, Path.mkCanonical path') 
+                (protocol', name, port, Path.mkCanonical path', "text/html")
             end
     end;
 
@@ -436,9 +439,13 @@ fun buildURI' (origin : URI option, str) =
    undtagelser hvis kommunikation med server slår fejl. *)
 fun canonicalURI orig = 
     let fun getHead uri = requestURI (headResponse, "HEAD") uri
-            handle Error (HTTP (int, string)) => NONE
-    in case (getHead orig) of NONE => orig
-                            | SOME uri => buildURI'(SOME orig, uri)
+            handle Error (HTTP (int, string)) => (NONE, "text/html")
+        val (uri, cType) = getHead orig
+        fun addCType uri = let val (protocol, host, port, path, _) = uri
+                           in (protocol, host, port, path, cType) end
+    in case uri of NONE => addCType orig
+                 | SOME uri => addCType (buildURI'(SOME orig, uri))
+                              
 end;
 
 (* buildURI: URI option * string -> URI

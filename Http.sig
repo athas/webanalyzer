@@ -11,6 +11,7 @@ sig
     val protocolFromURI : URI -> string 
     val serverFromURI : URI -> string
     val pathFromURI : URI -> string
+    val contentTypeFromURI : URI -> string
 
    (* Failure kan indeholde tre forskellige 
       fejlmeddelelser. HTTP har en status-kode 
