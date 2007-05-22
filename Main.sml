@@ -86,13 +86,13 @@ fun getLinks htmlTree absoluteURI =
 
 val getAndParse = (parse o getURI)
 
-fun findStartURI URI = if Robots.isPathAllowed (stringFromURI URI)
+fun findStartURI URI = if Robots.isPathAllowed (pathFromURI URI)
                        then URI
                        else let val rootURI = buildURI (SOME URI, "/") in
                                 print (stringFromURI URI);
                                 print " is off-limits to crawlers, trying ";
                                 print (stringFromURI rootURI);
-                                "instead.\n";
+                                print " instead.\n";
                                 rootURI
                             end
 
