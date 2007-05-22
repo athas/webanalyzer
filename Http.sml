@@ -215,26 +215,27 @@ let
     val match = Regex.regexec regexp [] line1
 in  
     case match of NONE => raise Header line1
-              | SOME v => 
-    let val status = valOf(Int.fromString (get (v, 2)))
-                     handle Option => raise Fail line1
-        val regstr = "([^:]+):[[:space:]]*([^;[:space:]]+)"
-        val regexp = Regex.regcomp regstr [Regex.Extended, Regex.Icase]
-        (* gemmer liste af tupler (nøgle, værdi) indtil en 
-           helt tom linie dukker op *)
-        fun getHeader () =
-        let val line = readLine socket
-        in  if line = "\r\n" then [] else 
-                (case (Regex.regexec regexp [] line) of 
-                     NONE => []
-                   | SOME v => [(lowercase (str (Vector.sub(v,1))),
-                                            str (Vector.sub(v, 2)))]
-                ) @ getHeader ()
-        end
-        val header = getHeader()
-                     handle Fail str => raise Error(Socket str)
-    in  (status, header)
-    end
+                | SOME v => 
+                  let val status = valOf(Int.fromString (get (v, 2)))
+                          handle Option => raise Fail line1
+                      val regstr = "([^:]+):[[:space:]]*([^;[:space:]]+)"
+                      val regexp = Regex.regcomp regstr [Regex.Extended, Regex.Icase]
+                      (* gemmer liste af tupler (nøgle, værdi) indtil en 
+                                helt tom linie dukker op *)
+                      fun getHeader () =
+                          let val line = readLine socket
+                          in  if line = "\r\n" then [] else 
+                              (case (Regex.regexec regexp [] line) of 
+                                   NONE => []
+                                 | SOME v => [(lowercase (str (Vector.sub(v,1))),
+                                               str (Vector.sub(v, 2)))]
+                              ) @ getHeader ()
+                          end
+                      val header = getHeader()
+                          handle Fail str => raise Error(Socket str)
+                  in  
+                      (status, header)
+                  end
 end;
 
 (* get: (string * string) list * string -> string option
@@ -386,32 +387,44 @@ in content end;
    Opbygning af stier klares af Path-modulet. *)
 exception badURI;
 fun buildURI' (origin : URI option, str) = 
-let open Option
-    val (protocol, server, path) = (parseURI (isSome origin) str)
-                                    handle _ => raise badURI
-in  if isSome origin then 
-    let fun joinPath (orig, new) =
-        let open Path
-        in  if isAbsolute new then new else 
-	    mkCanonical (concat (dir orig, mkCanonical new))
-        end
-        val origin' = valOf origin
-        val protocol' = default (#1 origin') protocol
-        val server' = default (#2 origin', #3 origin') server
-        val path' = if not (isSome path) then "/" 
-                    else joinPath(#4 origin', valOf path)
-        val name = #1 server'
-        val port = if isSome (#2 server') then (#2 server')
-                   else #3 origin'
-    in  (protocol', name, port, path') end else
-    if not (isSome server) then raise badURI else
-    let val protocol' = default "http" protocol
-        val server' = valOf server
-        val name = #1 server'
-        val port = #2 server'
-        val path' = default "/" path
-    in (protocol', name, port, Path.mkCanonical path') end
-end;
+    let open Option
+        val (protocol, server, path) = (parseURI (isSome origin) str)
+            handle _ => raise badURI
+    in  
+        if isSome origin then 
+            let fun joinPath (orig, new) =
+                    let 
+                        open Path
+                    in  
+                        if isAbsolute new then 
+                            new 
+                        else 
+	                    mkCanonical (concat (dir orig, mkCanonical new))
+                    end
+                val origin' = valOf origin
+                val protocol' = default (#1 origin') protocol
+                val server' = default (#2 origin', #3 origin') server
+                val path' = if not (isSome path) then "/" 
+                            else joinPath(#4 origin', valOf path)
+                val name = #1 server'
+                val port = if isSome (#2 server') then (#2 server')
+                           else #3 origin'
+            in  
+                (protocol', name, port, path') 
+            end 
+        else if not (isSome server) then 
+            raise badURI 
+        else
+            let 
+                val protocol' = default "http" protocol
+                val server' = valOf server
+                val name = #1 server'
+                val port = #2 server'
+                val path' = default "/" path
+            in 
+                (protocol', name, port, Path.mkCanonical path') 
+            end
+    end;
 
 (* canonicalURI: URI -> URI
 
