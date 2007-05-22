@@ -36,7 +36,7 @@ local
                   "noscript"] @ headings;
 
     (* Tags that shouldn't cause any end of paragraphs and newlines. *)
-    val inline = ["span", "font", "a", "bdo", "address",
+    val inline = ["span", "font", "a", "bdo", "address", "center"
                   "blockquote", "q", "cite",
                   "var", "kbd", "samp",
                   "sub", "sup", "big", "small"]
@@ -47,6 +47,8 @@ local
     val nonvisual = ["script", "style",
                      "colgroup", "col",
                      "param", "meta", "link"];
+
+    val sentenceDelimiters = explode ".:!?";
 in
     fun isHeading tag = tag member headings;
     fun isEmphasizing tag = tag member emphasizing;
@@ -54,6 +56,8 @@ in
     fun isBlock tag = tag member block;
     fun isInline tag = tag member inline;
     fun isNonVisual tag = tag member nonvisual;
+    fun isSentenceDelimiter x = x member sentenceDelimiters;
+    fun isAlphabetic x = Char.isAlpha x orelse x member (explode "æøåÆØÅöäüêç")
 end;
 
 (* Get the language of a tag (i.e. the lang or xml:lang attribute values *)
@@ -179,7 +183,7 @@ local
     fun wordify' attrs [] = []
       | wordify' attrs (x::xs) =
         let
-            val xword = if Char.isAlpha x
+            val xword = if isAlphabetic x
                         then Word (str x, attrs)
                         else if Char.isSpace x
                         then Space
@@ -231,13 +235,29 @@ in
     fun wordify (text, attrs) = (convertSentenceElems o concatRepetitions) (wordify' attrs  (explode text))
 end
 
+local
 
-fun sentencify text = 
-    let
-        val words = [concatMap wordify text]
-    in
-        words
-    end
+    fun sentenceDelimiter (TextAnalyser.Punctuation x) = List.exists isSentenceDelimiter (explode x)
+      | sentenceDelimiter _ = false
+
+    fun splitInSentences [] = []
+      | splitInSentences (x :: xs) =
+            if sentenceDelimiter x
+            then [x] :: (splitInSentences xs)
+            else case (splitInSentences xs) of
+                     (sentence :: sentences) => (x :: sentence) :: sentences
+                   | [] => [[x]]
+
+                                   
+
+in 
+    fun sentencify text = 
+        let
+            val words = concatMap wordify text
+        in
+            splitInSentences words
+        end
+end
 fun sentencifyTextElement (Paragraph (texts, descs)) = TextAnalyser.Paragraph (sentencify texts, descs)
   | sentencifyTextElement (Heading x) = TextAnalyser.Heading (map sentencifyTextElement x)
   | sentencifyTextElement (Quotation x) = TextAnalyser.Quotation (map sentencifyTextElement x)
@@ -310,8 +330,8 @@ fun extractText (alltags as (Tag (tag, subtrees) :: tags)) =
                    :: content}
     end
   | extractText [] = {title = NONE, 
-                    languagecode = NONE,
-                    content = []}
+                      languagecode = NONE,
+                      content = []}
 
 
 
@@ -336,31 +356,3 @@ end; (* structure deHTMLifier end *)
 
 
 
-(* findElement : tag -> parsetree list -> parsetree
-
-   Finds the first subtree in lst with tag-name x.
-   Only searches the top level of given the parsetree list. 
-fun findElement y [] = NONE
-  | findElement y ((x as (Tag (tag, subtrees))) :: xs) =
-        if y = tagName tag
-        then SOME x
-        else (case findElement y subtrees of
-                 SOME z => SOME z
-               | NONE => findElement y xs)
-  | findElement y (_ :: xs) = findElement y xs;
-
-
-    fun wordAttrOrder (Language _) (Language _) = EQUAL
-      | wordAttrOrder Emphasized Emphasized = EQUAL
-      | wordAttrOrder (Acronym _) (Acronym _) = EQUAL
-      | wordAttrOrder (Bidirectional _) (Bidirectional _) = EQUAL           
-      | wordAttrOrder (Language _) _ = GREATER
-      | wordAttrOrder Emphasized (Language _) = LESS
-      | wordAttrOrder Emphasized _ = GREATER
-      | wordAttrOrder (Acronym _) (Bidirectional _) = LESS
-      | wordAttrOrder (Acronym _) _ = GREATER
-      | wordAttrOrder (Bidirectional _) _ = GREATER
-
-    fun wordAttrOrderPair (x, y) = wordAttrOrder x y;
-
- *)
