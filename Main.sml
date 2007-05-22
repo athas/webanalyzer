@@ -80,7 +80,6 @@ fun getLinks htmlTree absoluteURI =
         getChildren'([], htmlTree)
     end
 
-
 val getAndParse = (HTMLParser.parse o getURI)
 
 fun findStartURI URI = if Robots.isPathAllowed (stringFromURI URI)
@@ -94,23 +93,25 @@ fun findStartURI URI = if Robots.isPathAllowed (stringFromURI URI)
                             end
 
 val visitedPages : URI list ref = ref [];
+val maxDepth = 2;
 
-fun visit uri = if exists (fn x => x = uri) (!visitedPages) then ()
-                else (visitedPages := uri :: !visitedPages;
-                      print "Visiting ";
-                      print (stringFromURI uri);
-                      print "\n";
-                      flushOut stdOut;
-                      map (fn link => (print "Seeing ";
-                                       print (stringFromURI link);
-                                       print "\n";
-                                       flushOut stdOut;
-                                       visit link))
-                          (getLinks (getAndParse uri) (SOME uri));
-                      ())
-                     handle Error (HTTP (_, _)) => ()
-                          | Error (General s) => (print s; print "\n"; raise Fail "General")
-                          | Error (Socket s) => (print s; print "\n"; raise Fail "Socket");
+fun visit uri depth = if depth >= maxDepth orelse 
+                         exists (fn x => x = uri) (!visitedPages) then ()
+                      else (visitedPages := uri :: !visitedPages;
+                            print "Visiting ";
+                            print (stringFromURI uri);
+                            print "\n";
+                            flushOut stdOut;
+                            map (fn link => (print "Seeing ";
+                                             print (stringFromURI link);
+                                             print "\n";
+                                             flushOut stdOut;
+                                             visit link (depth + 1)))
+                                (getLinks (getAndParse uri) (SOME uri));
+                            ())
+                           handle Error (HTTP (_, _)) => ()
+                                | Error (General s) => (print s; print "\n"; raise Fail "General")
+                                | Error (Socket s) => (print s; print "\n"; raise Fail "Socket");
 
 fun main (arg :: _) = 
     let val uri = buildURI (NONE, arg)
@@ -123,7 +124,9 @@ fun main (arg :: _) =
         val _ = Robots.initRobotsTxt robotstxt;
         val starturi = findStartURI uri
     in 
-        visit starturi;
+        (* Useful when used interactively. *)
+        visitedPages := [];
+        visit starturi 0;
         print "Done!\n";
         flushOut stdOut
     end
