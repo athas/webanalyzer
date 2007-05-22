@@ -150,24 +150,27 @@ fun flatten' attr ((Text t) :: rest) = (FlatText ((textContents t), attr))
     end;
 
 
-fun paragraphise _ [] = [] : paragraphised list
-  | paragraphise descs (NewParagraph :: rest) = (Paragraph ([], [])) :: (paragraphise descs rest)
-  | paragraphise descs ((FlatText x) :: rest) = (case paragraphise descs rest of
-                                                     ((Paragraph (xs, de)) :: r) => Paragraph (x::xs, de) :: r
-                                                   | [] => [(Paragraph ([x], descs))]
-                                                   | therest => (Paragraph ([x], descs)) :: therest)
-  | paragraphise descs ((Description x) :: rest) = paragraphise (x::descs) rest
-  | paragraphise descs ((FlatHeading x) :: rest) = (Heading (paragraphise [] x))
-                                                   :: (paragraphise descs rest)
-  | paragraphise descs ((FlatQuotation x) :: rest) = (Quotation (paragraphise [] x))
-                                                     :: (paragraphise descs rest);
+fun paragraphise [] = [] : paragraphised list
+  | paragraphise (NewParagraph :: rest) = (Paragraph ([], [])) :: (paragraphise rest)
+  | paragraphise ((FlatText x) :: rest) = (case paragraphise rest of
+                                                     ((Paragraph (xs, descs)) :: r) => Paragraph (x::xs, descs) :: r
+                                                   | [] => [(Paragraph ([x], []))]
+                                                   | therest => (Paragraph ([x], [])) :: therest)
+  | paragraphise ((Description x) :: rest) = (case paragraphise rest of
+                                                     ((Paragraph (xs, de)) :: r) => Paragraph (xs, x::de) :: r
+                                                   | [] => [(Paragraph ([], [x]))]
+                                                   | therest => (Paragraph ([], [x])) :: therest)
+  | paragraphise ((FlatHeading x) :: rest) = (Heading (paragraphise x))
+                                             :: (paragraphise rest)
+  | paragraphise ((FlatQuotation x) :: rest) = (Quotation (paragraphise x))
+                                               :: (paragraphise rest);
 
 in
 
     (* flatten: parsetree list -> flat list
        
        Converts a HTML parsetree in to a flatter format. *)
-    val flatten = (paragraphise []) o rmExtraParagraphs o (flatten' []);
+    val flatten = paragraphise o rmExtraParagraphs o (flatten' []);
 end
 
 
@@ -340,15 +343,8 @@ http://www.w3.org/TR/html401/struct/global.html
 
 TODO:
 
- - <title> som (sentence list) option i stedet for string option
  - placer formularer, knapper, labels
- - title, alt, summary
- - Analyser <noframes>, for framesets
- - opdel i sætninger
- - brug lister i stedet for Binaryset.set ?
 
-Skal dette modul vende teksten i bdo's og tags med dir="rtl"? Ja
-Hvad betyder <bdo dir="rtl"><bdo dir="ltr">foobar</bdo></bdo>? Det inderste tag gælder.
 *)
                                     
     
