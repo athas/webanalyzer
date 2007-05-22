@@ -116,8 +116,8 @@ fun visit maxdepth uri depth =
               (getLinks (getAndParse uri) (SOME uri));
           ())
          handle Error (HTTP (code, _)) => ()
+              | Error (Socket s) => ()
               | Error (General s) => (print s; print "\n"; raise Fail "General")
-              | Error (Socket s) => (print s; print "\n"; raise Fail "Socket");
 
 val standardMaxDepth = 1;
 
