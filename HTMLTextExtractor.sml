@@ -231,14 +231,13 @@ in
     fun wordify (text, attrs) = (convertSentenceElems o concatRepetitions) (wordify' attrs  (explode text))
 end
 
-(* 
+
 fun sentencify text = 
     let
         val words = [concatMap wordify text]
     in
-        
+        words
     end
-*)
 fun sentencifyTextElement (Paragraph (texts, descs)) = TextAnalyser.Paragraph (sentencify texts, descs)
   | sentencifyTextElement (Heading x) = TextAnalyser.Heading (map sentencifyTextElement x)
   | sentencifyTextElement (Quotation x) = TextAnalyser.Quotation (map sentencifyTextElement x)
