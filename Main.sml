@@ -108,7 +108,7 @@ fun visit uri = if exists (fn x => x = uri) (!visitedPages) then ()
                                        visit link))
                           (getLinks (getAndParse uri) (SOME uri));
                       ())
-                     handle Error (HTTP (404, _)) => ()
+                     handle Error (HTTP (_, _)) => ()
                           | Error (General s) => (print s; print "\n"; raise Fail "General")
                           | Error (Socket s) => (print s; print "\n"; raise Fail "Socket");
 
