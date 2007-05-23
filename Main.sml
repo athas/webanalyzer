@@ -154,7 +154,7 @@ fun main (arg :: rest) =
                                        ^ "/robots.txt")
         val robotstxt = (getURI robotsuri)
             handle Error (HTTP (_, _)) => ""
-                 | Error (Socket s) => ()
+                 | Error (Socket s) => ""
         val _ = Robots.initRobotsTxt robotstxt;
         val starturi = findStartURI uri
     in 
