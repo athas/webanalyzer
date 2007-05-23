@@ -1,0 +1,37 @@
+User-agent: *
+Allow: /searchhistory/
+Disallow: /news?output=xhtml&
+Allow: /news?output=xhtml
+Disallow: /search
+Disallow: /?
+Disallow: /addurl/image?
+Disallow: /sorry/
+
+User-agent: foor
+Disallow: /sprint_xhtml
+Disallow: /sprint_wml
+Disallow: /pqa
+Disallow: /palm
+
+
+User-agent: webanalyzer
+Disallow: /books
+Disallow: /patents?
+Crawl-delay: 10
+Disallow: /scholar?
+Disallow: /complete
+
+User-Agent: bar
+Disallow: /videoprograminfo?
+Disallow: /maps?
+Disallow: /translate?
+Disallow: /ie?
+Disallow: /sms/demo?
+Disallow: /katrina?
+
+
+User-agent: *
+Disallow: /trends/music?
+Disallow: /notebook/search?
+Disallow: /archivesearch/advanced_search
+
