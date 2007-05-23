@@ -12,4 +12,5 @@ app use ["Util.sig", "Util.sml",
          "TextExtractor.sig", "TextExtractor.sml",
          "Sentencifier.sig", "Sentencifier.sml",
          "TextAnalyser.sig", "TextAnalyser.sml",
+         "TextAnalysisReporter.sig", "TextAnalysisReporter.sml",
          "Robots.sig", "Robots.sml"];
