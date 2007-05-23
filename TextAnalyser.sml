@@ -182,7 +182,7 @@ fun fleshKincaidGradeLevel ({words, sentences, vowels, ...} : counts) =
         val r_vowels = fromInt vowels;
         val r_sentences = fromInt sentences;
     in
-        0.39 * (r_words / r_sentences) - 11.8 * (r_vowels / r_words) - 15.59 handle Div => ~1.0
+        0.39 * (r_words / r_sentences) + 11.8 * (r_vowels / r_words) - 15.59 handle Div => ~1.0
     end;
 end
 
