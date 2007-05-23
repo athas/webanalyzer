@@ -12,19 +12,21 @@ datatype AnalysisResult = Lix of real
                         | FleshReadingEase of real
                         | FleshKincaidGradeLevel of real;
 
+type results = AnalysisResult list;
+
 (* Results of sentences *)
-type sentenceresult = (SentenceElementResult list) * (AnalysisResult list);
+type sentenceresult = results * (SentenceElementResult list);
 
 (* Results from a paragraph, a heading or a quotation *)
-datatype textresult = ParagraphResult of AnalysisResult list *
+datatype textresult = ParagraphResult of results *
                                          sentenceresult list *
                                          sentenceresult list list
-                    | HeadingResult of AnalysisResult list *
+                    | HeadingResult of results *
                                        textresult list
-                    | QuotationResult of AnalysisResult list *
+                    | QuotationResult of results *
                                          textresult list;
 (* All results of a document *)
-type documentresult = {title_results : sentenceresult,
-                       document_results : (AnalysisResult list),
+type documentresult = {title_results : results * sentenceresult list,
+                       document_results : results,
                        content_results : textresult list};
 end
