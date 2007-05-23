@@ -225,9 +225,6 @@ fun concatMap f [] = []
 (* SOMEs : 'a option list -> 'a list
  
    Takes a list of options and returns all the SOME-values. *)
-fun SOMEs xs = foldl (fn (SOME x, b) => x :: b
-                            | (NONE, b) => b)
-                          []
-                          xs;
+val SOMEs = (map Option.valOf) o (List.filter Option.isSome);
 
 end;
