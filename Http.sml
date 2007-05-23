@@ -157,7 +157,8 @@ let fun now () = Time.toReal (Time.now())
         (* Data må IKKE indlæses hvis der ikke er noget parat.
            Ved at pakke indlæsningen ind i en anonym funktion,
            kan dette undgås.                                   *) 
-        val data = fn () => Socket.recvVec(socket, 1000) 
+        val data = fn () => (Socket.recvVec(socket, 1000)
+                             handle Fail str => raise Error(Socket str))
         val length = Word8Vector.length vector
         val msecs = now() - time
     in  
