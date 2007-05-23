@@ -29,4 +29,6 @@ datatype textresult = ParagraphResult of results *
 type documentresult = {title_results : results * sentenceresult list,
                        document_results : results,
                        content_results : textresult list};
+
+val analyse : Sentencifier.document -> documentresult;
 end
