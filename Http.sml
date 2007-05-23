@@ -152,7 +152,8 @@ let fun now () = Time.toReal (Time.now())
     in  not (isSome match) end;
     fun read(acc, time) = if not (moreHTML acc) then acc else
     let
-        val vector = Socket.recvVec'(socket, 1, {peek=true, oob=false}) 
+        val vector = (Socket.recvVec'(socket, 1, {peek=true, oob=false})
+                      handle Fail str => raise Error(Socket str))
         (* Data må IKKE indlæses hvis der ikke er noget parat.
            Ved at pakke indlæsningen ind i en anonym funktion,
            kan dette undgås.                                   *) 
