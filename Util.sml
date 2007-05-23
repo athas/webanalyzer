@@ -198,6 +198,19 @@ fun getFirstIndexOf (chr, str) =
         getFirstIndexOf' chr 0 str 
     end
 
+(* Return the index of the last occurence of char in
+   string. Returns size of string if char is not in string. *)
+fun getLastIndexOf (char, string) =
+    let
+        fun getLastIndexOf' index = if index <= 0
+                                    then size string
+                                    else if String.sub (string, index) = char
+                                    then index
+                                    else getLastIndexOf' (index - 1)
+    in
+        getLastIndexOf' (size string - 1)
+    end
+
 (* trims a string from spaces in front and back *)
 fun trimStr str = 
     (* If trimStr gets a empty string or string of spaces then
