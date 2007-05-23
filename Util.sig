@@ -11,6 +11,7 @@ sig type 'a sock = ('a, Socket.active Socket.stream) Socket.sock
     val assoc: ''a -> (''a * 'b) list -> 'b option
 
     val readFrom: string -> string
+    val writeTo: string -> string -> unit
 
     (* Return the index of the first occurence of char in
     string. Returns 0 if char is not in string. *)

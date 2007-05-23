@@ -178,6 +178,11 @@ fun readFrom fileName =
         TextIO.inputAll inStrm
     end
 
+fun writeTo fileName str =
+    let val ostream = TextIO.openOut fileName
+            handle Io _ => raise IOError fileName
+    in TextIO.output (ostream, str) before
+       TextIO.closeOut ostream end
 
 (* Some usefull string functions *)
 
