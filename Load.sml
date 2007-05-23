@@ -9,6 +9,7 @@ app use ["Util.sig", "Util.sml",
          "HTMLLexer.sig", "HTMLLexer.sml",
          "HTMLParser.sig", "HTMLParser.sml",
          "HTMLFilter.sig", "HTMLFilter.sml",
+         "TextExtractor.sig", "TextExtractor.sml",
+         "Sentencifier.sig", "Sentencifier.sml",
          "TextAnalyser.sig",
-         "HTMLTextExtractor.sig", "HTMLTextExtractor.sml",
          "Robots.sig", "Robots.sml"];

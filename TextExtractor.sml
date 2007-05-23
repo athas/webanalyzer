@@ -1,4 +1,4 @@
-structure HTMLTextExtractor :> HTMLTextExtractor =
+structure TextExtractor :> TextExtractor =
 struct
 
 open HTMLParser;
@@ -6,6 +6,7 @@ open Util;
 infix 0 member;
 
 type text = string
+
 
 datatype TextDirection = RightToLeft
                        | LeftToRight;
@@ -15,12 +16,18 @@ datatype WordAttribute = Language of text
                        | Emphasized
                        | Code (* var, kbd *)
                        | Acronym
-                       | Bidirectional of TextDirection;
+                       | Bidirectional of TextDirection; (* Should the words be reversed? *)
 
 (* A text format where most of HTML's nesting is removed. *)
-datatype paragraphised = Paragraph of (string * WordAttribute list) list * text list
+datatype paragraphised = Paragraph of (text * WordAttribute list) list
+                                      * text list
                        | Heading of paragraphised list
                        | Quotation of paragraphised list;
+
+type paragraphiseddocument = {title : text option,
+                              languagecode : text option,
+                              content : paragraphised list};
+
 
 local
     val headings = ["h1", "h2", "h3", "h4", "h5", "h6"];
@@ -48,7 +55,6 @@ local
                      "colgroup", "col",
                      "param", "meta", "link"];
 
-    val sentenceDelimiters = explode ".:!?";
 in
     fun isHeading tag = tag member headings;
     fun isEmphasizing tag = tag member emphasizing;
@@ -56,8 +62,6 @@ in
     fun isBlock tag = tag member block;
     fun isInline tag = tag member inline;
     fun isNonVisual tag = tag member nonvisual;
-    fun isSentenceDelimiter x = x member sentenceDelimiters;
-    fun isAlphabetic x = Char.isAlpha x orelse x member (explode "æøåÆØÅöäüêç")
 end;
 
 (* Get the language of a tag (i.e. the lang or xml:lang attribute values *)
@@ -65,23 +69,22 @@ fun getLanguage tag = case getAttribute "lang" tag of
                           NONE => getAttribute "xml:lang" tag
                         | SOME x => SOME x;
 
-(* Adds a WordAttribute to a set of attributes.
-   - There can be only one Language (A new language will replace an existing)
-   - Only one TextDirection is allowed
-   - Acronym, Code and Emphasized can only occur once. *)
-fun addToAttrSet (Language x) lst = (Language x)
-                                  :: (List.filter (fn (Language _) => false
-                                                    | _ => true)
-                                                  lst)
-  | addToAttrSet (Bidirectional x) lst = (Bidirectional x)
-                                       :: (List.filter (fn (Bidirectional _) => false
-                                                         | _ => true)
-                                                       lst)
-  | addToAttrSet x lst = x :: List.filter (fn y => y <> x) lst;
+(* Adds a WordAttribute to a list of attributes.
+                                    
+   No attribute can occur twice, if an attribute of the type already already exist, the
+   old attribute is removed and the new is used. *)
+fun addWordAttribute (Language x) lst = (Language x)
+                                        :: (List.filter (fn (Language _) => false
+                                                          | _ => true)
+                                                        lst)
+  | addWordAttribute (Bidirectional x) lst = (Bidirectional x)
+                                         :: (List.filter (fn (Bidirectional _) => false
+                                                           | _ => true)
+                                                         lst)
+  | addWordAttribute x lst = x :: List.filter (fn y => y <> x) lst;
 
 
 local
-
 
 (* Intermediate datatype used by the flatten function  *)
 datatype flat = FlatText of (string * WordAttribute list)
@@ -103,13 +106,13 @@ fun flatten' attr ((Text t) :: rest) = (FlatText ((textContents t), attr))
   | flatten' attr ((Tag (tag, subtrees)) :: rest) =
     let
         val newattr' = case getLanguage tag of
-                           SOME x => addToAttrSet (Language x) attr
+                           SOME x => addWordAttribute (Language x) attr
                          | _ => attr;
         val newattr = case getAttribute "dir" tag of
-                          SOME "rtl" => addToAttrSet (Bidirectional RightToLeft) 
-                                                     newattr'
-                        | SOME "ltr" => addToAttrSet (Bidirectional LeftToRight)
-                                                     newattr'
+                          SOME "rtl" => addWordAttribute (Bidirectional RightToLeft) 
+                                                         newattr'
+                        | SOME "ltr" => addWordAttribute (Bidirectional LeftToRight)
+                                                         newattr'
                         | _ => newattr';
 
         val tagname = tagName tag;
@@ -121,12 +124,12 @@ fun flatten' attr ((Text t) :: rest) = (FlatText ((textContents t), attr))
     in
         descriptions @
         (if isEmphasizing tagname
-        then (flatten' (addToAttrSet Emphasized newattr)
+        then (flatten' (addWordAttribute Emphasized newattr)
                        subtrees)
              @ (flatten' attr rest)
 
         else if isAcronym tagname
-        then (flatten' (addToAttrSet Acronym newattr)
+        then (flatten' (addWordAttribute Acronym newattr)
                        subtrees)
              @ (flatten' attr rest)
 
@@ -167,14 +170,14 @@ fun paragraphise [] = [] : paragraphised list
 
 in
 
-    (* flatten: parsetree list -> flat list
+    (* flatten: parsetree list -> paragraphised list
        
        Converts a HTML parsetree in to a flatter format. *)
     val flatten = paragraphise o rmExtraParagraphs o (flatten' []);
 end
 
 
-
+(*
 local
     type word = text * WordAttribute list;
      
@@ -267,32 +270,30 @@ fun sentencifyTextElement (Paragraph (texts, descs)) = TextAnalyser.Paragraph (s
 
 
 fun extractBody parsetrees = ((map sentencifyTextElement) o flatten) parsetrees;
+*)
 
 local
     (* Find all visible string content in the given parsetree list. *)
-    fun stringContent' [] = ""
+  (*  fun stringContent' [] = ""
       | stringContent' ((Text t) :: rest) =
             (textContents t) ^ (stringContent' rest)
 
       | stringContent' (Tag (_, subtrees) :: rest) =
             (stringContent' subtrees) ^ (stringContent' rest);
-
-    fun stringContent (Tag (_, subtrees)) = [stringContent' subtrees]
-      | stringContent (Text t) = [textContents t]
+*)
+    fun stringContent (Tag (_, subtrees)) = foldl (fn (x, b) => b ^ stringContent x) "" subtrees
+      | stringContent (Text t) = textContents t
 in
     (* Gets the title of a webpage, given the head section of that
     webpage. *)
     fun getTitle [] = NONE
-      | getTitle head = Option.map (sentencify
-                                    o (map (fn x => (x, [])))
-                                    o stringContent)
+      | getTitle head = Option.map stringContent
                                    (find "title" head);
 end;
 
 
 
-(* TODO: take care of framesets: analyse <noframes>-contents *)
-fun extractText (alltags as (Tag (tag, subtrees) :: tags)) =
+fun extractFromHTML (alltags as (Tag (tag, subtrees) :: tags)) =
     (case tagName tag of
         "html" =>
           let
@@ -311,7 +312,7 @@ fun extractText (alltags as (Tag (tag, subtrees) :: tags)) =
               val doc_lang = getLanguage tag;
 
               val content = case body of
-                                SOME (Tag (_, subtree)) => extractBody subtree
+                                SOME (Tag (_, subtree)) => flatten subtree
                               | _ => [];
           in
               {title = title,
@@ -321,20 +322,20 @@ fun extractText (alltags as (Tag (tag, subtrees) :: tags)) =
 
       | _ => {title = getTitle alltags,
               languagecode = NONE,
-              content = extractBody alltags})
+              content = flatten alltags})
 
-  | extractText (Text t :: rest) =
+  | extractFromHTML (Text t :: rest) =
     let
-        val {title, languagecode, content} = extractText rest
+        val {title, languagecode, content} = extractFromHTML rest
     in
         {title = title,
          languagecode = languagecode,
-         content = (TextAnalyser.Paragraph ([wordify (textContents t, [])], []))
+         content = (Paragraph ([(textContents t, [])], []))
                    :: content}
     end
-  | extractText [] = {title = NONE, 
-                      languagecode = NONE,
-                      content = []}
+  | extractFromHTML [] = {title = NONE, 
+                          languagecode = NONE,
+                          content = []}
 
 
 
@@ -342,13 +343,9 @@ fun extractText (alltags as (Tag (tag, subtrees) :: tags)) =
 http://www.w3.org/TR/html401/struct/global.html
 
 TODO:
-
  - placer formularer, knapper, labels
 
 *)
                                     
     
-end; (* structure deHTMLifier end *)
-
-
-
+end; (* structure TextExtractor end *)
