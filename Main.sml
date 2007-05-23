@@ -60,20 +60,39 @@ fun mapLinks function htmlTree =
         getChildren'([], htmlTree)
     end
 
+local
+    val URICache = ref (Binarymap.mkDict (fn (x, y) => String.compare (stringFromURI x, stringFromURI y)))
+                   
+    (* Remove everything to the right of the last picket fence (#) in
+    the argument. *)
+    fun trimURI string = 
+        let val index = getLastIndexOf (#"#", string)
+        in String.substring (string, 0, index) end
+in
+fun makeURI (absoluteURI, path) = 
+    let
+        val trimmedPath = trimURI path;
+        val simpleURI = if (String.isPrefix "http://" trimmedPath)
+                        then buildSimpleURI (NONE, trimmedPath)
+                        else buildSimpleURI (absoluteURI, trimmedPath)
+    in
+        case Binarymap.peek (!URICache, simpleURI) of
+            SOME uri => uri
+          | NONE => (URICache := Binarymap.insert (!URICache, simpleURI, buildURI (absoluteURI, trimmedPath));
+                     makeURI (absoluteURI, trimmedPath))
+    end
+end
+
 fun findLinks absoluteURI htmlTree = 
     let
-        fun makeURI path =
-            if (String.isPrefix "http://" path)
-            then buildURI (NONE, path)
-            else buildURI (absoluteURI, path)
-
         fun valid "a" link = not (String.isPrefix "mailto:" link)
           | valid tagname link = true
 
         fun checkAttribute tag attribute =
             case getAttribute attribute tag of
                 SOME str => if valid (tagName tag) str then
-                                (SOME (makeURI str) handle Http.Error (General _) => NONE)
+                                (SOME (makeURI (absoluteURI, str)) 
+                                 handle Http.Error (General _) => NONE)
                             else NONE
               | NONE => NONE
                         
@@ -92,10 +111,10 @@ fun filterExitLinks localuri links =
 
 val getAndParse = parse o getURI;
 
-fun findStartURI URI = if Robots.isPathAllowed (pathFromURI URI)
-                       then URI
-                       else let val rootURI = buildURI (SOME URI, "/") in
-                                print (stringFromURI URI);
+fun findStartURI uri = if Robots.isPathAllowed (pathFromURI uri)
+                       then uri
+                       else let val rootURI = makeURI (SOME uri, "/") in
+                                print (stringFromURI uri);
                                 print " is off-limits to crawlers, trying ";
                                 print (stringFromURI rootURI);
                                 print " instead.\n";
@@ -128,11 +147,11 @@ fun visit uri depth =
               | Error (General s) => (print s; print "\n"; raise Fail "General")
 
 fun main (arg :: rest) = 
-    let val uri = buildURI (NONE, arg)
-        val robotsuri = buildURI (NONE, protocolFromURI uri
-                                        ^ "://"
-                                        ^ serverFromURI uri
-                                        ^ "/robots.txt")
+    let val uri = makeURI (NONE, arg)
+        val robotsuri = makeURI (NONE, protocolFromURI uri
+                                       ^ "://"
+                                       ^ serverFromURI uri
+                                       ^ "/robots.txt")
         val robotstxt = (getURI robotsuri)
             handle Error (HTTP (404, _)) => ""
         val _ = Robots.initRobotsTxt robotstxt;
