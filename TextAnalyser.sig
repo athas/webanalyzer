@@ -1,36 +1,32 @@
-structure TextAnalyser =
-struct
+signature TextAnalyser =
+sig
 
-type text = string;
-         
-(* Attributes that a word can have *)
-datatype WordAttribute = Language of text
-                       | Emphasized
-                       | Code (* var, kbd *)
-                       | Acronym;
+type text = TextExtractor.text;
 
+(* Result of a single word,
+   the boolean indicates whether the word is spelled correctly or not. *)
+type wordresult = text * bool
 
-type word = text * WordAttribute list;
-     
-(* Either a word, a space or punctuation *)
-datatype SentenceElement = Word of word
-                         | Punctuation of text;
-         
-(* [From Wikipedia] Punctuation is everything in written language
-                    other than the actual letters, including
-                    punctuation marks, inter-word spaces,
-                    capitalization, and indentation (Todd, 2000). *)
+datatype SentenceElementResult = Word of wordresult
+                               | Punctuation of text;
 
-type sentence = SentenceElement list;
+datatype AnalysisResult = Lix of real
+                        | FleshReadingEase of real
+                        | FleshKincaidGradeLevel of real;
 
-datatype textelement = Paragraph of sentence list * text list
-                     | Heading of textelement list
-                     | Quotation of textelement list
-                 (*  | Code of text (* <code> *) *)
+(* Results of sentences *)
+type sentenceresult = (SentenceElementResult list) * (AnalysisResult list);
 
-type document = {title : sentence list option,
-                 languagecode : string option,
-                 content : textelement list};
-
-
+(* Results from a paragraph, a heading or a quotation *)
+datatype textresult = ParagraphResult of AnalysisResult list *
+                                         sentenceresult list *
+                                         sentenceresult list
+                    | HeadingResult of AnalysisResult list *
+                                       textresult list
+                    | QuotationResult of AnalysisResult list *
+                                         textresult list;
+(* All results of a document *)
+type documentresult = {title_results : sentenceresult,
+                       document_results : (AnalysisResult list),
+                       content_results : textresult list};
 end
