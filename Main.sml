@@ -2,6 +2,7 @@ open TextIO;
 open Http;
 open HTMLParser;
 open List;
+open Util;
 
 local
     fun unparse' (Tag (tag, children)) =
@@ -81,7 +82,7 @@ fun findLinks absoluteURI htmlTree =
           | maybeGetLink "iframe" tag = checkAttribute tag "src"
           | maybeGetLink _ _ = NONE
     in
-        map valOf (filter Option.isSome (mapLinks (fn tag => maybeGetLink (tagName tag) tag) htmlTree))
+        SOMEs (mapLinks (fn tag => maybeGetLink (tagName tag) tag) htmlTree)
     end
 
 fun filterExitLinks localuri links = 
