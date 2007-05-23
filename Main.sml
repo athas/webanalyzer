@@ -91,7 +91,7 @@ fun findLinks absoluteURI htmlTree =
         fun checkAttribute tag attribute =
             case getAttribute attribute tag of
                 SOME str => if valid (tagName tag) str then
-                                (SOME (makeURI (absoluteURI, str)) 
+                                (SOME (makeURI (absoluteURI, str))
                                  handle Http.Error (General _) => NONE)
                             else NONE
               | NONE => NONE
@@ -153,7 +153,8 @@ fun main (arg :: rest) =
                                        ^ serverFromURI uri
                                        ^ "/robots.txt")
         val robotstxt = (getURI robotsuri)
-            handle Error (HTTP (404, _)) => ""
+            handle Error (HTTP (_, _)) => ""
+                 | Error (Socket s) => ()
         val _ = Robots.initRobotsTxt robotstxt;
         val starturi = findStartURI uri
     in 
