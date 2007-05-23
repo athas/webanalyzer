@@ -219,8 +219,7 @@ fun x member y = List.exists (fn z => z = x) y;
 (* concatMap func lst: ('a -> 'b list) -> 'a list -> 'b list
 
    Maps func over the elements in lst, concatenating the results. *)
-fun concatMap f [] = []
-  | concatMap f (x::xs) = (f x) @ concatMap f xs
+fun concatMap f l = (foldr (op @) []) (map f l);
 
 (* SOMEs : 'a option list -> 'a list
  
