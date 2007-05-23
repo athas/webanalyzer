@@ -338,7 +338,7 @@ val method = ref (Automatic (resolveAddress (parseAddress proxy))) handle _ => r
    Bygger http-request linie udfra action, path og host. *)
 fun buildReq (action, path, host) = action ^ " " ^ path ^ " HTTP/1.1\r\n" ^
                                     "Host: " ^ host ^ "\r\n" ^
-                                    "User-agent:" ^ Config.HttpUserAgent  ^ "\r\n\r\n";
+                                    "User-agent:" ^ (Config.HttpUserAgent ()) ^ "\r\n\r\n";
 
 (*  val requestURI': (('a, active stream) sock -> 'a * string) -> 
                      Config -> string -> URI -> 'a 
