@@ -103,8 +103,8 @@ fun findStartURI URI = if Robots.isPathAllowed (pathFromURI URI)
 
 val visitedPages : URI list ref = ref [];
 
-fun visit maxdepth uri depth = 
-    if depth >= maxdepth orelse 
+fun visit uri depth = 
+    if depth >= (Config.crawlDepthLimit ()) orelse 
        contentTypeFromURI uri <> "text/html" orelse
        exists (fn x => x = uri) (!visitedPages) 
     then ()
@@ -118,15 +118,13 @@ fun visit maxdepth uri depth =
                               print (stringFromURI link);
                               print "\n";
                               flushOut stdOut;
-                              visit maxdepth link (depth + 1)))
+                              visit link (depth + 1)))
                  (filterExitLinks uri (findLinks (SOME uri) parseTree));
              ()
          end
          handle Error (HTTP (code, _)) => ()
               | Error (Socket s) => ()
               | Error (General s) => (print s; print "\n"; raise Fail "General")
-
-val standardMaxDepth = 1;
 
 fun main (arg :: rest) = 
     let val uri = buildURI (NONE, arg)
@@ -139,11 +137,12 @@ fun main (arg :: rest) =
         val _ = Robots.initRobotsTxt robotstxt;
         val starturi = findStartURI uri
     in 
+        if rest <> [] then
+            (Config.setCrawlDepthLimit o valOf o Int.fromString) (hd rest)
+        else ();
         (* Useful when used interactively. *)
         visitedPages := [];
-        case rest of
-            (maxdepth :: _) => visit (Option.valOf (Int.fromString maxdepth)) starturi 0
-          | _ => visit standardMaxDepth starturi 0;
+        visit starturi 0;
         print "Done!\n";
         flushOut stdOut
     end
