@@ -2,6 +2,9 @@ signature Http =
 sig 
     eqtype URI
     exception badURI
+    (* Ikke-kanoniseret *)
+    val buildSimpleURI : URI option * string -> URI
+    (* Kanoniseret *)
     val buildURI : URI option * string -> URI
 
     (* Streng-repræsentation af uri. Det vil gælde for alle uri, at: 

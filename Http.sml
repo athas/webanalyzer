@@ -385,13 +385,13 @@ let val (ctype, content) = (requestURI (getResponse, "GET") uri)
                                 |       _ => raise Error(General "Unknown failure")
 in content end;
 
-(* buildURI': URI option * string -> URI
+(* buildSimpleURI: URI option * string -> URI
 
    En ny URI konstrueres udfra streng og eventuelt
    tidligere URI som strengen skal ses relativt til. 
    Opbygning af stier klares af Path-modulet. *)
 exception badURI;
-fun buildURI' (origin : URI option, str) = 
+fun buildSimpleURI (origin : URI option, str) = 
     let open Option
         val (protocol, server, path) = (parseURI (isSome origin) str)
             handle _ => raise badURI
@@ -445,22 +445,21 @@ fun canonicalURI orig =
         fun addCType uri = let val (protocol, host, port, path, _) = uri
                            in (protocol, host, port, path, cType) end
     in case uri of NONE => addCType orig
-                 | SOME uri => addCType (buildURI'(SOME orig, uri))
+                 | SOME uri => addCType (buildSimpleURI(SOME orig, uri))
                               
 end;
 
 (* buildURI: URI option * string -> URI
 
-   buildURI' vil opbygge en relativ og absolut URI
+   buildSimpleURI vil opbygge en relativ og absolut URI
    udfra givne oplysninger. Der tages kontakt til webserver
    for så kun kanoniske uri returneres. Tvetydighed mht. 
    partielle eller absolutte uri løses også ved forespørgsel
    hos server. *)
 fun buildURI (SOME uri, new) = 
-    (canonicalURI (buildURI'(SOME uri, new))
+    (canonicalURI (buildSimpleURI(SOME uri, new))
      handle Error _ => buildURI(NONE, new))
   | buildURI (NONE, new) = 
-    (canonicalURI (buildURI'(NONE, new)))
+    (canonicalURI (buildSimpleURI(NONE, new)))
 
 end;
-
