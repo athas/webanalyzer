@@ -5,10 +5,8 @@ type text = TextExtractor.text;
 
 (* Result of a single word,
    the boolean indicates whether the word is spelled correctly or not. *)
-type wordresult = text * bool
-
-datatype SentenceElementResult = Word of wordresult
-                               | Punctuation of text;
+datatype SentenceElementResult = WordResult of text * bool
+                               | PunctuationResult of text;
 
 datatype AnalysisResult = Lix of real
                         | FleshReadingEase of real
