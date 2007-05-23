@@ -442,6 +442,10 @@ fun buildSimpleURI (origin : URI option, str) =
 fun canonicalURI orig = 
     let fun getHead uri = requestURI (headResponse, "HEAD") uri
             handle Error (HTTP (int, string)) => (NONE, "text/html")
+                 (* The following status codes are thrown by the
+                 socket module under some circumstances *)
+                 | Fail "ECONNRESET" => (NONE, "text/html")
+                 | Fail "ETIMEDOUT" => (NONE, "text/html")
         val (uri, cType) = getHead orig
         fun addCType uri = let val (protocol, host, port, path, _) = uri
                            in (protocol, host, port, path, cType) end
