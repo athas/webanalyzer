@@ -11,5 +11,5 @@ app use ["Util.sig", "Util.sml",
          "HTMLFilter.sig", "HTMLFilter.sml",
          "TextExtractor.sig", "TextExtractor.sml",
          "Sentencifier.sig", "Sentencifier.sml",
-         "TextAnalyser.sig",
+         "TextAnalyser.sig", "TextAnalyser.sml",
          "Robots.sig", "Robots.sml"];

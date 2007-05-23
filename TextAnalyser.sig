@@ -26,7 +26,7 @@ datatype textresult = ParagraphResult of results *
                     | QuotationResult of results *
                                          textresult list;
 (* All results of a document *)
-type documentresult = {title_results : results * sentenceresult list,
+type documentresult = {title_results : (results * sentenceresult list) option,
                        document_results : results,
                        content_results : textresult list};
 

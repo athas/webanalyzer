@@ -29,7 +29,7 @@ datatype textresult = ParagraphResult of results *
                     | QuotationResult of results *
                                          textresult list;
 (* All results of a document *)
-type documentresult = {title_results : results * sentenceresult list,
+type documentresult = {title_results : (results * sentenceresult list) option,
                        document_results : results,
                        content_results : textresult list};
 
@@ -105,7 +105,12 @@ fun countSentence (sentence : Sentencifier.SentenceElement list) =
          longwords = longwords,
          vowels = vowels} : counts
     end;
-(*
+    
+fun countOfTextCounts (ParagraphCount (c, _, _)) = c
+  | countOfTextCounts (HeadingCount (c, _)) = c
+  | countOfTextCounts (QuotationCount (c, _)) = c;
+
+
 fun countTextElement (Sentencifier.Paragraph (sentences, descs)) =
     let
         val sentencesCounts = map countSentence sentences;
@@ -130,9 +135,20 @@ fun countTextElement (Sentencifier.Paragraph (sentences, descs)) =
                         descriptionCountResults)
     end
   | countTextElement (Sentencifier.Heading content) =
-        HeadingCount (map countTextElement content)
+    let
+        val subCounts = map countTextElement content
+        val total = sumCounts (map countOfTextCounts subCounts)
+    in
+        HeadingCount (total, subCounts)
+    end
   | countTextElement (Sentencifier.Quotation content) =
-        QuotationCount (map countTextElement content);
+    let
+        val subCounts = map countTextElement content
+        val total = sumCounts (map countOfTextCounts  subCounts)
+    in
+        QuotationCount (total, subCounts)
+    end;
+        
 
 val countDocumentContent = map countTextElement;
     
@@ -178,42 +194,60 @@ local
                            FleshReadingEase (fleshReadingEase counts),
                            FleshKincaidGradeLevel (fleshKincaidGradeLevel counts)];
 
-    fun analyseSentenceElement (Word (t, _)) = WordResult (t, checkSpelling t)
-      | analyseSentenceElement (Punctuation t) = PunctuationResult t;
+
+
+    fun analyseSentenceElement (Sentencifier.Word (t, _)) = WordResult (t, checkSpelling NONE t)
+      | analyseSentenceElement (Sentencifier.Punctuation t) = PunctuationResult t;
 
     fun analyseSentence (counts, sentence) = (analyse' counts,
                                               map analyseSentenceElement sentence);
 
-    fun resultOfTextResult (ParagraphResult (r, _, _)) = r;
-      | resultOfTextResult (HeadingResult (r, _)) = r;
+    fun resultOfTextResult (ParagraphResult (r, _, _)) = r
+      | resultOfTextResult (HeadingResult (r, _)) = r
       | resultOfTextResult (QuotationResult (r, _)) = r;
 
-    fun analyseTextElement (ParagraphCount (count, sentence)) =
+    fun analyseTextElement (ParagraphCount (count, sentenceCounts, descsCounts)) =
         let
-            val counts = countTextElement te;
+            val total = analyse' count;
+            val sentenceResults = map analyseSentence sentenceCounts;
+            (* val descriptionResults = map (map analyseSentence) descsCounts; *)
         in
-            
+            ParagraphResult (total, sentenceResults, [])
         end
       | analyseTextElement (HeadingCount (count, subcounts)) =
-            HeadingResult (analyse' counts, map analyseTextElement subcounts)
-      | analyseTextElement (QuotationCount (count, subcount)) =
-            QuotationResult (analyse' counts, map analyseTextElement subcounts)
+            HeadingResult (analyse' count, map analyseTextElement subcounts)
+      | analyseTextElement (QuotationCount (count, subcounts)) =
+            QuotationResult (analyse' count, map analyseTextElement subcounts)
 in
 
 fun analyse ({title, languagecode, content} : Sentencifier.document) =
     let
         val documentCounts = countDocumentContent content;
-        val titleCounts = Option.map (addCounts (map countSentence)) title;
+        val documentTotal = sumCounts (map countOfTextCounts documentCounts);
+        val results = map analyseTextElement documentCounts;
+
+        val titleResults = case title of
+                               NONE => NONE
+                             | SOME (sentences) =>
+                               let
+                                   val counts = map countSentence sentences;
+                                   val zipped = ListPair.zip (counts, sentences);
+                                   val totals = sumCounts counts;
+                               in
+                                   SOME (analyse' totals,
+                                         map analyseSentence zipped)
+                               end;
+            
     in
-        {title_results =,
-         document_results =,
-         content_results =}
+        {title_results = titleResults,
+         document_results = analyse' documentTotal,
+         content_results = results}
     end;
 end;
-*)
 
+(*(* dummy *)
 fun analyse ({title, languagecode, content} : Sentencifier.document) =
-    {title_results = ([], []),
+    {title_results = NONE,
      document_results = [],
-     content_results = []} : documentresult;
+     content_results = []} : documentresult; *)
 end;
