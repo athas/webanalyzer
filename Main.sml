@@ -59,7 +59,7 @@ fun mapLinks function htmlTree =
         getChildren'([], htmlTree)
     end
 
-fun getLinks htmlTree absoluteURI = 
+fun findLinks absoluteURI htmlTree = 
     let
         fun makeURI path =
             if (String.isPrefix "http://" path)
@@ -84,7 +84,12 @@ fun getLinks htmlTree absoluteURI =
         map valOf (filter Option.isSome (mapLinks (fn tag => maybeGetLink (tagName tag) tag) htmlTree))
     end
 
-val getAndParse = (parse o getURI)
+fun filterExitLinks localuri links = 
+    filter (fn link => serverFromURI link = 
+                       serverFromURI localuri)
+           links;
+
+val getAndParse = parse o getURI;
 
 fun findStartURI URI = if Robots.isPathAllowed (pathFromURI URI)
                        then URI
@@ -103,18 +108,20 @@ fun visit maxdepth uri depth =
        contentTypeFromURI uri <> "text/html" orelse
        exists (fn x => x = uri) (!visitedPages) 
     then ()
-    else (visitedPages := uri :: !visitedPages;
-          print "Visiting ";
-          print (stringFromURI uri);
-          print "\n";
-          flushOut stdOut;
-          map (fn link => (print "Seeing ";
-                           print (stringFromURI link);
-                           print "\n";
-                           flushOut stdOut;
-                           visit maxdepth link (depth + 1)))
-              (getLinks (getAndParse uri) (SOME uri));
-          ())
+    else let val parseTree = (getAndParse uri) in
+             visitedPages := uri :: !visitedPages;
+             print "Visiting ";
+             print (stringFromURI uri);
+             print "\n";
+             flushOut stdOut;
+             map (fn link => (print "Seeing ";
+                              print (stringFromURI link);
+                              print "\n";
+                              flushOut stdOut;
+                              visit maxdepth link (depth + 1)))
+                 (filterExitLinks uri (findLinks (SOME uri) parseTree));
+             ()
+         end
          handle Error (HTTP (code, _)) => ()
               | Error (Socket s) => ()
               | Error (General s) => (print s; print "\n"; raise Fail "General")
