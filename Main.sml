@@ -110,6 +110,9 @@ fun filterExitLinks localuri links =
            links;
 
 val getAndParse = parse o getURI;
+val analyseHTML = TextAnalyser.analyse o 
+                  Sentencifier.sentencifyParagraphised o 
+                  TextExtractor.extractFromHTML;
 
 fun findStartURI uri = if Robots.isPathAllowed (pathFromURI uri)
                        then uri
@@ -123,7 +126,7 @@ fun findStartURI uri = if Robots.isPathAllowed (pathFromURI uri)
 
 val visitedPages : URI list ref = ref [];
 
-fun visit uri depth = 
+fun visit outputAnalysis uri depth = 
     if depth >= (Config.crawlDepthLimit ()) orelse 
        contentTypeFromURI uri <> "text/html" orelse
        exists (fn x => x = uri) (!visitedPages) 
@@ -134,17 +137,22 @@ fun visit uri depth =
              print (stringFromURI uri);
              print "\n";
              flushOut stdOut;
+             outputAnalysis uri (analyseHTML parseTree);
              map (fn link => (print "Seeing ";
                               print (stringFromURI link);
                               print "\n";
                               flushOut stdOut;
-                              visit link (depth + 1)))
+                              visit outputAnalysis link (depth + 1)))
                  (filterExitLinks uri (findLinks (SOME uri) parseTree));
              ()
          end
          handle Error (HTTP (code, _)) => ()
               | Error (Socket s) => ()
               | Error (General s) => (print s; print "\n"; raise Fail "General")
+
+fun filenameForAnalysis uri = String.map (fn #"/" => #"#"
+                                           | char => char)
+                                         ((serverFromURI uri) ^ (pathFromURI uri));
 
 fun main (arg :: rest) = 
     let val uri = makeURI (NONE, arg)
@@ -157,13 +165,17 @@ fun main (arg :: rest) =
                  | Error (Socket s) => ""
         val _ = Robots.initRobotsTxt robotstxt;
         val starturi = findStartURI uri
+        val outputdir = serverFromURI uri;
+        fun analysisOutputter uri analysis =
+            writeTo (outputdir ^ "/" ^ (filenameForAnalysis uri)) (TextAnalysisReporter.makeReport analysis);
     in 
         if rest <> [] then
             (Config.setCrawlDepthLimit o valOf o Int.fromString) (hd rest)
         else ();
+        FileSys.mkDir outputdir;
         (* Useful when used interactively. *)
         visitedPages := [];
-        visit starturi 0;
+        visit analysisOutputter starturi 0;
         print "Done!\n";
         flushOut stdOut
     end
