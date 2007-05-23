@@ -26,7 +26,7 @@ datatype SentenceElement = Word of word
 (* A list of sentence elements, there should be space between each element. *)
 type sentence = SentenceElement list;
 
-datatype textelement = Paragraph of sentence list * text list
+datatype textelement = Paragraph of sentence list * sentence list list
                      | Heading of textelement list
                      | Quotation of textelement list;
                  (*  | Code of text (* <code> *) *)
@@ -143,7 +143,7 @@ in
 end
 
 
-fun sentencifyTextelement (TextExtractor.Paragraph (texts, descs)) = Paragraph (sentencify texts, descs)
+fun sentencifyTextelement (TextExtractor.Paragraph (texts, descs)) = Paragraph (sentencify texts, map sentencifyString descs)
   | sentencifyTextelement (TextExtractor.Heading x) = Heading (map sentencifyTextelement x)
   | sentencifyTextelement (TextExtractor.Quotation x) = Quotation (map sentencifyTextelement x);
 

@@ -24,7 +24,7 @@ sig
     (* A list of sentence elements, there should be space between each element. *)
     type sentence = SentenceElement list;
 
-    datatype textelement = Paragraph of sentence list * text list
+    datatype textelement = Paragraph of sentence list * sentence list list
                          | Heading of textelement list
                          | Quotation of textelement list;
                      (*  | Code of text (* <code> *) *)

@@ -18,7 +18,7 @@ type sentenceresult = (SentenceElementResult list) * (AnalysisResult list);
 (* Results from a paragraph, a heading or a quotation *)
 datatype textresult = ParagraphResult of AnalysisResult list *
                                          sentenceresult list *
-                                         sentenceresult list
+                                         sentenceresult list list
                     | HeadingResult of AnalysisResult list *
                                        textresult list
                     | QuotationResult of AnalysisResult list *
