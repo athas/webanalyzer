@@ -202,7 +202,7 @@ fun getFirstIndexOf (chr, str) =
    string. Returns size of string if char is not in string. *)
 fun getLastIndexOf (char, string) =
     let
-        fun getLastIndexOf' index = if index <= 0
+        fun getLastIndexOf' index = if index < 0
                                     then size string
                                     else if String.sub (string, index) = char
                                     then index
