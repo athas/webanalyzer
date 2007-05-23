@@ -16,6 +16,7 @@ val disallowedPaths : string list ref = ref [];
 (* de-refs disallowedPaths. Used when searching by 'isPathAllowed' *)
 fun getDisallowedPaths() = !disallowedPaths
 
+fun clearRobotsTxt () = () before disallowedPaths := [];
     
 (* Initializes the 'disallowedPaths' from the content of a robots.txt *)
 fun initRobotsTxt robotsStr = 
@@ -50,7 +51,8 @@ fun initRobotsTxt robotsStr =
                             filterOtherUserAgents' ret ss
                     end
             in
-              filterOtherUserAgents' [] strLst  
+                clearRobotsTxt ();
+                filterOtherUserAgents' [] strLst
             end
 
         (* String list containing info from Robots.txt that is of interest for our webcrawler *)
@@ -97,9 +99,6 @@ fun initRobotsTxt robotsStr =
            it can be assesed later by the query function *)
         disallowedPaths := disallowLst
     end
-
-fun clearRobotsTxt () = () before disallowedPaths := [];
-
 
 (* Scans the disallowedPaths, that was created at by initRobotsTxt
    and check that no elements prefixes the given path *)
