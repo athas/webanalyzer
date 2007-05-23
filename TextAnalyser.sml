@@ -162,7 +162,7 @@ fun lix ({words, longwords, sentences, ...} : counts) =
         val r_longwords = fromInt longwords;
         val r_sentences = fromInt sentences;
     in
-        r_words/r_sentences + (r_longwords/r_words * 100.0)
+        r_words/r_sentences + (r_longwords/r_words * 100.0) handle Div => ~1.0
     end;
 
 fun fleshReadingEase ({words, sentences, vowels, ...} : counts) =
@@ -172,7 +172,7 @@ fun fleshReadingEase ({words, sentences, vowels, ...} : counts) =
         val r_vowels = fromInt vowels;
         val r_sentences = fromInt sentences;
     in
-        206.835 - 1.015 * (r_words / r_sentences) - 84.6 * (r_vowels / r_words)
+        206.835 - 1.015 * (r_words / r_sentences) - 84.6 * (r_vowels / r_words) handle Div => ~1.0
     end;
 
 fun fleshKincaidGradeLevel ({words, sentences, vowels, ...} : counts) =
@@ -182,7 +182,7 @@ fun fleshKincaidGradeLevel ({words, sentences, vowels, ...} : counts) =
         val r_vowels = fromInt vowels;
         val r_sentences = fromInt sentences;
     in
-        0.39 * (r_words / r_sentences) - 11.8 * (r_vowels / r_words) - 15.59
+        0.39 * (r_words / r_sentences) - 11.8 * (r_vowels / r_words) - 15.59 handle Div => ~1.0
     end;
 end
 
