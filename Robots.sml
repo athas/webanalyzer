@@ -14,8 +14,20 @@ struct
 val disallowedPaths : string list ref = ref [];
 
 (* de-refs disallowedPaths. Used when searching by 'isPathAllowed' *)
-fun getDisallowedPaths() = !disallowedPaths
+fun getDisallowedPaths() = !disallowedPaths;
 
+(* Crawl delay indicationg how loong the site wants us to wait between
+   each crawling links *)
+val crawlDelay : int ref = ref 0;
+
+(* Used to set the crawlDelay, if it is specifyed by either the user
+   or in a Robots.txt *) 
+fun setCrawlDelay n = crawlDelay := n;
+
+(* Returns the crawlDelay de-refed *)
+fun getCrawlDelay () = !crawlDelay;
+
+(* Resets the disallowedPaths list *)
 fun clearRobotsTxt () = () before disallowedPaths := [];
     
 (* Initializes the 'disallowedPaths' from the content of a robots.txt *)
@@ -62,21 +74,54 @@ fun initRobotsTxt robotsStr =
            the paths that follows from a 'Disallow:' *)
         fun makeDisallowLst strLst =
             let
+                (* Set the crawlDelay from crawlDelay in robots.txt *)
+                fun handleCrawlDelay str = case Int.fromString str of
+                                               SOME n => setCrawlDelay n
+                                             | NONE => ()
+                                     
+                (* Set the crawlDelay from the requestRatein in robots.txt *)
+                fun handleRequestRate str = 
+                    let
+                        val splitStr = String.tokens (fn str => str = #"/") str 
+                        fun handleRequestRate' (numPages::inTime::[]) = 
+                            let
+                                val numPages' = Int.fromString numPages
+                                val inTime' = Int.fromString inTime
+                            in
+                                if (Option.isSome numPages' andalso Option.isSome inTime') then
+                                    setCrawlDelay (Int.div(valOf inTime', valOf numPages'))
+                                else
+                                    ()
+                            end
+                          | handleRequestRate' _ = ()
+
+                    in  
+                        if (List.length splitStr = 2) then
+                            handleRequestRate' splitStr
+                        else
+                            ()         
+                    end
+              
+                (* regexp expressions for matching string in the robots.txt *)
+                val disallowRegexp = (Regex.regcomp "Disallow:" [Regex.Icase]);
+                val crawlDelayRegexp = (Regex.regcomp "Crawl-delay:" [Regex.Icase]);
+                val requestRateRegexp = (Regex.regcomp "Request-rate:" [Regex.Icase]);
+              
                 fun makeDisallowLst' ret [] = ret
-                  | makeDisallowLst' ret (strLst as s::ss) = 
-                    if Regex.regexecBool 
-                           (Regex.regcomp "Disallow:" [Regex.Icase]) 
-                           [] 
-                           s
-                    then
-                        (* if List.hd strLst is 'Disallow:' then save the next
-                           and search further in the 2. next for 'disallow'
-                           statement. If this aint a 'Disallow' statement then
-                           just move further to the next and check that one. *)
-                        makeDisallowLst' (List.nth(strLst, 1) :: ret) (List.tl ss) 
-                        handle _ => makeDisallowLst' ret []
+                  | makeDisallowLst' ret [_] = ret
+                  | makeDisallowLst' ret (s::(strTail as ss::sss)) = 
+                    (* if s matches one of the above Regexp then process the next
+                       and move on to the 2. next and start over.
+                       If this doesn't match the above  Regexps then
+                       just to the next element check that one. *)
+                    if Regex.regexecBool disallowRegexp [] s then
+                        makeDisallowLst' (ss :: ret) sss 
+                    else if Regex.regexecBool crawlDelayRegexp [] s then
+                        makeDisallowLst' ret sss before handleCrawlDelay ss
+                    else if Regex.regexecBool requestRateRegexp [] s then
+                        makeDisallowLst' ret sss before handleRequestRate ss
                     else
-                        makeDisallowLst' ret (ss)
+                        makeDisallowLst' ret strTail
             in
                 makeDisallowLst' [] strLst
             end
