@@ -11,7 +11,7 @@ local
                         ("quot", chr 34), (* forward-slash *)
                         ("apos", #"'"),
                         ("nbsp", chr 160),   (* Space *)
-                        ("Oslash", chr 216), (* ÆØÅæøå *)
+                        ("Oslash", chr 216),
                         ("oslash", chr 248),
                         ("Aelig", chr 146),
                         ("aelig", chr 145),
