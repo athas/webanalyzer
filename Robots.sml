@@ -28,7 +28,10 @@ fun setCrawlDelay n = crawlDelay := n;
 fun getCrawlDelay () = !crawlDelay;
 
 (* Resets the disallowedPaths list *)
-fun clearRobotsTxt () = () before disallowedPaths := [];
+fun clearRobotsTxt () = (
+    disallowedPaths := [];
+    setCrawlDelay 0;
+    () );
     
 (* Initializes the 'disallowedPaths' from the content of a robots.txt *)
 fun initRobotsTxt robotsStr = 
