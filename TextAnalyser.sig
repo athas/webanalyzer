@@ -30,5 +30,9 @@ type documentresult = {title_results : (results * sentenceresult list) option,
                        document_results : results,
                        content_results : textresult list};
 
+val titleResults : documentresult -> (results * sentenceresult list) option;
+val documentResults : documentresult -> results;
+val contentResults : documentresult -> textresult list;
+
 val analyse : Sentencifier.document -> documentresult;
 end

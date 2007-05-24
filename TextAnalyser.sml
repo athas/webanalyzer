@@ -33,6 +33,10 @@ type documentresult = {title_results : (results * sentenceresult list) option,
                        document_results : results,
                        content_results : textresult list};
 
+fun titleResults documentresult = #title_results documentresult;
+fun documentResults documentresult = #document_results documentresult;
+fun contentResults documentresult = #content_results documentresult;
+
 (* A record containing information about a document, paragraph or sentence.
     - paragraphs is 0 and sentences is 1 for a sentence
     - paragraphs is 1 for a paragraph
