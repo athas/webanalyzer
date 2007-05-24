@@ -4,37 +4,6 @@ open HTMLParser;
 open List;
 open Util;
 
-local
-    fun unparse' (Tag (tag, children)) =
-        let
-            fun printChildren [] = []
-              | printChildren (child :: rest) =
-                (unparse' child;
-                 print "\n";
-                 printChildren rest);
-            fun printAttribute (key, value) = (print " ";
-                                               print key;
-                                               print "=\"";
-                                               print value;
-                                               print "\"")
-        in
-            print "<";
-            print (tagName tag);
-            mapAttributes printAttribute tag;
-            print ">\n";
-            printChildren children;
-            print "</";
-            print (tagName tag);
-            print ">\n"
-        end
-      | unparse' (Text text) = print (textContents text);
-
-in
-
-fun unparse tags = (map unparse' tags; flushOut stdOut);
-
-end
-
 fun mapLinks function htmlTree =
     let
         (* takes a parsetree list and processes down it by calling
