@@ -2,6 +2,8 @@ load "Regex";
 load "Socket";
 load "Unix";
 load "Binarymap";
+load "Msp";
+load "Listsort";
 
 app use ["Util.sig", "Util.sml",
          "Config.sig", "Config.sml",
