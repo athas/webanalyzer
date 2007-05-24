@@ -1,3 +1,5 @@
+(* Note that you have to load Main.sml seperately. *)
+
 load "Regex";
 load "Socket";
 load "Unix";
