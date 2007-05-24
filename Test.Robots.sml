@@ -46,11 +46,11 @@ val testIsPathDisallowed044 = Robots.isPathAllowed "/notebook/search?" = true;
 (* Test that we obay the extended Robots definiton of Request-rate
    from a robots.txt *) 
 Robots.initRobotsTxt (Util.readFrom "robots.txt"); 
-val testCrawlDelay001 = Robots.getCrawlDelay() = 10;
+val testCrawlDelay001 = Config.crawlDelay() = 10;
 
 (* Test crawlDelay on the empty Robots.txt *)
 Robots.initRobotsTxt "";
-val testCrawlDelay011 = Robots.getCrawlDelay() = 0;
+val testCrawlDelay011 = Config.crawlDelay() = 0;
 
 (* Parse a new Robots.txt that uses Request-Rate instead *)
 Robots.initRobotsTxt ( "User-agent: foo\n "
@@ -65,6 +65,6 @@ Robots.initRobotsTxt ( "User-agent: foo\n "
                      ^ "Disallow: /foo\n"
                      ^ "Crawl-delay: 50");
 
-val testCrawlDelay021 = Robots.getCrawlDelay() = Int.div(10,2);
+val testCrawlDelay021 = Config.crawlDelay() = Int.div(10,2);
 
 
