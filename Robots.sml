@@ -16,21 +16,10 @@ val disallowedPaths : string list ref = ref [];
 (* de-refs disallowedPaths. Used when searching by 'isPathAllowed' *)
 fun getDisallowedPaths() = !disallowedPaths;
 
-(* Crawl delay indicationg how loong the site wants us to wait between
-   each crawling links *)
-val crawlDelay : int ref = ref 0;
-
-(* Used to set the crawlDelay, if it is specifyed by either the user
-   or in a Robots.txt *) 
-fun setCrawlDelay n = crawlDelay := n;
-
-(* Returns the crawlDelay de-refed *)
-fun getCrawlDelay () = !crawlDelay;
-
 (* Resets the disallowedPaths list *)
 fun clearRobotsTxt () = (
     disallowedPaths := [];
-    setCrawlDelay 0;
+    Config.setCrawlDelay 0;
     () );
     
 (* Initializes the 'disallowedPaths' from the content of a robots.txt *)
@@ -60,7 +49,7 @@ fun initRobotsTxt robotsStr =
                     in
                         (* match the userAgent against this crawlers own
                            name and * which applys to all *)
-                        if ((userAgent = "*") orelse (userAgent = Config.HttpUserAgent ())) then
+                        if ((userAgent = "*") orelse (userAgent = Config.httpUserAgent ())) then
                             filterOtherUserAgents' ((s) :: ret) (ss)
                         else
                             filterOtherUserAgents' ret ss
@@ -79,7 +68,7 @@ fun initRobotsTxt robotsStr =
             let
                 (* Set the crawlDelay from crawlDelay in robots.txt *)
                 fun handleCrawlDelay str = case Int.fromString str of
-                                               SOME n => setCrawlDelay n
+                                               SOME n => Config.setCrawlDelay n
                                              | NONE => ()
                                      
                 (* Set the crawlDelay from the requestRatein in robots.txt *)
@@ -92,7 +81,7 @@ fun initRobotsTxt robotsStr =
                                 val inTime' = Int.fromString inTime
                             in
                                 if (Option.isSome numPages' andalso Option.isSome inTime') then
-                                    setCrawlDelay (Int.div(valOf inTime', valOf numPages'))
+                                    Config.setCrawlDelay (Int.div(valOf inTime', valOf numPages'))
                                 else
                                     ()
                             end
