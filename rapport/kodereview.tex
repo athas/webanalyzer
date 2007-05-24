@@ -1,0 +1,69 @@
+\documentclass[a4paper,oneside,article]{memoir}
+\usepackage[T1]{fontenc}
+\usepackage{textcomp}
+\usepackage[latin1]{inputenc}
+\usepackage[danish]{babel}
+\usepackage[garamond]{mathdesign}
+\usepackage{listings}
+
+\renewcommand{\ttdefault}{pcr} % bedre typewriter font
+\renewcommand{\rmdefault}{ugm} % garamond
+
+%\overfullrule=5pt
+
+\setsecnumdepth{part}
+
+\lstloadlanguages{C}
+\lstset{language     = ML,
+        extendedchars= false,
+        breaklines   = true,
+        tabsize      = 2,
+        showstringspaces = false,
+        basicstyle   = \small\ttfamily,
+        commentstyle = \small\rmfamily\em
+      }
+
+\title{Programkode til kodereview  \\
+       \small{Førsteårsprojekt}}
+
+\author
+{
+  Gruppe 1:\\
+  Troels Henriksen (athas@sigkill.dk)\\
+  Jesper Reenberg (reenberg@kampsax.dtu.dk)\\
+  Martin Dybdal (dybber@dybber.dk)\\ \\
+  Vejledere: Dina og Kasper
+}
+
+\pagestyle{plain}
+
+\date{\today}
+
+\begin{document}
+\maketitle
+\tableofcontents*
+
+\appendix
+\chapter{HTMLLexer.sig}
+\lstinputlisting{../HTMLLexer.sig}
+
+\chapter{HTMLLexer.sml}
+\lstinputlisting{../HTMLLexer.sml}
+
+\chapter{HTMLParser.sig}
+\lstinputlisting{../HTMLParser.sig}
+
+\chapter{HTMLParser.sml}
+\lstinputlisting{../HTMLParser.sml}
+
+\chapter{TextExtractor.sig}
+\lstinputlisting{../TextExtractor.sig}
+
+\chapter{TextExtractor.sml}
+\lstinputlisting{../TextExtractor.sml}
+
+\chapter{Sentencifier.sig}
+\lstinputlisting{../Sentencifier.sig}
+
+
+\end{document}
