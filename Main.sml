@@ -101,6 +101,7 @@ fun visit outputAnalysis uri depth =
        exists (fn x => x = uri) (!visitedPages) 
     then ()
     else let val parseTree = (getAndParse uri) in
+             Util.wait (Robots.getCrawlDelay ());
              visitedPages := uri :: !visitedPages;
              print "Visiting ";
              print (stringFromURI uri);
@@ -159,7 +160,7 @@ fun main (arg :: rest) =
         val robotstxt = (getURI robotsuri)
             handle Error (HTTP (_, _)) => ""
                  | Error (Socket s) => ""
-        val _ = Robots.initRobotsTxt robotstxt;
+        val _ = Robots.setCrawlDelay 0 before Robots.initRobotsTxt robotstxt;
         val starturi = findStartURI uri
         val outputdir = serverFromURI uri;
         fun outputFilename uri = (outputdir ^ "/" ^ (filenameForAnalysis uri))
