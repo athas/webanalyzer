@@ -73,19 +73,6 @@ in  TextIO.inputAll indstrm before
     TextIO.closeIn(indstrm)
 end;
 
-(* tmpName: unit -> string
-
-   tmpName vil lave et midlertidigt filnavn udfra 
-   klokkeslet *)
-val begin = Time.now()
-fun tmpName () = 
-let val t = Time.-(Time.now(), begin)
-    val secs  = Time.toSeconds t
-    val msecs = trunc(((Time.toReal t) - (real secs)) * 1000.0)
-    val num = 1000 * (secs mod 1000) + (msecs mod 1000)
-    val str = Int.toString num
-in  str ^ ".tmp" end;
-
 (* safeRemove: string -> unit
 
    safeRemove fjerner filen, men melder ikke fejl,
@@ -106,29 +93,11 @@ fun safeRemove filename = (FileSys.remove filename)
    back an deleting it *) 
 fun run line =
     let
-        fun runWindows line = 
-            let val temp = tmpName()
-                val command = line ^ " > " ^ temp
-                val status = Process.system command
-            in  (if status = Process.failure then NONE 
-                 else SOME (readFile temp)) 
-                before safeRemove temp
-            end;
-            
-        fun runUnix line = 
-            let
-                val pr = Unix.execute("/bin/sh" , ["-c", line])
-            in
-                (SOME (TextIO.inputAll(#1 (Unix.streamsOf pr)))
-                 handle Fail s => NONE)
-                before Unix.reap pr
-            end
+        val pr = Unix.execute("/bin/sh" , ["-c", line])
     in
-        if unix() then
-            runUnix line
-        else
-            runWindows line
-            
+        (SOME (TextIO.inputAll(#1 (Unix.streamsOf pr)))
+         handle Fail s => NONE)
+        before Unix.reap pr
     end;
        
 (* gethostbyname: string -> string
