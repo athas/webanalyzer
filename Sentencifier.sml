@@ -105,7 +105,7 @@ local
       | convertAttrs ((TextExtractor.Language x) :: xs) = (Language x) :: convertAttrs xs
       | convertAttrs [] = []
 
-    fun convertSentenceElems (Space :: xs) = convertSentenceElems xs
+    fun convertSentenceElems (Space :: xs) = (Punctuation " ") :: convertSentenceElems xs
       | convertSentenceElems ((WordI (text, attrs)) :: xs) = 
         let
             val rtext =
