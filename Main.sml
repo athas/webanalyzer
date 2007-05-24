@@ -4,6 +4,8 @@ open HTMLParser;
 open List;
 open Util;
 
+exception FatalError of string;
+
 fun mapLinks function htmlTree =
     let
         (* takes a parsetree list and processes down it by calling
@@ -86,11 +88,14 @@ val analyseHTML = TextAnalyser.analyse o
 fun findStartURI uri = if Robots.isPathAllowed (pathFromURI uri)
                        then uri
                        else let val rootURI = makeURI (SOME uri, "/") in
-                                print (stringFromURI uri);
-                                print " is off-limits to crawlers, trying ";
-                                print (stringFromURI rootURI);
-                                print " instead.\n";
-                                rootURI
+                                if Robots.isPathAllowed (pathFromURI rootURI) then
+                                    rootURI before
+                                    print (stringFromURI uri) before
+                                    print " er forbudt for crawlere, så " before
+                                    print (stringFromURI rootURI) before
+                                    print " bruges i stedet.\n"
+                                else
+                                    raise FatalError ("Både den leverede URI og serverens rod-URI er forbudt, så jeg giver op.")
                             end
 
 val visitedPages : URI list ref = ref [];
@@ -151,7 +156,7 @@ fun writeIndex starturi outputFilename analysedPages =
                                                              sortedResults))))))))
     end;
 
-fun main (arg :: rest) = 
+fun mainProgram (arg :: rest) = 
     let val uri = makeURI (NONE, arg)
         val robotsuri = makeURI (NONE, protocolFromURI uri
                                        ^ "://"
@@ -180,6 +185,9 @@ fun main (arg :: rest) =
         print "Done!\n";
         flushOut stdOut
     end
-  | main [] = print "Not enough arguments\n";
+  | mainProgram [] = print "Not enough arguments\n";
 
-(*val _ = main (CommandLine.arguments ());*)
+fun main args = mainProgram args
+    handle FatalError reason => print reason before print "\n";
+
+(*val _ = mainWrapper (CommandLine.arguments ());*)
