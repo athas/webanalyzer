@@ -127,26 +127,27 @@ fun badnessFactor analysis = case List.find (fn (TextAnalyser.Lix value) => true
                                                          | _ => false)
                                             (TextAnalyser.documentResults analysis)
                               of SOME (TextAnalyser.Lix value) => value
-                               | NONE => raise Fail "Impossible! No lix!";
+                               | _ => raise Fail "Impossible! No lix!";
 
 (* Compare two analysis-results. *)
 fun compareResults (result1, result2) = Real.compare (badnessFactor result1, badnessFactor result2);
 
 fun writeIndex starturi outputFilename analysedPages =
-    let val sortedResults = Listsort.sort (fn ((_, x), (_, y)) => compareResults (y, x)) analysedPages
+    let open Msp;
+        val sortedResults = Listsort.sort (fn ((_, x), (_, y)) => compareResults (y, x)) analysedPages
         val std = td o $
         val wseqFromURI = $ o stringFromURI
         val wseqFromReal = $ o Real.toString
-        val wltr = tr o $$ o (map flatten)
-        val wltable = table o $$ o (map flatten)
+        val wltr = tr o $$ o (List.map flatten)
+        val wltable = table o $$ o (List.map flatten)
     in writeTo (serverFromURI starturi ^ ".html")
                (flatten (html (&& ((head o title o $) ("Analyse af " ^ (stringFromURI starturi)),
                                    (body (wltable ((wltr [(std "URI"), (std "Sidesværhedsgrad")]) ::
-                                                   (map (fn (uri, result) =>
-                                                            (wltr [(td (ahref (urlencode (outputFilename uri))
-                                                                              (wseqFromURI uri))),
-                                                                   (td (wseqFromReal (badnessFactor result)))]))
-                                                        sortedResults))))))))
+                                                   (List.map (fn (uri, result) =>
+                                                                 (wltr [(td (ahref (urlencode (outputFilename uri))
+                                                                                   (wseqFromURI uri))),
+                                                                        (td (wseqFromReal (badnessFactor result)))]))
+                                                             sortedResults))))))))
     end;
 
 fun main (arg :: rest) = 
