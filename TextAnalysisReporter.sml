@@ -30,15 +30,19 @@ fun findLix results = List.find (fn Lix x => true
 
 fun reportSentence (results, elemResults) = 
     let
-        val lix = case findLix results of
-                      SOME (Lix x) => x
-                    | _ => 0.0;
-
-        val style = if lix > 38.0
-                    then "hardsentence"
-                    else "easysentence";
+        val lowerlimit = 20.0
+        val upperlimit = 80.0
+        val multiplier = 100.0 / (upperlimit - lowerlimit)
+        val lix = Real.max(lowerlimit, Real.min(case findLix results of
+                                            SOME (Lix x) => x
+                                          | _ => 0.0,
+                                          upperlimit))
+        val greenlevel = trunc (100.0 - (lix - lowerlimit) * multiplier)
+        val redlevel = trunc ((lix - lowerlimit) * multiplier)
+        fun hexify number = StringCvt.padLeft #"0" 2 (Int.fmt StringCvt.HEX number)
+        val color = "#" ^ hexify redlevel ^ hexify greenlevel ^ "00"
     in
-        span1 style (prmap reportSentenceElem elemResults)
+        mark1a "SPAN" ("style=\"background-color:" ^ color ^ ";\"") (prmap reportSentenceElem elemResults)
     end;
 
 fun reportSentences sentences = prmap reportSentence sentences;
