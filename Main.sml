@@ -112,7 +112,7 @@ fun shouldVisit uri depth = depth < (Config.crawlDepthLimit ()) andalso
 fun visit outputAnalysis uri depth = 
     if shouldVisit uri depth then
         let val parseTree = (getAndParse uri) in
-            Util.wait (Robots.getCrawlDelay ());
+            Util.wait (Config.crawlDelay ());
             visitedPages := uri :: !visitedPages;
             print "Visiting ";
             print (stringFromURI uri);
@@ -165,7 +165,8 @@ fun writeIndex starturi outputFilename analysedPages =
     end;
     
 fun mainProgram (arg :: rest) = 
-    let val uri = makeURI (NONE, arg)
+    let 
+        val uri = makeURI (NONE, arg)
         val robotsuri = makeURI (NONE, protocolFromURI uri
                                        ^ "://"
                                        ^ serverFromURI uri
@@ -207,7 +208,7 @@ fun parseArguments ("-d" :: limit :: rest) =
 element of the args list. Will create a file "[domain-name].html" in
 the current directory containing links to HTML-files inside a folder
 "[domain-name]" that contains the actual analysis results. *)
-fun main args = parseArguments args before mainProgram args
+fun main args = Config.setDefaults() before parseArguments args before mainProgram args
     handle FatalError reason => print reason before print "\n";
 
 (*val _ = mainWrapper (CommandLine.arguments ());*)
