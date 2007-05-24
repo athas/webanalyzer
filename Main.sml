@@ -100,30 +100,32 @@ fun findStartURI uri = if Robots.isPathAllowed (pathFromURI uri)
 
 val visitedPages : URI list ref = ref [];
 
+fun shouldVisit uri depth = depth < (Config.crawlDepthLimit ()) andalso
+                            contentTypeFromURI uri = "text/html" andalso
+                            not (exists (fn x => x = uri) (!visitedPages)) andalso
+                            Robots.isPathAllowed (pathFromURI uri);
+
 fun visit outputAnalysis uri depth = 
-    if depth >= (Config.crawlDepthLimit ()) orelse 
-       contentTypeFromURI uri <> "text/html" orelse
-       exists (fn x => x = uri) (!visitedPages) 
-    then ()
-    else let val parseTree = (getAndParse uri) in
-             Util.wait (Robots.getCrawlDelay ());
-             visitedPages := uri :: !visitedPages;
-             print "Visiting ";
-             print (stringFromURI uri);
-             print "\n";
-             flushOut stdOut;
-             outputAnalysis uri (analyseHTML parseTree);
-             map (fn link => (print "Seeing ";
-                              print (stringFromURI link);
-                              print "\n";
-                              flushOut stdOut;
-                              visit outputAnalysis link (depth + 1)))
-                 (filterExitLinks uri (findLinks (SOME uri) parseTree));
-             ()
-         end
-         handle Error (HTTP (code, _)) => ()
-              | Error (Socket s) => ()
-              | Error (General s) => (print s; print "\n"; raise Fail "General")
+    if shouldVisit uri depth then
+        let val parseTree = (getAndParse uri) in
+            Util.wait (Robots.getCrawlDelay ());
+            visitedPages := uri :: !visitedPages;
+            print "Visiting ";
+            print (stringFromURI uri);
+            print "\n";
+            flushOut stdOut;
+            outputAnalysis uri (analyseHTML parseTree);
+            map (fn link => (print "Seeing ";
+                             print (stringFromURI link);
+                             print "\n";
+                             flushOut stdOut;
+                             visit outputAnalysis link (depth + 1)))
+                (filterExitLinks uri (findLinks (SOME uri) parseTree));
+            ()
+        end handle Error (HTTP (code, _)) => ()
+                 | Error (Socket s) => ()
+                 | Error (General s) => (print s; print "\n"; raise Fail "General")
+    else ();
 
 fun filenameForAnalysis uri = String.map (fn #"/" => #"#"
                                            | char => char)
