@@ -39,4 +39,8 @@ val testHTMLParser007 = HTMLParser.textContents aData = "BAR";
 (* Test that we pull out the correct attributes from tags.*)
 val testHTMLParserAttributes001 = HTMLParser.getAttribute "href" a = SOME "bas.html";
 
+
+(* NEEDS ALSO TO TEST FOR SUPPORT OF <br> and <hr> maby <p> *)
+
+
 end;

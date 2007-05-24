@@ -9,6 +9,7 @@ load "Listsort";
 
 app use ["Util.sig", "Util.sml",
          "Config.sig", "Config.sml",
+         "Help.sig", "Help.sml",
          "Http.sig", "Http.sml",
          "HTMLLexer.sig", "HTMLLexer.sml",
          "HTMLParser.sig", "HTMLParser.sml",

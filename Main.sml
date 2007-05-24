@@ -192,7 +192,7 @@ fun mainProgram (arg :: rest) =
         print "Done!\n";
         flushOut stdOut
     end
-  | mainProgram [] = raise FatalError "Ikke nok argumenter.";
+  | mainProgram [] = raise FatalError "Ikke nok argumenter." before Help.printProgramArgs();
 
 fun parseArguments ("-d" :: limit :: rest) =
        (Config.setCrawlDepthLimit o valOf o Int.fromString) limit before
