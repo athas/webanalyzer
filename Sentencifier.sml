@@ -12,7 +12,6 @@ datatype WordAttribute = Language of text
                        | Code (* var, kbd *)
                        | Acronym;
 
-
 type word = text * WordAttribute list;
      
 (* Either a word or punctuation.
@@ -23,10 +22,12 @@ type word = text * WordAttribute list;
 datatype SentenceElement = Word of word
                          | Punctuation of text;
 
-(* A list of sentence elements, there should be space between each element. *)
+(* A list of sentence elements, there should be space between each
+element. *)
 type sentence = SentenceElement list;
 
-datatype textelement = Paragraph of sentence list * sentence list list
+datatype textelement = Paragraph of sentence list *
+                                    sentence list list
                      | Heading of textelement list
                      | Quotation of textelement list;
                  (*  | Code of text (* <code> *) *)
@@ -35,21 +36,21 @@ type document = {title : sentence list option,
                  languagecode : string option,
                  content : textelement list};
 
-
+(* Characters that ends a sentence *)
 val sentenceDelimiters = explode ".:!?";
 fun isSentenceDelimiter x = x member sentenceDelimiters;
 
-fun isAlphabetic x = Char.isAlpha x orelse x member (explode "æøåÆØÅöäüêç");
-
-
+fun isAlphabetic x = Char.isAlpha x orelse
+                     x member (explode "æøåÆØÅöäüêç");
 
 (* Adds a WordAttribute to a set of attributes.
    - There can be only one Language (A new language will replace an existing)
    - Acronym, Code and Emphasized can only occur once. *)
-fun addToAttrSet (Language x) lst = (Language x)
-                                    :: (List.filter (fn (Language _) => false
-                                                      | _ => true)
-                                                    lst)
+fun addToAttrSet (Language x) lst =
+        (Language x)
+        :: (List.filter (fn (Language _) => false
+                          | _ => true)
+                        lst)
   | addToAttrSet x lst = x :: List.filter (fn y => y <> x) lst;
 
 
@@ -76,7 +77,7 @@ local
         in
             case rest of
                 [] => [xword]
-              | Space :: ys => (case xword of 
+              | Space :: ys => (case xword of
                                         Space => Space :: ys
                                       | _ => xword :: rest)
                                    
@@ -104,25 +105,29 @@ local
       | convertAttrs ((TextExtractor.Language x) :: xs) = (Language x) :: convertAttrs xs
       | convertAttrs [] = []
 
-    fun convertSentenceElems (Space :: xs) = convertSentenceElems xs : SentenceElement list
+    fun convertSentenceElems (Space :: xs) = convertSentenceElems xs
       | convertSentenceElems ((WordI (text, attrs)) :: xs) = 
         let
-            val rtext = (case (TextExtractor.Bidirectional TextExtractor.RightToLeft) member attrs of
-                             true => (implode o rev o explode) text (* reverse the string *)
-                           | false => text)
+            val rtext =
+                    (case (TextExtractor.Bidirectional TextExtractor.RightToLeft) member attrs of
+                         true => (implode o rev o explode) text (* reverse the string *)
+                       | false => text);
         in
             Word (rtext, convertAttrs attrs) :: convertSentenceElems xs
         end
-      | convertSentenceElems ((PunctuationI x) :: xs) = Punctuation x :: convertSentenceElems xs
+      | convertSentenceElems ((PunctuationI x) :: xs) = Punctuation x
+                                                        :: convertSentenceElems xs
       | convertSentenceElems [] = []
 in
-    fun wordify (text, attrs) = (convertSentenceElems o concatRepetitions) (wordify' attrs  (explode text))
+    fun wordify (text, attrs) = (convertSentenceElems o concatRepetitions)
+                                    (wordify' attrs  (explode text))
 end
 
 local
 
-    fun sentenceDelimiter (Punctuation x) = List.exists isSentenceDelimiter (explode x)
-      | sentenceDelimiter _ = false
+    fun sentenceDelimiter (Punctuation x) = List.exists isSentenceDelimiter
+                                                        (explode x)
+      | sentenceDelimiter _ = false;
 
     fun splitInSentences [] = []
       | splitInSentences (x :: xs) =
@@ -137,18 +142,22 @@ in
             val words = concatMap wordify text
         in
             splitInSentences words
-        end
+        end;
 
-    fun sentencifyString str = splitInSentences (wordify (str, []))
+    fun sentencifyString str = splitInSentences (wordify (str, []));
 end
 
 
-fun sentencifyTextelement (TextExtractor.Paragraph (texts, descs)) = Paragraph (sentencify texts, map sentencifyString descs)
-  | sentencifyTextelement (TextExtractor.Heading x) = Heading (map sentencifyTextelement x)
-  | sentencifyTextelement (TextExtractor.Quotation x) = Quotation (map sentencifyTextelement x);
+fun sentencifyTextelement (TextExtractor.Paragraph (texts, descs)) =
+        Paragraph (sentencify texts, map sentencifyString descs)
+  | sentencifyTextelement (TextExtractor.Heading x) =
+        Heading (map sentencifyTextelement x)
+  | sentencifyTextelement (TextExtractor.Quotation x) =
+        Quotation (map sentencifyTextelement x);
 
-fun sentencifyParagraphised ({content, languagecode, title} : TextExtractor.paragraphiseddocument) =
+fun sentencifyParagraphised ({content, languagecode, title}
+                                : TextExtractor.paragraphiseddocument) =
         {content = map sentencifyTextelement content,
          languagecode = languagecode,
-         title = Option.map sentencifyString title};
+         title = Option.map sentencifyString title} : document;
 end

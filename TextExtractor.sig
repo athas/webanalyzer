@@ -2,7 +2,7 @@ signature TextExtractor =
 sig
 
     type text = string;
-         
+
     datatype TextDirection = RightToLeft
                            | LeftToRight;
 
@@ -11,7 +11,8 @@ sig
                            | Emphasized
                            | Code (* var, kbd *)
                            | Acronym
-                           | Bidirectional of TextDirection; (* Should the words be reversed? *)
+                              (* Reverse word before spellchecking? *)
+                           | Bidirectional of TextDirection;
 
     (* A text format where most of HTML's nesting is removed. *)
     datatype paragraphised = Paragraph of (text * WordAttribute list) list
@@ -19,12 +20,18 @@ sig
                            | Heading of paragraphised list
                            | Quotation of paragraphised list;
 
+    (* A document partitioned in paragraphs *)
     type paragraphiseddocument = {title : text option,
                                   languagecode : text option,
                                   content : paragraphised list};
 
-    val extractFromHTML : HTMLParser.parsetree list -> paragraphiseddocument;
+    (* Create a paragraphised document from a HTML-parsetree *)
+    val extractFromHTML : HTMLParser.parsetree list
+                          -> paragraphiseddocument;
 
-    val addWordAttribute : WordAttribute -> WordAttribute list -> WordAttribute list
+    (* Add an attribute to a list of attributes. *)
+    val addWordAttribute : WordAttribute
+                           -> WordAttribute list
+                           -> WordAttribute list;
 
-end
+end;

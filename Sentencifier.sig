@@ -21,10 +21,12 @@ sig
     datatype SentenceElement = Word of word
                              | Punctuation of text;
 
-    (* A list of sentence elements, there should be space between each element. *)
+    (* A list of sentence elements, there should be space between each
+    element. *)
     type sentence = SentenceElement list;
 
-    datatype textelement = Paragraph of sentence list * sentence list list
+    datatype textelement = Paragraph of sentence list
+                                        * sentence list list
                          | Heading of textelement list
                          | Quotation of textelement list;
                      (*  | Code of text (* <code> *) *)
@@ -34,7 +36,8 @@ sig
                      content : textelement list};
 
 
-
+    (* Splits the paragraphs (that the TextExtractor produces) in
+    words and sentences. *)
     val sentencifyParagraphised : TextExtractor.paragraphiseddocument
                                   -> document;
 end
