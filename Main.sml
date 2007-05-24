@@ -153,13 +153,15 @@ fun writeIndex starturi outputFilename analysedPages =
         val wltr = tr o $$ o (List.map flatten)
         val wltable = table o $$ o (List.map flatten)
     in writeTo (serverFromURI starturi ^ ".html")
-               (flatten (html (&& ((head o title o $) ("Analyse af " ^ (stringFromURI starturi)),
-                                   (body (wltable ((wltr [(std "URI"), (std "Sidesværhedsgrad")]) ::
-                                                   (List.map (fn (uri, result) =>
-                                                                 (wltr [(td (ahref (urlencode (outputFilename uri))
-                                                                                   (wseqFromURI uri))),
-                                                                        (td (wseqFromReal (badnessFactor result)))]))
-                                                             sortedResults))))))))
+               (flatten
+                    (html (&& ((head o title o $) ("Analyse af " ^ (stringFromURI starturi)),
+                               (body (wltable ((wltr [(std "URI"), (std "Sidesværhedsgrad")]) ::
+                                               (List.map
+                                                    (fn (uri, result) =>
+                                                        (wltr [(td (ahref (urlencode (outputFilename uri))
+                                                                          (wseqFromURI uri))),
+                                                               (td (wseqFromReal (badnessFactor result)))]))
+                                                    sortedResults))))))))
     end;
 
 fun mainProgram (arg :: rest) = 
