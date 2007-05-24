@@ -145,13 +145,12 @@ local
             @
             (* A Heading starts a new paragraph *)
             (if isHeading tagname   
-             then NewParagraph :: (FlatHeading flatContent) :: flatAfter
+             then (FlatHeading flatContent) :: flatAfter
                   
              (* Quotations starts and ends with new paragraphs *)
              else if isQuotation tagname
-             then [NewParagraph,
-                   FlatQuotation flatContent,
-                   NewParagraph] @ flatAfter
+             then FlatQuotation flatContent
+                  :: flatAfter
 
              (* Other block elements starts and ends with a new paragraph *)
              else if isBlock tagname 
@@ -179,6 +178,10 @@ local
      *)
     fun rmExtraParagraphs (NewParagraph :: NewParagraph :: xs) =
         rmExtraParagraphs (NewParagraph :: xs)
+      | rmExtraParagraphs ((FlatHeading x) :: NewParagraph :: xs) = rmExtraParagraphs ((FlatHeading x) :: xs)
+      | rmExtraParagraphs ((FlatQuotation x) :: NewParagraph :: xs) = rmExtraParagraphs ((FlatQuotation x) :: xs)
+      | rmExtraParagraphs (NewParagraph :: (FlatHeading x) :: xs) = (FlatHeading x) :: rmExtraParagraphs xs
+      | rmExtraParagraphs (NewParagraph :: (FlatQuotation x) :: xs) = (FlatQuotation x) :: rmExtraParagraphs xs
       | rmExtraParagraphs (x :: xs) = x :: (rmExtraParagraphs xs)
       | rmExtraParagraphs [] = [];
 
