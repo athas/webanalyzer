@@ -1,3 +1,7 @@
+(* The main interface to the web-analyzer program. Call the main
+function (for example, main ["http://www.diku.dk"]) for
+functionality. *)
+
 open TextIO;
 open Http;
 open HTMLParser;
@@ -192,6 +196,10 @@ fun parseArguments ("-d" :: limit :: rest) =
   | parseArguments (_ :: rest) = parseArguments rest
   | parseArguments [] = ();
 
+(* Analyze the website accessible at the URL provided by the first
+element of the args list. Will create a file "[domain-name].html" in
+the current directory containing links to HTML-files inside a folder
+"[domain-name]" that contains the actual analysis results. *)
 fun main args = parseArguments args before mainProgram args
     handle FatalError reason => print reason before print "\n";
 
