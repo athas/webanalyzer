@@ -1,12 +1,11 @@
 (* Test of HTMLLexer *)
-open HTMLParser;
 local
 
 fun getTag (parseTree) = case parseTree of
-                             Tag (tag, children) => SOME (tag, children)
+                             HTMLParser.Tag (tag, children) => SOME (tag, children)
                            | _ => NONE
 fun getText (parseTree) = case parseTree of 
-                             Text t => SOME t
+                            HTMLParser.Text t => SOME t
                            | _ => NONE
 
 val parseTree = HTMLParser.parse   ( "<html>"
@@ -29,15 +28,15 @@ val aData = valOf (getText (List.hd aRest));
 in
 
 (* Test that the parser parses the correct tags *)
-val testHTMLParser001 = tagName html = "html";
-val testHTMLParser002 = tagName head = "head";
-val testHTMLParser003 = tagName title = "title";
-val testHTMLParser004 = textContents titleData = "Foo";
-val testHTMLParser005 = tagName body = "body";
-val testHTMLParser006 = tagName a = "a";
-val testHTMLParser007 = textContents aData = "BAR";
+val testHTMLParser001 = HTMLParser.tagName html = "html";
+val testHTMLParser002 = HTMLParser.tagName head = "head";
+val testHTMLParser003 = HTMLParser.tagName title = "title";
+val testHTMLParser004 = HTMLParser.textContents titleData = "Foo";
+val testHTMLParser005 = HTMLParser.tagName body = "body";
+val testHTMLParser006 = HTMLParser.tagName a = "a";
+val testHTMLParser007 = HTMLParser.textContents aData = "BAR";
 
 (* Test that we pull out the correct attributes from tags.*)
-val testHTMLParserAttributes001 = getAttribute "href" a = SOME "bas.html";
+val testHTMLParserAttributes001 = HTMLParser.getAttribute "href" a = SOME "bas.html";
 
 end;
