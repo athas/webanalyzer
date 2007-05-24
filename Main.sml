@@ -123,6 +123,32 @@ fun filenameForAnalysis uri = String.map (fn #"/" => #"#"
                                            | char => char)
                                          ((serverFromURI uri) ^ (pathFromURI uri));
 
+fun badnessFactor analysis = case List.find (fn (TextAnalyser.Lix value) => true
+                                                         | _ => false)
+                                            (TextAnalyser.documentResults analysis)
+                              of SOME (TextAnalyser.Lix value) => value
+                               | NONE => raise Fail "Impossible! No lix!";
+
+(* Compare two analysis-results. *)
+fun compareResults (result1, result2) = Real.compare (badnessFactor result1, badnessFactor result2);
+
+fun writeIndex starturi outputFilename analysedPages =
+    let val sortedResults = Listsort.sort (fn ((_, x), (_, y)) => compareResults (y, x)) analysedPages
+        val std = td o $
+        val wseqFromURI = $ o stringFromURI
+        val wseqFromReal = $ o Real.toString
+        val wltr = tr o $$ o (map flatten)
+        val wltable = table o $$ o (map flatten)
+    in writeTo (serverFromURI starturi ^ ".html")
+               (flatten (html (&& ((head o title o $) ("Analyse af " ^ (stringFromURI starturi)),
+                                   (body (wltable ((wltr [(std "URI"), (std "Sidesværhedsgrad")]) ::
+                                                   (map (fn (uri, result) =>
+                                                            (wltr [(td (ahref (urlencode (outputFilename uri))
+                                                                              (wseqFromURI uri))),
+                                                                   (td (wseqFromReal (badnessFactor result)))]))
+                                                        sortedResults))))))))
+    end;
+
 fun main (arg :: rest) = 
     let val uri = makeURI (NONE, arg)
         val robotsuri = makeURI (NONE, protocolFromURI uri
@@ -135,8 +161,11 @@ fun main (arg :: rest) =
         val _ = Robots.initRobotsTxt robotstxt;
         val starturi = findStartURI uri
         val outputdir = serverFromURI uri;
+        fun outputFilename uri = (outputdir ^ "/" ^ (filenameForAnalysis uri))
+        val analysedPages : (URI * TextAnalyser.documentresult) list ref = ref []
         fun analysisOutputter uri analysis =
-            writeTo (outputdir ^ "/" ^ (filenameForAnalysis uri)) (TextAnalysisReporter.makeReport analysis);
+            writeTo (outputFilename uri) (TextAnalysisReporter.makeReport analysis)
+            before analysedPages := (uri, analysis) :: !analysedPages
     in 
         if rest <> [] then
             (Config.setCrawlDepthLimit o valOf o Int.fromString) (hd rest)
@@ -145,6 +174,7 @@ fun main (arg :: rest) =
         (* Useful when used interactively. *)
         visitedPages := [];
         visit analysisOutputter starturi 0;
+        writeIndex starturi outputFilename (!analysedPages);
         print "Done!\n";
         flushOut stdOut
     end
