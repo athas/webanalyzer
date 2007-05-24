@@ -12,9 +12,9 @@ fun div1 class content = mark1a "DIV"
                                 ("class=\"" ^ class ^ "\"")
                                 content;
     
-fun reportResult (Lix x) = span1 "lix" ($(Real.toString x))
-  | reportResult (FleshReadingEase x) = span1 "fleshrl" ($(Real.toString x))
-  | reportResult (FleshKincaidGradeLevel x) = span1 "fkincaidgl" ($(Real.toString x));
+fun reportResult (Lix x) = span1 "lix" ($("Lix: " ^ (Real.toString x)))
+  | reportResult (FleshReadingEase x) = span1 "fleshrl" ($("Flesh Reading Ease: " ^ (Real.toString x)))
+  | reportResult (FleshKincaidGradeLevel x) = span1 "fkincaidgl" ($("FK Grade level: " ^ (Real.toString x)));
 
 fun reportResults results = div1 "result" (prmap (fn x => (reportResult x) && br) results);
 
@@ -37,8 +37,8 @@ fun reportSentence (results, elemResults) =
                                             SOME (Lix x) => x
                                           | _ => 0.0,
                                           upperlimit))
-        val greenlevel = trunc (100.0 - (lix - lowerlimit) * multiplier)
-        val redlevel = trunc ((lix - lowerlimit) * multiplier)
+        val greenlevel = trunc (2.55 * (100.0 - (lix - lowerlimit) * multiplier))
+        val redlevel = trunc (2.55 * ((lix - lowerlimit) * multiplier))
         fun hexify number = StringCvt.padLeft #"0" 2 (Int.fmt StringCvt.HEX number)
         val color = "#" ^ hexify redlevel ^ hexify greenlevel ^ "00"
     in
@@ -60,23 +60,21 @@ fun reportContent (ParagraphResult (results, sentences, descriptions)) =
         val resultReport = reportResults result;
         val contentReport = prmap reportContent content;
     in
-        resultReport && (h1 contentReport) && hr
+        (h1 contentReport)
     end
   | reportContent (QuotationResult (result, content)) = 
     let
         val resultReport = reportResults result;
         val contentReport = prmap reportContent content;
     in
-        resultReport && (blockquote contentReport) && hr
+        (blockquote contentReport)
     end;
 
-val style = mark1 "STYLE"
-                  ($ (".lix { background: green; }" ^
-                      ".fleshrl { background: blue; }" ^
+(*val style = mark1 "STYLE"
+                  ($ (".lix { background: lightgreen; }" ^
+                      ".fleshrl { background: lightblue; }" ^
                       ".fkincaidgl { background: yellow; }" ^
-                      "/*.result {float:right;}*/ " ^
-                      ".hardsentence {background: pink;}" ^
-                      ".easysentence {background: lightgreen;}"))
+                      "/*.result {float:right;}*/ ")) *)
                                          
 
 fun makeReport' ({title_results,
@@ -85,7 +83,7 @@ fun makeReport' ({title_results,
     let
         val contentReport = (prmap reportContent content_results);
     in
-        (html (head (style && (title ($ "results..")))
+        (html (head (title ($ "results.."))
               &&
               body contentReport))
          handle Match => $ "her"
