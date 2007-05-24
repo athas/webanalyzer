@@ -183,7 +183,8 @@ fun mainProgram (arg :: rest) =
             writeTo (outputFilename uri) (TextAnalysisReporter.makeReport analysis)
             before analysedPages := (uri, analysis) :: !analysedPages
     in 
-        FileSys.mkDir outputdir;
+        FileSys.mkDir outputdir
+        handle SysError => raise FatalError "Kunne ikke oprette output-mappe.";
         (* Useful when used interactively. *)
         visitedPages := [];
         visit analysisOutputter starturi 0;
@@ -191,7 +192,7 @@ fun mainProgram (arg :: rest) =
         print "Done!\n";
         flushOut stdOut
     end
-  | mainProgram [] = print "Not enough arguments\n";
+  | mainProgram [] = raise FatalError "Ikke nok argumenter.";
 
 fun parseArguments ("-d" :: limit :: rest) =
        (Config.setCrawlDepthLimit o valOf o Int.fromString) limit before
@@ -209,6 +210,6 @@ element of the args list. Will create a file "[domain-name].html" in
 the current directory containing links to HTML-files inside a folder
 "[domain-name]" that contains the actual analysis results. *)
 fun main args = Config.setDefaults() before parseArguments args before mainProgram args
-    handle FatalError reason => print reason before print "\n";
+    handle FatalError reason => print "Fejl: " before print reason before print "\n";
 
 (*val _ = mainWrapper (CommandLine.arguments ());*)
