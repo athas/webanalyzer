@@ -21,7 +21,7 @@ fun setCrawlDelay n = CrawlDelay := n;
 fun crawlDelay () = !CrawlDelay;
 
 
-fun setToDefault() = 
+fun setDefault () = 
     (
      setHttpUserAgent "webanalyzer";
      setCrawlDepthLimit 10;

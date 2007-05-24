@@ -7,4 +7,6 @@ sig
     val crawlDepthLimit : unit -> int;
     val setCrawlDelay: int -> unit;
     val crawlDelay: unit -> int;
+
+    val setDefault: unit -> unit;
 end
