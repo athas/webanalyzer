@@ -174,9 +174,6 @@ fun mainProgram (arg :: rest) =
             writeTo (outputFilename uri) (TextAnalysisReporter.makeReport analysis)
             before analysedPages := (uri, analysis) :: !analysedPages
     in 
-        if rest <> [] then
-            (Config.setCrawlDepthLimit o valOf o Int.fromString) (hd rest)
-        else Config.setCrawlDepthLimit 10;
         FileSys.mkDir outputdir;
         (* Useful when used interactively. *)
         visitedPages := [];
@@ -187,7 +184,13 @@ fun mainProgram (arg :: rest) =
     end
   | mainProgram [] = print "Not enough arguments\n";
 
-fun main args = mainProgram args
+fun parseArguments ("-d" :: limit :: rest) =
+    (Config.setCrawlDepthLimit o valOf o Int.fromString) limit before
+    parseArguments rest
+  | parseArguments (_ :: rest) = parseArguments rest
+  | parseArguments [] = ();
+
+fun main args = parseArguments args before mainProgram args
     handle FatalError reason => print reason before print "\n";
 
 (*val _ = mainWrapper (CommandLine.arguments ());*)
