@@ -8,5 +8,5 @@ sig
     val setCrawlDelay: int -> unit;
     val crawlDelay: unit -> int;
 
-    val setDefault: unit -> unit;
+    val setDefaults: unit -> unit;
 end
