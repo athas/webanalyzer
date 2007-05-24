@@ -21,28 +21,47 @@ fun tagAttributes tag = mapAttributes (fn tuple => tuple) tag;
 the HTML. *)
 fun parsefun (StartTagLexeme tag :: lexemes) tagstack = 
     let val tagName = (HTMLLexer.tagName tag);
+        (* Find a matching close tag, and consider all lexemes before
+        it as children of this tag.  *)
         val (children, childrest) = findChildren tagName lexemes tagstack;
         val (successors, succrest) = parsefun childrest tagstack;
     in (Tag (tag, children) :: successors, succrest) end
   | parsefun (EndTagLexeme tag :: lexemes) (headtag :: tagstack) =
+    (* If this closing tag matches the most recently opened tag, that
+    means we are done finding children for it. *)
     if HTMLLexer.tagName tag = headtag then ([], lexemes)
-    else if List.exists (fn x => HTMLLexer.tagName tag = x) tagstack then ([], EndTagLexeme tag :: lexemes)
+    (* If the closing tag matches some opened tag, assume that we are
+    missing a closing tag (BAD user!!! Write well-formed HTML
+    dammit!), and just assume that we read the proper closing tag, and
+    try reading the current closing tag again. *)
+    else if List.exists (fn x => HTMLLexer.tagName tag = x) tagstack
+    then ([], EndTagLexeme tag :: lexemes)
+    (* Closing a tag that isn't open? Let's just pretend this never
+    happened. *)
     else parsefun lexemes tagstack
-  | parsefun (EndTagLexeme _ :: lexemes) [] = parsefun lexemes []
+  | parsefun (EndTagLexeme _ :: lexemes) [] = 
+    (* Closing a tag, but there are no open tags. Again, this never happened. *)
+    parsefun lexemes []
   | parsefun (TextLexeme text :: lexemes) stacktop =
+    (* A text lexeme is simple, it has no children, only successors. *)
     let val (successors, lexemerest) = parsefun lexemes stacktop
     in (Text text :: successors, lexemerest) end
   | parsefun _ [] = ([], [])
   | parsefun [] _ = ([], [])
+(* Some tags never have children, despite not necessarily being
+closed. Handle them here. *)
 and findChildren "br" lexemes tagstack = ([], lexemes)
   | findChildren "hr" lexemes tagstack = ([], lexemes)
   | findChildren parentName lexemes tagstack = 
     parsefun lexemes (parentName :: tagstack);
 
-fun parse string = let fun worker (tree, []) = tree
-                         | worker (tree, lexemes) =
-                           tree @ (worker o parsefun lexemes) []
-                   in worker ([], (lex string)) end;
+(* parse : string -> parsetree list *)
+fun parse string = 
+    (* Make a list of lexemes, then accumulate parse trees. *)
+    let fun worker (tree, []) = tree
+          | worker (tree, lexemes) =
+            tree @ (worker o parsefun lexemes) []
+    in worker ([], (lex string)) end;
 
 (* findElement : string -> parsetree list -> parsetree option
 
