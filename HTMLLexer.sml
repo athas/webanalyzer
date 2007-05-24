@@ -8,10 +8,10 @@ local
     val HTMLentities = [("lt", #"<"),
                         ("gt", #">"),
                         ("amp", #"&"),
-                        ("quot", #"\""),
+                        ("quot", chr 34), (* forward-slash *)
                         ("apos", #"'"),
-                        ("nbsp", chr 160),
-                        ("Oslash", chr 216),
+                        ("nbsp", chr 160),   (* Space *)
+                        ("Oslash", chr 216), (* ÆØÅæøå *)
                         ("oslash", chr 248),
                         ("Aelig", chr 146),
                         ("aelig", chr 145),
