@@ -170,7 +170,7 @@ fun main (arg :: rest) =
     in 
         if rest <> [] then
             (Config.setCrawlDepthLimit o valOf o Int.fromString) (hd rest)
-        else ();
+        else Config.setCrawlDepthLimit 10;
         FileSys.mkDir outputdir;
         (* Useful when used interactively. *)
         visitedPages := [];
