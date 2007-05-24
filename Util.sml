@@ -244,4 +244,14 @@ fun concatMap f l = (foldr (op @) []) (map f l);
    Takes a list of options and returns all the SOME-values. *)
 val SOMEs = (map Option.valOf) o (List.filter Option.isSome);
 
+fun wait seconds =
+    let
+        open Time;
+        val endTime = now () + fromSeconds seconds
+        fun wait' () = if now () >= endTime then ()
+                       else wait' ()
+    in
+        wait' ()
+    end;
+
 end;

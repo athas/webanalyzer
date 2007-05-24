@@ -28,4 +28,7 @@ sig type 'a sock = ('a, Socket.active Socket.stream) Socket.sock
     val member : ''a * ''a list -> bool
     val concatMap : ('a -> 'b list) -> 'a list -> 'b list;
     val SOMEs : 'a option list -> 'a list
+
+    (* Wait for the provided amount of seconds before returning. *)
+    val wait : int -> unit
 end;
