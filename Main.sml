@@ -163,7 +163,7 @@ fun writeIndex starturi outputFilename analysedPages =
                                                                (td (wseqFromReal (badnessFactor result)))]))
                                                     sortedResults))))))))
     end;
-
+    
 fun mainProgram (arg :: rest) = 
     let val uri = makeURI (NONE, arg)
         val robotsuri = makeURI (NONE, protocolFromURI uri
@@ -193,8 +193,13 @@ fun mainProgram (arg :: rest) =
   | mainProgram [] = print "Not enough arguments\n";
 
 fun parseArguments ("-d" :: limit :: rest) =
-    (Config.setCrawlDepthLimit o valOf o Int.fromString) limit before
-    parseArguments rest
+       (Config.setCrawlDepthLimit o valOf o Int.fromString) limit before
+       parseArguments rest
+  | parseArguments ("-u" :: userAgent :: rest) = Config.setHttpUserAgent userAgent before
+                                                 parseArguments rest
+  | parseArguments ("-c" :: delay :: rest ) =
+       (Config.setCrawlDelay o valOf o Int.fromString) delay before
+       parseArguments rest
   | parseArguments (_ :: rest) = parseArguments rest
   | parseArguments [] = ();
 
