@@ -192,9 +192,12 @@ end
 
 fun checkSpelling languageCode str = 
     let open SpellChecker 
-        open Option in
-    spellCheckWord (if isSome languageCode then valOf languageCode
-                    else "da") str
+        open Option
+        open Config in
+        not (spell ()) orelse
+        spellCheckWord (if isSome languageCode 
+                        then valOf languageCode 
+                        else "da") str
     handle dictionaryNotFound _ => true
     end;
 
