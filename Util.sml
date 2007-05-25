@@ -179,7 +179,13 @@ fun trimStr str =
         [] => ""
       (* if it aint a empty list then the first element in the list is
          the string of interes *)
-      | strLst => List.hd strLst                                        
+      | strLst => List.hd strLst
+
+(* equal : ''a -> ''a -> bool
+
+   A currying equivalence function.*)
+
+fun equal x y = x = y;
 
 (* x member y: ''a * ''a list -> bool
 

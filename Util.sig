@@ -27,6 +27,7 @@ sig type 'a sock = ('a, Socket.active Socket.stream) Socket.sock
 
     exception IOError of string
 
+    val equal : ''a -> ''a -> bool
     val member : ''a * ''a list -> bool
     val concatMap : ('a -> 'b list) -> 'a list -> 'b list;
     val SOMEs : 'a option list -> 'a list
