@@ -62,7 +62,6 @@ local
        We need to save the Spaces to find words splitted in two by a
        HTML-tag, like: f<strong>oo</strong>bar  *)
     datatype SentenceElementI = WordI of word
-                              | Space
                               | PunctuationI of text;
 
     fun wordify' attrs [] = []
@@ -70,17 +69,11 @@ local
         let
             val xword = if isAlphabetic x
                         then WordI (str x, attrs)
-                        else if Char.isSpace x
-                        then Space
                         else PunctuationI (str x)
             val rest = wordify' attrs xs
         in
             case rest of
                 [] => [xword]
-              | Space :: ys => (case xword of
-                                        Space => Space :: ys
-                                      | _ => xword :: rest)
-                                   
               | (WordI (y, _)) :: ys => (case xword of
                                             WordI(z, _) => WordI (z ^ y, attrs) :: ys
                                           | _ => xword :: rest)
@@ -90,9 +83,9 @@ local
                                             | _ => xword :: rest
         end
 
-    fun concatRepetitions (Space :: Space :: xs) = Space :: (concatRepetitions xs)
-      | concatRepetitions ((WordI (x, xattrs)) :: (WordI (y, yattrs)) :: xs) =
-            (WordI (x ^ y, foldr (fn (z, b) => TextExtractor.addWordAttribute z b) xattrs yattrs)) :: (concatRepetitions xs)
+    fun concatRepetitions  ((WordI (x, xattrs)) :: (WordI (y, yattrs)) :: xs) =
+            (WordI (x ^ y, foldr (fn (z, b) => TextExtractor.addWordAttribute z b) xattrs yattrs))
+            :: (concatRepetitions xs)
       | concatRepetitions ((PunctuationI x) :: (PunctuationI y) :: xs) =
             (PunctuationI (x ^ y)) :: (concatRepetitions xs)
       | concatRepetitions (x :: xs) = x :: concatRepetitions xs
@@ -105,8 +98,7 @@ local
       | convertAttrs ((TextExtractor.Language x) :: xs) = (Language x) :: convertAttrs xs
       | convertAttrs [] = []
 
-    fun convertSentenceElems (Space :: xs) = (Punctuation " ") :: convertSentenceElems xs
-      | convertSentenceElems ((WordI (text, attrs)) :: xs) = 
+    fun convertSentenceElems ((WordI (text, attrs)) :: xs) = 
         let
             val rtext =
                     (case (TextExtractor.Bidirectional TextExtractor.RightToLeft) member attrs of
