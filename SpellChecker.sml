@@ -4,6 +4,7 @@ struct
 (* GNU Aspell-based implementation. *)
 
 open Util;
+open List;
 
 exception dictionaryNotFound of string;
 
