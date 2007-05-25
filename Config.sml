@@ -5,8 +5,8 @@ val UserAgentDefault = "webanalyzer";
 val DepthLimitDefault = 10;
 val CrawlDelayDefault = 0;
 val LixDefault = false;
-val FkrtDefault = false;
 val FreDefault = false;
+val FkglDefault = false;
 val SpellDefault = false;
 
 (* Program User-agent info *)
@@ -30,15 +30,16 @@ val Lix = ref LixDefault;
 fun setLix () = Lix := true;
 fun lix () = !Lix;
 
-(* 'Flesch-Kincaid Readability Test' analyze text. Set by commandline *)
-val Fkrt = ref FkrtDefault;
-fun setFkrt () = Fkrt := true;
-fun fkrt () = !Fkrt;
-
 (* 'Flesch Reading Ease' analyze text. Set by commandline *)
 val Fre = ref FreDefault;
 fun setFre () = Fre := true;
 fun fre () = !Fre;
+
+
+(* 'Flesch-Kincaid Readability Test' analyze text. Set by commandline *)
+val Fkgl = ref FkglDefault;
+fun setFkgl () = Fkgl := true;
+fun fkgl () = !Fkgl;
 
 (* Spell check the text. Set by commandline *)
 val Spell = ref SpellDefault;
@@ -50,7 +51,7 @@ fun setDefaults () =
      setCrawlDepthLimit DepthLimitDefault;
      setCrawlDelay CrawlDelayDefault;
      Lix := LixDefault;
-     Fkrt := FkrtDefault;
+     Fkgl := FkglDefault;
      Fre := FreDefault;
      Spell := SpellDefault);
 

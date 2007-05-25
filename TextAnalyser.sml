@@ -199,9 +199,23 @@ fun checkSpelling languageCode str =
     end;
 
 local
-    fun analyse' counts = [Lix (lix counts),
-                           FleshReadingEase (fleshReadingEase counts),
-                           FleshKincaidGradeLevel (fleshKincaidGradeLevel counts)];
+    fun analyse' counts = 
+        let
+            val lix = if Config.lix ()
+                      then [Lix (lix counts)] 
+                      else []
+            val fre = if Config.fre ()
+                      then [FleshReadingEase (fleshReadingEase counts)] 
+                      else []
+            val fkgl = if Config.fkgl () 
+                       then [FleshKincaidGradeLevel (fleshKincaidGradeLevel counts)] 
+                       else []
+        in
+            lix @ fre @ fkgl
+        end;
+            
+                           
+                           
 
     fun language attributes = List.find (fn Sentencifier.Language x => true
                                           | _ => false)

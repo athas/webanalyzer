@@ -9,10 +9,10 @@ sig
     val crawlDelay: unit -> int;
     val setLix: unit -> unit;
     val lix: unit -> bool;
-    val setFkrt: unit -> unit;
-    val fkrt: unit -> bool;
     val setFre: unit -> unit;
     val fre: unit -> bool;
+    val setFkgl: unit -> unit;
+    val fkgl: unit -> bool;
     val setSpell: unit -> unit;
     val spell: unit -> bool;
 

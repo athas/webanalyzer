@@ -204,10 +204,10 @@ fun parseArguments ("-d" :: limit :: rest) =
        parseArguments rest
   | parseArguments ("-lix" :: rest) =
        Config.setLix () before parseArguments rest
-  | parseArguments ("-fkrt" :: rest) =
-       Config.setFkrt () before parseArguments rest
   | parseArguments ("-fre" :: rest) = 
        Config.setFre () before parseArguments rest
+  | parseArguments ("-fkgl" :: rest) =
+       Config.setFkgl () before parseArguments rest
   | parseArguments ("-spell" :: rest) =
        Config.setSpell () before parseArguments rest
   | parseArguments (_ :: rest) = parseArguments rest
