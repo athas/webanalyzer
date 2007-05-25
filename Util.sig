@@ -5,6 +5,8 @@ sig type 'a sock = ('a, Socket.active Socket.stream) Socket.sock
     val readLine: 'a sock -> string
     val readEmptyLine: 'a sock -> string
 
+    val run : string -> string option
+
     (* Oversætter symbolsk navn på vært til ip-adresse *)
     val gethostbyname: string -> string
 
