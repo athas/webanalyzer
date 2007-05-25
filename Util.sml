@@ -73,13 +73,6 @@ in  TextIO.inputAll indstrm before
     TextIO.closeIn(indstrm)
 end;
 
-(* safeRemove: string -> unit
-
-   safeRemove fjerner filen, men melder ikke fejl,
-   hvis det gik galt. *)
-fun safeRemove filename = (FileSys.remove filename)
-                          handle _ => ();
-
 (* run: string -> string option
 
    Kører program og returnerer SOME stdout, eller NONE
