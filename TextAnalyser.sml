@@ -76,11 +76,7 @@ fun calcCounts operator
 fun addCounts (x : counts ,y : counts) = calcCounts op+ x y;
 val sumCounts = foldl addCounts zeroCount;
 
-val vowels = explode "aeiouyæøåAEIOUYÆØÅöÖäÄ";
-
-fun isVowel x = x member vowels;
-
-fun countVowels str = foldl (fn (char, b) => if isVowel char
+fun countVowels str = foldl (fn (char, b) => if Config.isVowel char
                                              then 1 + b
                                              else b)
                             0 

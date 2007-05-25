@@ -40,8 +40,6 @@ type document = {title : sentence list option,
 val sentenceDelimiters = explode ".:!?";
 fun isSentenceDelimiter x = x member sentenceDelimiters;
 
-fun isAlphabetic x = Char.isAlpha x orelse
-                     x member (explode "æøåÆØÅöäüêç");
 
 (* Adds a WordAttribute to a set of attributes.
    - There can be only one Language (A new language will replace an existing)
@@ -67,7 +65,7 @@ local
     fun wordify' attrs [] = []
       | wordify' attrs (x::xs) =
         let
-            val xword = if isAlphabetic x
+            val xword = if Config.isAlphabetic x
                         then WordI (str x, attrs)
                         else PunctuationI (str x)
             val rest = wordify' attrs xs

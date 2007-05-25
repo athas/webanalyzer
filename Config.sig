@@ -7,6 +7,10 @@ sig
     val crawlDepthLimit : unit -> int;
     val setCrawlDelay: int -> unit;
     val crawlDelay: unit -> int;
+
+    val isVowel : char -> bool;
+    val isAlphabetic : char -> bool;
+
     val setLix: unit -> unit;
     val lix: unit -> bool;
     val setFre: unit -> unit;

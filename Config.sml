@@ -9,6 +9,20 @@ val FreDefault = false;
 val FkglDefault = false;
 val SpellDefault = false;
 
+(* Location of the scandinavian vowels in ISO 8859-1 *)
+val scandinavianVowels = [chr 230, (* æ *)
+                          chr 198, (* Æ *)
+                          chr 248, (* ø *)
+                          chr 216, (* Ø *)
+                          chr 229, (* å *)
+                          chr 197  (* Å *)
+                         ]; 
+
+val vowels = explode "aeiouyAEIOUY" @ scandinavianVowels;
+
+fun isVowel char = Util.member(char, vowels); 
+fun isAlphabetic char = Char.isAlpha char orelse Util.member(char, scandinavianVowels);
+
 (* Program User-agent info *)
 val UserAgent = ref UserAgentDefault;
 fun setHttpUserAgent str = UserAgent := str
