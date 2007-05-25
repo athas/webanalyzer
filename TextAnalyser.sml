@@ -190,7 +190,9 @@ fun fleshKincaidGradeLevel ({words, sentences, vowels, ...} : counts) =
     end;
 end
 
-fun checkSpelling languagecode str = true;
+fun checkSpelling languageCode str = 
+    SpellChecker.spellCheckWord (if Option.isSome languageCode then Option.valOf languageCode
+                                 else "da") str;
 
 local
     fun analyse' counts = [Lix (lix counts),
