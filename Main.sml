@@ -202,6 +202,14 @@ fun parseArguments ("-d" :: limit :: rest) =
   | parseArguments ("-c" :: delay :: rest ) =
        (Config.setCrawlDelay o valOf o Int.fromString) delay before
        parseArguments rest
+  | parseArguments ("-lix" :: rest) =
+       Config.setLix () before parseArguments rest
+  | parseArguments ("-fkrt" :: rest) =
+       Config.setFkrt () before parseArguments rest
+  | parseArguments ("-fre" :: rest) = 
+       Config.setFre () before parseArguments rest
+  | parseArguments ("-spell" :: rest) =
+       Config.setSpell () before parseArguments rest
   | parseArguments (_ :: rest) = parseArguments rest
   | parseArguments [] = ();
 

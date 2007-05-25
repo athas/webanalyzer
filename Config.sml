@@ -1,9 +1,13 @@
 structure Config :> Config =
 struct
 
-val UserAgentDefault = "webanalyzer"
+val UserAgentDefault = "webanalyzer";
 val DepthLimitDefault = 10;
 val CrawlDelayDefault = 0;
+val LixDefault = false;
+val FkrtDefault = false;
+val FreDefault = false;
+val SpellDefault = false;
 
 (* Program User-agent info *)
 val UserAgent = ref UserAgentDefault;
@@ -16,17 +20,38 @@ fun setCrawlDepthLimit newLimit = DepthLimit := newLimit;
 fun crawlDepthLimit () = !DepthLimit;
 
 (* Crawl delay indicationg how loong the site wants us to wait between
-   each crawling links *)
+   each crawling links Set by commandline or robots.txt*)
 val CrawlDelay = ref CrawlDelayDefault;
-(* Used to set the crawlDelay, if it is specifyed by either the user
-   or in a Robots.txt *) 
 fun setCrawlDelay n = CrawlDelay := n;
-(* Returns the crawlDelay de-refed *)
 fun crawlDelay () = !CrawlDelay;
+
+(* 'Lix' analyze text, set by commandline *)
+val Lix = ref LixDefault;
+fun setLix () = Lix := true;
+fun lix () = !Lix;
+
+(* 'Flesch-Kincaid Readability Test' analyze text. Set by commandline *)
+val Fkrt = ref FkrtDefault;
+fun setFkrt () = Fkrt := true;
+fun fkrt () = !Fkrt;
+
+(* 'Flesch Reading Ease' analyze text. Set by commandline *)
+val Fre = ref FreDefault;
+fun setFre () = Fre := true;
+fun fre () = !Fre;
+
+(* Spell check the text. Set by commandline *)
+val Spell = ref SpellDefault;
+fun setSpell () = Spell := true;
+fun spell () = !Spell
 
 fun setDefaults () = 
     (setHttpUserAgent UserAgentDefault;
      setCrawlDepthLimit DepthLimitDefault;
-     setCrawlDelay CrawlDelayDefault);
+     setCrawlDelay CrawlDelayDefault;
+     Lix := LixDefault;
+     Fkrt := FkrtDefault;
+     Fre := FreDefault;
+     Spell := SpellDefault);
 
 end
