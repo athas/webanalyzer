@@ -96,7 +96,7 @@ fun reportContent onlyContent (ParagraphResult (results, sentences, descriptions
     end;
 
 val style = mark1 "STYLE"
-                  ($ (".paragraph { border-width: 10px; border-style: solid; margin: 5px; }" ^
+                  ($ (".paragraph { border-width: 10px; border-style: solid; margin: 5px; padding: 10px; }" ^
                       (* ".lix { background: lightgreen; }" ^
                          ".fleshrl { background: lightblue; }" ^
                          ".fkincaidgl { background: yellow; }" ^ *)
@@ -120,9 +120,9 @@ fun makeReport' ({title_results,
         (html (head (style && (title ($ "Results")))
               &&
               (body (div1 "document"
-                          ((h1 ($ "Document results: ")) && documentReport) && hr &&
-                          ((h1 ($ "Page title results: "))) && titleReport) && hr &&
-                    contentReport)))
+                          (((h1 ($ "Document results: ")) && documentReport) && hr &&
+                          ((h1 ($ "Page title results: "))) && titleReport && hr &&
+                          contentReport)))))
          handle Match => $ "her"
     end;
 
