@@ -11,11 +11,24 @@ fun span1 class content = mark1a "SPAN"
 fun div1 class content = mark1a "DIV"
                                 ("class=\"" ^ class ^ "\"")
                                 content;
-    
-fun reportResult (Lix x) = span1 "lix" ($("Lix: " ^ (Real.toString x)))
-  | reportResult (FleshReadingEase x) = span1 "fleshrl" ($("Flesh Reading Ease: " ^ (Real.toString x)))
-  | reportResult (FleshKincaidGradeLevel x) = span1 "fkincaidgl" ($("FK Grade level: " ^ (Real.toString x)));
+local
+    open Real;
 
+    fun formatResultValue x =
+        let
+            val sign = if x < 0.0
+                       then "-"
+                       else ""
+
+            val value = abs (((fromInt o round) (x * 10.0)) / 10.0)
+        in
+            sign ^ toString value
+        end;
+in
+fun reportResult (Lix x) = span1 "lix" ($("Lix: " ^ (formatResultValue x)))
+  | reportResult (FleshReadingEase x) = span1 "fleshrl" ($("Flesh Reading Ease: " ^ (formatResultValue x)))
+  | reportResult (FleshKincaidGradeLevel x) = span1 "fkincaidgl" ($("FK Grade level: " ^ (formatResultValue x)));
+end;
 fun reportResults results = div1 "result" (prmap (fn x => (reportResult x) && br) results);
 
 fun reportSentenceElem (WordResult (text, correct)) = if correct
@@ -44,6 +57,15 @@ fun colorByResults results =
         "#" ^ hexify redlevel ^ hexify greenlevel ^ "00"
     end;
 
+fun createColorBox results content =
+    let
+        val color = colorByResults results;
+    in
+        mark1a "DIV"
+               ("style=\"border-color:" ^ color ^ ";\" class=\"colorbox\"")
+               content
+    end
+
 fun reportSentence (results, elemResults) = 
     let
         val color = colorByResults results;
@@ -62,15 +84,11 @@ fun reportContent onlyContent (ParagraphResult (results, sentences, descriptions
         val resultReport = reportResults results;
         val sentencesReport = reportSentences sentences;
         val descriptionsReport = prmap reportSentences descriptions;
-        val color = colorByResults results;
         val content = (p (sentencesReport && descriptionsReport));
     in
         if onlyContent
         then content
-        else
-            mark1a "DIV"
-               ("style=\"border-color:" ^ color ^ ";\" class=\"paragraph\"")
-               ((p resultReport) && content)
+        else createColorBox results ((p resultReport) && content)
                
         
     end
@@ -78,11 +96,10 @@ fun reportContent onlyContent (ParagraphResult (results, sentences, descriptions
     let
         val resultReport = reportResults result;
         val contentReport = prmap (reportContent true) content;
-        val color = colorByResults result;
+
     in
-        mark1a "DIV"
-               ("style=\"border-color:" ^ color ^ ";\" class=\"paragraph\"")
-               (resultReport && (h3 contentReport))
+        createColorBox result
+                       (resultReport && (h3 contentReport))
     end
   | reportContent display (QuotationResult (result, content)) = 
     let
@@ -90,20 +107,19 @@ fun reportContent onlyContent (ParagraphResult (results, sentences, descriptions
         val contentReport = prmap (reportContent true) content;
         val color = colorByResults result;
     in
-        mark1a "DIV"
-               ("style=\"border-color:" ^ color ^ ";\" class=\"paragraph\"")
-               (resultReport && (blockquote contentReport))
+        createColorBox result
+                       (resultReport && (blockquote contentReport))
     end;
 
 val style = mark1 "STYLE"
-                  ($ (".paragraph { border-width: 10px; border-style: solid; margin: 5px; padding: 10px; }" ^
-                      (* ".lix { background: lightgreen; }" ^
-                         ".fleshrl { background: lightblue; }" ^
-                         ".fkincaidgl { background: yellow; }" ^ *)
-                      ".document {width: 750px;}" ^
-                      ".spellerror {border:2px solid blue;}" ^
-                      ".result {margin: 10px; }")
-                  );
+                  ($ (".colorbox { border-width: 10px; border-style: solid; margin: 5px; padding: 10px; }"
+                   (* ^ ".lix { background: lightgreen; }"
+                      ^ ".fleshrl { background: lightblue; }"
+                      ^ ".fkincaidgl { background: yellow; }" *)
+                      ^ ".document {max-width: 750px;}"
+                      ^ ".spellerror {border:2px solid blue;}"
+                   (* ^ ".result {margin-bottom: 10px; }" *)
+                  ));
                                          
 
 fun makeReport' ({title_results,
@@ -113,16 +129,16 @@ fun makeReport' ({title_results,
         val contentReport = (prmap (reportContent false) content_results);
         val titleReport = case title_results of
                               NONE => $("No title found.")
-                            | SOME (results, sentences) => (reportResults results) && (reportSentences sentences);
+                            | SOME (results, sentences) => createColorBox results ((reportResults results) && (reportSentences sentences));
                                         
         val documentReport = reportResults document_results;
     in
         (html (head (style && (title ($ "Results")))
               &&
               (body (div1 "document"
-                          (((h1 ($ "Document results: ")) && documentReport) && hr &&
-                          ((h1 ($ "Page title results: "))) && titleReport && hr &&
-                          contentReport)))))
+                          ((h1 ($ "Document results: ")) && (createColorBox document_results documentReport) &&
+                          (h1 ($ "Page title results: ")) && titleReport &&
+                          (h1 ($ "Content results:") &&  contentReport))))))
          handle Match => $ "her"
     end;
 
