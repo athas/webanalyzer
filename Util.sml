@@ -204,6 +204,8 @@ fun concatMap f l = (foldr (op @) []) (map f l);
    Takes a list of options and returns all the SOME-values. *)
 val SOMEs = (map Option.valOf) o (List.filter Option.isSome);
 
+val splitLines = String.fields (equal #"\n");
+
 fun wait seconds =
     let
         open Time;
