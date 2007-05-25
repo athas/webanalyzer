@@ -64,15 +64,6 @@ in  case match of NONE   => false
                 | SOME _ => true
 end;
 
-(* readFile: string -> string
-
-   Indlæser hele indholdet af en fil med filnavnet fnvn. *)
-fun readFile fnvn = 
-let val indstrm = TextIO.openIn fnvn
-in  TextIO.inputAll indstrm before 
-    TextIO.closeIn(indstrm)
-end;
-
 (* run: string -> string option
 
    Kører program og returnerer SOME stdout, eller NONE
