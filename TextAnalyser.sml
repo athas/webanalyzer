@@ -227,8 +227,8 @@ local
     fun analyseSentenceElement doc_lang (Sentencifier.Word (t, attributes)) = 
         let
             val lang = case language attributes of
-                           NONE => doc_lang
-                         | SOME (Sentencifier.Language x) => SOME x;
+                           SOME (Sentencifier.Language x) => SOME x
+                         | _ => doc_lang;
         in
             WordResult (t, checkSpelling lang t)
         end
@@ -281,9 +281,4 @@ fun analyse ({title, languagecode, content} : Sentencifier.document) =
     end;
 end;
 
-(*(* dummy *)
-fun analyse ({title, languagecode, content} : Sentencifier.document) =
-    {title_results = NONE,
-     document_results = [],
-     content_results = []} : documentresult; *)
 end;

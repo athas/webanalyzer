@@ -28,7 +28,7 @@ fun findLix results = List.find (fn Lix x => true
                                   | _ => false)
                                 results;
 
-fun reportSentence (results, elemResults) = 
+fun colorByResults results = 
     let
         val lowerlimit = 20.0
         val upperlimit = 80.0
@@ -40,7 +40,13 @@ fun reportSentence (results, elemResults) =
         val greenlevel = trunc (2.55 * (100.0 - (lix - lowerlimit) * multiplier))
         val redlevel = trunc (2.55 * ((lix - lowerlimit) * multiplier))
         fun hexify number = StringCvt.padLeft #"0" 2 (Int.fmt StringCvt.HEX number)
-        val color = "#" ^ hexify redlevel ^ hexify greenlevel ^ "00"
+    in
+        "#" ^ hexify redlevel ^ hexify greenlevel ^ "00"
+    end;
+
+fun reportSentence (results, elemResults) = 
+    let
+        val color = colorByResults results;
     in
         mark1a "SPAN"
                ("style=\"background-color:" ^ color ^ ";\"")
@@ -49,55 +55,74 @@ fun reportSentence (results, elemResults) =
 
 fun reportSentences sentences = prmap reportSentence sentences;
 
-fun reportContent display (ParagraphResult (results, sentences, descriptions)) =
+(* onlyContent indicates whether this is a complete paragraph or occurs in some other
+   context where the only wanted analyze is the content-analyze. *)
+fun reportContent onlyContent (ParagraphResult (results, sentences, descriptions)) =
     let
         val resultReport = reportResults results;
         val sentencesReport = reportSentences sentences;
         val descriptionsReport = prmap reportSentences descriptions;
+        val color = colorByResults results;
+        val content = (p (sentencesReport && descriptionsReport));
     in
-        if display
-        then resultReport && (p (sentencesReport && descriptionsReport)) && hr
-        else (p (sentencesReport && descriptionsReport)) && hr
+        if onlyContent
+        then content
+        else
+            mark1a "DIV"
+               ("style=\"border-color:" ^ color ^ ";\" class=\"paragraph\"")
+               ((p resultReport) && content)
+               
         
     end
   | reportContent display (HeadingResult (result, content)) = 
     let
         val resultReport = reportResults result;
-        val contentReport = prmap (reportContent false) content;
+        val contentReport = prmap (reportContent true) content;
+        val color = colorByResults result;
     in
-        resultReport && (h3 contentReport)
+        mark1a "DIV"
+               ("style=\"border-color:" ^ color ^ ";\" class=\"paragraph\"")
+               (resultReport && (h3 contentReport))
     end
   | reportContent display (QuotationResult (result, content)) = 
     let
         val resultReport = reportResults result;
-        val contentReport = prmap (reportContent false) content;
+        val contentReport = prmap (reportContent true) content;
+        val color = colorByResults result;
     in
-        resultReport && (blockquote contentReport)
+        mark1a "DIV"
+               ("style=\"border-color:" ^ color ^ ";\" class=\"paragraph\"")
+               (resultReport && (blockquote contentReport))
     end;
 
-(*val style = mark1 "STYLE"
-                  ($ (".lix { background: lightgreen; }" ^
-                      ".fleshrl { background: lightblue; }" ^
-                      ".fkincaidgl { background: yellow; }" ^
-                      "/*.result {float:right;}*/ ")) *)
+val style = mark1 "STYLE"
+                  ($ (".paragraph { border-width: 10px; border-style: solid; margin: 5px; }" ^
+                      (* ".lix { background: lightgreen; }" ^
+                         ".fleshrl { background: lightblue; }" ^
+                         ".fkincaidgl { background: yellow; }" ^ *)
+                      ".document {width: 750px;}" ^
+                      ".spellerror {border:2px solid blue;}" ^
+                      ".result {margin: 10px; }")
+                  );
                                          
 
 fun makeReport' ({title_results,
                   document_results,
                   content_results} : documentresult) =
     let
-        val contentReport = (prmap (reportContent true) content_results);
+        val contentReport = (prmap (reportContent false) content_results);
         val titleReport = case title_results of
                               NONE => $("No title found.")
                             | SOME (results, sentences) => (reportResults results) && (reportSentences sentences);
                                         
         val documentReport = reportResults document_results;
     in
-        (html (head (title ($ "Results"))
+        (html (head (style && (title ($ "Results")))
               &&
-              body ((h1 ($ "Document results: ")) && documentReport) && hr &&
-                   ((h1 ($ "Page title results: "))) && titleReport) && hr &&
-              contentReport)
+              (body (div1 "document"
+                          ((h1 ($ "Document results: ")) && documentReport) && hr &&
+                          ((h1 ($ "Page title results: "))) && titleReport) && hr &&
+                    contentReport)))
          handle Match => $ "her"
     end;
 

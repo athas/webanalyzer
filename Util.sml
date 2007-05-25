@@ -191,7 +191,7 @@ fun equal x y = x = y;
 
    Does x occur in the list y? *)
 infix 0 member;
-fun x member y = List.exists (fn z => z = x) y;
+fun x member y = List.exists (equal x) y;
 
 
 (* concatMap func lst: ('a -> 'b list) -> 'a list -> 'b list
