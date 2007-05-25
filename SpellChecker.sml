@@ -15,8 +15,8 @@ fun hasDictionary languageCode = case run("aspell dicts")
 fun spellCheckWord languageCode word = 
     if not (hasDictionary languageCode) 
     then raise dictionaryNotFound languageCode
-    else case run ("echo \"" ^ word ^ "\" | aspell -l \"" ^ languageCode ^ "\" pipe") of
-             SOME result => String.sub (nth (splitLines result, 1), 0) = #"*"
+    else case run ("echo \"" ^ word ^ "\" | aspell -l \"" ^ languageCode ^ "\" pipe --encoding iso8859-1") of
+             SOME result => String.sub (List.nth (splitLines result, 1), 0) = #"*"
            | NONE => false;
 
 fun spellCheckWords languageCode words = 
