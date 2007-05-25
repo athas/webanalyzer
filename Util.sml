@@ -78,11 +78,12 @@ end;
 fun run line =
     let
         val pr = Unix.execute("/bin/sh" , ["-c", line])
+        val result = TextIO.inputAll(#1 (Unix.streamsOf pr))
     in
-        (SOME (TextIO.inputAll(#1 (Unix.streamsOf pr)))
-         handle Fail s => NONE)
-        before Unix.reap pr
-    end;
+        if Unix.reap pr = Process.success
+        then SOME(result)
+        else NONE
+    end handle Fail _ => NONE;
        
 (* gethostbyname: string -> string
 
