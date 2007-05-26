@@ -36,8 +36,10 @@ fun mapLinks function htmlTree =
     end
 
 local
-    val URICache = ref (Binarymap.mkDict (fn (x, y) => String.compare (stringFromURI x, stringFromURI y)))
-                   
+    structure URIMap = BinaryMapFn (struct type ord_key = URI; 
+                                    fun compare (x, y) = String.compare(stringFromURI x, stringFromURI y);
+                                    end);
+    val URICache : URI URIMap.map ref = ref URIMap.empty;
     (* Remove everything to the right of the last picket fence (#) in
     the argument. *)
     fun trimURI string = 
@@ -51,9 +53,9 @@ fun makeURI (absoluteURI, path) =
                         then buildSimpleURI (NONE, trimmedPath)
                         else buildSimpleURI (absoluteURI, trimmedPath)
     in
-        case Binarymap.peek (!URICache, simpleURI) of
+        case URIMap.find (!URICache, simpleURI) of
             SOME uri => uri
-          | NONE => (URICache := Binarymap.insert (!URICache, simpleURI, buildURI (absoluteURI, trimmedPath));
+          | NONE => (URICache := URIMap.insert (!URICache, simpleURI, buildURI (absoluteURI, trimmedPath));
                      makeURI (absoluteURI, trimmedPath))
     end
 end
