@@ -227,7 +227,7 @@ exception Header of string;
 fun readResponseHeader socket =
 let 
     val line1 = readLine socket
-    val regexp = RegexMatcher.compileString "HTTP/([0-9]+\\.[0-9]+)[[:space:]]+([0-9]+)[[:space:]]+(.*)"
+    val regexp = RegexMatcher.compileString "HTTP/([0-9]+\\.[0-9]+)[ \r\n\t\v\f]+([0-9]+)[ \r\n\t\v\f]+(.*)"
     val match = Util.matchList regexp line1;
 in  
     case match of NONE => raise Header line1
@@ -235,7 +235,7 @@ in
                   let val status = valOf(Int.fromString (List.nth (v, 2)))
                           handle Option => raise Fail line1
                       val regexp = RegexMatcher.compileString
-                                       "([^:]+):[[:space:]]*([^;[:space:]]+)";
+                                       "([^:]+):[ \r\n\t\v\f]*([^; \r\n\t\v\f]+)";
                       (* gemmer liste af tupler (nøgle, værdi) indtil en 
                                 helt tom linie dukker op *)
                       fun getHeader () =
