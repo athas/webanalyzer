@@ -443,8 +443,6 @@ fun buildSimpleURI (origin : URI option, str) =
                            else #3 origin'
                 val contentType = #5 origin'
             in  
-                print path';
-                print "\n";
                 (protocol', name, port, path', contentType)
             end 
         else if not (isSome server) then 
