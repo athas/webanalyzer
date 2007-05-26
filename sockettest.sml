@@ -1,4 +1,5 @@
 
+
       fun connect host port =
       let
          fun resolve host =
@@ -20,40 +21,45 @@
        *)
       fun send_request conn req =
          SockUtil.sendStr (conn, req)
-         handle SysErr => ( print "could not send request" ; raise SysErr )
+          handle SysErr => ( print "could not send request" ; raise SysErr )
 
 
-      val path = SOME "/blog/";
+      val path = "/blog/";
       val host = "dybber.dk";
       val port = 80;
-
-      val path' = Option.getOpt (path, "/")
 
       val req  = "GET " ^ path' ^ " HTTP/1.0\r\n" ^
                  "Host: " ^ host ^ "\r\n" ^
                  "User-Agent: webanalyzer\r\n\r\n";
 
-
+      (* Convert a Word8Vector to a char list *)
       fun vectorToChars vec = Word8Vector.foldr
                                   (fn (chr, b) => (Byte.byteToChar chr) :: b)
                                   []
                                   vec;
-
+      (* Convert a Word8Vector to a string *)
       val vectorToString = implode o vectorToChars;
 
-      fun get conn =
+      (* Get the result as a string *)
+      fun readAll conn =
           let
-              val vec = Socket.recvVec (conn, 10);
+              val vec = Socket.recvVec (conn, 8192);
           in
+              (* Stop when we receive an empty vector;
+                 which means that the connection is closed in
+                 the other end. *)
               if Word8Vector.length vec = 0
               then ((close conn) ; "")
-              else
-                  (vectorToString vec) ^ (get conn)
+              else (vectorToString vec) ^ (get conn)
           end;
 
-
+      (* Connect to the server *)
       val conn = connect host port;
+
+      (* Send a request *)
       val send = send_request conn req;
+
+      (* Get the resulting information. *)
       val result = get conn;
 
 
