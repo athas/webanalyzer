@@ -107,17 +107,17 @@ let
     val matches = case match of NONE   => raise MalformedURI uri
                               | SOME v => v
 
-    val prot = (if List.length matches > 3
-                then SOME (lowercase (List.nth(matches,3)))
-                else NONE) handle _ => raise Fail "asdadsjK";
+    val prot = if List.length matches > 3
+               then SOME (lowercase (List.nth(matches,3)))
+               else NONE
 
-    val addr = (if List.length matches > 5
-                then SOME (lowercase (List.nth(matches,5)))
-                else NONE) handle _ => raise Fail "asdadsjK";
+    val addr = if List.length matches > 5
+               then SOME (lowercase (List.nth(matches,5)))
+               else NONE;
                      
-    val path = (if List.length matches > 6
-                then SOME (List.nth(matches,6))
-                else NONE);
+    val path = if List.length matches > 6
+               then SOME (List.nth(matches,6))
+               else NONE;
 
     val address = case addr of NONE => NONE
                              | SOME s => SOME(parseAddress s)
