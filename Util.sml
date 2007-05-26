@@ -3,6 +3,35 @@
 structure Util :> Util =
 struct
 
+local
+    open RegexMatcher;
+    fun matches regex string = StringCvt.scanString (find regex) string
+
+                               
+    (* Return the actual match as element #1 in the list and there after
+       the sub-matches (defined with paranteses in the regexp) *)
+    fun matchList' string (MatchTree.Match (SOME {pos, len}, subtrees)) =
+            String.substring (string, pos, len)
+            :: (foldl (fn (m, b) => b @ matchList' string m) [] subtrees)
+      | matchList' _ _ = [];
+in
+    fun isMatch regex string = case matches regex string of
+                                   SOME x => true
+                                 | NONE => false;
+
+    fun firstMatch regex string =
+            case matches regex string of
+                SOME (MatchTree.Match (SOME {pos, len}, _)) =>
+                        SOME (String.substring (string, pos, len))
+              | _ => NONE;
+       
+    fun matchList regex string = 
+        case matches regex string of
+            SOME x => SOME (matchList' string x)
+          | _ => NONE;
+end
+        
+
 type 'a sock = ('a, Socket.active Socket.stream) Socket.sock
 
 (* readChar: ('a, active stream) sock -> char
@@ -44,25 +73,18 @@ let
     end
 in  read() end; 
 
-(* unix: unit -> bool
 
-   Returnerer sand, hvis maskinen er unix-variant.
-   Det udnyttes, at unix-maskiner IKKE har drevbogstaver ligesom
-   MS-operativsystemerne. *)
-fun unix () = not (Path.validVolume {isAbs = true, vol = "C:\\"});
-
-val regstr_ip = "([0-9]+\\.[0-9]+\\.[0-9]+\\.[0-9]+)";
-val regexp_ip = Regex.regcomp regstr_ip [Regex.Extended, Regex.Icase];
+(* SML/NJ regex's doesn't support {1,3} to tell the allowed nr. of repetitions  *)
+val ip_regexp = RegexMatcher.compileString ("[0-9][0-9]?[0-9]?" ^
+                                            "\\.[0-9][0-9]?[0-9]?" ^
+                                            "\\.[0-9][0-9]?[0-9]?" ^
+                                            "\\.[0-9][0-9]?[0-9]?");
     
 (* numericAddress: string -> bool 
 
    Returnerer sand, hvis strengen har form af en ip-adresse
    fx. 255.0.0.1 *)
-fun numericAddress addr =
-let val match = Regex.regexec regexp_ip [] addr
-in  case match of NONE   => false
-                | SOME _ => true
-end;
+fun numericAddress addr = isMatch ip_regexp addr
 
 (* run: string -> string option
 
@@ -80,7 +102,7 @@ fun run line =
         val pr = Unix.execute("/bin/sh" , ["-c", line])
         val result = TextIO.inputAll(#1 (Unix.streamsOf pr))
     in
-        if Unix.reap pr = Process.success
+        if Unix.reap pr = OS.Process.success
         then SOME(result)
         else NONE
     end handle Fail _ => NONE;
@@ -95,22 +117,19 @@ fun run line =
 
 fun gethostbyname name = if numericAddress name then name else
 let fun trySocket () = 
-   (let val ip = Socket.getinetaddr (Socket.inetAddr name 80)
+   (let val ip = NetHostDB.toString (#addr (SockUtil.resolveAddr {host = SockUtil.HostName name,
+                                                                  port = SOME (SockUtil.PortNumber 80)}));
     in if ip = "0.0.0.0" orelse 
            ip = "255.255.255.255" then NONE
                                   else SOME ip
     end) handle Fail _ => NONE
     fun tryPing () = 
-    let val host = if unix() then "host " ^ name
-                   else "ping -n 1 " ^ name
+    let val host = "host " ^ name
         val status = run host
         val output = case status of SOME str => str 
                                   | NONE     => ""
-        val match = Regex.regexec regexp_ip [] output
-        val vector = valOf match
-        val sub = Vector.sub(vector, 1)
-        val str = Substring.string sub
-    in  SOME str end 
+        val match = firstMatch ip_regexp output
+    in  SOME (valOf match) end 
     handle _ => NONE
 in  case trySocket() of SOME ip => ip | NONE =>
     ( case tryPing() of SOME ip => ip | NONE => 
@@ -134,7 +153,7 @@ fun readFrom fileName =
 
 fun writeTo fileName str =
     let val ostream = TextIO.openOut fileName
-            handle Io _ => raise IOError fileName
+            handle IO.Io _ => raise IOError fileName
     in TextIO.output (ostream, str) before
        TextIO.closeOut ostream end
 
@@ -202,11 +221,14 @@ fun concatMap f l = (foldr (op @) []) (map f l);
 (* SOMEs : 'a option list -> 'a list
  
    Takes a list of options and returns all the SOME-values. *)
-val SOMEs = (map Option.valOf) o (List.filter Option.isSome);
+fun SOMEs x = map Option.valOf (List.filter Option.isSome x);
 
 val splitLines = String.fields (equal #"\n");
 
-fun wait seconds =
+fun wait sec = ();
+
+(*
+fun wait (seconds : int) =
     let
         open Time;
         val endTime = now () + fromSeconds seconds
@@ -215,5 +237,6 @@ fun wait seconds =
     in
         wait' ()
     end;
-
+*)
 end;
+

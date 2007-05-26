@@ -61,19 +61,24 @@ type address = string * int option;
 exception MalformedAddress of string;
 fun parseAddress addr =
 let
-    val regstr = "([^:]+)(:([0-9]+))?";
-    val regexp = Regex.regcomp regstr [Regex.Extended, Regex.Icase]
-    val match = Regex.regexec regexp [] addr
-    val (s, port') = 
-            case match of NONE   => raise MalformedAddress addr
-                        | SOME v => (Vector.sub(v,1), Vector.sub(v,3))
-    val port'' = if size port' = 0 then NONE 
-		 else Int.fromString (str port')
-    val port = if (isSome port'') andalso (valOf port'') = 80 then NONE
-               else port''
+    val regexp = RegexMatcher.compileString "([^:]+)(:([0-9]+))?"
+    val match = Util.matchList regexp addr;
+    val matches = case match of NONE   => raise MalformedAddress addr
+                              | SOME v => v
+
+    val s = if List.length matches > 1
+            then List.nth (matches, 1)
+            else raise MalformedAddress addr
+
+    val port' = if List.length matches > 2 andalso String.size (List.nth (matches, 2)) > 0
+                then Int.fromString (List.nth (matches, 2))
+                else NONE
+
+    val port = if (isSome port') andalso (valOf port') = 80 then NONE
+               else port'
 in
-    if (size s) = 0 then raise MalformedAddress addr
-    else (str s, port)
+    if (String.size s) = 0 then raise MalformedAddress addr
+    else (s, port)
 end;
 
 (* parseURI: bool -> string -> string option * address option 
@@ -94,19 +99,28 @@ end;
 exception MalformedURI of string;
 fun parseURI isHTML uri =
 let
-    val regstr = if isHTML then "(([a-z]+)()?:)?(//([^/]+))?(.+)?"
-                 else "((([a-z]+):)?//)?(([^/]+))?(.+)?";
-    val regexp = Regex.regcomp regstr [Regex.Extended, Regex.Icase]
-    val match = Regex.regexec regexp [] uri
-    val (prot', addr', path') = 
-            case match of NONE   => raise MalformedURI uri
-                        | SOME v => (Vector.sub(v,3), Vector.sub(v,5),
-                                     Vector.sub(v,6))
-    val prot = if size prot' = 0 then NONE else SOME(lowercase (str prot'))
-    val addr = if size addr' = 0 then NONE else SOME(lowercase (str addr'))
-    val path = if size path' = 0 then NONE else SOME(str path')
+    val regexp = RegexMatcher.compileString
+                     (if isHTML
+                      then "(([a-z]+)()?:)?(//([^/]+))?(.+)?"
+                      else "((([a-z]+):)?//)?(([^/]+))?(.+)?");
+    val match = Util.matchList regexp uri
+    val matches = case match of NONE   => raise MalformedURI uri
+                              | SOME v => v
+
+    val prot = (if List.length matches > 3
+                then SOME (lowercase (List.nth(matches,3)))
+                else NONE) handle _ => raise Fail "asdadsjK";
+
+    val addr = (if List.length matches > 5
+                then SOME (lowercase (List.nth(matches,5)))
+                else NONE) handle _ => raise Fail "asdadsjK";
+                     
+    val path = (if List.length matches > 6
+                then SOME (List.nth(matches,6))
+                else NONE);
+
     val address = case addr of NONE => NONE
-                           | SOME s => SOME(parseAddress s)
+                             | SOME s => SOME(parseAddress s)
 in
     (prot, address, path)
 end;
@@ -146,10 +160,10 @@ val timeout = 20.0;
 fun readAll socket =
 let fun now () = Time.toReal (Time.now())
     fun moreHTML text = 
-    let val regstr = "</html>";
-        val regexp = Regex.regcomp regstr [Regex.Extended, Regex.Icase]
-        val match = Regex.regexec regexp [] text
-    in  not (isSome match) end;
+        let 
+            val regexp = RegexMatcher.compileString "</html>";
+            
+        in  not (Util.isMatch regexp text) end;
     fun read(acc, time) = if not (moreHTML acc) then acc else
     let
         val vector = (Socket.recvVec'(socket, 1, {peek=true, oob=false})
@@ -189,7 +203,7 @@ end;
    Skriver streng til socket. *)
 fun writeSocket socket str =
 let 
-    val reqVec = {buf=Byte.stringToBytes str, ofs=0, size=NONE}
+    val reqVec =  Word8VectorSlice.slice (Byte.stringToBytes str, 0, NONE)
 in  
     Socket.sendVec(socket, reqVec)
     handle Fail s => raise Error(Socket ("Error writing data: " ^ s))
@@ -198,9 +212,8 @@ end;
 (* resolveAddress: address -> pf_inet sock_addr
 
    Oversætter adresse til internt socket-format. *)
-fun resolveAddress(host, port) =
-(Socket.inetAddr (gethostbyname host) (default 80 port)
-)handle Fail str => raise Error (General str);
+fun resolveAddress(host, port) = SockUtil.resolveAddr {host = SockUtil.HostName host,
+                                                       port = SOME (SockUtil.PortNumber (default 80 port))}
 
 (* readResponseHeader: ('a, active stream) sock -> 
                        int * (string * string) list
@@ -214,25 +227,24 @@ exception Header of string;
 fun readResponseHeader socket =
 let 
     val line1 = readLine socket
-    val regstr = "HTTP/([0-9]+\\.[0-9]+)[[:space:]]+([0-9]+)[[:space:]]+(.*)"
-    val regexp = Regex.regcomp regstr [Regex.Extended, Regex.Icase]
-    val match = Regex.regexec regexp [] line1
+    val regexp = RegexMatcher.compileString "HTTP/([0-9]+\\.[0-9]+)[[:space:]]+([0-9]+)[[:space:]]+(.*)"
+    val match = Util.matchList regexp line1;
 in  
     case match of NONE => raise Header line1
                 | SOME v => 
-                  let val status = valOf(Int.fromString (get (v, 2)))
+                  let val status = valOf(Int.fromString (List.nth (v, 2)))
                           handle Option => raise Fail line1
-                      val regstr = "([^:]+):[[:space:]]*([^;[:space:]]+)"
-                      val regexp = Regex.regcomp regstr [Regex.Extended, Regex.Icase]
+                      val regexp = RegexMatcher.compileString
+                                       "([^:]+):[[:space:]]*([^;[:space:]]+)";
                       (* gemmer liste af tupler (nøgle, værdi) indtil en 
                                 helt tom linie dukker op *)
                       fun getHeader () =
                           let val line = readLine socket
                           in  if line = "\r\n" then [] else 
-                              (case (Regex.regexec regexp [] line) of 
+                              (case (Util.matchList regexp line) of 
                                    NONE => []
-                                 | SOME v => [(lowercase (str (Vector.sub(v,1))),
-                                               str (Vector.sub(v, 2)))]
+                                 | SOME v => [(lowercase (List.nth(v,1)),
+                                               List.nth(v, 2))]
                               ) @ getHeader ()
                           end
                       val header = getHeader()
@@ -298,13 +310,16 @@ fun headResponse socket =
 
    Laver http-forespørgsel som angivet ved request-strengen og 
    håndterer svaret ved hjælp af receiver. *)
-fun requestHTTPbyServer (receiver, request) addr =
+fun requestHTTPbyServer (receiver, request) {addr, port, host} =
     let 
-        val server = Socket.getinetaddr addr
-        val socket = Socket.inetStream()
-    in (Socket.connect(socket, addr)
+        val socket = INetSock.TCP.socket ();
+        val addr2 = INetSock.toAddr(addr, default 80 port);
+    in 
+        print "foo";
+        (Socket.connect(socket, addr2)
         handle Fail str => raise Error (Socket ("Error connecting to " ^ 
-                                                server ^ ": " ^ str));
+                                                host ^ ": " ^ str));
+         print "bar";
         writeSocket socket request;
         receiver socket before 
         Socket.close socket)
@@ -328,8 +343,12 @@ fun requestHTTP (receiver, request) host =
    Proxy vil benytte proxy-server. 
    Automatic vil prøve både proxy-server og direkte forbindelse. *)
 val proxy = "proxy:8080";
-datatype Config = Automatic of Socket.pf_inet Socket.sock_addr
-                | Proxy of Socket.pf_inet Socket.sock_addr
+datatype Config = Automatic of {addr : NetHostDB.in_addr,
+                                host : string,
+                                port : int option}
+                | Proxy of {addr : NetHostDB.in_addr,
+                            host : string,
+                            port : int option}
                 | Direct;
 val method = ref (Automatic (resolveAddress (parseAddress proxy))) handle _ => ref Direct; 
 
@@ -350,13 +369,14 @@ case method of Direct =>
     let val (protocol, host, port, path, _) = uri 
         val server = (host, port)
         val request = buildReq (action, path, serverFromURI uri)
+                      
         (* val request = buildReq(action, path) *)
     in
         if protocol = "http" then requestHTTP (receiver, request) server
         else raise Error(General("Bad protocol: " ^ protocol))
     end
 | Proxy addr => 
-    let val request = buildReq(action, stringFromURI uri, serverFromURI uri)  
+    let val request = buildReq(action, stringFromURI uri, serverFromURI uri)
     in requestHTTPbyServer (receiver, request) addr end
 | _ => raise Error(General "Bad getURI' method");
 
@@ -401,7 +421,7 @@ fun buildSimpleURI (origin : URI option, str) =
         if isSome origin then 
             let fun joinPath (orig, new) =
                     let 
-                        open Path
+                        open OS.Path
                     in  
                         if isAbsolute new then 
                             new 
@@ -430,7 +450,7 @@ fun buildSimpleURI (origin : URI option, str) =
                 val port = #2 server'
                 val path' = default "/" path
             in 
-                (protocol', name, port, Path.mkCanonical path', "text/html")
+                (protocol', name, port, OS.Path.mkCanonical path', "text/html")
             end
     end;
 

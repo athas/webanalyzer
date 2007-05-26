@@ -1,6 +1,10 @@
 signature Util =
 sig type 'a sock = ('a, Socket.active Socket.stream) Socket.sock
 
+    val isMatch : RegexMatcher.regexp -> string -> bool;
+    val firstMatch : RegexMatcher.regexp -> string -> string option;
+    val matchList : RegexMatcher.regexp -> string -> string list option;
+
     val readChar: 'a sock -> char
     val readLine: 'a sock -> string
     val readEmptyLine: 'a sock -> string
