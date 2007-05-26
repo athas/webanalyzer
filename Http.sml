@@ -97,32 +97,37 @@ end;
    og kastes undtagelsen MalformedURI hvis uri-strengen
    ikke giver mening. *)
 exception MalformedURI of string;
-fun parseURI isHTML uri =
+fun parseURI false uri =
 let
-    val regexp = RegexMatcher.compileString
-                     (if isHTML
-                      then "(([a-z]+)()?:)?(//([^/]+))?(.+)?"
-                      else "((([a-z]+):)?//)?(([^/]+))?(.+)?");
+    val regexp = RegexMatcher.compileString "((([a-z]+):)?//)?(([^/]+))?(.+)?";
     val match = Util.matchList regexp uri
     val matches = case match of NONE   => raise MalformedURI uri
                               | SOME v => v
-
     val prot = if List.length matches > 3
                then SOME (lowercase (List.nth(matches,3)))
                else NONE
-
     val addr = if List.length matches > 5
                then SOME (lowercase (List.nth(matches,5)))
                else NONE;
-                     
     val path = if List.length matches > 6
                then SOME (List.nth(matches,6))
                else NONE;
-
     val address = case addr of NONE => NONE
-                             | SOME s => SOME(parseAddress s)
+                             | SOME s => SOME(parseAddress s);
 in
     (prot, address, path)
+end
+  | parseURI true uri =
+    let
+        val regexp = RegexMatcher.compileString "(([a-z]+)()?:)?(//([^/]+))?(.+)?"
+        val match = Util.matchList regexp uri
+        val matches = case match of NONE   => raise MalformedURI uri
+                                  | SOME v => v
+        val path = (if List.length matches > 0
+                    then SOME (List.nth(matches,0))
+                    else NONE);
+in
+    (NONE, NONE, path)
 end;
 
 type URI = string     (* protokol   *)
@@ -431,13 +436,15 @@ fun buildSimpleURI (origin : URI option, str) =
                 val origin' = valOf origin
                 val protocol' = default (#1 origin') protocol
                 val server' = default (#2 origin', #3 origin') server
-                val path' = if not (isSome path) then "/" 
+                val path' = if not (isSome path) then "/"
                             else joinPath(#4 origin', valOf path)
                 val name = #1 server'
                 val port = if isSome (#2 server') then (#2 server')
                            else #3 origin'
                 val contentType = #5 origin'
             in  
+                print path';
+                print "\n";
                 (protocol', name, port, path', contentType)
             end 
         else if not (isSome server) then 
