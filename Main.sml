@@ -143,12 +143,9 @@ fun badnessFactor analysis = case List.find (fn (TextAnalyser.Lix value) => true
                               of SOME (TextAnalyser.Lix value) => value
                                | _ => raise Fail "Impossible! No lix!";
 
-(* Compare two analysis-results. *)
-fun compareResults (result1, result2) = Real.compare (badnessFactor result1, badnessFactor result2);
-
 fun writeIndex starturi outputFilename analysedPages =
     let open Msp;
-        val sortedResults = Listsort.sort (fn ((_, x), (_, y)) => compareResults (y, x)) analysedPages
+        val sortedResults = ListMergeSort.sort (fn ((_, x), (_, y)) => badnessFactor x > badnessFactor y) analysedPages
         val std = td o $
         val wseqFromURI = $ o stringFromURI
         val wseqFromReal = $ o Real.toString
