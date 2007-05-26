@@ -1,14 +1,7 @@
-(* Note that you have to load Main.sml seperately. 
+(* Note that you have to load Main.sml seperately. *)
 
-load "Regex";
-load "Socket";
-load "Unix";
-load "Binarymap";
-load "Msp";
-load "Listsort"; *)
-
-CM.autoload "smlnj-lib/RegExp/regexp-lib.cm";
-CM.autoload "smlnj-lib/INet/inet-lib.cm";
+CM.make "$/regexp-lib.cm";
+CM.make "$/inet-lib.cm";
 
 structure RegexMatcher = RegExpFn (structure P=AwkSyntax; structure E=BackTrackEngine);
 
