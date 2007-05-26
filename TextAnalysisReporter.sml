@@ -1,6 +1,6 @@
 structure TextAnalysisReporter :> TextAnalysisReporter =
 struct
-open Msp;
+open HTMLBuilder;
 infix &&;
 open TextAnalyser;
 

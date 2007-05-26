@@ -7,6 +7,7 @@ structure RegexMatcher = RegExpFn (structure P=AwkSyntax; structure E=BackTrackE
 
 app use ["Util.sig", "Util.sml",
          "Config.sig", "Config.sml",
+         "HTMLBuilder.sig", "HTMLBuilder.sml",
          "Help.sig", "Help.sml",
          "Http.sig", "Http.sml",
          "HTMLLexer.sig", "HTMLLexer.sml",
@@ -15,7 +16,7 @@ app use ["Util.sig", "Util.sml",
          "SpellChecker.sig", "SpellChecker.sml",
          "TextExtractor.sig", "TextExtractor.sml",
          "Sentencifier.sig", "Sentencifier.sml",
-         "TextAnalyser.sig", "TextAnalyser.sml"(*,
-         "TextAnalysisReporter.sig", "TextAnalysisReporter.sml",
-         "Robots.sig", "Robots.sml"*)
+         "TextAnalyser.sig", "TextAnalyser.sml",
+         "TextAnalysisReporter.sig", "TextAnalysisReporter.sml"(*,
+        "Robots.sig", "Robots.sml"*)
 ];

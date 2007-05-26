@@ -144,7 +144,7 @@ fun badnessFactor analysis = case List.find (fn (TextAnalyser.Lix value) => true
                                | _ => raise Fail "Impossible! No lix!";
 
 fun writeIndex starturi outputFilename analysedPages =
-    let open Msp;
+    let open HTMLBuilder;
         val sortedResults = ListMergeSort.sort (fn ((_, x), (_, y)) => badnessFactor x > badnessFactor y) analysedPages
         val std = td o $
         val wseqFromURI = $ o stringFromURI
