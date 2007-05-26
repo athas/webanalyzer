@@ -182,7 +182,7 @@ fun mainProgram (arg :: rest) =
             writeTo (outputFilename uri) (TextAnalysisReporter.makeReport analysis)
             before analysedPages := (uri, analysis) :: !analysedPages
     in 
-        FileSys.mkDir outputdir
+        OS.FileSys.mkDir outputdir
         handle SysError => raise FatalError "Kunne ikke oprette output-mappe.";
         (* Useful when used interactively. *)
         visitedPages := [];
