@@ -1,5 +1,3 @@
-
-
       fun connect host port =
       let
          fun resolve host =
@@ -28,17 +26,9 @@
       val host = "dybber.dk";
       val port = 80;
 
-      val req  = "GET " ^ path' ^ " HTTP/1.0\r\n" ^
+      val req  = "GET " ^ path ^ " HTTP/1.0\r\n" ^
                  "Host: " ^ host ^ "\r\n" ^
                  "User-Agent: webanalyzer\r\n\r\n";
-
-      (* Convert a Word8Vector to a char list *)
-      fun vectorToChars vec = Word8Vector.foldr
-                                  (fn (chr, b) => (Byte.byteToChar chr) :: b)
-                                  []
-                                  vec;
-      (* Convert a Word8Vector to a string *)
-      val vectorToString = implode o vectorToChars;
 
       (* Get the result as a string *)
       fun readAll conn =
@@ -50,7 +40,7 @@
                  the other end. *)
               if Word8Vector.length vec = 0
               then ((close conn) ; "")
-              else (vectorToString vec) ^ (get conn)
+              else (Byte.bytesToString vec) ^ (readAll conn)
           end;
 
       (* Connect to the server *)
@@ -60,7 +50,7 @@
       val send = send_request conn req;
 
       (* Get the resulting information. *)
-      val result = get conn;
+      val result = readAll conn;
 
 
 
