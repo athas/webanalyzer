@@ -56,7 +56,6 @@ datatype textcounts = ParagraphCount of counts *
                     | QuotationCount of counts *
                                         textcounts list;
 
-
 val zeroCount = {paragraphs = 0,
                  sentences = 0,
                  words = 0,
@@ -247,11 +246,23 @@ local
             HeadingResult (analyse' count, map (analyseTextElement doc_lang) subcounts)
       | analyseTextElement doc_lang (QuotationCount (count, subcounts)) =
             QuotationResult (analyse' count, map (analyseTextElement doc_lang) subcounts)
+
+    fun isWord (Sentencifier.Word _) = true
+      | isWord _ = false;
+
+    fun sentenceHasWord sentence = exists isWord sentence;
+
+    fun hasWord (Sentencifier.Paragraph (sentences, descs)) =
+          (exists sentenceHasWord sentences) orelse
+          (exists (exists sentenceHasWord) descs)
+      | hasWord (Sentencifier.Heading sub) = exists hasWord sub
+      | hasWord (Sentencifier.Quotation sub) = exists hasWord sub
 in
 
 fun analyse ({title, languagecode, content} : Sentencifier.document) =
     let
-        val documentCounts = countDocumentContent content;
+        val fcontent = filter hasWord content
+        val documentCounts = countDocumentContent fcontent;
         val documentTotal = sumCounts (map countOfTextCounts documentCounts);
         val results = map (analyseTextElement languagecode) documentCounts;
 
