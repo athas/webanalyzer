@@ -186,7 +186,7 @@ fun mainProgram (arg :: rest) =
             before analysedPages := (uri, analysis) :: !analysedPages);
     in 
         OS.FileSys.mkDir outputdir
-        handle SysError => raise FatalError "Kunne ikke oprette output-mappe.";
+        handle OS.SysErr (_,_) => raise FatalError "Kunne ikke oprette output-mappe.";
         (* Useful when used interactively. *)
         visitedPages := [];
         visit analysisOutputter starturi 0;
