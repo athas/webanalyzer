@@ -167,6 +167,43 @@ fun readAll conn =
     end;
 
 
+(* Read the message-body as described in 
+ * http://www.w3.org/Protocols/rfc2616/rfc2616-sec3.html#sec3.6 *)
+
+fun readChunked conn =
+    let fun readN n = let val vec = Socket.recvVec (conn, n);
+                          val string = Byte.bytesToString vec;
+                          val len = size string;
+                      in if len > 0 andalso len < n
+                         then string ^ (readN (n - len))
+                         else string
+                      end;
+        fun readNextLine conn = let val line = readLine conn
+                                in if size line > 0 andalso
+                                      List.all Char.isSpace (explode line)
+                                   then readNextLine conn
+                                   else line
+                                end;
+
+        val chunkSizeHex = readNextLine conn
+        val chunkSizeOpt = StringCvt.scanString (Int.scan StringCvt.HEX)
+                                             chunkSizeHex
+
+        val chunkSize = case chunkSizeOpt of
+                           SOME x => x
+                         | NONE => raise Fail ("Expected HEX value not : \"" ^
+                                         chunkSizeHex ^ "\".")
+
+    in
+        if chunkSize = 0
+        then ""
+        else let val stringResult = readN chunkSize;
+             in 
+                 if size stringResult = 0
+                 then stringResult
+                 else stringResult ^ (readChunked conn)
+             end
+    end;
 
 (* readString: ('a, active stream) sock -> int -> string
 
@@ -237,7 +274,7 @@ end;
    der matcher nøglen. *)
 fun get([], key) = NONE
   | get((k,v)::ts, key) = 
-    if k = key then SOME v  
+    if lowercase k = lowercase key then SOME v  
     else get(ts, key);
 	
 (* getResponse: ('a, active stream) sock -> string * string
@@ -255,10 +292,19 @@ fun getResponse socket =
      val cLength' = get(header, "content-length")
      val cLength = case cLength' of NONE => NONE
                                 | SOME s => Int.fromString s
+     val transferCoding = get(header, "Transfer-Encoding")
      val cType   = default "text/html" (get (header, "content-type"))
- in  (cType, case cLength of 
-               NONE => readAll socket 
-           | SOME l => readString socket l)
+
+     fun getX () = case cLength of 
+                       NONE => readAll socket 
+                     | SOME l => readString socket l
+
+     val messageBody = case transferCoding of
+                           SOME "identity" => getX ()
+                         | NONE => getX ()
+                         | _ => readChunked socket (* Chunked transfer-coding *)
+                           
+ in  (cType, messageBody)
  end
 ) handle Header str => ("text/html", str ^ (readAll socket));
 
