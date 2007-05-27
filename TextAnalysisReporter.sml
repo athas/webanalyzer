@@ -6,11 +6,12 @@ open TextAnalyser;
 
 fun span1 class content = mark1a "SPAN"
                                  ("class=\"" ^ class ^ "\"")
-                                 content;
+                                 content
 
 fun div1 class content = mark1a "DIV"
                                 ("class=\"" ^ class ^ "\"")
-                                content;
+                                content
+
 local
     open Real;
 
@@ -20,16 +21,19 @@ local
                        then "-"
                        else ""
 
-            val value = abs (((fromInt o round) (x * 10.0)) / 10.0)
+            (* Round to 2 decimals *)
+            val value = if isFinite x
+                        then abs (((fromInt o round) (x * 100.0)) / 100.0)
+                        else abs x
         in
             sign ^ toString value
         end;
 in
 fun reportResult (Lix x) = span1 "lix" ($("Lix: " ^ (formatResultValue x)))
   | reportResult (FleshReadingEase x) = span1 "fleshrl" ($("Flesh Reading Ease: " ^ (formatResultValue x)))
-  | reportResult (FleshKincaidGradeLevel x) = span1 "fkincaidgl" ($("FK Grade level: " ^ (formatResultValue x)));
+  | reportResult (FleshKincaidGradeLevel x) = span1 "fkincaidgl" ($("FK Grade level: " ^ (formatResultValue x)))
 end;
-fun reportResults results = div1 "result" (prmap (fn x => (reportResult x) && br) results);
+fun reportResults results = div1 "result" (prmap (fn x => (reportResult x) && br) results)
 
 fun reportSentenceElem (WordResult (text, correct)) = if correct
                                                      then $ (htmlencode text)
@@ -84,13 +88,11 @@ fun reportContent onlyContent (ParagraphResult (results, sentences, descriptions
         val resultReport = reportResults results;
         val sentencesReport = reportSentences sentences;
         val descriptionsReport = prmap reportSentences descriptions;
-        val content = (p (sentencesReport && descriptionsReport));
+        val content = p (sentencesReport && descriptionsReport);
     in
         if onlyContent
         then content
         else createColorBox results ((p resultReport) && content)
-               
-        
     end
   | reportContent display (HeadingResult (result, content)) = 
     let
@@ -126,7 +128,7 @@ fun makeReport' ({title_results,
                   document_results,
                   content_results} : documentresult) =
     let
-        val contentReport = (prmap (reportContent false) content_results);
+        val contentReport = prmap (reportContent false) content_results;
         val titleReport = case title_results of
                               NONE => $("No title found.")
                             | SOME (results, sentences) => createColorBox results ((reportResults results) && (reportSentences sentences));
@@ -139,7 +141,6 @@ fun makeReport' ({title_results,
                           ((h1 ($ "Document results: ")) && (createColorBox document_results documentReport) &&
                           (h1 ($ "Page title results: ")) && titleReport &&
                           (h1 ($ "Content results:") &&  contentReport))))))
-         handle Match => $ "her"
     end;
 
 val makeReport = flatten o makeReport';
