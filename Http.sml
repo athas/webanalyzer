@@ -147,54 +147,20 @@ fun close conn =
 (* readAll: ('a, active stream) sock -> string
 
  * Indlæs data indtil socket lukkes.  *)
-
-(* readAll: ('a, active stream) sock -> string
-
-   Indlæs data indtil socket lukkes.
-   Det er ikke umiddelbart at se hvornår en Socket er
-   lukket på server-siden. Derfor stopper denne funktion
-   med at indlæse data, når der ikke har været noget
-   i tyve sekunder eller der modtages en undtagelse.
-   For at øge hastigheden afsluttes også når strengen </html>
-   mødes. *)
-
-fun readAll socket =
-let
-    fun read acc =
+fun readAll conn =
     let
-        val vector = (Socket.recvVec'(socket, 1, {peek=true, oob=false}))
-                      handle (OS.SysErr (str, _)) => raise Error (Socket ("SysErr: " ^ str))
-        (* Data må IKKE indlæses hvis der ikke er noget parat.
-           Ved at pakke indlæsningen ind i en anonym funktion,
-           kan dette undgås.                                   *) 
-        val data = fn () => (Socket.recvVec(socket, 1000)
-                             handle Fail str => raise Error(Socket str))
-        val length = Word8Vector.length vector
-
-    in  
-        if length > 0 then 
-            let val str = (Byte.bytesToString (data()))
-            in  read (acc ^ str)        
-            end handle _ => acc
-        else acc
-    end
-in  
-    read ""
-end;
-
-      fun readAll conn =
-          let
-              val vec = Socket.recvVec (conn, 8192)
-                  handle (OS.SysErr (str, _)) => raise Error (Socket ("SysErr: " ^ str))
-          in
-              (* Stop when we receive an empty vector;
-                 which means that the connection is closed in
-                 the other end. *)
-              if Word8Vector.length vec = 0
-              then ((close conn) ; "")
-              else (Byte.bytesToString vec) ^ (readAll conn)
-          end;
-
+        val amountToRead = 8192;
+        val vec = Socket.recvVec (conn, amountToRead)
+            handle (OS.SysErr (str, _)) => raise Error (Socket ("SysErr: " ^ str))
+        val amountRead = Word8Vector.length vec;
+    in
+        (* Stop when we receive an empty vector the vector is shorter
+         * than requested which means that the connection is closed in
+         * the other end. *)
+        if amountRead = 0 orelse amountRead < amountToRead
+        then ""
+        else (Byte.bytesToString vec) ^ (readAll conn)
+    end;
 
 (* readString: ('a, active stream) sock -> int -> string
 
@@ -322,6 +288,7 @@ fun requestHTTPbyServer (receiver, request) {addr, port, host} =
             handle SysErr =>
                    raise Error (Socket ("address unreachable, connection refused " ^ 
                                         "or timeout, when connecting to " ^ host));
+        
     in 
         writeSocket socket request;
         receiver socket before
@@ -431,7 +398,8 @@ fun buildSimpleURI (origin : URI option, str) =
                         else 
 	                    mkCanonical (concat (dir orig, mkCanonical new))
                     end
-                val origin' = valOf origin
+
+                val origin' = valOf origin;
                 val protocol' = default (#1 origin') protocol
                 val server' = default (#2 origin', #3 origin') server
                 val path' = if not (isSome path) then "/"
