@@ -149,18 +149,24 @@ fun close conn =
  * Indlæs data indtil socket lukkes.  *)
 fun readAll conn =
     let
-        val amountToRead = 8192;
-        val vec = Socket.recvVec (conn, amountToRead)
-            handle (OS.SysErr (str, _)) => raise Error (Socket ("SysErr: " ^ str))
-        val amountRead = Word8Vector.length vec;
+        fun hasEndHTML text = 
+        let 
+            val regexp = RegexMatcher.compileString "</[hH][tT][mM][lL]>";
+            
+        in Util.isMatch regexp text end;
+
+        val vec = Socket.recvVec (conn, 8192);
+        val stringResult = Byte.bytesToString vec;
     in
-        (* Stop when we receive an empty vector the vector is shorter
-         * than requested which means that the connection is closed in
+        (* Stop when we receive an empty vector;
+         * which means that the connection is closed in
          * the other end. *)
-        if amountRead = 0 orelse amountRead < amountToRead
-        then ""
-        else (Byte.bytesToString vec) ^ (readAll conn)
+        if size stringResult = 0 orelse hasEndHTML stringResult
+        then stringResult
+        else stringResult ^ (readAll conn)
     end;
+
+
 
 (* readString: ('a, active stream) sock -> int -> string
 
@@ -245,7 +251,7 @@ fun get([], key) = NONE
 fun getResponse socket =
 (let val (status, header) = readResponseHeader socket
      val _ = if status < 200 orelse status >= 400 
-             then raise Error (HTTP (status, readAll socket)) else () 
+             then raise Error (HTTP (status, readAll socket)) else ()
      val cLength' = get(header, "content-length")
      val cLength = case cLength' of NONE => NONE
                                 | SOME s => Int.fromString s
@@ -287,8 +293,7 @@ fun requestHTTPbyServer (receiver, request) {addr, port, host} =
         val socket = SockUtil.connectINetStrm {addr=addr, port=default 80 port}
             handle SysErr =>
                    raise Error (Socket ("address unreachable, connection refused " ^ 
-                                        "or timeout, when connecting to " ^ host));
-        
+                                        "or timeout, when connecting to " ^ host));        
     in 
         writeSocket socket request;
         receiver socket before
