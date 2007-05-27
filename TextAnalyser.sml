@@ -247,6 +247,8 @@ local
       | analyseTextElement doc_lang (QuotationCount (count, subcounts)) =
             QuotationResult (analyse' count, map (analyseTextElement doc_lang) subcounts)
 
+
+    open List;
     fun isWord (Sentencifier.Word _) = true
       | isWord _ = false;
 
