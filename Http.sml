@@ -107,7 +107,7 @@ let
     val path' = List.nth(matches, 6);
     val prot = if size prot' = 0 then NONE else SOME (lowercase prot')
     val addr = if size addr' = 0 then NONE else SOME (lowercase addr')
-    val path = if size path' = 0 then NONE else SOME (lowercase path')
+    val path = if size path' = 0 then NONE else SOME path'
     val address = case addr of NONE => NONE
                              | SOME s => SOME (parseAddress s);
 in
