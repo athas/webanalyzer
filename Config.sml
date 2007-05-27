@@ -4,10 +4,10 @@ struct
 val UserAgentDefault = "webanalyzer";
 val DepthLimitDefault = 10;
 val CrawlDelayDefault = 0;
-val LixDefault = false;
-val FreDefault = false;
-val FkglDefault = false;
-val SpellDefault = false;
+val LixDefault = true;
+val FreDefault = true;
+val FkglDefault = true;
+val SpellDefault = true;
 
 (* Location of the scandinavian vowels in ISO 8859-1 *)
 val scandinavianVowels = [chr 230, (* æ *)
