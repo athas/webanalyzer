@@ -151,7 +151,18 @@ fun pathFromURI (_, _, _, path, _) = path;
 fun contentTypeFromURI (_, _, _, _, contentType) = contentType
 fun stringFromURI uri = 
     (protocolFromURI uri) ^ "://" ^ (serverFromURI uri) ^ (pathFromURI uri);
+
     
+(* Close the connection and return nothing.  If conn is already
+ * closed, handle SysErr by also returning nothing.
+ *)
+fun close conn =
+    Socket.close conn handle _ => ()
+
+(* readAll: ('a, active stream) sock -> string
+
+ * Indlæs data indtil socket lukkes.  *)
+
 (* readAll: ('a, active stream) sock -> string
 
    Indlæs data indtil socket lukkes.
@@ -161,44 +172,52 @@ fun stringFromURI uri =
    i tyve sekunder eller der modtages en undtagelse.
    For at øge hastigheden afsluttes også når strengen </html>
    mødes. *)
-val timeout = 20.0;
+
 fun readAll socket =
-let fun now () = Time.toReal (Time.now())
-    fun moreHTML text = 
-        let 
-            val regexp = RegexMatcher.compileString "</html>";
-            
-        in  not (Util.isMatch regexp text) end;
-    fun read(acc, time) = if not (moreHTML acc) then acc else
+let
+    fun read acc =
     let
-        val vector = (Socket.recvVec'(socket, 1, {peek=true, oob=false})
-                      handle Fail str => raise Error(Socket str))
+        val vector = (Socket.recvVec'(socket, 1, {peek=true, oob=false}))
+                      handle (OS.SysErr (str, _)) => raise Error (Socket ("SysErr: " ^ str))
         (* Data må IKKE indlæses hvis der ikke er noget parat.
            Ved at pakke indlæsningen ind i en anonym funktion,
            kan dette undgås.                                   *) 
         val data = fn () => (Socket.recvVec(socket, 1000)
                              handle Fail str => raise Error(Socket str))
         val length = Word8Vector.length vector
-        val msecs = now() - time
+
     in  
         if length > 0 then 
             let val str = (Byte.bytesToString (data()))
-            in  read(acc ^ str, now())        
-        end handle _ => acc
-        else if msecs <= timeout then read(acc, time) 
-             else acc
+            in  read (acc ^ str)        
+            end handle _ => acc
+        else acc
     end
 in  
-    read("", now())
+    read ""
 end;
+
+      fun readAll conn =
+          let
+              val vec = Socket.recvVec (conn, 8192)
+                  handle (OS.SysErr (str, _)) => raise Error (Socket ("SysErr: " ^ str))
+          in
+              (* Stop when we receive an empty vector;
+                 which means that the connection is closed in
+                 the other end. *)
+              if Word8Vector.length vec = 0
+              then ((close conn) ; "")
+              else (Byte.bytesToString vec) ^ (readAll conn)
+          end;
+
 
 (* readString: ('a, active stream) sock -> int -> string
 
    Læs n tegn fra socket. *) 
 fun readString socket n =
-let val vector = Socket.recvVec(socket, n) 
-                 handle Fail str => raise Error(Socket str)
-    val str = Byte.bytesToString vector 
+let val vector = Socket.recvVec(socket, n)
+        handle (OS.SysErr (str, _)) => raise Error(Socket ("SysErr: " ^ str))
+    val str = Byte.bytesToString vector
     val len = String.size str
 in  if len >= n then str else str ^ readString socket (n - len)
 end;
@@ -206,19 +225,15 @@ end;
 (* writeSocket: ('a, active stream) sock -> string -> int
    
    Skriver streng til socket. *)
-fun writeSocket socket str =
-let 
-    val reqVec =  Word8VectorSlice.slice (Byte.stringToBytes str, 0, NONE)
-in  
-    Socket.sendVec(socket, reqVec)
-    handle Fail s => raise Error(Socket ("Error writing data: " ^ s))
-end;
+fun writeSocket socket str = SockUtil.sendStr (socket, str)
+    handle (OS.SysErr (str, _)) => raise Error (Socket ("SysErr: " ^ str))
 
 (* resolveAddress: address -> pf_inet sock_addr
 
    Oversætter adresse til internt socket-format. *)
 fun resolveAddress(host, port) = SockUtil.resolveAddr {host = SockUtil.HostName host,
                                                        port = SOME (SockUtil.PortNumber (default 80 port))}
+    handle BadAddr => raise Error (Socket ("Unknown host: " ^ host))
 
 (* readResponseHeader: ('a, active stream) sock -> 
                        int * (string * string) list
@@ -232,15 +247,16 @@ exception Header of string;
 fun readResponseHeader socket =
 let 
     val line1 = readLine socket
-    val regexp = RegexMatcher.compileString "HTTP/([0-9]+\\.[0-9]+)[ \r\n\t\v\f]+([0-9]+)[ \r\n\t\v\f]+(.*)"
+    val regexp = RegexMatcher.compileString "HTTP/([0-9]+\\.[0-9]+)[ \\r\\n\\t\v\f]+([0-9]+)[ \\r\\n\\t\v\f]+(.*)"
     val match = Util.matchList regexp line1;
 in  
     case match of NONE => raise Header line1
                 | SOME v => 
-                  let val status = valOf(Int.fromString (List.nth (v, 2)))
+                  let 
+                      val status = valOf(Int.fromString (List.nth (v, 2)))
                           handle Option => raise Fail line1
                       val regexp = RegexMatcher.compileString
-                                       "([^:]+):[ \r\n\t\v\f]*([^; \r\n\t\v\f]+)";
+                                       "([^:]+):[ \\r\\n\\t\v\f]*([^; \\r\\n\\t\v\f]+)";
                       (* gemmer liste af tupler (nøgle, værdi) indtil en 
                                 helt tom linie dukker op *)
                       fun getHeader () =
@@ -310,6 +326,7 @@ fun headResponse socket =
         val cType = default "text/html" (get (header, "content-type"))
     in (l, cType) end handle Header str => (NONE, "text/html");
 
+
 (* requestHTTPbyServer : (('a, active stream) sock -> 'a * string) -> 
                          pf_inet sock_addr -> 'a
 
@@ -317,18 +334,15 @@ fun headResponse socket =
    håndterer svaret ved hjælp af receiver. *)
 fun requestHTTPbyServer (receiver, request) {addr, port, host} =
     let 
-        val socket = INetSock.TCP.socket ();
-        val addr2 = INetSock.toAddr(addr, default 80 port);
+        val socket = SockUtil.connectINetStrm {addr=addr, port=default 80 port}
+            handle SysErr =>
+                   raise Error (Socket ("address unreachable, connection refused " ^ 
+                                        "or timeout, when connecting to " ^ host));
     in 
-        print "foo";
-        (Socket.connect(socket, addr2)
-        handle Fail str => raise Error (Socket ("Error connecting to " ^ 
-                                                host ^ ": " ^ str));
-         print "bar";
         writeSocket socket request;
-        receiver socket before 
-        Socket.close socket)
-       handle e => (Socket.close socket; raise e)
+        receiver socket before
+        close socket
+       handle e => (close socket; raise e)
     end;
 
 (* requestHTTP: (('a, active stream) sock -> 'a * string) ->
@@ -356,7 +370,7 @@ datatype Config = Automatic of {addr : NetHostDB.in_addr,
                             port : int option}
                 | Direct;
 val method = ref (Automatic (resolveAddress (parseAddress proxy))) handle _ => ref Direct; 
-
+val method = ref Direct
 (* buildReq: string * string * string -> string 
 
    Bygger http-request linie udfra action, path og host. *)
@@ -396,7 +410,7 @@ let val response = case !method of
                               fun proxyOn  () = method := Proxy addr
                           in (requestURI' (receiver, action) (Proxy addr) uri
                               before proxyOn())
-                             handle _ => (requestURI' (receiver, action) Direct uri 
+                             handle _ => (requestURI' (receiver, action) Direct uri
                                           before proxyOff())
                           end
       | m => requestURI' (receiver, action) m uri
@@ -409,7 +423,7 @@ in response end;
 fun getURI uri = 
 let val (ctype, content) = (requestURI (getResponse, "GET") uri)
                            handle Error e => raise Error e
-                                |       _ => raise Error(General "Unknown failure")
+                                |       e => raise e
 in content end;
 
 (* buildSimpleURI: URI option * string -> URI
@@ -455,7 +469,7 @@ fun buildSimpleURI (origin : URI option, str) =
                 val port = #2 server'
                 val path' = default "/" path
             in 
-                (protocol', name, port, OS.Path.mkCanonical path', "text/html")
+                (protocol', name, port, (*OS.Path.mkCanonical*) path', "text/html")
             end
     end;
 
@@ -466,7 +480,8 @@ fun buildSimpleURI (origin : URI option, str) =
    uri, hvis ny location gives. Der kastes HTTP 
    undtagelser hvis kommunikation med server slår fejl. *)
 fun canonicalURI orig = 
-    let fun getHead uri = requestURI (headResponse, "HEAD") uri
+    let
+        fun getHead uri = requestURI (headResponse, "HEAD") uri
             handle Error (HTTP (int, string)) => (NONE, "text/html")
                  (* The following status codes are thrown by the
                  socket module under some circumstances *)
