@@ -28,9 +28,9 @@ fun failString (General s) = s
 
 open Util;
 
-(* Import af enkelte navne fra Substring til globalt navnerum *)
+(* Import af enkelte navne fra Substring til globalt navnerum 
 val size = Substring.size;
-val str = Substring.string;
+val str = Substring.string;*)
 
 (* lowercase: string -> string
 
@@ -65,20 +65,17 @@ let
     val match = Util.matchList regexp addr;
     val matches = case match of NONE   => raise MalformedAddress addr
                               | SOME v => v
-
-    val s = if List.length matches > 1
-            then List.nth (matches, 1)
-            else raise MalformedAddress addr
-
-    val port' = if List.length matches > 2 andalso String.size (List.nth (matches, 2)) > 0
-                then Int.fromString (List.nth (matches, 2))
-                else NONE
-
-    val port = if (isSome port') andalso (valOf port') = 80 then NONE
-               else port'
+    val server = List.nth (matches, 1)
+    val port' = List.nth (matches, 3)
+    val port'' = if size port' = 0
+                 then NONE
+                 else Int.fromString port'
+    val port = if (isSome port'') andalso (valOf port'') = 80
+               then NONE
+               else port''
 in
-    if (String.size s) = 0 then raise MalformedAddress addr
-    else (s, port)
+    if size server = 0 then raise MalformedAddress addr
+    else (server, port)
 end;
 
 (* parseURI: bool -> string -> string option * address option 
@@ -97,38 +94,26 @@ end;
    og kastes undtagelsen MalformedURI hvis uri-strengen
    ikke giver mening. *)
 exception MalformedURI of string;
-fun parseURI false uri =
+fun parseURI isHTML uri =
 let
-    val regexp = RegexMatcher.compileString "((([a-z]+):)?//)?(([^/]+))?(.+)?";
+    val regstr = if isHTML then "(([a-z]+)()?:)?(//([^/]+))?(.+)?"
+                 else "((([a-z]+):)?//)?(([^/]+))?(.+)?";
+    val regexp = RegexMatcher.compileString regstr;
     val match = Util.matchList regexp uri
     val matches = case match of NONE   => raise MalformedURI uri
                               | SOME v => v
-    val prot = if List.length matches > 3
-               then SOME (lowercase (List.nth(matches,3)))
-               else NONE
-    val addr = if List.length matches > 5
-               then SOME (lowercase (List.nth(matches,5)))
-               else NONE;
-    val path = if List.length matches > 6
-               then SOME (List.nth(matches,6))
-               else NONE;
+    val prot' = List.nth(matches, 3);
+    val addr' = List.nth(matches, 5);
+    val path' = List.nth(matches, 6);
+    val prot = if size prot' = 0 then NONE else SOME (lowercase prot')
+    val addr = if size addr' = 0 then NONE else SOME (lowercase addr')
+    val path = if size path' = 0 then NONE else SOME (lowercase path')
     val address = case addr of NONE => NONE
-                             | SOME s => SOME(parseAddress s);
+                             | SOME s => SOME (parseAddress s);
 in
     (prot, address, path)
-end
-  | parseURI true uri =
-    let
-        val regexp = RegexMatcher.compileString "(([a-z]+)()?:)?(//([^/]+))?(.+)?"
-        val match = Util.matchList regexp uri
-        val matches = case match of NONE   => raise MalformedURI uri
-                                  | SOME v => v
-        val path = (if List.length matches > 0
-                    then SOME (List.nth(matches,0))
-                    else NONE);
-in
-    (NONE, NONE, path)
 end;
+
 
 type URI = string     (* protokol   *)
          * string     (* værts-navn *)
@@ -254,11 +239,10 @@ in
                 | SOME v => 
                   let 
                       val status = valOf(Int.fromString (List.nth (v, 2)))
-                          handle Option => raise Fail line1
                       val regexp = RegexMatcher.compileString
                                        "([^:]+):[ \\r\\n\\t\v\f]*([^; \\r\\n\\t\v\f]+)";
                       (* gemmer liste af tupler (nøgle, værdi) indtil en 
-                                helt tom linie dukker op *)
+                       * helt tom linie dukker op *)
                       fun getHeader () =
                           let val line = readLine socket
                           in  if line = "\r\n" then [] else 
@@ -269,13 +253,13 @@ in
                               ) @ getHeader ()
                           end
                       val header = getHeader()
-                          handle Fail str => raise Error(Socket str)
+                          handle (OS.SysErr (str, _)) => raise Error (Socket ("SysErr: " ^ str))
                   in  
                       (status, header)
                   end
 end;
 
-(* get: (string * string) list * string -> string option
+(* get: (a' * b') list * a' -> b' option
 
    Leder gennem liste af tupler efter værdien 
    der matcher nøglen. *)
