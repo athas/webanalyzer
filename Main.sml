@@ -76,6 +76,9 @@ fun findLinks absoluteURI htmlTree =
         fun maybeGetLink "a" tag = checkAttribute tag "href"
           | maybeGetLink "frame" tag = checkAttribute tag "src"
           | maybeGetLink "iframe" tag = checkAttribute tag "src"
+          | maybeGetLink "img" tag = checkAttribute tag "longdesc"
+          | maybeGetLink "ins" tag = checkAttribute tag "cite"
+          | maybeGetLink "del" tag = checkAttribute tag "cite"
           | maybeGetLink _ _ = NONE
     in
         SOMEs (mapLinks (fn tag => maybeGetLink (tagName tag) tag) htmlTree)
@@ -179,8 +182,8 @@ fun mainProgram (arg :: rest) =
         fun outputFilename uri = (outputdir ^ "/" ^ (filenameForAnalysis uri))
         val analysedPages : (URI * TextAnalyser.documentresult) list ref = ref []
         fun analysisOutputter uri analysis =
-            writeTo (outputFilename uri) (TextAnalysisReporter.makeReport analysis)
-            before analysedPages := (uri, analysis) :: !analysedPages
+            (writeTo (outputFilename uri) (TextAnalysisReporter.makeReport analysis)
+            before analysedPages := (uri, analysis) :: !analysedPages);
     in 
         OS.FileSys.mkDir outputdir
         handle SysError => raise FatalError "Kunne ikke oprette output-mappe.";
