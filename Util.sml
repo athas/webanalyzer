@@ -11,9 +11,11 @@ local
     (* Return the actual match as element #1 in the list and there after
        the sub-matches (defined with paranteses in the regexp) *)
     fun matchList' string (MatchTree.Match (SOME {pos, len}, subtrees)) =
-            String.substring (string, pos, len)
-            :: (foldl (fn (m, b) => b @ matchList' string m) [] subtrees)
-      | matchList' _ _ = [];
+        String.substring (string, pos, len) :: (matchList'' string subtrees)
+      | matchList' string (MatchTree.Match (NONE, subtrees)) = "" :: (matchList'' string subtrees)
+
+    and matchList'' string matchtreelist =
+        (foldl (fn (m, b) => b @ matchList' string m) [] matchtreelist)
 in
     fun isMatch regex string = case matches regex string of
                                    SOME x => true
