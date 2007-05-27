@@ -28,6 +28,9 @@ sig
                      | General of string
     exception Error of Failure
 
+    (* Get the error message of a Failure. *)
+    val failString : Failure -> string
+
    (* Henter html-fil, som URI refererer til. En Error-undtagelse
       rejses ved alle slags problemer. *)
     val getURI : URI -> string
