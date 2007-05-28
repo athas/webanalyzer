@@ -229,16 +229,16 @@ val splitLines = String.fields (equal #"\n");
 
 fun wait sec = ();
 
-(*
 fun wait (seconds : int) =
     let
         open Time;
-        val endTime = now () + fromSeconds seconds
-        fun wait' () = if now () >= endTime then ()
+        open LargeInt;
+        val endTime = Time.+(now (), fromSeconds (Int.toLarge seconds))
+        fun wait' () = if Time.>=(now (), endTime) then ()
                        else wait' ()
     in
         wait' ()
     end;
-*)
+
 end;
 
