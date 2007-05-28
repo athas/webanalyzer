@@ -37,22 +37,17 @@ fun initRobotsTxt robotsStr =
                 fun filterOtherUserAgents' ret [] = ret
                   | filterOtherUserAgents' ret (strLst as s::ss) =
                     let
-                        
                         (* extract the user-agent string, which is the
                            first string until the first \n in the list *)
-                        val userAgent = Util.trimStr (String.substring(s, 
-                                                                  0, 
-                                                                  Util.getFirstIndexOf(#"\n", s)
-                                                                 )
-                                                     (* Handle exception of substring*)
-                                                ) handle Subscript => "";
+                        val userAgent = Util.trimStr (String.substring 
+                                                          (s, 0, Util.getFirstIndexOf(#"\n", s))
+                                                      handle Subscript => "");
                     in
                         (* match the userAgent against this crawlers own
                            name and * which applys to all *)
                         if ((userAgent = "*") orelse (userAgent = Config.httpUserAgent ())) then
                             filterOtherUserAgents' ((s) :: ret) (ss)
-                        else
-                            filterOtherUserAgents' ret ss
+                        else filterOtherUserAgents' ret ss
                     end
             in
                 clearRobotsTxt ();
@@ -82,11 +77,9 @@ fun initRobotsTxt robotsStr =
                             in
                                 if (Option.isSome numPages' andalso Option.isSome inTime') then
                                     Config.setCrawlDelay (Int.div(valOf inTime', valOf numPages'))
-                                else
-                                    ()
+                                else ()
                             end
                           | handleRequestRate' _ = ()
-
                     in  
                         if (List.length splitStr = 2) then
                             handleRequestRate' splitStr
@@ -120,17 +113,13 @@ fun initRobotsTxt robotsStr =
             
         (* Concatenates the disallowed paths from the string list list *)
         val disallowLst = List.concat 
-                              (
                                (* keeps all paths that is after a "disallow:" in the string list.*)
-                               List.map makeDisallowLst 
-                                        (
-                                         (* splits each string in the useableAgents list up 
+                              (List.map makeDisallowLst 
+                                        (* splits each string in the useableAgents list up 
                                             to a string list according to spaces and newlines 
                                             (Char.isSpace) *)
-                                         List.map (fn xs => String.tokens Char.isSpace xs) 
-                                                  useableAgents
-                                        )
-                              );
+                                        (List.map (fn xs => String.tokens Char.isSpace xs) 
+                                                  useableAgents));
     in
         (* save the final disallow lis in a public variable so 
            it can be assesed later by the query function *)
@@ -145,18 +134,14 @@ fun isPathAllowed path =
            dir then we can still match them even if one has a slah and
            the other didn't *)
         fun rmEndSlash str = 
-            if String.sub(str, (String.size str)-1) = #"/" then
-                String.substring(str, 0, (String.size str)-1)
-            else
-                str
+            if String.sub(str, (String.size str) - 1) = #"/" then
+                String.substring(str, 0, (String.size str) - 1)
+            else str
     in
-        not 
-            (
-             List.exists 
-                 (fn disallowedPath => (String.isPrefix (rmEndSlash disallowedPath)  
-                                                        (rmEndSlash path)))
-                 (getDisallowedPaths())
-            )
+        not (List.exists (fn disallowedPath => 
+                             (String.isPrefix (rmEndSlash disallowedPath)  
+                                              (rmEndSlash path)))
+                         (getDisallowedPaths()))
     end;
 
 
