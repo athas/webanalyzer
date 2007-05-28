@@ -30,7 +30,6 @@ type paragraphiseddocument = {title : text option,
                               languagecode : text option,
                               content : paragraphised list};
 
-(* http://www.w3.org/TR/html401/struct/global.html *)
 local
     val headings = ["h1", "h2", "h3", "h4", "h5", "h6"];
     val emphasizing = ["strong", "em", "b", "i", "u"];
@@ -63,6 +62,8 @@ local
                      "param", "meta", "link"];
 
 in
+    (* Functions that identifies the meaning of different HTML-tags or
+       attributes *)
     fun isHeading tag = tag member headings;
     fun isQuotation tag = tag member quotations;
     fun isEmphasizing tag = tag member emphasizing;
@@ -74,10 +75,15 @@ in
     fun isDescription attr = attr member descriptionAttributes;
 end;
 
-(* Get the language of a tag (i.e. the lang or xml:lang attribute values *)
+(* Get the language of a tag (i.e. the lang or xml:lang attribute values) *)
 fun getLanguage tag = case getAttribute "lang" tag of
                           NONE => getAttribute "xml:lang" tag
                         | SOME x => SOME x;
+
+fun getTextDirection tag = case getAttribute "dir" tag of
+                               SOME "rtl" => SOME (Bidirectional RightToLeft) 
+                             | SOME "ltr" => SOME (Bidirectional LeftToRight)
+                             | _ => NONE
 
 (* Adds a WordAttribute to a list of attributes.
                                     
@@ -96,49 +102,51 @@ fun addWordAttribute (Language x) lst =
   | addWordAttribute x lst = x :: List.filter (fn y => y <> x) lst;
 
 local
-    (* Intermediate datatype used by the flatten function  *)
-    datatype flat = FlatText of (string * WordAttribute list)
-                  | FlatHeading of flat list
-                  | FlatQuotation of flat list
-                  | Description of text
-                  | NewParagraph;
 
-    (* Converts a parsetree to the flat format above. *)
-    fun flatten' attr ((Text t) :: rest) = (FlatText ((textContents t), attr))
-                                           :: (flatten' attr rest)
-      | flatten' attr [] = []
-      | flatten' attr ((Tag (tag, subtrees)) :: rest) =
-        let
-            val newattr' = case getLanguage tag of
-                               SOME x => addWordAttribute (Language x) attr
-                             | _ => attr;
-            val newattr'' = case getAttribute "dir" tag of
-                                SOME "rtl" => addWordAttribute
-                                                  (Bidirectional RightToLeft) 
-                                                  newattr'
-                              | SOME "ltr" => addWordAttribute
-                                                  (Bidirectional LeftToRight)
-                                                  newattr'
-                              | _ => newattr';
-            val tagname = tagName tag;
-            val newattr = if isEmphasizing tagname
-                          then addWordAttribute Emphasized newattr''
-                          else if isAcronym tagname
-                          then addWordAttribute Acronym newattr''
-                          else if isCode tagname
-                          then addWordAttribute Code newattr''
-                          else newattr'';
-                
-            val descriptionValues =
-                SOMEs (mapAttributes (fn (t, v) => if isDescription t
-                                                   then SOME v
-                                                   else NONE)
-                                     tag);
+(* Intermediate datatype used by the flatten function  *)
+datatype flat = FlatText of (string * WordAttribute list)
+              | FlatHeading of flat list
+              | FlatQuotation of flat list
+              | Description of text
+              | NewParagraph;
 
-            val descriptions = map (fn x => Description x) descriptionValues;
-                
-            val flatAfter = flatten' attr rest;
-            val flatContent = flatten' newattr subtrees;
+(* Gets WordAttributes defined for a tag. *)
+fun getAttributes tag =
+    let val tagname = tagName tag
+        val lang = case getLanguage tag of
+                       SOME x => SOME (Language x)
+                     | NONE => NONE;
+        val dir = getTextDirection tag
+        val tagtype = if isEmphasizing tagname
+                      then SOME Emphasized
+                      else if isAcronym tagname
+                      then SOME Acronym
+                      else if isCode tagname
+                      then SOME Code
+                      else NONE
+    in
+        Util.SOMEs [lang, dir, tagtype]
+    end;
+
+(* Converts a parsetree to the flat format above. *)
+fun flatten' attr ((Text t) :: rest) = (FlatText ((textContents t), attr))
+                                       :: (flatten' attr rest)
+  | flatten' attr [] = []
+  | flatten' attr ((Tag (tag, subtrees)) :: rest) =
+    let
+        val tagname = tagName tag
+        val newattrs = getAttributes tag;
+        (* Add all the newattrs to attr. *)
+        val attr' = foldr (fn (x,b) => addWordAttribute x b) attr newattrs;
+        val descriptionValues =
+            SOMEs (mapAttributes (fn (t, v) => if isDescription t
+                                               then SOME v
+                                               else NONE)
+                                 tag);
+        val descriptions = map (fn x => Description x) descriptionValues;
+        (* Recursively flatten' the rest of the parsetree-list. *)
+        val flatAfter = flatten' attr rest;
+        val flatContent = flatten' attr' subtrees;
         in
             (* Add the descriptions of the tag to the result *)
             descriptions
@@ -175,13 +183,19 @@ local
               Gives: 
                  NewParagraph, NewParagraph, "foobar", NewParagraph,
                  NewParagraph
-     *)
+
+       Does also remove NewParagraphs just before and just after
+       Headings and Quotations. *)
     fun rmExtraParagraphs (NewParagraph :: NewParagraph :: xs) =
         rmExtraParagraphs (NewParagraph :: xs)
-      | rmExtraParagraphs ((FlatHeading x) :: NewParagraph :: xs) = rmExtraParagraphs ((FlatHeading x) :: xs)
-      | rmExtraParagraphs ((FlatQuotation x) :: NewParagraph :: xs) = rmExtraParagraphs ((FlatQuotation x) :: xs)
-      | rmExtraParagraphs (NewParagraph :: (FlatHeading x) :: xs) = (FlatHeading x) :: rmExtraParagraphs xs
-      | rmExtraParagraphs (NewParagraph :: (FlatQuotation x) :: xs) = (FlatQuotation x) :: rmExtraParagraphs xs
+      | rmExtraParagraphs ((FlatHeading x) :: NewParagraph :: xs) =
+        rmExtraParagraphs ((FlatHeading x) :: xs)
+      | rmExtraParagraphs ((FlatQuotation x) :: NewParagraph :: xs) =
+        rmExtraParagraphs ((FlatQuotation x) :: xs)
+      | rmExtraParagraphs (NewParagraph :: (FlatHeading x) :: xs) =
+                                           (FlatHeading x) :: rmExtraParagraphs xs
+      | rmExtraParagraphs (NewParagraph :: (FlatQuotation x) :: xs) =
+                                           (FlatQuotation x) :: rmExtraParagraphs xs
       | rmExtraParagraphs (x :: xs) = x :: (rmExtraParagraphs xs)
       | rmExtraParagraphs [] = [];
 
@@ -210,7 +224,7 @@ in
     (* flatten: parsetree list -> paragraphised list
        
        Converts a HTML parsetree in to a flatter format. *)
-    val flatten = paragraphise o rmExtraParagraphs o (flatten' []);
+    fun flatten attrs = paragraphise o rmExtraParagraphs o (flatten' attrs);
 end
 
 local
@@ -223,44 +237,62 @@ local
 in
     (* Gets the title of a webpage, given the head section of that
     webpage. *)
-    fun getTitle [] = NONE
-      | getTitle head = Option.map stringContent
+    fun getTitle head = Option.map stringContent
                                    (find "title" head);
 end;
 
 (* Locate the html, head and body (or noframes) and extract the text 
    of document. *)
-fun extractFromHTML (alltags as (Tag (tag, subtrees) :: tags)) =
-    (case tagName tag of
-        "html" =>
-          let
-              val head = find "head" subtrees;
-
-              (* framesets doesn't have a body, looks for noframes
-              when no body is present *)
-              val body = case find "body" subtrees of
-                           SOME x => SOME x
-                         | NONE => find "noframes" subtrees;
-              (* Look for the title if the head was found *)
-              val title = case head of
-                              SOME (Tag (_, subtree)) => getTitle subtree
-                            | _ => NONE;
-
-              val doc_lang = getLanguage tag;
-
-              val content = case body of
-                                SOME (Tag (_, subtree)) => flatten subtree
+fun extractFromHTML (alltags as ((tagx as (Tag (tag, subtrees))) :: tags)) =
+    let
+        (* Should only be called with the <html>-tag as argument *)
+        fun extractFromHTML' (Tag (htmltag, subtrees)) =
+            let
+                val head = find "head" subtrees;
+                (* framesets doesn't have a body, look for noframes
+                   when no body is found *)
+                val body = case find "body" subtrees of
+                               SOME x => SOME x
+                             | NONE => find "noframes" subtrees;
+                val bodytag = case body of
+                                  SOME (Tag (bodytag, _)) => SOME bodytag
+                                | _  => NONE
+                (* Look for the title if the head was found *)
+                val title = case Option.map (fn x => getTitle [x]) head of
+                                SOME (SOME x) => SOME x
+                              | _ => NONE
+                (* Look for the document language in body and html-tags. *)
+                val doc_lang = case Option.map getLanguage bodytag of
+                                   SOME (SOME x) => SOME x
+                                 | _ => getLanguage htmltag
+                (* The text-direction of the document can be specified in the
+                   body tag. *)
+                val attrs = case Option.map getTextDirection bodytag of
+                                SOME (SOME x) => [x]
                               | _ => [];
+
+                val content = case body of
+                                  SOME (Tag (_, subtree)) => flatten attrs subtree
+                                | _ => [];
           in
               {title = title,
                languagecode = doc_lang,
-               content=content}
+               content = content}
           end
-
-      | _ => {title = getTitle alltags,
-              languagecode = NONE,
-              content = flatten alltags})
-
+          | extractFromHTML' _ = raise Fail "Impossible";
+    in
+    (case tagName tag of
+         "html" => extractFromHTML' tagx
+       (* Search for the html tag if it wasn't the first element *)
+       | _ => case find "html" subtrees of 
+                 SOME htmltag => extractFromHTML' htmltag
+               | NONE =>
+              case find "html" tags of
+                  SOME htmltag => extractFromHTML' htmltag
+                | NONE => {title = getTitle alltags,
+                           languagecode = NONE,
+                           content = flatten [] alltags})
+    end
   | extractFromHTML (Text t :: rest) =
     let
         val {title, languagecode, content} = extractFromHTML rest
@@ -274,3 +306,4 @@ fun extractFromHTML (alltags as (Tag (tag, subtrees) :: tags)) =
                           languagecode = NONE,
                           content = []};
 end;
+ 
