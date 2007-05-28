@@ -16,7 +16,9 @@ fun spellCheckWord languageCode word =
     if not (hasDictionary languageCode) 
     then raise dictionaryNotFound languageCode
     else case run ("echo \"" ^ word ^ "\" | aspell -l \"" ^ languageCode ^ "\" pipe --encoding iso8859-1") of
-             SOME result => let val resultLine = List.nth (splitLines result, 1)
+             SOME result => let val lines = splitLines result
+                                val resultLine = if List.length lines = 0 then ""
+                                                 else List.nth (lines, 1)
                             in size resultLine = 0 orelse
                                String.sub (resultLine, 0) = #"*"
                             end
