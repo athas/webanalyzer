@@ -162,7 +162,7 @@ fun writeIndex starturi outputFilename analysedPages =
     let open HTMLBuilder;
         val sortedResults = ListMergeSort.sort (fn ((_, x), (_, y)) => badnessFactor y > badnessFactor x) analysedPages
         val std = td o $
-        val tdr = tda "align=\"right\""
+        val alignr = "align=\"right\""
         val wseqFromURI = $ o stringFromURI
         val wseqFromReal = $ o Util.formatForOutput
         val wltr = tr o $$ o (List.map flatten)
@@ -173,9 +173,16 @@ fun writeIndex starturi outputFilename analysedPages =
                                (body (wltable ((wltr [(std "Sidesv&aelig;rhedsgrad"), (std "URI")]) ::
                                                (List.map
                                                     (fn (uri, result) =>
-                                                        (wltr [(tdr (wseqFromReal (badnessFactor result))),
-                                                               (td (ahref (urlencode (outputFilename uri))
-                                                                          (wseqFromURI uri)))]))
+                                                        let val style = ("style=\"background-color: "
+                                                                         ^ (TextAnalysisReporter.colorByResults
+                                                                                (TextAnalyser.documentResults result))
+                                                                         ^ "\"");
+                                                        in
+                                                        (wltr [(tda (style ^ alignr)  (wseqFromReal (badnessFactor result))),
+                                                               (tda style
+                                                                    (ahref (urlencode (outputFilename uri))
+                                                                           (wseqFromURI uri)))])
+                                                        end)
                                                     sortedResults))))))))
     end;
     
