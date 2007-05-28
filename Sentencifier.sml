@@ -62,13 +62,13 @@ local
     datatype SentenceElementI = WordI of word
                               | PunctuationI of text;
 
-    fun wordify' attrs [] = []
-      | wordify' attrs (x::xs) =
+    fun wordify' _ [] _ = []
+      | wordify' attrs (x::xs) preceding =
         let
             val xword = if Config.isAlphabetic x
                         then WordI (str x, attrs)
                         else PunctuationI (str x)
-            val rest = wordify' attrs xs
+            val rest = wordify' attrs xs (SOME x)
         in
             case rest of
                 [] => [xword]
@@ -77,7 +77,6 @@ local
                                            (* A dot followed by a letter is probably part of an acronym *)
                                            | PunctuationI "." => WordI ("." ^ y, TextExtractor.Acronym :: attrs) :: ys
                                            | _ => xword :: rest)
-                                       
               | (PunctuationI y) :: ys => case xword of
                                               PunctuationI "." => 
                                             (* If the next character
@@ -91,7 +90,13 @@ local
                                                                           else PunctuationI ("." ^ y) :: ys
                                                  | _ => PunctuationI ("." ^ y) :: ys)
                                             | PunctuationI z => PunctuationI (z ^ y) :: ys
-                                            | _ => xword :: rest
+                                            | WordI(z, _) => if Char.isUpper (String.sub (z, 0)) andalso
+                                                                ((not o Option.isSome) preceding orelse
+                                                                 (not o Char.isUpper o Option.valOf) preceding) andalso
+                                                                String.sub (y, 0) = #"."
+                                                             then WordI (z ^ ".", attrs) ::
+                                                                  PunctuationI (String.extract (y, 1, NONE)) :: ys
+                                                             else xword :: rest
         end
 
     fun concatRepetitions  ((WordI (x, xattrs)) :: (WordI (y, yattrs)) :: xs) =
@@ -123,7 +128,7 @@ local
       | convertSentenceElems [] = []
 in
     fun wordify (text, attrs) = (convertSentenceElems o concatRepetitions)
-                                    (wordify' attrs  (explode text))
+                                    (wordify' attrs  (explode text) NONE)
 end
 
 local
