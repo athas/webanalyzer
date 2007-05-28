@@ -108,34 +108,46 @@ fun findStartURI uri = if Robots.isPathAllowed (pathFromURI uri)
                             end
 
 val visitedPages : URI list ref = ref [];
+val waitingVisits : (unit -> unit) list ref = ref [];
 
 fun shouldVisit uri depth = depth < (Config.crawlDepthLimit ()) andalso
                             contentTypeFromURI uri = "text/html" andalso
                             not (exists (fn x => x = uri) (!visitedPages)) andalso
                             Robots.isPathAllowed (pathFromURI uri);
 
-fun visit outputAnalysis uri depth = 
+fun visit outputAnalysis depth uri = 
+let
+    fun continue () = if length (!waitingVisits) = 0
+                      then ()
+                      else let val next = hd (!waitingVisits)
+                           in waitingVisits := tl (!waitingVisits);
+                              next ()
+                           end
+in
     if shouldVisit uri depth then
-        let val parseTree = (getAndParse uri) in
+        let val parseTree = (getAndParse uri);
+            val linksFound = filterExitLinks uri (findLinks (SOME uri) parseTree);
+            fun visitChilds () = app (visit outputAnalysis (depth+1)) linksFound;
+        in
             Util.wait (Config.crawlDelay ());
             visitedPages := uri :: !visitedPages;
+            waitingVisits := !waitingVisits @ [visitChilds];
             print "Visiting ";
             print (stringFromURI uri);
-            print "\n";
+            print (" at depth " ^ (Int.toString depth) ^ "\n");
             flushOut stdOut;
             outputAnalysis uri (analyseHTML parseTree);
             map (fn link => (print "Seeing ";
                              print (stringFromURI link);
-                             print "\n";
-                             flushOut stdOut;
-                             visit outputAnalysis link (depth + 1)))
-                (filterExitLinks uri (findLinks (SOME uri) parseTree));
-            ()
-        end handle Error (HTTP (code, _)) => ()
-                 | Error (Socket s) => ()
+                             print (" at depth " ^ (Int.toString (depth+1)) ^ "\n");
+                             flushOut stdOut))
+                linksFound;
+            continue ()
+        end handle Error (HTTP (code, _)) => continue ()
+                 | Error (Socket s) => continue ()
                  | Error (General s) => (print s; print "\n"; raise Fail "General")
-    else ();
-
+    else ()
+end;
 fun filenameForAnalysis uri = String.map (fn #"/" => #"#"
                                            | char => char)
                                          ((serverFromURI uri) ^ (pathFromURI uri));
@@ -189,7 +201,7 @@ fun mainProgram (arg :: rest) =
         handle OS.SysErr (_,_) => raise FatalError "Kunne ikke oprette output-mappe.";
         (* Useful when used interactively. *)
         visitedPages := [];
-        visit analysisOutputter starturi 0;
+        visit analysisOutputter 0 starturi;
         writeIndex starturi outputFilename (!analysedPages);
         print "Done!\n";
         flushOut stdOut
