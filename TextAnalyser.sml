@@ -50,7 +50,7 @@ type counts = {paragraphs : int,
 
 datatype textcounts = ParagraphCount of counts *
                                         (counts * Sentencifier.sentence) list *
-                                        (counts * Sentencifier.sentence list) list
+                                        (counts * Sentencifier.sentence) list list
                     | HeadingCount of counts *
                                       textcounts list
                     | QuotationCount of counts *
@@ -105,6 +105,14 @@ fun countSentence (sentence : Sentencifier.SentenceElement list) =
          vowels = vowels} : counts
     end;
     
+
+fun countSentences sentences = let val counts = map countSentence sentences;
+                                   val sum = sumCounts counts;
+                               in  (sum,
+                                    ListPair.zip (counts, sentences))
+                               end
+                                   
+
 fun countOfTextCounts (ParagraphCount (c, _, _)) = c
   | countOfTextCounts (HeadingCount (c, _)) = c
   | countOfTextCounts (QuotationCount (c, _)) = c;
@@ -112,16 +120,24 @@ fun countOfTextCounts (ParagraphCount (c, _, _)) = c
 
 fun countTextElement (Sentencifier.Paragraph (sentences, descs)) =
     let
-        val sentencesCounts = map countSentence sentences;
-        val sentencesCountResults = ListPair.zip (sentencesCounts, sentences);
-        val sentencesCountSum = sumCounts sentencesCounts;
+        val (sentencesCountSum,
+             sentencesCountResults) = countSentences sentences;
 
-        val descriptionCounts : counts list = map (sumCounts o (map countSentence)) descs;
-        val descriptionCountResults : (counts * Sentencifier.sentence list) list = ListPair.zip (descriptionCounts, descs);
-        val descriptionCountSum : counts = sumCounts descriptionCounts;
+        (* Descriptions is lists of lists of sentences, speciel care is
+           taken *)
+        val descriptionCounts = map countSentences descs
+        val (descsSums,
+             descsCountResults) = ListPair.unzip descriptionCounts;
+
+        val descsSum = sumCounts descsSums
+
+(*        val descriptionCounts : counts list = map (sumCounts o (map countSentence)) descs;
+        val descriptionCountResults : (counts * Sentencifier.sentence) list list =
+            ListPair.zip (descriptionCounts, descs);
+        val descriptionCountSum : counts = sumCounts descriptionCounts;*)
 
         val {words, longwords, vowels, sentences, ...} =
-                addCounts (sentencesCountSum, descriptionCountSum)
+                addCounts (sentencesCountSum, descsSum)
 
         val paragraphCounts = {paragraphs = 1,
                                sentences = sentences,
@@ -131,7 +147,7 @@ fun countTextElement (Sentencifier.Paragraph (sentences, descs)) =
     in
         ParagraphCount (paragraphCounts,
                         sentencesCountResults,
-                        descriptionCountResults)
+                        descsCountResults)
     end
   | countTextElement (Sentencifier.Heading content) =
     let
@@ -238,9 +254,9 @@ local
         let
             val total = analyse' count;
             val sentenceResults = map (analyseSentence doc_lang) sentenceCounts;
-            (* val descriptionResults = map (map (analyseSentence doc_lang)) descsCounts; *)
+            val descriptionResults = map (map (analyseSentence doc_lang)) descsCounts;
         in
-            ParagraphResult (total, sentenceResults, [])
+            ParagraphResult (total, sentenceResults, descriptionResults)
         end
       | analyseTextElement doc_lang (HeadingCount (count, subcounts)) =
             HeadingResult (analyse' count, map (analyseTextElement doc_lang) subcounts)
@@ -263,7 +279,7 @@ in
 
 fun analyse ({title, languagecode, content} : Sentencifier.document) =
     let
-        val fcontent = filter hasWord content
+        val fcontent = filter hasWord content (* Remove paragraphs and more without words *)
         val documentCounts = countDocumentContent fcontent;
         val documentTotal = sumCounts (map countOfTextCounts documentCounts);
         val results = map (analyseTextElement languagecode) documentCounts;

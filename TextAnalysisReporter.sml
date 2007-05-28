@@ -87,8 +87,12 @@ fun reportContent onlyContent (ParagraphResult (results, sentences, descriptions
     let
         val resultReport = reportResults results;
         val sentencesReport = reportSentences sentences;
-        val descriptionsReport = prmap reportSentences descriptions;
-        val content = p (sentencesReport && descriptionsReport);
+        val descriptionsReport = prmap (li o reportSentences) descriptions;
+        val content = p (sentencesReport) && (if (length descriptions) > 0
+                                              then p ((h4 ($ "Descriptions: "))
+                                                      && (ul descriptionsReport))
+                                              else Empty)
+      
     in
         if onlyContent
         then content

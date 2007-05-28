@@ -130,11 +130,11 @@ local
                           else newattr'';
                 
             val descriptionValues =
-                SOMEs (mapAttributes (fn (t, v) => if isDescription tagname
+                SOMEs (mapAttributes (fn (t, v) => if isDescription t
                                                    then SOME v
                                                    else NONE)
                                      tag);
-                
+
             val descriptions = map (fn x => Description x) descriptionValues;
                 
             val flatAfter = flatten' attr rest;

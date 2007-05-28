@@ -151,7 +151,7 @@ end
 
 
 fun sentencifyTextelement (TextExtractor.Paragraph (texts, descs)) =
-        Paragraph (sentencify texts, map sentencifyString descs)
+        Paragraph (sentencify texts, map sentencifyString descs) 
   | sentencifyTextelement (TextExtractor.Heading x) =
         Heading (map sentencifyTextelement x)
   | sentencifyTextelement (TextExtractor.Quotation x) =
