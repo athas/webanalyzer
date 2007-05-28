@@ -18,5 +18,6 @@ app use ["Util.sig", "Util.sml",
          "Sentencifier.sig", "Sentencifier.sml",
          "TextAnalyser.sig", "TextAnalyser.sml",
          "TextAnalysisReporter.sig", "TextAnalysisReporter.sml",
-         "Robots.sig", "DummyRobots.sml"
-];
+         "Robots.sig", "DummyRobots.sml",
+         "Main.sml" (* Works for now... *)
+        ];
