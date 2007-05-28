@@ -73,11 +73,24 @@ local
             case rest of
                 [] => [xword]
               | (WordI (y, _)) :: ys => (case xword of
-                                            WordI(z, _) => WordI (z ^ y, attrs) :: ys
-                                          | _ => xword :: rest)
+                                             WordI(z, _) => WordI (z ^ y, attrs) :: ys
+                                           (* A dot followed by a letter is probably part of an acronym *)
+                                           | PunctuationI "." => WordI ("." ^ y, TextExtractor.Acronym :: attrs) :: ys
+                                           | _ => xword :: rest)
                                        
               | (PunctuationI y) :: ys => case xword of
-                                              PunctuationI z => PunctuationI (z ^ y) :: ys
+                                              PunctuationI "." => 
+                                            (* If the next character
+                                               is lowercase, this is
+                                               probably the end of an
+                                               acronym *)
+                                              (case List.find (fn WordI _ => true
+                                                                | _       => false) ys
+                                                of SOME (WordI (z, _)) => if Char.isLower (String.sub (z, 0))
+                                                                          then WordI (".", attrs) :: rest
+                                                                          else PunctuationI ("." ^ y) :: ys
+                                                 | _ => PunctuationI ("." ^ y) :: ys)
+                                            | PunctuationI z => PunctuationI (z ^ y) :: ys
                                             | _ => xword :: rest
         end
 
