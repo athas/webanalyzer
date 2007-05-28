@@ -37,7 +37,7 @@ type document = {title : sentence list option,
                  content : textelement list};
 
 (* Characters that ends a sentence *)
-val sentenceDelimiters = explode ".:!?";
+val sentenceDelimiters = explode ".!?";
 fun isSentenceDelimiter x = x member sentenceDelimiters;
 
 
