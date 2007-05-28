@@ -40,4 +40,7 @@ sig type 'a sock = ('a, Socket.active Socket.stream) Socket.sock
 
     (* Wait for the provided amount of seconds before returning. *)
     val wait : int -> unit
+
+    (* Print how long it takes a function of a single argument to execute. *)
+    val time : ('a -> 'b) -> 'a -> 'b
 end;

@@ -240,5 +240,14 @@ fun wait (seconds : int) =
         wait' ()
     end;
 
+fun time f arg =
+    let val beginTime = Time.now () in
+        (f arg) before 
+        let val endTime = Time.now () 
+            val timeDiff = Time.-(endTime, beginTime) in
+            print (Time.toString timeDiff);
+            print " seconds.\n" end
+    end;
+
 end;
 
