@@ -53,15 +53,27 @@ fun addToAttrSet (Language x) lst =
 
 
 local
+    (* And intermediate definition of sentenceelements,
+       where the WordAttributes is like those from TextExtractor.
+       The only difference between these and the resulting words
+       is that these can have a TextDirection specified. *)
     type word = text * TextExtractor.WordAttribute list;
-     
-    (* Either a word, a space or punctuation.
-
-       We need to save the Spaces to find words splitted in two by a
-       HTML-tag, like: f<strong>oo</strong>bar  *)
     datatype SentenceElementI = WordI of word
                               | PunctuationI of text;
 
+    (* Partitions a string in SentenceElements and applies the given attributes.
+       Generally it just converts all sequences of letters to Words
+       and all sequences of punctutation to Punctuations.
+       Besides that, it makes three assumptions:
+         1. If there is no space after a dot "." and its followed by a letter,
+            it is considered to be part of an acronym.
+         3. If a dot is followed by a lowercase letter, the dot is considered the
+            end of an acronym.
+         2. If single upper-case letter is followed by a dot, the letter is
+            is considered an initial (eg. "H. Hansen").
+
+       These assumptions makes the sentencifier better at guessing
+       where sentences ends. *)
     fun wordify' _ [] _ = []
       | wordify' attrs (x::xs) preceding =
         let
@@ -99,6 +111,9 @@ local
                                                              else xword :: rest
         end
 
+    (* Concatenates sequences of SentenceElements of the same type.
+       Eg. the word "con" followed by the word "cat" is replaced by
+       the word "concat". (The same applies for Punctuation elements) *)
     fun concatRepetitions  ((WordI (x, xattrs)) :: (WordI (y, yattrs)) :: xs) =
             (WordI (x ^ y, foldr (fn (z, b) => TextExtractor.addWordAttribute z b) xattrs yattrs))
             :: (concatRepetitions xs)
@@ -107,6 +122,8 @@ local
       | concatRepetitions (x :: xs) = x :: concatRepetitions xs
       | concatRepetitions [] = []
 
+    (* TextExtractor.WordAttribute list -> WordAttribute list
+       Removes Bidirectional attributes. *)
     fun convertAttrs (TextExtractor.Emphasized :: xs) = Emphasized :: convertAttrs xs
       | convertAttrs (TextExtractor.Acronym :: xs) = Acronym :: convertAttrs xs
       | convertAttrs (TextExtractor.Code :: xs) = Code :: convertAttrs xs
@@ -114,12 +131,15 @@ local
       | convertAttrs ((TextExtractor.Language x) :: xs) = (Language x) :: convertAttrs xs
       | convertAttrs [] = []
 
+    (* SentenceElementI -> SentenceElement
+       Removes Bidirectional WordAttributes and reverses the words if specified.
+     *)
     fun convertSentenceElems ((WordI (text, attrs)) :: xs) = 
         let
-            val rtext =
-                    (case (TextExtractor.Bidirectional TextExtractor.RightToLeft) member attrs of
-                         true => (implode o rev o explode) text (* reverse the string *)
-                       | false => text);
+            open TextExtractor;
+            val rtext = if (Bidirectional RightToLeft) member attrs
+                        then (implode o rev o explode) text (* reverse the string *)
+                        else text;
         in
             Word (rtext, convertAttrs attrs) :: convertSentenceElems xs
         end
@@ -127,16 +147,18 @@ local
                                                         :: convertSentenceElems xs
       | convertSentenceElems [] = []
 in
+    (* Partitions text in words and applies the given attributes. *)
     fun wordify (text, attrs) = (convertSentenceElems o concatRepetitions)
                                     (wordify' attrs  (explode text) NONE)
 end
 
 local
-
+    (* Indicates whether a SentenceElement contains a sentence-delimiter. *)
     fun sentenceDelimiter (Punctuation x) = List.exists isSentenceDelimiter
                                                         (explode x)
       | sentenceDelimiter _ = false;
 
+    (* Splits a list of SentenceElements in sentences. *)
     fun splitInSentences [] = []
       | splitInSentences (x :: xs) =
             if sentenceDelimiter x
@@ -144,22 +166,31 @@ local
             else case (splitInSentences xs) of
                      (sentence :: sentences) => (x :: sentence) :: sentences
                    | [] => [[x]]
+
+    (* Splits text in words and sentences *)
+    val sentencify' = splitInSentences o (concatMap wordify);        
 in 
-    val sentencify = splitInSentences o (concatMap wordify);
+    (* Splits a string in words and sentences. *)
     fun sentencifyString str = splitInSentences (wordify (str, []));
-end
 
 
-fun sentencifyTextelement (TextExtractor.Paragraph (texts, descs)) =
-        Paragraph (sentencify texts, map sentencifyString descs) 
-  | sentencifyTextelement (TextExtractor.Heading x) =
-        Heading (map sentencifyTextelement x)
-  | sentencifyTextelement (TextExtractor.Quotation x) =
-        Quotation (map sentencifyTextelement x);
+    (* Splits a TextExtractor.textelement in words an sentences. *)
+    fun sentencifyTextelement (TextExtractor.Paragraph (texts, descs)) =
+            Paragraph (sentencify' texts, map sentencifyString descs) 
+      | sentencifyTextelement (TextExtractor.Heading x) =
+            Heading (map sentencifyTextelement x)
+      | sentencifyTextelement (TextExtractor.Quotation x) =
+            Quotation (map sentencifyTextelement x);
 
-fun sentencifyParagraphised ({content, languagecode, title}
-                                : TextExtractor.paragraphiseddocument) =
+    (* Splits a TextExtractor.paragraphiseddocument in sentences and 
+       words. If a WordAttribute is applied to any part of the text,
+       that attribute is applied to all words in that particular part. *)
+    fun sentencify ({content, languagecode, title}
+                    : TextExtractor.paragraphiseddocument) =
         {content = map sentencifyTextelement content,
          languagecode = languagecode,
          title = Option.map sentencifyString title} : document;
-end
+    
+end;
+
+end;

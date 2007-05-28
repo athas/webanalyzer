@@ -91,7 +91,7 @@ fun filterExitLinks localuri links =
 
 val getAndParse = parse o getURI;
 val analyseHTML = TextAnalyser.analyse o 
-                  Sentencifier.sentencifyParagraphised o 
+                  Sentencifier.sentencify o 
                   TextExtractor.extractFromHTML;
 
 fun findStartURI uri = if Robots.isPathAllowed (pathFromURI uri)

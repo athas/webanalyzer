@@ -35,9 +35,9 @@ sig
                      languagecode : string option,
                      content : textelement list};
 
-
-    (* Splits the paragraphs (that the TextExtractor produces) in
-    words and sentences. *)
-    val sentencifyParagraphised : TextExtractor.paragraphiseddocument
-                                  -> document;
+    (* Splits a TextExtractor.paragraphiseddocument in sentences and 
+       words. If a WordAttribute is applied to any part of the text,
+       that attribute is applied to all words in that particular part. *)
+    val sentencify : TextExtractor.paragraphiseddocument
+                         -> document;
 end

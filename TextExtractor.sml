@@ -19,7 +19,14 @@ datatype WordAttribute = Language of text
                           (* Reverse word before spellchecking? *)
                        | Bidirectional of TextDirection;
 
-(* A text format where most of HTML's nesting is removed. *)
+
+(* A text format where most of HTML's nesting is removed and
+   paragraphs, headings and quotations is identified.
+
+   A paragraph consist of some text and a list of descriptions
+   associated with different parts of that text. The text is divided
+   in parts with similar attributes (same language etc.)  Headings and
+   Quotations is just considered as a list of paragraphs. *)
 datatype paragraphised = Paragraph of (text * WordAttribute list) list
                                       * text list
                        | Heading of paragraphised list
