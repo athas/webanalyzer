@@ -14,6 +14,8 @@ sig
     return value is a two-letter language code. *)
     val defaultLanguage: unit -> string;
 
+    val fractionalDigits : int;
+
     val isVowel : char -> bool;
     val isAlphabetic : char -> bool;
 

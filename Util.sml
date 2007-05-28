@@ -249,5 +249,16 @@ fun time f arg =
             print " seconds.\n" end
     end;
 
+
+(* Format a real for printing, rounds to the amount of digits defined
+   in Config.fractionalDigits and uses "-" instead of "~". *)
+fun formatForOutput x =
+    let
+        val sign = if x < 0.0 then "-" else "";
+        val rounded = Real.fmt (StringCvt.FIX (SOME Config.fractionalDigits))
+                               (Real.abs x);
+    in
+        sign ^ rounded
+    end;
 end;
 

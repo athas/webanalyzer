@@ -41,6 +41,10 @@ sig type 'a sock = ('a, Socket.active Socket.stream) Socket.sock
     (* Wait for the provided amount of seconds before returning. *)
     val wait : int -> unit
 
+    (* Format a real for printing, rounds to the amount of digits defined
+       in Config.fractionalDigits and uses "-" instead of ugly "~". *)
+    val formatForOutput : real -> string;
+
     (* Print how long it takes a function of a single argument to execute. *)
-    val time : ('a -> 'b) -> 'a -> 'b
+    val time : ('a -> 'b) -> 'a -> 'b;
 end;

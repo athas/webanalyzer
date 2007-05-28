@@ -12,34 +12,20 @@ fun div1 class content = mark1a "DIV"
                                 ("class=\"" ^ class ^ "\"")
                                 content
 
-local
-    open Real;
 
-    fun formatResultValue x =
-        let
-            val sign = if x < 0.0
-                       then "-"
-                       else ""
+fun reportResult (Lix x) = span1 "lix" ($("Lix: " ^ (Util.formatForOutput x)))
+  | reportResult (FleshReadingEase x) =
+        span1 "fleshrl" ($("Flesh Reading Ease: " ^ (Util.formatForOutput x)))
+  | reportResult (FleshKincaidGradeLevel x) =
+        span1 "fkincaidgl" ($("FK Grade level: " ^ (Util.formatForOutput x)))
 
-            (* Round to 2 decimals *)
-            val value = if isFinite x
-                        then abs (((fromInt o round) (x * 100.0)) / 100.0)
-                        else abs x
-        in
-            sign ^ toString value
-        end;
-in
-fun reportResult (Lix x) = span1 "lix" ($("Lix: " ^ (formatResultValue x)))
-  | reportResult (FleshReadingEase x) = span1 "fleshrl" ($("Flesh Reading Ease: " ^ (formatResultValue x)))
-  | reportResult (FleshKincaidGradeLevel x) = span1 "fkincaidgl" ($("FK Grade level: " ^ (formatResultValue x)))
-end;
 fun reportResults results = div1 "result" (prmap (fn x => (reportResult x) && br) results)
 
 fun reportSentenceElem (WordResult (text, correct)) = if correct
                                                      then $ (htmlencode text)
                                                      else span1 "spellerror"
                                                                 ($ (htmlencode text))
-  | reportSentenceElem (PunctuationResult text) = $ text;
+  | reportSentenceElem (PunctuationResult text) = $ (htmlencode text);
 
 fun findLix results = List.find (fn Lix x => true
                                   | _ => false)

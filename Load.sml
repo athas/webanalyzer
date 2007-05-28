@@ -5,8 +5,8 @@ CM.make "$/inet-lib.cm";
 
 structure RegexMatcher = RegExpFn (structure P=AwkSyntax; structure E=BackTrackEngine);
 
-app use ["Util.sig", "Util.sml",
-         "Config.sig", "Config.sml",
+app use ["Config.sig", "Config.sml",
+         "Util.sig", "Util.sml",
          "HTMLBuilder.sig", "HTMLBuilder.sml",
          "Help.sig", "Help.sml",
          "Http.sig", "Http.sml",
@@ -21,3 +21,5 @@ app use ["Util.sig", "Util.sml",
          "Robots.sig", "DummyRobots.sml",
          "Main.sml" (* Works for now... *)
         ];
+
+

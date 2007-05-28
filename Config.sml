@@ -18,11 +18,16 @@ val scandinavianVowels = [chr 230, (* æ *)
                           chr 229, (* å *)
                           chr 197  (* Å *)
                          ]; 
-
+(* Number of digits after decimal point in the output. *)
+val fractionalDigits = 2;
 val vowels = explode "aeiouyAEIOUY" @ scandinavianVowels;
 
-fun isVowel char = Util.member(char, vowels); 
-fun isAlphabetic char = Char.isAlpha char orelse Util.member(char, scandinavianVowels);
+infix 0 member; (* From Util *)
+fun x member y = List.exists (fn z => z=x) y;
+
+fun isVowel char = char member vowels; 
+fun isAlphabetic char = Char.isAlpha char orelse
+                        char member scandinavianVowels;
 
 (* Program User-agent info *)
 val UserAgent = ref UserAgentDefault;

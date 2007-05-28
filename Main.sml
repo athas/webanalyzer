@@ -160,21 +160,22 @@ fun badnessFactor analysis = case List.find (fn (TextAnalyser.Lix value) => true
 
 fun writeIndex starturi outputFilename analysedPages =
     let open HTMLBuilder;
-        val sortedResults = ListMergeSort.sort (fn ((_, x), (_, y)) => badnessFactor x > badnessFactor y) analysedPages
+        val sortedResults = ListMergeSort.sort (fn ((_, x), (_, y)) => badnessFactor y > badnessFactor x) analysedPages
         val std = td o $
+        val tdr = tda "align=\"right\""
         val wseqFromURI = $ o stringFromURI
-        val wseqFromReal = $ o Real.toString
+        val wseqFromReal = $ o Util.formatForOutput
         val wltr = tr o $$ o (List.map flatten)
         val wltable = table o $$ o (List.map flatten)
     in writeTo (serverFromURI starturi ^ ".html")
                (flatten
                     (html (&& ((head o title o $) ("Analyse af " ^ (stringFromURI starturi)),
-                               (body (wltable ((wltr [(std "URI"), (std "Sidesværhedsgrad")]) ::
+                               (body (wltable ((wltr [(std "Sidesv&aelig;rhedsgrad"), (std "URI")]) ::
                                                (List.map
                                                     (fn (uri, result) =>
-                                                        (wltr [(td (ahref (urlencode (outputFilename uri))
-                                                                          (wseqFromURI uri))),
-                                                               (td (wseqFromReal (badnessFactor result)))]))
+                                                        (wltr [(tdr (wseqFromReal (badnessFactor result))),
+                                                               (td (ahref (urlencode (outputFilename uri))
+                                                                          (wseqFromURI uri)))]))
                                                     sortedResults))))))))
     end;
     
