@@ -192,7 +192,7 @@ fun checkSpelling languageCode str =
         not (spell ()) orelse
         spellCheckWord (if isSome languageCode 
                         then valOf languageCode 
-                        else "da") str
+                        else Config.defaultLanguage ()) str
     handle dictionaryNotFound _ => true
     end;
 

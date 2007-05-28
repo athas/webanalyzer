@@ -7,6 +7,12 @@ sig
     val crawlDepthLimit : unit -> int;
     val setCrawlDelay: int -> unit;
     val crawlDelay: unit -> int;
+    (* Set the default language web-pages are assumed to be in. The
+    argument must be a two-letter language code. *)
+    val setDefaultLanguage: string -> unit;
+    (* Return the default language web-pages are assumed to be in. The
+    return value is a two-letter language code. *)
+    val defaultLanguage: unit -> string;
 
     val isVowel : char -> bool;
     val isAlphabetic : char -> bool;

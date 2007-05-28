@@ -212,6 +212,8 @@ fun parseArguments ("-d" :: limit :: rest) =
        Config.setFkgl () before parseArguments rest
   | parseArguments ("-spell" :: rest) =
        Config.setSpell () before parseArguments rest
+  | parseArguments ("-l" :: language :: rest) =
+    Config.setDefaultLanguage (language) before parseArguments rest
   | parseArguments (_ :: rest) = parseArguments rest
   | parseArguments [] = ();
 

@@ -4,6 +4,7 @@ struct
 val UserAgentDefault = "webanalyzer";
 val DepthLimitDefault = 10;
 val CrawlDelayDefault = 0;
+val DefaultLanguageDefault = "da";
 val LixDefault = true;
 val FreDefault = true;
 val FkglDefault = true;
@@ -39,6 +40,10 @@ val CrawlDelay = ref CrawlDelayDefault;
 fun setCrawlDelay n = CrawlDelay := n;
 fun crawlDelay () = !CrawlDelay;
 
+val DefaultLanguage = ref DefaultLanguageDefault;
+fun setDefaultLanguage language = DefaultLanguage := language;
+fun defaultLanguage _ = !DefaultLanguage;
+
 (* 'Lix' analyze text, set by commandline *)
 val Lix = ref LixDefault;
 fun setLix () = Lix := true;
@@ -64,6 +69,7 @@ fun setDefaults () =
     (setHttpUserAgent UserAgentDefault;
      setCrawlDepthLimit DepthLimitDefault;
      setCrawlDelay CrawlDelayDefault;
+     setDefaultLanguage DefaultLanguageDefault;
      Lix := LixDefault;
      Fkgl := FkglDefault;
      Fre := FreDefault;
