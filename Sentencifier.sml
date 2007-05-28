@@ -127,13 +127,7 @@ local
                      (sentence :: sentences) => (x :: sentence) :: sentences
                    | [] => [[x]]
 in 
-    fun sentencify text = 
-        let
-            val words = concatMap wordify text
-        in
-            splitInSentences words
-        end;
-
+    val sentencify = splitInSentences o (concatMap wordify);
     fun sentencifyString str = splitInSentences (wordify (str, []));
 end
 
