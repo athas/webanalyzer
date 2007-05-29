@@ -212,7 +212,8 @@ fun mainProgram (arg :: rest) =
         visit analysisOutputter 0 starturi;
         writeIndex starturi outputFilename (!analysedPages);
         print "Done!\n";
-        flushOut stdOut
+        flushOut stdOut;
+        OS.Process.success
     end
   | mainProgram [] = raise FatalError "Ikke nok argumenter." before Help.printProgramArgs();
 
@@ -241,7 +242,7 @@ fun parseArguments ("-d" :: limit :: rest) =
 element of the args list. Will create a file "[domain-name].html" in
 the current directory containing links to HTML-files inside a folder
 "[domain-name]" that contains the actual analysis results. *)
-fun main args = Config.setDefaults() before parseArguments args before mainProgram args
-    handle FatalError reason => print "Fejl: " before print reason before print "\n";
+fun main args = (Config.setDefaults; parseArguments args; mainProgram args)
+    handle FatalError reason => OS.Process.success before print "Fejl: " before print reason before print "\n";
 
 (*val _ = mainWrapper (CommandLine.arguments ());*)
