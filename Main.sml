@@ -189,6 +189,7 @@ fun writeIndex starturi outputFilename analysedPages =
 fun mainProgram (arg :: rest) = 
     let 
         val uri = makeURI (NONE, arg)
+            handle Error (Socket s) => raise FatalError s
         val robotsuri = makeURI (NONE, protocolFromURI uri
                                        ^ "://"
                                        ^ serverFromURI uri
