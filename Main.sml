@@ -69,7 +69,7 @@ fun findLinks absoluteURI htmlTree =
             case getAttribute attribute tag of
                 SOME str => if valid (tagName tag) str then
                                 (SOME (makeURI (absoluteURI, str))
-                                 handle Http.Error (General _) => NONE)
+                                 handle Error _ => NONE)
                             else NONE
               | NONE => NONE
                         
