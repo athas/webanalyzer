@@ -19,6 +19,7 @@ sig type 'a sock = ('a, Socket.active Socket.stream) Socket.sock
     val readFrom: string -> string
     val writeTo: string -> string -> unit
 
+    val strToLower: string -> string
     (* Return the index of the first occurence of char in
     string. Returns 0 if char is not in string. *)
     val getFirstIndexOf: char * string -> int
@@ -32,8 +33,9 @@ sig type 'a sock = ('a, Socket.active Socket.stream) Socket.sock
     exception IOError of string
 
     val equal : ''a -> ''a -> bool
+    val equalICase: string -> string -> bool
     val member : ''a * ''a list -> bool
-    val concatMap : ('a -> 'b list) -> 'a list -> 'b list;
+    val concatMap : ('a -> 'b list) -> 'a list -> 'b list
     val SOMEs : 'a option list -> 'a list
     (* Split a string containing newline characters into a list of lines. *)
     val splitLines : string -> string list

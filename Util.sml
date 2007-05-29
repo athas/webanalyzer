@@ -31,6 +31,7 @@ in
         case matches regex string of
             SOME x => SOME (matchList' string x)
           | _ => NONE;
+
 end
         
 
@@ -161,6 +162,8 @@ fun writeTo fileName str =
 
 (* Some usefull string functions *)
 
+fun strToLower str = implode(map Char.toLower (explode str));
+
 (* returns the index of the first occurence of chr in str *)
 fun getFirstIndexOf (chr, str) = 
     let
@@ -207,6 +210,10 @@ fun trimStr str =
    A currying equivalence function.*)
 
 fun equal x y = x = y;
+
+fun equalICase x y = (strToLower x) = (strToLower y);
+
+
 
 (* x member y: ''a * ''a list -> bool
 
