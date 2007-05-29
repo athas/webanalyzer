@@ -11,12 +11,12 @@ local
                         ("quot", chr 34), (* forward-slash *)
                         ("apos", #"'"),
                         ("nbsp", chr 160),   (* Space *)
-                        ("Oslash", chr 216),
-                        ("oslash", chr 248),
-                        ("Aelig", chr 146),
-                        ("aelig", chr 145),
-                        ("Aring", chr 143),
-                        ("aring", chr 134)];
+                        ("Oslash", chr 152),
+                        ("oslash", chr 184),
+                        ("Aelig", chr 134),
+                        ("aelig", chr 166),
+                        ("Aring", chr 133),
+                        ("aring", chr 164)];
 
     (* Find a replacement for the provided entity name. If the entity
     nam is not known, the full identity (including ampersand and
