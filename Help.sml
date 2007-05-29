@@ -6,10 +6,8 @@ fun printProgramArgs () =
         fun p str = print str before print "\n";
     in
         (p " --- Webanalyzer ---";
-         p "main: string list -> unit";
          p "";
-         p "string list er en liste af argumenter på formen:";
-         p "[\"url\", valgfrie argumenter]";
+         p "\"url\" [-d num] [-u str] [-c num] [-lix] [-fre] [-fkgl]";
          p "valgfrie argumenter er:";
          p "\t -d num ";
          p "\t\t Overskriver dybden af links som crawleren skal følge.";
@@ -21,6 +19,7 @@ fun printProgramArgs () =
          p "\t -c num ";
          p "\t\t Overskriver pausen mellem hver HTTP request.";
          p ("\t\t Default: " ^ Int.toString (Config.crawlDelay ()));
+
          p "")
     end;
 

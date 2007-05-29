@@ -227,13 +227,13 @@ fun parseArguments ("-d" :: limit :: rest) =
        (Config.setCrawlDelay o valOf o Int.fromString) delay before
        parseArguments rest
   | parseArguments ("-lix" :: rest) =
-       Config.setLix () before parseArguments rest
+       Config.toggleLix () before parseArguments rest
   | parseArguments ("-fre" :: rest) = 
-       Config.setFre () before parseArguments rest
+       Config.toggleFre () before parseArguments rest
   | parseArguments ("-fkgl" :: rest) =
-       Config.setFkgl () before parseArguments rest
+       Config.toggleFkgl () before parseArguments rest
   | parseArguments ("-spell" :: rest) =
-       Config.setSpell () before parseArguments rest
+       Config.toggleSpell () before parseArguments rest
   | parseArguments ("-l" :: language :: rest) =
     Config.setDefaultLanguage (language) before parseArguments rest
   | parseArguments (_ :: rest) = parseArguments rest

@@ -51,24 +51,24 @@ fun defaultLanguage _ = !DefaultLanguage;
 
 (* 'Lix' analyze text, set by commandline *)
 val Lix = ref LixDefault;
-fun setLix () = Lix := true;
 fun lix () = !Lix;
+fun toggleLix () = Lix := not (lix());
 
 (* 'Flesch Reading Ease' analyze text. Set by commandline *)
 val Fre = ref FreDefault;
-fun setFre () = Fre := true;
 fun fre () = !Fre;
+fun toggleFre () = Fre := not (fre());
 
 
 (* 'Flesch-Kincaid Readability Test' analyze text. Set by commandline *)
 val Fkgl = ref FkglDefault;
-fun setFkgl () = Fkgl := true;
 fun fkgl () = !Fkgl;
+fun toggleFkgl () = Fkgl := not (fkgl());
 
 (* Spell check the text. Set by commandline *)
 val Spell = ref SpellDefault;
-fun setSpell () = Spell := true;
 fun spell () = !Spell
+fun toggleSpell () = Spell := not (spell());
 
 fun setDefaults () = 
     (setHttpUserAgent UserAgentDefault;

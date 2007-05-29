@@ -19,13 +19,13 @@ sig
     val isVowel : char -> bool;
     val isAlphabetic : char -> bool;
 
-    val setLix: unit -> unit;
+    val toggleLix: unit -> unit;
     val lix: unit -> bool;
-    val setFre: unit -> unit;
+    val toggleFre: unit -> unit;
     val fre: unit -> bool;
-    val setFkgl: unit -> unit;
+    val toggleFkgl: unit -> unit;
     val fkgl: unit -> bool;
-    val setSpell: unit -> unit;
+    val toggleSpell: unit -> unit;
     val spell: unit -> bool;
 
     val setDefaults: unit -> unit;
