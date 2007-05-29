@@ -20,7 +20,9 @@ fun spellCheckWord languageCode word =
                                 val resultLine = if List.length lines = 0 then ""
                                                  else List.nth (lines, 1)
                             in size resultLine = 0 orelse
-                               String.sub (resultLine, 0) = #"*"
+                               String.sub (resultLine, 0) = #"*" orelse
+                               String.sub (resultLine, 0) = #"+" orelse
+                               String.sub (resultLine, 0) = #"-"
                             end
            | NONE => false;
 
