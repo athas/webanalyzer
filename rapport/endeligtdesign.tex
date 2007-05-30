@@ -80,6 +80,22 @@ kommandolinjen er i et ugyldigt format, eller der er angivet ukendte
 indstillinger, er det også dette moduls ansvar at informere brugeren
 om fejlen og afslutte programmet.
 
+\subsection{Indstillinger}
+Da de brugerleverede indstillinger skal kunne tilgås fra vidt spredte
+dele af programmet har vi fundet det bedst at lagre disse på et
+centralt, løst koblet sted, i modsætning til programmets egentligt
+arbejds-data, der i højere grad fører data rundt gennem tæt koblede
+moduler og strenge, typestærke interfaces. Dette sikrer også at det er
+let at tilføje nye indstillingsmuligheder - idet der kun skal ændres i
+den kode der rent faktisk udnytter den nye indstillingsmulighed - hvor
+ændringer i det primære dataflow kan resultere i en kaskade af
+ændringer over det meste af programmet. Den uafhængige plads
+indstillings-informationen har ville dog ikke være nær så passende til
+den primære data, idet det ville gøre det sværere at kontrollere hvor
+og hvornår den blev ændret, og ville svække muligheden for at
+garantere den sekventielt løbende raffinering af arbejdsdata som
+programmet er bygget op omkring.
+
 \subsection{Domæne check, indlæsning af robots.txt}
 Dette modul skal tjekke om det domæne brugeren har angivet kan tilgås
 og give en fejlmeddelelse hvis det ikke er tilfældet. Hvis brugeren
