@@ -32,6 +32,29 @@ in
             SOME x => SOME (matchList' string x)
           | _ => NONE;
 
+    fun regexTokens regex str = 
+        let
+            fun regexTokens' ret _ "" = ret
+              | regexTokens' ret regex str = 
+                let
+                    val match = matches regex str
+                in
+                    case match of 
+                        SOME (MatchTree.Match (SOME {len, pos}, _)) => 
+                        let
+                            val beforeMatch = String.substring(str, 0, pos)
+                            val afterMatch = String.substring(str,(pos+len), 
+                                                              ((String.size str)-(pos+len)))
+                        in
+                            regexTokens' (beforeMatch::ret) regex afterMatch
+                        end
+                      | _ => ret 
+                end
+            
+        in
+            regexTokens' [] regex str
+        end;
+
 end
         
 

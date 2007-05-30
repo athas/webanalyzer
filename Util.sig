@@ -4,6 +4,7 @@ sig type 'a sock = ('a, Socket.active Socket.stream) Socket.sock
     val isMatch : RegexMatcher.regexp -> string -> bool;
     val firstMatch : RegexMatcher.regexp -> string -> string option;
     val matchList : RegexMatcher.regexp -> string -> string list option;
+    val regexTokens: RegexMatcher.regexp -> string -> string list;
 
     val readChar: 'a sock -> char
     val readLine: 'a sock -> string
