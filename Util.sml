@@ -48,7 +48,7 @@ in
                         in
                             regexTokens' (beforeMatch::ret) regex afterMatch
                         end
-                      | _ => ret 
+                      | _ => str :: ret
                 end
             
         in
