@@ -99,11 +99,13 @@ programmet er bygget op omkring.
 \subsection{Domæne check, indlæsning af robots.txt}
 Dette modul skal tjekke om det domæne brugeren har angivet kan tilgås
 og give en fejlmeddelelse hvis det ikke er tilfældet. Hvis brugeren
-har angivet det skal det undersøges om der er en \textit{robots.txt}
-fil på serveren og hvis det er tilfældet så skal den
-parses. Informationerne i \textit{robots.txt} skal gøres tilgængeligt
-for \textit{Hent side}--modulet, så det kan se hvilke dele af websitet
-det må crawle.
+har angivet det skal det undersøges om der er en
+\textit{robots.txt}-fil (en standard, der gør det muligt for websider
+at bede robotter om at lade være med at besøge dele af
+siden) \footnote{\url{http://www.robotstxt.org/}} på serveren og hvis
+det er tilfældet så skal den parses. Informationerne i
+\textit{robots.txt} skal gøres tilgængeligt for \textit{Hent
+  side}--modulet, så det kan se hvilke dele af websitet det må crawle.
 
 \subsection{Hent Side}
 Hent side modulet skal kunne hente en side fra en webserver via
@@ -111,8 +113,8 @@ HTTP-protokollen. Da vores behov er små og vi ikke har for meget tid
 vil vi bruge et eksternt produceret
 Http-modul\footnote{http://www.diku.dk/undervisning/2000e/dat0/filer200001/K1/brevkasse.html},
 modificeret til vores behov. Det er også dette moduls job at tjekke om
-robots.txt tillader at vi må crawle siden, da dette skal tjekkes hver
-gang der skal hentes en side.
+{\tt robots.txt} tillader at vi må crawle siden, da dette skal tjekkes
+hver gang der skal hentes en side.
 
 \subsection{HTML-Parsing}
 For at kunne udtrække tekst fra en HTML-side er det nødvendigt først
