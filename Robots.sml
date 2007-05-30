@@ -25,11 +25,10 @@ fun clearRobotsTxt () = (
 (* Initializes the 'disallowedPaths' from the content of a robots.txt *)
 fun initRobotsTxt robotsStr = 
     let
-        (* break up in user agents and convert the substring list to string list *)
-        val userAgents = List.map Substring.string 
-                                  (Regex.tokens 
-                                       (Regex.regcomp "user-agent:" [Regex.Icase]) 
-                                       robotsStr);
+        (* break up in user agents (InCase Sensitive *)
+        val regex = RegexMatcher.compileString
+        val userAgentsRegexp = regex "[uU][sS][eE][rR]-[aA][gG][eE][nN][tT]:"
+        val userAgents = Util.regexTokens userAgentsRegexp robotsStr
 
         (* remove user agents not of interest for this crawler *)
         fun filterOtherUserAgents strLst =
@@ -88,9 +87,6 @@ fun initRobotsTxt robotsStr =
                     end
               
                 (* regexp expressions for matching string in the robots.txt *)
-                val disallowRegexp = (Regex.regcomp "Disallow:" [Regex.Icase]);
-                val crawlDelayRegexp = (Regex.regcomp "Crawl-delay:" [Regex.Icase]);
-                val requestRateRegexp = (Regex.regcomp "Request-rate:" [Regex.Icase]);
               
                 fun makeDisallowLst' ret [] = ret
                   | makeDisallowLst' ret [_] = ret
@@ -99,11 +95,11 @@ fun initRobotsTxt robotsStr =
                        and move on to the 2. next and start over.
                        If this doesn't match the above  Regexps then
                        just to the next element check that one. *)
-                    if Regex.regexecBool disallowRegexp [] s then
+                    if Util.equalICase "disallow:" s then
                         makeDisallowLst' (ss :: ret) sss 
-                    else if Regex.regexecBool crawlDelayRegexp [] s then
+                    else if Util.equalICase "crawl-delay:" s then
                         makeDisallowLst' ret sss before handleCrawlDelay ss
-                    else if Regex.regexecBool requestRateRegexp [] s then
+                    else if Util.equalICase "request-rate:" s then
                         makeDisallowLst' ret sss before handleRequestRate ss
                     else
                         makeDisallowLst' ret strTail

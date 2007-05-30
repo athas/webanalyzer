@@ -18,7 +18,7 @@ app use ["Config.sig", "Config.sml",
          "Sentencifier.sig", "Sentencifier.sml",
          "TextAnalyser.sig", "TextAnalyser.sml",
          "TextAnalysisReporter.sig", "TextAnalysisReporter.sml",
-         "Robots.sig", "DummyRobots.sml",
+         "Robots.sig", "Robots.sml",
          "Main.sml" (* Works for now... *)
         ];
 
