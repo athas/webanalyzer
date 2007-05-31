@@ -92,7 +92,8 @@ fun filterExitLinks localuri links =
 val getAndParse = parse o getURI;
 val analyseHTML = TextAnalyser.analyse o 
                   Sentencifier.sentencify o 
-                  TextExtractor.extractFromHTML;
+                  TextExtractor.extractFromHTML o 
+                  HTMLFilter.filterhtml ;
 
 fun findStartURI uri = if Robots.isPathAllowed (pathFromURI uri)
                        then uri
@@ -249,6 +250,10 @@ fun parseArguments ("-d" :: limit :: rest) =
        Config.setDefaultLanguage language before parseArguments rest
   | parseArguments ("-o" :: outputDir :: rest) = 
        Config.setOutputDir outputDir before parseArguments rest
+  | parseArguments ("-ignore-tag" :: tagname :: rest) = 
+       Config.addTagNameFilter tagname before parseArguments rest
+  | parseArguments ("-ignore-id" :: id :: rest) = 
+       Config.addIdFilter id before parseArguments rest
   | parseArguments (_ :: rest) = parseArguments rest
   | parseArguments [] = ();
 

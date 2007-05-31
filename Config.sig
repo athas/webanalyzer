@@ -33,4 +33,10 @@ sig
     val spell: unit -> bool;
 
     val setDefaults: unit -> unit;
+
+
+    val addTagNameFilter : string -> unit;
+    val tagNameFilters : unit -> string list;
+    val addIdFilter : string -> unit;
+    val idFilters : unit -> string list;
 end

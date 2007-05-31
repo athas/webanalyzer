@@ -9,13 +9,10 @@ sig
                     | ByAttribute of (string * string)
                     | And of Filter * Filter
                     | Or of Filter * Filter
-                    | Not of Filter;
+                    | Not of Filter
+                    | None;
              
     (* removes unwanted content from a HTML parsetree *)
-    val filterhtml : Filter
-                     -> HTMLParser.parsetree list
+    val filterhtml : HTMLParser.parsetree list
                      -> HTMLParser.parsetree list;
-
-    (* Removes script and style tags *)
-    val standardfilter : Filter;
 end

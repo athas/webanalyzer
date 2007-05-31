@@ -7,7 +7,8 @@ datatype Filter = ByTagName of string
                 | ByAttribute of (string * string)
                 | And of Filter * Filter
                 | Or of Filter * Filter
-                | Not of Filter;
+                | Not of Filter
+                | None;
 
 infix And;
 infix Or;
@@ -24,14 +25,11 @@ fun evaluate _ (Text _) = false
                                   evaluate f2 tag
   | evaluate (f1 Or f2) tag = evaluate f1 tag orelse
                                  evaluate f2 tag
-  | evaluate (Not f) tag = evaluate f tag;
+  | evaluate (Not f) tag = evaluate f tag
+  | evaluate None _ = false
 
 
-
-(* Filter -> parsetree list -> parsetree list *)
-fun filterhtml filter tree = HTMLParser.filter (evaluate filter) tree;
-
-val standardfilter =  (Not (ByTagName "body"))
+val standardFilter =  (Not (ByTagName "body"))
                           And (Not (ByTagName "head"))
                           And (Not (ByTagName "html"))
                           And (ByTagName "script")
@@ -39,5 +37,19 @@ val standardfilter =  (Not (ByTagName "body"))
                           And (ByTagName "colgroup")
                           And (ByTagName "col");
 
+fun currentFilter () = 
+      let
+          fun orIt (f1 :: fs) = f1 Or (orIt fs)
+            | orIt [] = None
+          val idFilters = orIt (map (fn x => ByAttribute ("id", x)) (Config.idFilters ()));
+          val tagNameFs = orIt (map (fn x => ByTagName x) (Config.tagNameFilters ()));
+      in
+          
+          standardFilter Or idFilters Or tagNameFs
+      end;
+
+
+(* parsetree list -> parsetree list *)
+fun filterhtml tree = HTMLParser.filter (fn x => not (evaluate (currentFilter ()) x)) tree;
 
 end;

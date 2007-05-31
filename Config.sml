@@ -86,4 +86,14 @@ fun setDefaults () =
      Fre := FreDefault;
      Spell := SpellDefault);
 
-end
+
+val TagNameFilters : string list ref = ref [];
+val IdFilters : string list ref = ref [];
+    
+fun addTagNameFilter filter = TagNameFilters := filter :: !TagNameFilters;    
+fun tagNameFilters () = !TagNameFilters;
+
+fun addIdFilter filter = IdFilters := filter :: !IdFilters;    
+fun idFilters () = !IdFilters;
+
+end;
