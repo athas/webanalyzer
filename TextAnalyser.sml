@@ -39,7 +39,7 @@ type documentresult = {titleResults : (results * sentenceresult list) option,
 fun getLix (results : results) = #lix results;
 fun getFRE (results : results) = #fleshReadingEase results;
 fun getFKGL (results : results) = #fleshKincaidGradeLevel results;
-fun getBadnessFactor (results : results) = (getLix results + getFRE results / 2.0);
+fun getBadnessFactor (results : results) = (getLix results + (100.0 - (getFRE results / 3.0))) / 4.0;
 
 fun titleResults (documentresult : documentresult) = #titleResults documentresult;
 fun documentResults (documentresult : documentresult) = #documentResults documentresult;
