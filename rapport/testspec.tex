@@ -80,11 +80,72 @@
 % "Testspecifikation") senest den 6. juni 2007.
  
 
-\chapter{Testplan}
+\chapter{Strategi}
+Vores test er delt i to. Den første del --- funktionstesten --- skal
+afgøre om programmet kan alle de ting vi påstår det kan og at alle
+disse funktioner virker korrekt. Det optimale ville være hvis denne
+test kunne automatiseres, men det er ikke tilfældet og vi må derfor
+teste det manuelt.
+
+Den anden del af testen --- brugertesten --- skal bruges til at finde
+ud af om brugervejledningen er forståelig og om brugeren kan finde ud
+af at bruge programmet ved at læse brugermanualen. Derudover skal
+testen bruges til at finde ud af om resultatsiderne er vanskelige at
+læse. 
 
 \chapter{Funktionstest}
 
-\section{}
+\section{Dybde angivelse}
+Hvis man angiver en maksimal dybde af analysen, så skal programmet
+respektere denne og gøre det korrekt.
+
+\subsection{Ækvivalens-klasser}
+\begin{itemize}
+\item 
+\end{itemize}
+
+\section{Links finder}
+Programmet skal finde alle interne links på hjemmesiden, som
+eksiterer.
+
+
+\section{Analyse indhold}
+Al \underline{relevant} tekst fra hjemmesiden skal fremgå af
+analyseresultatet, herunder hjemmesidens titel.
+
+\section{Stavekontrol}
+Hvis en side er angivet til dansk og en dansk ordbog til aspell er
+installeret, så skal programmet kunne tjekke for stavefejl.
+\subsection{Ækvivalens-klasser}
+\begin{itemize}
+\item aspell er ikke installeret --- Stavekontrol skal ikke udføres og
+  brugeren skal have besked.
+\item De korrekte sprogpakker er ikke installeret --- Stavekontrol
+  skal ikke udføres på de relevante sektioner og brugeren skal have
+  besked.
+\item 
+\end{itemize}
+
+\section{Respekter robots.txt}
+Programmet skal tjekke det angivne websteds robots.txt og sørge for at
+websider angivet i filen ikke bliver hentet og analyseret.
+
+\section{Udfør analyser angivet af brugeren}
+
+
+\section{Indkodning}
+Programmet skal virke på hjemmesider indkodet med ASCII
+tegnsættet. Specielt skal det testes at de dansk tegn (æøåÆØÅ) virker
+korrekt.
+
+\section{Filtrering mekanisme}
+Programmet skal fra sortere
+
+
+\section{Output-mappe}
+Hvis man angiver en output-mappe
 
 \chapter{Brugertest}
+
+
 \end{document}
