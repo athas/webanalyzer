@@ -44,7 +44,7 @@ fun contentResults (documentresult : documentresult) = #content_results document
 type counts = {paragraphs : int,
                sentences : int,
                words : int,
-               (* words with more than 7 chars, for LIX calculation *)
+               (* words with more than 6 chars, for LIX calculation *)
                longwords : int,
                vowels : int};
 
@@ -81,7 +81,7 @@ fun countVowels str = foldl (fn (char, b) => if Config.isVowel char
                             0 
                             (explode str);
 
-fun isLongword str = size str >= 7;
+fun isLongword str = size str > 6;
 
 fun countSentence (sentence : Sentencifier.SentenceElement list) = 
     let
