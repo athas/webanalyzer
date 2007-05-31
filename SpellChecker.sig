@@ -5,6 +5,14 @@ sig
     language. The string is the language code that was not known. *)
     exception dictionaryNotFound of string;
 
+    (* Thrown when asked to spellcheck a word that contains
+    troublesome non-word-characters. *)
+    exception badWord of string;
+
+    (* Thrown when asked to use a language code that does not appear
+    valid. A valid language code contains two characters. *)
+    exception badLanguageCode of string;
+
     (* Given a language code and a word, return a boolean indicating
     whether the word is spelled properly according to the language. *)
     val spellCheckWord : string -> string -> bool;
