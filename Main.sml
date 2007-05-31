@@ -2,11 +2,11 @@
 function (for example, main ["http://www.diku.dk"]) for
 functionality. *)
 
-open TextIO;
-open Http;
-open HTMLParser;
 open List;
 open Util;
+open TextIO;
+open Http;
+open TextAnalyser;
 
 exception FatalError of string;
 
@@ -89,8 +89,8 @@ fun filterExitLinks localuri links =
                        serverFromURI localuri)
            links;
 
-val getAndParse = parse o getURI;
-val analyseHTML = TextAnalyser.analyse o 
+val getAndParse = HTMLParser.parse o getURI;
+val analyseHTML = analyse o 
                   Sentencifier.sentencify o 
                   TextExtractor.extractFromHTML o 
                   HTMLFilter.filterhtml ;
