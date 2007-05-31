@@ -162,7 +162,7 @@ fun filenameForAnalysis uri = String.map (fn #"/" => #"#"
 
 fun badnessFactor analysis = TextAnalyser.getLix (TextAnalyser.documentResults analysis)
 
-fun writeIndex starturi outputFilename analysedPages =
+fun writeIndex starturi indexFilename outputFilename analysedPages =
     let open HTMLBuilder;
         val sortedResults = ListMergeSort.sort (fn ((_, x), (_, y)) => badnessFactor y > badnessFactor x) analysedPages
         val std = td o $
@@ -171,21 +171,22 @@ fun writeIndex starturi outputFilename analysedPages =
         val wseqFromReal = $ o Util.formatForOutput
         val wltr = tr o $$ o (List.map flatten)
         val wltable = table o $$ o (List.map flatten)
-    in writeTo (serverFromURI starturi ^ ".html")
+    in writeTo (indexFilename ^ ".html")
                (flatten
                     (html (&& ((head o title o $) ("Analyse af " ^ (stringFromURI starturi)),
                                (body (wltable ((wltr [(std "Sidesv&aelig;rhedsgrad"), (std "URI")]) ::
                                                (List.map
                                                     (fn (uri, result) =>
-                                                        let val style = ("style=\"background-color: "
+                                                        let val style = ("style=\"color:white;background-color: "
                                                                          ^ (TextAnalysisReporter.colorByResults
                                                                                 (TextAnalyser.documentResults result))
                                                                          ^ "\"");
                                                         in
                                                         (wltr [(tda (style ^ alignr)  (wseqFromReal (badnessFactor result))),
                                                                (tda style
-                                                                    (ahref (urlencode (outputFilename uri))
-                                                                           (wseqFromURI uri)))])
+                                                                    (ahrefa (urlencode (outputFilename uri))
+                                                                            style
+                                                                            (wseqFromURI uri)))])
                                                         end)
                                                     sortedResults))))))))
     end;
@@ -218,7 +219,7 @@ fun mainProgram (arg :: rest) =
         visitedPages := [];
         waitingVisits := [];
         visit analysisOutputter starturi 0;
-        writeIndex starturi outputFilename (!analysedPages);
+        writeIndex starturi outputdir outputFilename (!analysedPages);
         print "Done!\n";
         flushOut stdOut;
         OS.Process.success
