@@ -72,12 +72,13 @@ fun spellCheckWord languageCode word =
              output (outstream, word ^ "\n");
              flushOut outstream;
              (case inputLine instream of
-                  SOME resultLine => (if size resultLine > 1
-                                      then inputLine instream else NONE;
-                                      size resultLine = 0 orelse
-                                      String.sub (resultLine, 0) = #"*" orelse
-                                      String.sub (resultLine, 0) = #"+" orelse
-                                      String.sub (resultLine, 0) = #"-")
+                  SOME resultLine => if size resultLine > 1
+                                     then (inputLine instream;
+                                           size resultLine = 0 orelse
+                                           String.sub (resultLine, 0) = #"*" orelse
+                                           String.sub (resultLine, 0) = #"+" orelse
+                                           String.sub (resultLine, 0) = #"-")
+                                     else false
                 | NONE => false)
          end handle aspellNotFound => false;
 
