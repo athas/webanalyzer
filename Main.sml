@@ -162,7 +162,7 @@ fun filenameForAnalysis uri = String.map (fn #"/" => #"#"
 
 fun badnessFactor analysis = TextAnalyser.getLix (TextAnalyser.documentResults analysis)
 
-fun writeIndex starturi indexFilename outputFilename analysedPages =
+fun writeIndex starturi outputFilename analysedPages =
     let open HTMLBuilder;
         val sortedResults = ListMergeSort.sort (fn ((_, x), (_, y)) => badnessFactor y > badnessFactor x) analysedPages
         val std = td o $
@@ -171,22 +171,21 @@ fun writeIndex starturi indexFilename outputFilename analysedPages =
         val wseqFromReal = $ o Util.formatForOutput
         val wltr = tr o $$ o (List.map flatten)
         val wltable = table o $$ o (List.map flatten)
-    in writeTo (indexFilename ^ ".html")
+    in writeTo (serverFromURI starturi ^ ".html")
                (flatten
                     (html (&& ((head o title o $) ("Analyse af " ^ (stringFromURI starturi)),
                                (body (wltable ((wltr [(std "Sidesv&aelig;rhedsgrad"), (std "URI")]) ::
                                                (List.map
                                                     (fn (uri, result) =>
-                                                        let val style = ("style=\"color:white;background-color: "
+                                                        let val style = ("style=\"background-color: "
                                                                          ^ (TextAnalysisReporter.colorByResults
                                                                                 (TextAnalyser.documentResults result))
                                                                          ^ "\"");
                                                         in
                                                         (wltr [(tda (style ^ alignr)  (wseqFromReal (badnessFactor result))),
                                                                (tda style
-                                                                    (ahrefa (urlencode (outputFilename uri))
-                                                                            style
-                                                                            (wseqFromURI uri)))])
+                                                                    (ahref (urlencode (outputFilename uri))
+                                                                           (wseqFromURI uri)))])
                                                         end)
                                                     sortedResults))))))))
     end;
@@ -204,22 +203,20 @@ fun mainProgram (arg :: rest) =
                  | Error (Socket s) => ""
         val _ = Robots.initRobotsTxt robotstxt;
         val starturi = findStartURI uri
-        val outputdir = case Config.outputDir () of
-                            NONE => serverFromURI uri
-                          | SOME x => x;
+        val outputdir = serverFromURI uri;
         fun outputFilename uri = (outputdir ^ "/" ^ (filenameForAnalysis uri))
         val analysedPages : (URI * TextAnalyser.documentresult) list ref = ref []
         fun analysisOutputter uri analysis =
             (writeTo (outputFilename uri) (TextAnalysisReporter.makeReport analysis)
             before analysedPages := (uri, analysis) :: !analysedPages);
     in 
-        OS.FileSys.mkDir outputdir
+        OS.FileSys.mkDir outputdir 
         handle OS.SysErr (_,_) => raise FatalError "Kunne ikke oprette output-mappe.";
         (* Useful when used interactively. *)
         visitedPages := [];
         waitingVisits := [];
         visit analysisOutputter starturi 0;
-        writeIndex starturi outputdir outputFilename (!analysedPages);
+        writeIndex starturi outputFilename (!analysedPages);
         print "Done!\n";
         flushOut stdOut;
         OS.Process.success
