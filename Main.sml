@@ -12,6 +12,8 @@ exception FatalError of string;
 
 fun mapLinks function htmlTree =
     let
+        open HTMLParser;
+
         (* takes a parsetree list and processes down it by calling
            mapLinks' on the children of the tree *)
         fun getChildren' (ret, []) = ret
@@ -62,6 +64,7 @@ end
 
 fun findLinks absoluteURI htmlTree = 
     let
+        open HTMLParser;
         fun valid "a" link = not (String.isPrefix "mailto:" link)
           | valid tagname link = true
 
