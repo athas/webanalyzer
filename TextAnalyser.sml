@@ -217,6 +217,8 @@ fun checkSpelling languageCode str =
                         then valOf languageCode 
                         else Config.defaultLanguage ()) str
     handle dictionaryNotFound _ => true
+         | badLanguageCode _ => true
+         | badWord _ => true
     end;
 
 local
