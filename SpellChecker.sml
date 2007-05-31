@@ -78,7 +78,7 @@ fun spellCheckWord languageCode word =
                                       String.sub (resultLine, 0) = #"+" orelse
                                       String.sub (resultLine, 0) = #"-")
                 | NONE => false)
-         end;
+         end handle aspellNotFound => false;
 
 fun spellCheckWords languageCode words = 
     map (fn word => (word, spellCheckWord languageCode word)) words;
