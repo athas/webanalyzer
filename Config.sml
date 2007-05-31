@@ -50,11 +50,9 @@ val DefaultLanguage = ref DefaultLanguageDefault;
 fun setDefaultLanguage language = DefaultLanguage := language;
 fun defaultLanguage _ = !DefaultLanguage;
 
-val OutputDir : string option ref = ref NONE;
-fun setOutputDir dir = OutputDir := (if dir = ""
-                                     then NONE
-                                     else SOME dir);
-fun outputDir () : string option = !OutputDir;
+val OutputDir = ref OutputDirDefault;
+fun setOutputDir dir = OutputDir := (if dir = "" then OutputDirDefault else dir);
+fun outputDir () = !OutputDir;
 
 (* 'Lix' analyze text, set by commandline *)
 val Lix = ref LixDefault;

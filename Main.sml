@@ -162,7 +162,8 @@ fun filenameForAnalysis uri = String.map (fn #"/" => #"#"
 
 fun badnessFactor analysis = TextAnalyser.getLix (TextAnalyser.documentResults analysis)
 
-fun writeIndex starturi outputFilename analysedPages =
+fun writeIndex starturi outputDir outputFilename analysedPages =
+
     let open HTMLBuilder;
         val sortedResults = ListMergeSort.sort (fn ((_, x), (_, y)) => badnessFactor y > badnessFactor x) analysedPages
         val std = td o $
@@ -171,21 +172,27 @@ fun writeIndex starturi outputFilename analysedPages =
         val wseqFromReal = $ o Util.formatForOutput
         val wltr = tr o $$ o (List.map flatten)
         val wltable = table o $$ o (List.map flatten)
-    in writeTo (serverFromURI starturi ^ ".html")
+in
+        writeTo (OS.Path.concat(outputDir, ((serverFromURI starturi) ^ ".html")))
                (flatten
                     (html (&& ((head o title o $) ("Analyse af " ^ (stringFromURI starturi)),
                                (body (wltable ((wltr [(std "Sidesv&aelig;rhedsgrad"), (std "URI")]) ::
                                                (List.map
                                                     (fn (uri, result) =>
-                                                        let val style = ("style=\"background-color: "
+                                                        let val style = ("style=\"color:white;background-color: "
                                                                          ^ (TextAnalysisReporter.colorByResults
                                                                                 (TextAnalyser.documentResults result))
                                                                          ^ "\"");
                                                         in
                                                         (wltr [(tda (style ^ alignr)  (wseqFromReal (badnessFactor result))),
                                                                (tda style
-                                                                    (ahref (urlencode (outputFilename uri))
-                                                                           (wseqFromURI uri)))])
+                                                                    (ahrefa  
+                                                                              ("file://" 
+                                                                          ^ (OS.Path.concat 
+                                                                                 (outputDir,
+                                                                                  urlencode (outputFilename uri))))
+                                                                         style
+                                                                         (wseqFromURI uri)))])
                                                         end)
                                                     sortedResults))))))))
     end;
@@ -203,20 +210,21 @@ fun mainProgram (arg :: rest) =
                  | Error (Socket s) => ""
         val _ = Robots.initRobotsTxt robotstxt;
         val starturi = findStartURI uri
-        val outputdir = serverFromURI uri;
-        fun outputFilename uri = (outputdir ^ "/" ^ (filenameForAnalysis uri))
+        val outputDir = OS.Path.concat(Config.outputDir (), serverFromURI uri)
+        fun outputFilename uri = filenameForAnalysis uri
         val analysedPages : (URI * TextAnalyser.documentresult) list ref = ref []
         fun analysisOutputter uri analysis =
-            (writeTo (outputFilename uri) (TextAnalysisReporter.makeReport analysis)
+            (writeTo (OS.Path.concat(outputDir, outputFilename uri)) 
+                     (TextAnalysisReporter.makeReport analysis)
             before analysedPages := (uri, analysis) :: !analysedPages);
     in 
-        OS.FileSys.mkDir outputdir 
+        OS.FileSys.mkDir outputDir 
         handle OS.SysErr (_,_) => raise FatalError "Kunne ikke oprette output-mappe.";
         (* Useful when used interactively. *)
         visitedPages := [];
         waitingVisits := [];
         visit analysisOutputter starturi 0;
-        writeIndex starturi outputFilename (!analysedPages);
+        writeIndex starturi outputDir outputFilename (!analysedPages);
         print "Done!\n";
         flushOut stdOut;
         OS.Process.success
