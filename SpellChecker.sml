@@ -19,7 +19,7 @@ exception aspellNotFound;
 val aspellProcesses : (string * (instream, outstream) Unix.proc) list ref = ref [];
 
 (* Return true if okay, false if it's bad. *)
-fun checkLanguageCode languageCode = size languageCode = 2 andalso
+fun checkLanguageCode languageCode = size languageCode >= 2 andalso
                                      all Char.isAlpha (explode languageCode);
 
 (* Return true if aspell is available, false otherwise. *)
