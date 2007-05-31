@@ -12,15 +12,26 @@ fun div1 class content = mark1a "DIV"
                                 ("class=\"" ^ class ^ "\"")
                                 content
 
-val analyses = [("Lix", getLix, "http://da.wikipedia.org/wiki/Læsbarhedsindeks"),
-                ("Flesh Reading Ease", getFRE, ""),
-                ("FK Grade Level", getFKGL, "")];
+fun analyses () = 
+      let
+          val lix = if Config.lix ()
+                    then SOME ("Lix", getLix, "http://da.wikipedia.org/wiki/Læsbarhedsindeks")
+                    else NONE;
+          val fre =  if Config.fre ()
+                     then SOME ("Flesh Reading Ease", getFRE, "http://en.wikipedia.org/wiki/Flesch-Kincaid_Readability_Test#Flesch_Reading_Ease")
+                     else NONE;
+          val fkgl = if Config.fkgl ()
+                     then SOME ("FK Grade Level", getFKGL, "http://en.wikipedia.org/wiki/Flesch-Kincaid_Readability_Test#Flesch.E2.80.93Kincaid_Grade_Level")
+                     else NONE
+      in
+          Util.SOMEs [lix, fre, fkgl]
+      end;
 
 fun reportAnalyse results (title, analyse, link) =
-              mark1 "SPAN" ($(title ^ ": " ^ (Util.formatForOutput
-                                                  (analyse results))))
+              mark1 "SPAN" ((ahref link ($(title))) && ($(": " ^ (Util.formatForOutput
+                                                  (analyse results)))) && br)
 
-fun reportResults results = div1 "result" (prmap (reportAnalyse results) analyses)
+fun reportResults results = div1 "result" (prmap (reportAnalyse results) (analyses ()))
 
 fun reportSentenceElem (WordResult (text, correct)) = if correct
                                                       then $ (htmlencode text)
@@ -69,14 +80,14 @@ fun reportContent onlyContent (ParagraphResult (results, sentences, descriptions
         val sentencesReport = reportSentences sentences;
         val descriptionsReport = prmap (li o reportSentences) descriptions;
         val content = p (sentencesReport) && (if (length descriptions) > 0
-                                              then p ((h4 ($ "Descriptions: "))
+                                              then p ((h4 ($ "Beskrivende tekst: "))
                                                       && (ul descriptionsReport))
                                               else Empty)
       
     in
         if onlyContent
         then content
-        else createColorBox results ((p resultReport) && content)
+        else createColorBox results (resultReport && content)
     end
   | reportContent display (HeadingResult (result, content)) = 
     let
@@ -122,9 +133,9 @@ fun makeReport' ({titleResults,
         (html (head (style && (title ($ "Results")))
               &&
               (body (div1 "document"
-                          ((h1 ($ "Document results: ")) && (createColorBox documentResults documentReport) &&
-                          (h1 ($ "Page title results: ")) && titleReport &&
-                          (h1 ($ "Content results:") &&  contentReport))))))
+                          ((h1 ($ "Dokument resultat:")) && (createColorBox documentResults documentReport) &&
+                          (h1 ($ "Titel resultat:")) && titleReport &&
+                          (h1 ($ "Resultater for indhold:") &&  contentReport))))))
     end;
 
 val makeReport = flatten o makeReport';
