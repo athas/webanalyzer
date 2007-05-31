@@ -26,9 +26,11 @@ type documentresult = {titleResults : (results * sentenceresult list) option,
                        documentResults : results,
                        contentResults : textresult list};
 
-val getLix  : results -> real;
-val getFRE  : results -> real;
-val getFKGL : results -> real;
+val getLix           : results -> real;
+val getFRE           : results -> real;
+val getFKGL          : results -> real;
+(* Compound value based on LIX and FRE. *)
+val getBadnessFactor : results -> real;
 
 val titleResults : documentresult -> (results * sentenceresult list) option;
 val documentResults : documentresult -> results;

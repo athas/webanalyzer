@@ -163,39 +163,34 @@ fun filenameForAnalysis uri = String.map (fn #"/" => #"#"
                                            | char => char)
                                          ((serverFromURI uri) ^ (pathFromURI uri));
 
-fun badnessFactor analysis = TextAnalyser.getLix (TextAnalyser.documentResults analysis)
-
-fun writeIndex starturi outputDir outputFilename analysedPages =
-
+fun writeIndex starturi indexFilename outputFilename analysedPages =
     let open HTMLBuilder;
-        val sortedResults = ListMergeSort.sort (fn ((_, x), (_, y)) => badnessFactor y > badnessFactor x) analysedPages
+        val sortedResults = ListMergeSort.sort (fn ((_, x), (_, y)) => 
+                                                   getBadnessFactor (documentResults y) >
+                                                   getBadnessFactor (documentResults x))
+                                               analysedPages
         val std = td o $
         val alignr = "align=\"right\""
         val wseqFromURI = $ o stringFromURI
         val wseqFromReal = $ o Util.formatForOutput
         val wltr = tr o $$ o (List.map flatten)
         val wltable = table o $$ o (List.map flatten)
-in
-        writeTo (OS.Path.concat(outputDir, ((serverFromURI starturi) ^ ".html")))
+    in writeTo (indexFilename ^ ".html")
                (flatten
                     (html (&& ((head o title o $) ("Analyse af " ^ (stringFromURI starturi)),
                                (body (wltable ((wltr [(std "Sidesv&aelig;rhedsgrad"), (std "URI")]) ::
                                                (List.map
                                                     (fn (uri, result) =>
-                                                        let val style = ("style=\"color:white;background-color: "
+                                                        let val style = ("style=\"background-color: "
                                                                          ^ (TextAnalysisReporter.colorByResults
                                                                                 (TextAnalyser.documentResults result))
                                                                          ^ "\"");
                                                         in
-                                                        (wltr [(tda (style ^ alignr)  (wseqFromReal (badnessFactor result))),
-                                                               (tda style
-                                                                    (ahrefa  
-                                                                              ("file://" 
-                                                                          ^ (OS.Path.concat 
-                                                                                 (outputDir,
-                                                                                  urlencode (outputFilename uri))))
-                                                                         style
-                                                                         (wseqFromURI uri)))])
+                                                            (wltr [(tda (style ^ alignr)
+                                                                        (wseqFromReal (getBadnessFactor (documentResults result)))),
+                                                                   (tda style
+                                                                        (ahref (urlencode (outputFilename uri))
+                                                                               (wseqFromURI uri)))])
                                                         end)
                                                     sortedResults))))))))
     end;
@@ -215,7 +210,7 @@ fun mainProgram (arg :: rest) =
         val starturi = findStartURI uri
         val outputDir = OS.Path.concat(Config.outputDir (), serverFromURI uri)
         fun outputFilename uri = filenameForAnalysis uri
-        val analysedPages : (URI * TextAnalyser.documentresult) list ref = ref []
+        val analysedPages : (URI * documentresult) list ref = ref []
         fun analysisOutputter uri analysis =
             (writeTo (OS.Path.concat(outputDir, outputFilename uri)) 
                      (TextAnalysisReporter.makeReport analysis)
