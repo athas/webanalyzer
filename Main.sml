@@ -163,7 +163,7 @@ fun filenameForAnalysis uri = String.map (fn #"/" => #"#"
                                            | char => char)
                                          ((serverFromURI uri) ^ (pathFromURI uri));
 
-fun writeIndex starturi indexFilename outputFilename analysedPages =
+fun writeIndex starturi outputDir outputFilename analysedPages =
     let open HTMLBuilder;
         val sortedResults = ListMergeSort.sort (fn ((_, x), (_, y)) => 
                                                    getBadnessFactor (documentResults y) >
@@ -175,7 +175,7 @@ fun writeIndex starturi indexFilename outputFilename analysedPages =
         val wseqFromReal = $ o Util.formatForOutput
         val wltr = tr o $$ o (List.map flatten)
         val wltable = table o $$ o (List.map flatten)
-    in writeTo (indexFilename ^ ".html")
+    in writeTo (OS.Path.concat(outputDir, serverFromURI starturi ^ ".html"))
                (flatten
                     (html (&& ((head o title o $) ("Analyse af " ^ (stringFromURI starturi)),
                                (body (wltable ((wltr [(std "Sidesv&aelig;rhedsgrad"), (std "URI")]) ::
@@ -194,7 +194,7 @@ fun writeIndex starturi indexFilename outputFilename analysedPages =
                                                         end)
                                                     sortedResults))))))))
     end;
-    
+   
 fun mainProgram (arg :: rest) = 
     let 
         val uri = makeURI (NONE, arg)
