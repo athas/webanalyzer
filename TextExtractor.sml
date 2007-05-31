@@ -144,7 +144,8 @@ fun flatten' attr ((Text t) :: rest) = (FlatText ((textContents t), attr))
         (* Add all the newattrs to attr. *)
         val attr' = foldr (fn (x,b) => addWordAttribute x b) attr newattrs;
         val descriptionValues =
-            SOMEs (mapAttributes (fn (t, v) => if isDescription t
+            SOMEs (mapAttributes (fn (t, v) => if isDescription t andalso
+                                                  not (all Char.isSpace (explode v))
                                                then SOME v
                                                else NONE)
                                  tag);
