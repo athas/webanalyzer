@@ -8,11 +8,7 @@ type text = TextExtractor.text;
 datatype SentenceElementResult = WordResult of text * bool
                                | PunctuationResult of text;
 
-datatype AnalysisResult = Lix of real
-                        | FleshReadingEase of real
-                        | FleshKincaidGradeLevel of real;
-
-type results = AnalysisResult list;
+type results;
 
 (* Results of sentences *)
 type sentenceresult = results * (SentenceElementResult list);
@@ -26,9 +22,13 @@ datatype textresult = ParagraphResult of results *
                     | QuotationResult of results *
                                          textresult list;
 (* All results of a document *)
-type documentresult = {title_results : (results * sentenceresult list) option,
-                       document_results : results,
-                       content_results : textresult list};
+type documentresult = {titleResults : (results * sentenceresult list) option,
+                       documentResults : results,
+                       contentResults : textresult list};
+
+val getLix  : results -> real;
+val getFRE  : results -> real;
+val getFKGL : results -> real;
 
 val titleResults : documentresult -> (results * sentenceresult list) option;
 val documentResults : documentresult -> results;

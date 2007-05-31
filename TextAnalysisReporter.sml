@@ -12,34 +12,28 @@ fun div1 class content = mark1a "DIV"
                                 ("class=\"" ^ class ^ "\"")
                                 content
 
+val analyses = [("Lix", getLix, "http://da.wikipedia.org/wiki/Læsbarhedsindeks"),
+                ("Flesh Reading Ease", getFRE, ""),
+                ("FK Grade Level", getFKGL, "")];
 
-fun reportResult (Lix x) = span1 "lix" ($("Lix: " ^ (Util.formatForOutput x)))
-  | reportResult (FleshReadingEase x) =
-        span1 "fleshrl" ($("Flesh Reading Ease: " ^ (Util.formatForOutput x)))
-  | reportResult (FleshKincaidGradeLevel x) =
-        span1 "fkincaidgl" ($("FK Grade level: " ^ (Util.formatForOutput x)))
+fun reportAnalyse results (title, analyse, link) =
+              mark1 "SPAN" ($(title ^ ": " ^ (Util.formatForOutput
+                                                  (analyse results))))
 
-fun reportResults results = div1 "result" (prmap (fn x => (reportResult x) && br) results)
+fun reportResults results = div1 "result" (prmap (reportAnalyse results) analyses)
 
 fun reportSentenceElem (WordResult (text, correct)) = if correct
-                                                     then $ (htmlencode text)
-                                                     else span1 "spellerror"
+                                                      then $ (htmlencode text)
+                                                      else span1 "spellerror"
                                                                 ($ (htmlencode text))
   | reportSentenceElem (PunctuationResult text) = $ (htmlencode text);
-
-fun findLix results = List.find (fn Lix x => true
-                                  | _ => false)
-                                results;
 
 fun colorByResults results = 
     let
         val lowerlimit = 20.0
         val upperlimit = 80.0
         val multiplier = 100.0 / (upperlimit - lowerlimit)
-        val lix = Real.max(lowerlimit, Real.min(case findLix results of
-                                            SOME (Lix x) => x
-                                          | _ => 0.0,
-                                          upperlimit))
+        val lix = Real.max(lowerlimit, Real.min(getLix results, upperlimit))
         val greenlevel = trunc (2.55 * (100.0 - (lix - lowerlimit) * multiplier))
         val redlevel = trunc (2.55 * ((lix - lowerlimit) * multiplier))
         fun hexify number = StringCvt.padLeft #"0" 2 (Int.fmt StringCvt.HEX number)
@@ -114,21 +108,21 @@ val style = mark1 "STYLE"
                   ));
                                          
 
-fun makeReport' ({title_results,
-                  document_results,
-                  content_results} : documentresult) =
+fun makeReport' ({titleResults,
+                  documentResults,
+                  contentResults} : documentresult) =
     let
-        val contentReport = prmap (reportContent false) content_results;
-        val titleReport = case title_results of
+        val contentReport = prmap (reportContent false) contentResults;
+        val titleReport = case titleResults of
                               NONE => $("No title found.")
                             | SOME (results, sentences) => createColorBox results ((reportResults results) && (reportSentences sentences));
                                         
-        val documentReport = reportResults document_results;
+        val documentReport = reportResults documentResults;
     in
         (html (head (style && (title ($ "Results")))
               &&
               (body (div1 "document"
-                          ((h1 ($ "Document results: ")) && (createColorBox document_results documentReport) &&
+                          ((h1 ($ "Document results: ")) && (createColorBox documentResults documentReport) &&
                           (h1 ($ "Page title results: ")) && titleReport &&
                           (h1 ($ "Content results:") &&  contentReport))))))
     end;

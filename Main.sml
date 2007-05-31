@@ -159,11 +159,7 @@ fun filenameForAnalysis uri = String.map (fn #"/" => #"#"
                                            | char => char)
                                          ((serverFromURI uri) ^ (pathFromURI uri));
 
-fun badnessFactor analysis = case List.find (fn (TextAnalyser.Lix value) => true
-                                                         | _ => false)
-                                            (TextAnalyser.documentResults analysis)
-                              of SOME (TextAnalyser.Lix value) => value
-                               | _ => raise Fail "Impossible! No lix!";
+fun badnessFactor analysis = TextAnalyser.getLix (TextAnalyser.documentResults analysis)
 
 fun writeIndex starturi outputFilename analysedPages =
     let open HTMLBuilder;
@@ -217,6 +213,7 @@ fun mainProgram (arg :: rest) =
         handle OS.SysErr (_,_) => raise FatalError "Kunne ikke oprette output-mappe.";
         (* Useful when used interactively. *)
         visitedPages := [];
+        waitingVisits := [];
         visit analysisOutputter starturi 0;
         writeIndex starturi outputFilename (!analysedPages);
         print "Done!\n";

@@ -7,7 +7,6 @@ infix 0 member;
 
 type text = string
 
-
 datatype TextDirection = RightToLeft
                        | LeftToRight;
 
@@ -18,7 +17,6 @@ datatype WordAttribute = Language of text
                        | Acronym
                           (* Reverse word before spellchecking? *)
                        | Bidirectional of TextDirection;
-
 
 (* A text format where most of HTML's nesting is removed and
    paragraphs, headings and quotations is identified.

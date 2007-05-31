@@ -15,7 +15,9 @@ datatype AnalysisResult = Lix of real
                         | FleshReadingEase of real
                         | FleshKincaidGradeLevel of real;
 
-type results = AnalysisResult list;
+type results = {lix : real,
+                fleshReadingEase : real,
+                fleshKincaidGradeLevel : real};
 
 (* Results of sentences *)
 type sentenceresult = results * (SentenceElementResult list);
@@ -29,13 +31,18 @@ datatype textresult = ParagraphResult of results *
                     | QuotationResult of results *
                                          textresult list;
 (* All results of a document *)
-type documentresult = {title_results : (results * sentenceresult list) option,
-                       document_results : results,
-                       content_results : textresult list};
+type documentresult = {titleResults : (results * sentenceresult list) option,
+                       documentResults : results,
+                       contentResults : textresult list};
 
-fun titleResults (documentresult : documentresult) = #title_results documentresult;
-fun documentResults (documentresult : documentresult) = #document_results documentresult;
-fun contentResults (documentresult : documentresult) = #content_results documentresult;
+
+fun getLix (results : results) = #lix results;
+fun getFRE (results : results) = #fleshReadingEase results;
+fun getFKGL (results : results) = #fleshKincaidGradeLevel results;
+
+fun titleResults (documentresult : documentresult) = #titleResults documentresult;
+fun documentResults (documentresult : documentresult) = #documentResults documentresult;
+fun contentResults (documentresult : documentresult) = #contentResults documentresult;
 
 (* A record containing information about a document, paragraph or sentence.
     - paragraphs is 0 and sentences is 1 for a sentence
@@ -213,20 +220,10 @@ fun checkSpelling languageCode str =
     end;
 
 local
-    fun analyse' counts = 
-        let
-            val lix = if Config.lix ()
-                      then [Lix (lix counts)] 
-                      else []
-            val fre = if Config.fre ()
-                      then [FleshReadingEase (fleshReadingEase counts)] 
-                      else []
-            val fkgl = if Config.fkgl () 
-                       then [FleshKincaidGradeLevel (fleshKincaidGradeLevel counts)] 
-                       else []
-        in
-            lix @ fre @ fkgl
-        end;                           
+    fun analyse' counts = {lix = lix counts,
+                           fleshReadingEase = fleshReadingEase counts,
+                           fleshKincaidGradeLevel = fleshKincaidGradeLevel counts}
+
 
     fun language attributes = List.find (fn Sentencifier.Language x => true
                                           | _ => false)
@@ -297,9 +294,9 @@ fun analyse ({title, languagecode, content} : Sentencifier.document) =
                                end;
             
     in
-        {title_results = titleResults,
-         document_results = analyse' documentTotal,
-         content_results = results}
+        {titleResults = titleResults,
+         documentResults = analyse' documentTotal,
+         contentResults = results} : documentresult
     end;
 end;
 
