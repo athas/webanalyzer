@@ -72,13 +72,16 @@ fun spellCheckWord languageCode word =
              output (outstream, word ^ "\n");
              flushOut outstream;
              (case inputLine instream of
-                  SOME resultLine => if size resultLine > 1
-                                     then (inputLine instream;
-                                           size resultLine = 0 orelse
-                                           String.sub (resultLine, 0) = #"*" orelse
-                                           String.sub (resultLine, 0) = #"+" orelse
-                                           String.sub (resultLine, 0) = #"-")
-                                     else false
+                  SOME resultLine => let fun eatlines line =
+                                             if size line > 1
+                                             then eatlines (valOf (inputLine instream))
+                                             else () in
+                                         eatlines resultLine;
+                                         (size resultLine = 0 orelse
+                                          String.sub (resultLine, 0) = #"*" orelse
+                                          String.sub (resultLine, 0) = #"+" orelse
+                                          String.sub (resultLine, 0) = #"-") 
+                                     end
                 | NONE => false)
          end handle aspellNotFound => false;
 
