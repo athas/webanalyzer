@@ -28,15 +28,14 @@ fun evaluate _ (Text _) = false
   | evaluate (Not f) tag = evaluate f tag
   | evaluate None _ = false
 
-
-val standardFilter =  (Not (ByTagName "body"))
-                          And (Not (ByTagName "head"))
-                          And (Not (ByTagName "html"))
-                          And (ByTagName "script")
-                          And (ByTagName "style")
-                          And (ByTagName "colgroup")
-                          And (ByTagName "col");
-
+(* Filter *)
+val standardFilter =  (Not (ByTagName "body")) And (Not (ByTagName "head"))
+                                               And (Not (ByTagName "html"))
+                                               And (ByTagName "script")
+                                               And (ByTagName "style")
+                                               And (ByTagName "colgroup")
+                                               And (ByTagName "col");
+(* unit -> Filter *)
 fun currentFilter () = 
       let
           fun orIt (f1 :: fs) = f1 Or (orIt fs)
@@ -47,7 +46,6 @@ fun currentFilter () =
           
           standardFilter Or idFilters Or tagNameFs
       end;
-
 
 (* parsetree list -> parsetree list *)
 fun filterhtml tree = HTMLParser.filter (fn x => not (evaluate (currentFilter ()) x)) tree;

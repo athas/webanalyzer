@@ -139,11 +139,6 @@ fun countTextElement (Sentencifier.Paragraph (sentences, descs)) =
 
         val descsSum = sumCounts descsSums
 
-(*        val descriptionCounts : counts list = map (sumCounts o (map countSentence)) descs;
-        val descriptionCountResults : (counts * Sentencifier.sentence) list list =
-            ListPair.zip (descriptionCounts, descs);
-        val descriptionCountSum : counts = sumCounts descriptionCounts;*)
-
         val {words, longwords, vowels, sentences, ...} =
                 addCounts (sentencesCountSum, descsSum)
 
@@ -281,15 +276,29 @@ local
           (exists (exists sentenceHasWord) descs)
       | hasWord (Sentencifier.Heading sub) = exists hasWord sub
       | hasWord (Sentencifier.Quotation sub) = exists hasWord sub
+
+    (* results -> bool 
+       Returns true if the specified result-set is ok, and false
+       if they are to to wrong to be usable. *)
+    fun evaluateResult result = getFRE result >= ~50.0 andalso
+                                getFRE result < 200.0
+                                
+    fun badResultFilter (ParagraphResult (result, _, _)) = evaluateResult result
+      | badResultFilter (HeadingResult (result,_)) = evaluateResult result
+      | badResultFilter (QuotationResult (result,_)) = evaluateResult result
+
 in
 
 fun analyse ({title, languagecode, content} : Sentencifier.document) =
     let
-        val fcontent = filter hasWord content (* Remove paragraphs and more without words *)
-        val documentCounts = countDocumentContent fcontent;
+        (* Remove paragraphs, heading and quotations without words *)
+        val filtered_content = filter hasWord content
+        val documentCounts = countDocumentContent filtered_content;
         val documentTotal = sumCounts (map countOfTextCounts documentCounts);
         val results = map (analyseTextElement languagecode) documentCounts;
-
+        (* Remove all content with unusable results *)
+        val filtered_results = filter badResultFilter results
+        val _ = print ((Int.toString (length results)) ^ (Int.toString (length filtered_results)));
         val titleResults = case title of
                                NONE => NONE
                              | SOME (sentences) =>
@@ -305,7 +314,7 @@ fun analyse ({title, languagecode, content} : Sentencifier.document) =
     in
         {titleResults = titleResults,
          documentResults = analyse' documentTotal,
-         contentResults = results} : documentresult
+         contentResults = filtered_results} : documentresult
     end;
 end;
 
