@@ -16,7 +16,7 @@ sig
     val defaultLanguage: unit -> string;
 
     val setOutputDir: string -> unit;
-    val outputDir: unit -> string;
+    val outputDir: unit -> string option;
 
     val fractionalDigits : int;
 

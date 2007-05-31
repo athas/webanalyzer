@@ -2,7 +2,7 @@ structure Config :> Config =
 struct
 
 val UserAgentDefault = "webanalyzer";
-val DepthLimitDefault = 10;
+val DepthLimitDefault = 100;
 val CrawlDelayDefault = 0;
 val DefaultLanguageDefault = "da";
 val OutputDirDefault = "";
@@ -50,9 +50,11 @@ val DefaultLanguage = ref DefaultLanguageDefault;
 fun setDefaultLanguage language = DefaultLanguage := language;
 fun defaultLanguage _ = !DefaultLanguage;
 
-val OutputDir = ref OutputDirDefault;
-fun setOutputDir dir = OutputDir := dir;
-fun outputDir () = !OutputDir;
+val OutputDir : string option ref = ref NONE;
+fun setOutputDir dir = OutputDir := (if dir = ""
+                                     then NONE
+                                     else SOME dir);
+fun outputDir () : string option = !OutputDir;
 
 (* 'Lix' analyze text, set by commandline *)
 val Lix = ref LixDefault;
