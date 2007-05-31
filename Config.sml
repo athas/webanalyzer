@@ -5,6 +5,7 @@ val UserAgentDefault = "webanalyzer";
 val DepthLimitDefault = 10;
 val CrawlDelayDefault = 0;
 val DefaultLanguageDefault = "da";
+val OutputDirDefault = "";
 val LixDefault = true;
 val FreDefault = true;
 val FkglDefault = true;
@@ -49,6 +50,10 @@ val DefaultLanguage = ref DefaultLanguageDefault;
 fun setDefaultLanguage language = DefaultLanguage := language;
 fun defaultLanguage _ = !DefaultLanguage;
 
+val OutputDir = ref OutputDirDefault;
+fun setOutputDir dir = OutputDir := dir;
+fun outputDir () = !OutputDir;
+
 (* 'Lix' analyze text, set by commandline *)
 val Lix = ref LixDefault;
 fun lix () = !Lix;
@@ -75,6 +80,7 @@ fun setDefaults () =
      setCrawlDepthLimit DepthLimitDefault;
      setCrawlDelay CrawlDelayDefault;
      setDefaultLanguage DefaultLanguageDefault;
+     setOutputDir OutputDirDefault;
      Lix := LixDefault;
      Fkgl := FkglDefault;
      Fre := FreDefault;

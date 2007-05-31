@@ -222,14 +222,21 @@ fun mainProgram (arg :: rest) =
     end
   | mainProgram [] = raise FatalError "Ikke nok argumenter." before Help.printProgramArgs();
 
+(*
+ Arguments to be added.
+
+  - Argument to specify output dir
+
+*)
+
+
 fun parseArguments ("-d" :: limit :: rest) =
        (Config.setCrawlDepthLimit o valOf o Int.fromString) limit before
        parseArguments rest
-  | parseArguments ("-u" :: userAgent :: rest) = Config.setHttpUserAgent userAgent before
-                                                 parseArguments rest
+  | parseArguments ("-u" :: userAgent :: rest) = 
+       Config.setHttpUserAgent userAgent before parseArguments rest
   | parseArguments ("-c" :: delay :: rest ) =
-       (Config.setCrawlDelay o valOf o Int.fromString) delay before
-       parseArguments rest
+       (Config.setCrawlDelay o valOf o Int.fromString) delay before parseArguments rest
   | parseArguments ("-lix" :: rest) =
        Config.toggleLix () before parseArguments rest
   | parseArguments ("-fre" :: rest) = 
@@ -239,7 +246,9 @@ fun parseArguments ("-d" :: limit :: rest) =
   | parseArguments ("-spell" :: rest) =
        Config.toggleSpell () before parseArguments rest
   | parseArguments ("-l" :: language :: rest) =
-    Config.setDefaultLanguage (language) before parseArguments rest
+       Config.setDefaultLanguage language before parseArguments rest
+  | parseArguments ("-o" :: outputDir :: rest) = 
+       Config.setOutputDir outputDir before parseArguments rest
   | parseArguments (_ :: rest) = parseArguments rest
   | parseArguments [] = ();
 
