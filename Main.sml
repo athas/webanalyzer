@@ -135,7 +135,9 @@ in
          print (" at depth " ^ (Int.toString depth) ^ "\n");
          flushOut stdOut;
         let val parseTree = (getAndParse uri);
-            val linksFound = filterExitLinks uri (findLinks (SOME uri) parseTree);
+            val linksFound = if (depth+1) < (Config.crawlDepthLimit ())
+                             then filterExitLinks uri (findLinks (SOME uri) parseTree)
+                             else []
         in
             Util.wait (Config.crawlDelay ());
             visitedPages := uri :: !visitedPages;
