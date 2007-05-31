@@ -13,7 +13,9 @@ val parseTree = HTMLParser.parse   ( "<html>"
                                      ^     "<title>Foo</title>"
                                      ^   "</head>"
                                      ^   "<body>"
-                                     ^     "<a href=\"bas.html\">BAR</a>"
+                                     ^     "<a href=\"baz.html\">BAR</a>"
+                                     ^     "<br>"
+                                     ^     "Bar1"
                                      ^   "</body>"
                                      ^ "</html>" );
 
@@ -23,6 +25,8 @@ val (title, titleRest) = valOf (getTag (List.hd headRest));
 val titleData = valOf (getText (List.hd titleRest));
 val (body, bodyRest) = valOf (getTag (List.hd (List.tl htmlRest)));
 val (a, aRest) = valOf (getTag (List.hd bodyRest));
+val (br, _) = valOf (getTag (List.nth(bodyRest, 1)));
+val txt = valOf (getText (List.nth(bodyRest, 2)));
 val aData = valOf (getText (List.hd aRest));
 
 in
@@ -35,9 +39,11 @@ val testHTMLParser004 = HTMLParser.textContents titleData = "Foo";
 val testHTMLParser005 = HTMLParser.tagName body = "body";
 val testHTMLParser006 = HTMLParser.tagName a = "a";
 val testHTMLParser007 = HTMLParser.textContents aData = "BAR";
+val testHTMLParser008 = HTMLParser.tagName br = "br";
+val testHTMLParser009 = HTMLParser.textContents txt = "Bar1";
 
 (* Test that we pull out the correct attributes from tags.*)
-val testHTMLParserAttributes001 = HTMLParser.getAttribute "href" a = SOME "bas.html";
+val testHTMLParserAttributes001 = HTMLParser.getAttribute "href" a = SOME "baz.html";
 
 
 (* NEEDS ALSO TO TEST FOR SUPPORT OF <br> and <hr> maby <p> *)
