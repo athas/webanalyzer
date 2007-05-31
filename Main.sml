@@ -208,7 +208,10 @@ fun mainProgram (arg :: rest) =
                  | Error (Socket s) => ""
         val _ = Robots.initRobotsTxt robotstxt;
         val starturi = findStartURI uri
-        val outputDir = OS.Path.concat(Config.outputDir (), serverFromURI uri)
+        val outputDir = if isSome (Config.outputDir ()) 
+                        then valOf (Config.outputDir ())
+                        else serverFromURI uri
+
         fun outputFilename uri = filenameForAnalysis uri
         val analysedPages : (URI * documentresult) list ref = ref []
         fun analysisOutputter uri analysis =
