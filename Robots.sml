@@ -125,20 +125,9 @@ fun initRobotsTxt robotsStr =
 (* Scans the disallowedPaths, that was created at by initRobotsTxt
    and check that no elements prefixes the given path *)
 fun isPathAllowed path = 
-    let
-        (* This is used to remove ending slashes so if the path was a
-           dir then we can still match them even if one has a slah and
-           the other didn't *)
-        fun rmEndSlash str = 
-            if String.sub(str, (String.size str) - 1) = #"/" then
-                String.substring(str, 0, (String.size str) - 1)
-            else str
-    in
         not (List.exists (fn disallowedPath => 
-                             (String.isPrefix (rmEndSlash disallowedPath)  
-                                              (rmEndSlash path)))
+                             (String.isPrefix disallowedPath path))
                          (getDisallowedPaths()))
-    end;
 
 
 end;
