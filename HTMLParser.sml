@@ -66,7 +66,7 @@ fun parse string =
 (* findElement : string -> parsetree list -> parsetree option
 
    Finds the first subtree in lst with tag-name y.
-   Only searches the top level of given the parsetree list. *)
+   Uses depth-first search *)
 fun find y [] = NONE
   | find y ((x as (Tag (tag, subtrees))) :: xs) =
         if y = tagName tag
@@ -75,5 +75,15 @@ fun find y [] = NONE
                  SOME z => SOME z
                | NONE => find y xs)
   | find y (_ :: xs) = find y xs;
+
+(* filter : (parsetree -> bool) -> parsetree list -> parsetree list
+   Removes the subtrees that violates the predicate. *)
+fun filter p [] = []
+  | filter p ((x as (Text _)) :: xs) = x :: (filter p xs)
+  | filter p ((x as (Tag (tag, subtrees))) :: xs) =
+          if p x
+          then Tag (tag, filter p subtrees)
+               :: filter p xs
+          else filter p xs
 
 end

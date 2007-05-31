@@ -10,19 +10,16 @@ sig
     (* Returns a string containing the tagname *)
     val tagName : tag -> string;
 
-    (* 
-       Returns 'SOME attribute_data' or 'NONE' if the attribute exists in the given tag.
-       string = HTML tag attribute name in lowercase to find
-       tag = HTML tag from parsetree to search in 
-       
-     *)
+    (* Return the attribute of a tag (second argument) with the
+    desired name (first argument). The attribute name should be in
+    lowercase, as all attribute names are converted to lowercase
+    during lexing. *)
     val getAttribute : string -> tag -> string option;
     
-    (* 
-       Like List.map. It takes a function ex. (fn key, value => ....) on
-       a given tag and maps that function on all attributes and returns
-       the modifyed list 
-     *)
+    (* Map across all the attributes in a tag (second argument) in an
+    unspecified order. For each attribute, a function taking a tuple
+    as argument (first argument) will be called, and a list containing
+    the return values of these calls will be returned. *)
     val mapAttributes : (string * string -> 'b) -> tag -> 'b list;
 
     (* Converts types of text to a string *)
@@ -32,6 +29,9 @@ sig
     val parse : string -> parsetree list;
 
     (* Finds a subtree in the given parsetree list, given its tagname *)
-    val find : string -> parsetree list -> parsetree option
+    val find : string -> parsetree list -> parsetree option;
+
+    (* Removes the subtrees that violates the predicate. *)
+    val filter :  (parsetree -> bool) -> parsetree list -> parsetree list;
 
 end
