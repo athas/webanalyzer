@@ -123,7 +123,7 @@ fun countSentences sentences = let val counts = map countSentence sentences;
 
 fun countOfTextCounts (ParagraphCount (c, _, _)) = c
   | countOfTextCounts (HeadingCount (c, _)) = c
-  | countOfTextCounts (QuotationCount (c, _)) = c;
+  | countOfTextCounts (QuotationCount (c, _)) = zeroCount;
 
 
 fun countTextElement (Sentencifier.Paragraph (sentences, descs)) =
