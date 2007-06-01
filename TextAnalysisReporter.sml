@@ -41,12 +41,12 @@ fun reportSentenceElem (WordResult (text, correct)) = if correct
 
 fun colorByResults results = 
     let
-        val lowerlimit = 20.0
-        val upperlimit = 80.0
+        val lowerlimit = 0.0
+        val upperlimit = 100.0
         val multiplier = 100.0 / (upperlimit - lowerlimit)
-        val lix = Real.max(lowerlimit, Real.min(getBadnessFactor results, upperlimit))
-        val greenlevel = trunc (2.55 * (100.0 - (lix - lowerlimit) * multiplier))
-        val redlevel = trunc (2.55 * ((lix - lowerlimit) * multiplier))
+        val badnessFactor = Real.max(lowerlimit, Real.min(getBadnessFactor results, upperlimit))
+        val greenlevel = trunc (2.55 * (100.0 - (badnessFactor - lowerlimit) * multiplier))
+        val redlevel = trunc (2.55 * ((badnessFactor - lowerlimit) * multiplier))
         fun hexify number = StringCvt.padLeft #"0" 2 (Int.fmt StringCvt.HEX number)
     in
         "#" ^ hexify redlevel ^ hexify greenlevel ^ "00"
