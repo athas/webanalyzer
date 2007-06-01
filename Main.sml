@@ -181,7 +181,7 @@ fun writeIndex starturi outputDir outputFilename analysedPages =
                                (body (wltable ((wltr [(std "Sidesv&aelig;rhedsgrad"), (std "URI")]) ::
                                                (List.map
                                                     (fn (uri, result) =>
-                                                        let val style = ("style=\"background-color: "
+                                                        let val style = ("style=\"color:white; background-color: "
                                                                          ^ (TextAnalysisReporter.colorByResults
                                                                                 (TextAnalyser.documentResults result))
                                                                          ^ "\"");
@@ -189,7 +189,7 @@ fun writeIndex starturi outputDir outputFilename analysedPages =
                                                             (wltr [(tda (style ^ alignr)
                                                                         (wseqFromReal (getBadnessFactor (documentResults result)))),
                                                                    (tda style
-                                                                        (ahref (urlencode (outputFilename uri))
+                                                                        (ahrefa (urlencode (outputFilename uri)) style
                                                                                (wseqFromURI uri)))])
                                                         end)
                                                     sortedResults))))))))
