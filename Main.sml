@@ -268,7 +268,7 @@ fun parseArguments ("-d" :: limit :: rest) =
 element of the args list. Will create a file "[domain-name].html" in
 the current directory containing links to HTML-files inside a folder
 "[domain-name]" that contains the actual analysis results. *)
-fun main args = (Config.setDefaults; parseArguments args; mainProgram args)
+fun main (name, args) = (Config.setDefaults; parseArguments args; mainProgram args)
     handle FatalError reason => OS.Process.failure before print "Fejl: " before print reason before print "\n";
 
 (*val _ = mainWrapper (CommandLine.arguments ());*)
