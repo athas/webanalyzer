@@ -179,9 +179,7 @@ fun trimStr str =
 
 fun equal x y = x = y;
 
-fun equalICase x y = (strToLower x) = (strToLower y);
-
-
+val equalICase = (equal o strToLower o strToLower);
 
 (* x member y: ''a * ''a list -> bool
 
