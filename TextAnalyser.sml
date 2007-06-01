@@ -233,6 +233,7 @@ local
                                         attributes;
 
     fun spellCheckable attributes = List.exists (fn Sentencifier.Acronym => true
+                                                  | Sentencifier.Code => true
                                                   | _ => false)
                                         attributes;
 
