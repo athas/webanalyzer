@@ -234,6 +234,25 @@ input, men som i stedet for semantisk information har fået tilknyttet
 læsesværhedsgrad--data til de leksikale enheder (afsnit, sætninger og
 ord).
 
+Det er også i analysemodulet at ord stavekontrolleres baseret på deres
+angivne sprog, og får tilknyttet en værdi der angiver om de er korrekt
+stavet eller ej. Stavekontrollen fungerer ved at kommunikere ved en
+ekstern \texttt{aspell}-proces --- dette påvirker programmets
+stabilitet og ydelse i negativ retning, men er til gengæld væsentligt
+nemmere end at implementere et stavekontrolsystem i selve vores
+program. Kommunikationen med \texttt{aspell} foregår således at vi
+automatisk understøtter stavekontrol af alle sprog kendt af den lokale
+\texttt{aspell}-installation. Det følger heraf at vi ikke selv leverer
+\texttt{aspell} som en del af vores program, men derimod udnytter en
+eksisterende installation på systemet (og slår stavekontrol fra hvis
+en sådan ikke kan findes). Idet \texttt{aspell} er et relativt
+almindeligt program på GNU/Linux-systemer (vor målplatform) mener vi
+ikke at dette er et urimeligt krav at stille til brugerens system.
+
+Naturligvis er disse detaljer indkapslet og skjult for resten af
+programmet, som blot kalder en funktion (eller lignende) og får at
+vide om et givent ord er stavet korrekt eller ej.
+
 \section{Generer individuelle HTML--sider}
 Dette modul skal lave de HTML--filer der skal præsentere
 analyseresultaterne for brugeren. Givet analyse resultaterne for en
