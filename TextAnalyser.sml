@@ -298,7 +298,6 @@ fun analyse ({title, languagecode, content} : Sentencifier.document) =
         val results = map (analyseTextElement languagecode) documentCounts;
         (* Remove all content with unusable results *)
         val filtered_results = filter badResultFilter results
-        val _ = print ((Int.toString (length results)) ^ (Int.toString (length filtered_results)));
         val titleResults = case title of
                                NONE => NONE
                              | SOME (sentences) =>
