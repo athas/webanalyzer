@@ -34,4 +34,9 @@ sig
     (* Removes the subtrees that violates the predicate. *)
     val filter :  (parsetree -> bool) -> parsetree list -> parsetree list;
 
+    (* Map across HTML elements containing "links", calling the
+    provided function for each element and returning a list of the
+    return values. *)
+    val mapLinks : (tag -> 'a) -> parsetree list -> 'a list;
+
 end

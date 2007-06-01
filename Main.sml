@@ -10,33 +10,6 @@ open TextAnalyser;
 
 exception FatalError of string;
 
-fun mapLinks function htmlTree =
-    let
-        open HTMLParser;
-
-        (* takes a parsetree list and processes down it by calling
-           mapLinks' on the children of the tree *)
-        fun getChildren' (ret, []) = ret
-          | getChildren' (ret, (child :: rest)) =
-            getLinks' (ret, child) @ getChildren' ([], rest)
-            
-        (* Checks each parsetree for Tag's and if the tags are what
-           we looks for then it scans the tags known link attributes
-           and adds then return all these links. 
-           'AND' because these to functions are mutually recursive *)
-        and getLinks' (ret, Text t) = ret
-          | getLinks' (ret, Tag (tag, [])) = ret
-          | getLinks' (ret, Tag (tag, children)) =     
-            case tagName tag of
-                "a" => function tag :: getChildren' (ret, children)
-              | "frame" => function tag :: getChildren' (ret, children)
-              | "iframe" => function tag :: getChildren' (ret, children)
-              (* If none of the above cases just move on to next tag in the parsetree *)
-              | _ => getChildren' (ret, children)
-    in
-        getChildren'([], htmlTree)
-    end
-
 local
     structure URIMap = BinaryMapFn (struct type ord_key = URI; 
                                     fun compare (x, y) = String.compare(stringFromURI x, stringFromURI y);
