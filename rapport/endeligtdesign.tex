@@ -148,12 +148,13 @@ flere undergrene der angiver de HTML--elementer der findes mellem
 start-- og slut--tagget (nul undergrene kunne f.eks. være et
 ``\texttt{<br />}''--element), hvor hver undergren igen kan være enten
 en knude eller et blad. For eksempel vil HTML--strengen
-``\texttt{<strong>}\texttt{<em>}Vigtigt!\texttt{</em>} Parseren skal
-fungere\texttt{</strong>}'' bestå af en knude med to undergrene -
-endnu en knude og et blad indeholdende tekst. Undergrenene skal være
-ordnede i samme rækkefølge som deres optræden i det oprindelige
-HTML--dokument. En knude indeholder information om hvilket tag den
-repræsenterer, samt eventuelle HTML--attributes tagget har.
+``\textit{\texttt{<strong>} \texttt{<em>} Vigtigt! \texttt{</em>} 
+  Parseren skal fungere \texttt{</strong>}}'' bestå af en knude med to
+undergrene - endnu en knude og et blad indeholdende
+tekst. Undergrenene skal være ordnede i samme rækkefølge som deres
+optræden i det oprindelige HTML--dokument. En knude indeholder
+information om hvilket tag den repræsenterer, samt eventuelle
+HTML--attributes tagget har.
 
 \section{Find links}
 Dette modul skal ud fra HTML--parsetræet genereret af HTML--parseren,
