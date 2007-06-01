@@ -54,16 +54,17 @@ programmets moduler. Idet vores program ikke er interaktivt, men
 derimod kører som et {\em batch--job} med en fra starten af
 veldefineret afslutning (når alle sider er blevet analyseret), i
 modsætning til interaktive programmer, som kører indtil brugeren
-vælger at afslutte dem, er et dataflow--design velegnet, da vi kan være
-sikre på i hvilken rækkefølge indkommende data skal behandles. Da
+vælger at afslutte dem, er et dataflow--design velegnet, da vi kan
+være sikre på i hvilken rækkefølge indkommende data skal behandles. Da
 programmet ydermere er baseret på at foretage gradvist mere
 raffinerede bearbejdninger af det indkommende data er et
 dataflow--diagram velegnet til at vise hvorledes den i starten ``rå''
-og ustrukturerede data bliver destilleret ned til den endelige
-analyse. Programmeringssproget Standard ML er velegnet til en sådan
-opgave --- manglen på objektorienterede faciliteter vil ikke blive
-mærket, og programmets relativt korte og simple kørselstid betyder at
-manglen på mutérbar tilstand ikke vil være et problem.
+og ustrukturerede data bliver destilleret ned til den endelige analyse
+via gradvist mere finkornede processer. Programmeringssproget Standard
+ML er velegnet til en sådan opgave --- manglen på objektorienterede
+faciliteter vil ikke blive mærket, og programmets relativt korte og
+simple kørselstid betyder at manglen på mutérbar tilstand ikke vil
+være et problem.
 
 Her følger vores Dataflow diagram.
 \section{Dataflow diagram}
