@@ -185,6 +185,12 @@ cyklussen i diagrammet fungerer som programmets primære loop der
 henter og analyserer links, indtil der ikke kan findes flere indenfor
 den angivne maksimaldybde.
 
+\section{HTML--filtrering}
+For at gøre det muligt at angive at nogle dele af en hjemmeside ikke
+skal analyseres er det nødvendigt med et modul der kan frasortere de
+ønskede elementer fra siden. Ud fra brugerens indstillinger skal dette
+modul kunne frasortere dele af en HTML--side.
+
 \section{Tekstudtrækker}
 Når et HTML--dokument er parset kan vi udtage teksten, det er dette
 moduls job at læse parsetræet for et HTML--dokument og omdanne det til
@@ -279,15 +285,10 @@ programmet, og først når alle websitets undersider er blevet
 analyseret.
 
 \chapter{Redegørelse for designets kvaliteter}
-Ved at bruge dette design vil vi kunne indfri alle de uundværlige krav
-stillet i kravspecifikationen. Disse krav dækker, groft sagt, at
-indlæse og parse en HTML--side, finde links på den, og lave en simpel
-tekstanalyse (via LIX--algoritmen) på de sider der hentes. At dette er
-muligt med vores design fremgår åbenlyst af dataflow--figuren. Resten
-af vores krav er baseret på udvidelse af analysefaciliteterne,
-udelukkende centreret omkring de trin der kommer efter parsingen. De
-kan derfor alle baseres på den grundlæggende understøttelse af parsing
-og hentning (og behandlining) af HTML--filer.
+Ved at bruge dette design vil vi kunne indfri alle de krav der er
+stillet i kravspecifikationen. Derudover vil designet gøre det nemt at
+udvide programmet til at understøtte flere tekstformater og flere
+analysemetoder.
 
 Alle modulerne kan testes systematisk, måske med undtagelse af
 \textit{Hent side} modulet, da testen af dette modul kræver en
@@ -301,6 +302,5 @@ implementeres og testes for sig selv, uden at afhænge af en færdig
 implementation af de andre moduler. Hvert konceptuelt modul kan, om
 ikke fuldstændigt, så til en vis grad, implementeres som en SML
 modulsignatur og struktur.
-
 
 \end{document}

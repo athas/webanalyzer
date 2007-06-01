@@ -13,20 +13,22 @@ HentSide[label="Hent side"];
 FindLinks[label="Find Links"];
 afHTMLificering[label="Tekstudtrækker"];
 Tekstanalyse[label="Tekstanalyse"]
+HTMLFilter[label="HTML-filtrering"]
 
 Brugerinput -> "Domæne check, indlæsning af robots.txt"
             -> HentSide [label="URL"];
-Brugerinput -> Indstillinger [label="Brugerindstillinger"];
+Brugerinput -> Indstillinger [label="Brugerindstillinger", style=dashed];
 
-Indstillinger -> Tekstanalyse [label="Analyseindstillinger"];
-Indstillinger -> HentSide [label="Netværksindstillinger"];
+Indstillinger -> Tekstanalyse [label="Analyseindstillinger", style=dashed];
+Indstillinger -> HentSide [label="Netværksindstillinger", style=dashed];
+Indstillinger -> HTMLFilter [label="Filterindstillinger", style=dashed];
 
 FindLinks -> HentSide [label="Fundne URLs"]
 
 HentSide -> ParseSide [label="HTML"];
 
 
-ParseSide -> afHTMLificering [label="Parsetræ"];
+ParseSide -> HTMLFilter -> afHTMLificering [label="Parsetræ"];
 ParseSide -> FindLinks [label="Parsetræ"]
 
 afHTMLificering -> Tekstanalyse [label="Semantisk teksttræ"];
