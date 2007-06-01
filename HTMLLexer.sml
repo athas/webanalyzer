@@ -47,7 +47,7 @@ fun convertEntities string = implode (convertEntities' (explode string) [] []);
 end
 
 (* A function for extracting a string from a substring. *)
-val properString = implode o map Char.toLower o explode o Substring.string;
+val properString = strToLower o Substring.string;
 
 (* Use substrings for representing text. *)
 type tag = substring * (substring * substring) list;
