@@ -130,7 +130,7 @@ fun writeTo fileName str =
 
 (* Some usefull string functions *)
 
-fun strToLower str = implode(map Char.toLower (explode str));
+val strToLower = String.translate (str o Char.toLower);
 
 (* returns the index of the first occurence of chr in str *)
 fun getFirstIndexOf (chr, str) = 
