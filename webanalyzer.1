@@ -1,25 +1,60 @@
 .TH WEBANALYZER 1 "29 May 2007"
 
 .SH NAME
-webanalyzer \- analyze a webpage
+webanalyzer \- text analyze a webpage
 
 .SH SYNOPSIS
-\fBwebanalyzer\fP \fPurl\fP
+.B webanalyzer
+\fPurl\fP [options]
 
 .SH DESCRIPTION
 \fBwebanalyzer\fP is a program for analyzing the difficulty of text on
 web pages.
 
-.SS Options
+.SH Options
 .TP
-\fB\fIurl\fR
+.B \-url
 The URL to molest.
+.TP
+.B \-d num
+Overskriver dybden af links som crawleren skal følge.
+.TP
+.B \-u str
+Overskriver den User-agent som sendes med alle HTTP requests og som der identifiseres med i robots.txt filer
+.TP
+.B \-c num 
+Overskriver pausen mellem hver HTTP request.
+.TP
+.B \-lix
+Toggler hvorvidt der skal bruges lix analyse på teksten. 
+Læs mere: http://da.wikipedia.org/wiki/LIX
+.TP
+.B \-fre
+Toggler hvorvidt der skal bruges 'Flesch Reading Ease' analyse på teksten. 
+Læs mere: http://en.wikipedia.org/wiki/Flesch-Kincaid_Readability_Test
+.TP
+.B \-fkgl
+Toggler hvorvidt der skal bruges 'Flesch-Kincaid Grade Level' analyse på teksten. 
+Læs mere: http://en.wikipedia.org/wiki/Flesch-Kincaid_Readability_Test
+.TP
+.B \-l lang
+Sætter default sprog kode som bruges hvis der ikke er angivet noget andet i det analyserede dokument. 
+'lang' angives som ISO 639 sprog kode eventuelt efterfulgt af en bindestreg ('-') eller underscore ('_') og 2 bogstavs ISO 3166 lande kode.
+.TP
+.B \-o dir
+Sætter output mappen til en relativ eller absolut sti. Hvis der ikke er angivet nogen sti bliver der oprettet en mappe (navngivet efter det domæne der er angivet som url) i den mappe som programmet startes fra.
+.TP
+.B \-ignore-tag tag
+Angiver hvilket html tag der skal filtreres fra i analysen. Kan defineres flere gang hvis flere tags ønskes filtreret fra.
+.TP
+.B \-ignore-id id
+Angiver hvilket html tag med givet id der skal filtreres fra i analysen. Kan defineres flere gang hvis flere tags ønskes filtreret fra.
 
 .SH "SEE ALSO"
-uri(7), wget(1), sml(1)
+uri(7), wget(1), sml(1), aspell(1)
 
 .SH BUGS
-No.
+Theres is no known bug at this moment.
 
 .SH AUTHOR
 Troels Henriksen, Martin Dybdal, Jesper Reenberg

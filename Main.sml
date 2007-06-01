@@ -235,8 +235,6 @@ fun mainProgram (arg :: rest) =
 (*
  Arguments to be added.
 
-  - Argument to specify output dir
-
 *)
 
 

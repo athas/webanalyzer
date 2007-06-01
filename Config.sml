@@ -10,6 +10,8 @@ val LixDefault = true;
 val FreDefault = true;
 val FkglDefault = true;
 val SpellDefault = true;
+val TagNameFilters : string list ref = ref [];
+val IdFilters : string list ref = ref [];
 
 (* Location of the scandinavian vowels in ISO 8859-1 *)
 val scandinavianVowels = [chr 230, (* æ *)
@@ -75,6 +77,12 @@ val Spell = ref SpellDefault;
 fun spell () = !Spell
 fun toggleSpell () = Spell := not (spell());
 
+fun addTagNameFilter filter = TagNameFilters := filter :: !TagNameFilters;    
+fun tagNameFilters () = !TagNameFilters;
+
+fun addIdFilter filter = IdFilters := filter :: !IdFilters;    
+fun idFilters () = !IdFilters;
+
 fun setDefaults () = 
     (setHttpUserAgent UserAgentDefault;
      setCrawlDepthLimit DepthLimitDefault;
@@ -84,16 +92,8 @@ fun setDefaults () =
      Lix := LixDefault;
      Fkgl := FkglDefault;
      Fre := FreDefault;
-     Spell := SpellDefault);
-
-
-val TagNameFilters : string list ref = ref [];
-val IdFilters : string list ref = ref [];
-    
-fun addTagNameFilter filter = TagNameFilters := filter :: !TagNameFilters;    
-fun tagNameFilters () = !TagNameFilters;
-
-fun addIdFilter filter = IdFilters := filter :: !IdFilters;    
-fun idFilters () = !IdFilters;
+     Spell := SpellDefault;
+     TagNameFilters := [];
+     IdFilters := []);
 
 end;
