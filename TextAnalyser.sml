@@ -232,10 +232,10 @@ local
                                           | _ => false)
                                         attributes;
 
-    fun spellCheckable attributes = List.exists (fn Sentencifier.Acronym => true
-                                                  | Sentencifier.Code => true
-                                                  | _ => false)
-                                        attributes;
+    fun spellCheckable attributes = not (List.exists (fn Sentencifier.Acronym => true
+                                                       | Sentencifier.Code => true
+                                                       | _ => false)
+                                                     attributes);
 
     fun analyseSentenceElement doc_lang (Sentencifier.Word (t, attributes)) = 
         let
@@ -243,7 +243,7 @@ local
                            SOME (Sentencifier.Language x) => SOME x
                          | _ => doc_lang;
         in
-            WordResult (t, not (spellCheckable attributes) orelse 
+            WordResult (t, not (spellCheckable attributes) orelse
                            checkSpelling lang t)
         end
       | analyseSentenceElement _ (Sentencifier.Punctuation t) = PunctuationResult t;
