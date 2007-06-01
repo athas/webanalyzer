@@ -133,36 +133,6 @@ fun run line =
         else NONE
     end handle Fail _ => NONE;
        
-(* gethostbyname: string -> string
-
-   gethostbyname vil forsøge at finde ip-adresse ud fra
-   hostnavn. Først forsøges selve Socket-modulet; hvis 
-   dette fejler, kaldes ping, som findes både på unix og
-   win32, og resultatet trækkes ud herfra. Hvis alt går galt,
-   kastes en Fail-undtagelse. *)
-
-fun gethostbyname name = if numericAddress name then name else
-let fun trySocket () = 
-   (let val ip = NetHostDB.toString (#addr (SockUtil.resolveAddr {host = SockUtil.HostName name,
-                                                                  port = SOME (SockUtil.PortNumber 80)}));
-    in if ip = "0.0.0.0" orelse 
-           ip = "255.255.255.255" then NONE
-                                  else SOME ip
-    end) handle Fail _ => NONE
-    fun tryPing () = 
-    let val host = "host " ^ name
-        val status = run host
-        val output = case status of SOME str => str 
-                                  | NONE     => ""
-        val match = firstMatch ip_regexp output
-    in  SOME (valOf match) end 
-    handle _ => NONE
-in  case trySocket() of SOME ip => ip | NONE =>
-    ( case tryPing() of SOME ip => ip | NONE => 
-      raise Fail ("host lookup failed: " ^ name)
-    )
-end;
-
 fun assoc x list = case List.find (fn (y, _) => x = y) list
                     of SOME (_, value) => SOME (value)
                      | NONE => NONE;

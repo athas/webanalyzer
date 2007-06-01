@@ -12,9 +12,6 @@ sig type 'a sock = ('a, Socket.active Socket.stream) Socket.sock
 
     val run : string -> string option
 
-    (* Oversætter symbolsk navn på vært til ip-adresse *)
-    val gethostbyname: string -> string
-
     val assoc: ''a -> (''a * 'b) list -> 'b option
 
     val readFrom: string -> string
