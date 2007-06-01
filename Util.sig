@@ -8,7 +8,6 @@ sig type 'a sock = ('a, Socket.active Socket.stream) Socket.sock
 
     val readChar: 'a sock -> char
     val readLine: 'a sock -> string
-    val readEmptyLine: 'a sock -> string
 
     val run : string -> string option
 
