@@ -11,7 +11,7 @@ Indstillinger[label="Indstillinger"];
 ParseSide[label="HTML-parsing"];
 HentSide[label="Hent side"];
 FindLinks[label="Find Links"];
-afHTMLificering[label="Find tekst, afHTMLificering"];
+afHTMLificering[label="Tekstudtrækker"];
 Tekstanalyse[label="Tekstanalyse"]
 
 Brugerinput -> "Domæne check, indlæsning af robots.txt"
