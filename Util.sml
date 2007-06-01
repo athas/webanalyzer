@@ -87,31 +87,6 @@ in
     implode (read())
 end; 
 
-(* readEmptyLine: ('a, active stream) sock -> string
-   
-   læs indtil helt tom linie. *)
-fun readEmptyLine socket =
-let 
-    fun read () =
-    let val line = readLine socket
-        fun empty l = (l = "") orelse (l = "\n") orelse (l = "\r\n")
-    in  if empty line then line else line ^ read() 
-    end
-in  read() end; 
-
-
-(* SML/NJ regex's doesn't support {1,3} to tell the allowed nr. of repetitions  *)
-val ip_regexp = RegexMatcher.compileString ("[0-9][0-9]?[0-9]?" ^
-                                            "\\.[0-9][0-9]?[0-9]?" ^
-                                            "\\.[0-9][0-9]?[0-9]?" ^
-                                            "\\.[0-9][0-9]?[0-9]?");
-    
-(* numericAddress: string -> bool 
-
-   Returnerer sand, hvis strengen har form af en ip-adresse
-   fx. 255.0.0.1 *)
-fun numericAddress addr = isMatch ip_regexp addr
-
 (* run: string -> string option
 
    Kører program og returnerer SOME stdout, eller NONE
