@@ -277,15 +277,26 @@ local
       | hasWord (Sentencifier.Heading sub) = exists hasWord sub
       | hasWord (Sentencifier.Quotation sub) = exists hasWord sub
 
+    fun isMisspelled (WordResult (_, s)) = s
+      | isMisspelled _ = false
+
+    fun sentenceHasMisspelling (_, sentence) = exists isMisspelled sentence;
+
+    fun hasMisspelling  (ParagraphResult (_, sentences, descs)) =
+        (exists sentenceHasMisspelling sentences) orelse
+        (exists (exists sentenceHasMisspelling) descs)
+      | hasMisspelling (HeadingResult (_,sub)) = exists hasMisspelling sub
+      | hasMisspelling (QuotationResult (_,sub)) = exists hasMisspelling sub
+
     (* results -> bool 
        Returns true if the specified result-set is ok, and false
        if they are to to wrong to be usable. *)
-    fun evaluateResult result = getFRE result >= ~50.0 andalso
-                                getFRE result < 200.0
+    fun evaluateResult result = (getFRE result >= ~50.0 andalso
+                                getFRE result < 200.0)
                                 
-    fun badResultFilter (ParagraphResult (result, _, _)) = evaluateResult result
-      | badResultFilter (HeadingResult (result,_)) = evaluateResult result
-      | badResultFilter (QuotationResult (result,_)) = evaluateResult result
+    fun badResultFilter (x as ParagraphResult (result, _, _)) = evaluateResult result orelse hasMisspelling x
+      | badResultFilter (x as HeadingResult (result,_)) = evaluateResult result orelse hasMisspelling x
+      | badResultFilter (QuotationResult (result,_)) = true
 
 in
 
