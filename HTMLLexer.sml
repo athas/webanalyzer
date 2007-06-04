@@ -80,7 +80,7 @@ type attributeIndices = attributeNameIndices * attributeValueIndices;
 progress. *)
 datatype lexerstate = Done of (lexeme * lexerstate)
                     (* Boolean keeps track of whether non-whitespace has been seen. *)
-                    | LexingText of bool * runningIndices
+                    | LexingText of runningIndices
                     | LexingTag of runningIndices
                     | LexingEndTag of runningIndices
                     | LexingIgnorableTag of runningIndices
@@ -141,13 +141,11 @@ state is returned when a full lexeme has been lexed.
 fun lexer _ _ _ (New i) #"<" =
     LexingTag (i + 1, 0)
   | lexer _ _ _ (New i) char =
-    LexingText (not (Char.isSpace char), (i, 1))
-  | lexer _ _ makeText (LexingText (true, (i, c))) #"<" =
+    LexingText (i, 1)
+  | lexer _ _ makeText (LexingText (i, c)) #"<" =
     Done (makeText (i, c), LexingTag (i + c + 1, 1))
-  | lexer _ _ makeText (LexingText (false, (i, c))) #"<" =
-    LexingTag (i + c + 1, 1)
-  | lexer _ _ _ (LexingText (nonSpaceSeen, (i, c))) char =
-    LexingText (nonSpaceSeen orelse not (Char.isSpace char), (i, c + 1))
+  | lexer _ _ _ (LexingText (i, c)) char =
+    LexingText (i, c + 1)
   | lexer _ _ _ (LexingTag (i, c)) #"/" =
     LexingEndTag (i + 1, 1)
   | lexer _ _ _ (LexingTag (i, c)) #"!" =
