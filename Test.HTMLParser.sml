@@ -7,6 +7,7 @@ fun getTag (parseTree) = case parseTree of
 fun getText (parseTree) = case parseTree of 
                             HTMLParser.Text t => SOME t
                            | _ => NONE
+fun getHeadText (parsetree) = HTMLParser.textContents (valOf (getText (hd (#2 (valOf (getTag parsetree))))))
 
 val parseTree = HTMLParser.parse   ( "<html>"
                                      ^   "<head>"
@@ -16,6 +17,12 @@ val parseTree = HTMLParser.parse   ( "<html>"
                                      ^     "<a href=\"baz.html\">BAR</a>"
                                      ^     "<br>"
                                      ^     "Bar1"
+                                     ^     "<p>"
+                                     ^       "foo"
+                                     ^     "<p>"
+                                     ^       "bar"
+                                     ^     "<p>"
+                                     ^       "baz"
                                      ^   "</body>"
                                      ^ "</html>" );
 
@@ -28,6 +35,7 @@ val (a, aRest) = valOf (getTag (List.hd bodyRest));
 val (br, _) = valOf (getTag (List.nth(bodyRest, 1)));
 val txt = valOf (getText (List.nth(bodyRest, 2)));
 val aData = valOf (getText (List.hd aRest));
+val [p1, p2, p3] = (tl o tl o tl) bodyRest;
 
 in
 
@@ -45,8 +53,9 @@ val testHTMLParser009 = HTMLParser.textContents txt = "Bar1";
 (* Test that we pull out the correct attributes from tags.*)
 val testHTMLParserAttributes001 = HTMLParser.getAttribute "href" a = SOME "baz.html";
 
-
-(* NEEDS ALSO TO TEST FOR SUPPORT OF <br> and <hr> maby <p> *)
-
+(* Test that nasty implicitly closed block-tags work. Only tests P for now. *)
+val testBlockTag001 = getHeadText p1 = "foo";
+val testBlockTag002 = getHeadText p2 = "bar"; 
+val testBlockTag003 = getHeadText p3 = "baz";
 
 end;

@@ -2,6 +2,7 @@ structure HTMLParser :> HTMLParser =
 
 struct
 open HTMLLexer;
+open Util;
 
 type tag = HTMLLexer.tag;
 type text = HTMLLexer.text;
@@ -17,15 +18,22 @@ val textContents = HTMLLexer.textContents;
 
 fun tagAttributes tag = mapAttributes (fn tuple => tuple) tag;
 
+(* Blocktags, can be implicitly closed in HTML. *)
+val blockTags  = ["p", "div", "form", "table",
+                  "ul", "ol", "li", "dl", "di",
+                  "tr", "td","th",
+                  "tbody", "thead", "tfoot",
+                  "object", "embed", "img",
+                  "noscript"];
+
 (* Given a string containing fairly valid HTML, return a parse tree of
 the HTML. *)
-fun parsefun (StartTagLexeme tag :: lexemes) tagstack = 
-    let val tagName = (HTMLLexer.tagName tag);
-        (* Find a matching close tag, and consider all lexemes before
-        it as children of this tag.  *)
-        val (children, childrest) = findChildren tagName lexemes tagstack;
-        val (successors, succrest) = parsefun childrest tagstack;
-    in (Tag (tag, children) :: successors, succrest) end
+fun parsefun (StartTagLexeme tag :: lexemes) (stackhead :: tagstack) = 
+    if member (HTMLLexer.tagName tag, blockTags) andalso
+       member (stackhead, blockTags) then ([], StartTagLexeme tag :: lexemes)
+    else findChildrenAndSuccessors tag lexemes (stackhead :: tagstack)
+  | parsefun (StartTagLexeme tag :: lexemes) tagstack = 
+    findChildrenAndSuccessors tag lexemes tagstack
   | parsefun (EndTagLexeme tag :: lexemes) (headtag :: tagstack) =
     (* If this closing tag matches the most recently opened tag, that
     means we are done finding children for it. *)
@@ -48,10 +56,17 @@ fun parsefun (StartTagLexeme tag :: lexemes) tagstack =
     in (Text text :: successors, lexemerest) end
   | parsefun _ [] = ([], [])
   | parsefun [] _ = ([], [])
+and findChildrenAndSuccessors tag lexemes tagstack =
+    let val tagName = (HTMLLexer.tagName tag);
+        val (children, childrest) = findChildren tagName lexemes tagstack;
+        val (successors, succrest) = parsefun childrest tagstack;
+    in (Tag (tag, children) :: successors, succrest) end
 (* Some tags never have children, despite not necessarily being
 closed. Handle them here. *)
 and findChildren "br" lexemes tagstack = ([], lexemes)
   | findChildren "hr" lexemes tagstack = ([], lexemes)
+  | findChildren "object" lexemes tagstack = ([], lexemes)
+  | findChildren "embed" lexemes tagstack = ([], lexemes)
   | findChildren parentName lexemes tagstack = 
     parsefun lexemes (parentName :: tagstack);
 
