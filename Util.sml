@@ -90,8 +90,7 @@ end;
 (* run: string -> string option
 
    Kører program og returnerer SOME stdout, eller NONE
-   ved fejl. Mosml-modulet har en tilsvarende funktion,
-   som desværre ikke synes at virke under win32. 
+   ved fejl.
 
    ADD: At default this code didn't take advantage of the Unix module
    as it does in gethostbyname so we added so it calls the command
