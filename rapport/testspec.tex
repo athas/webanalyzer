@@ -662,9 +662,10 @@ browsere. Disse features vil således ikke blive testet.
 
 \section*{Krav 8.1: Indkodning}
 
-Programmet skal virke på hjemmesider indkodet med ASCII
-tegnsættet. Specielt skal det testes at de dansk tegn (æøåÆØÅ) virker
-korrekt.
+Undervejs i programmets udvikling skiftede vi SML-implementation fra
+Moscow ML til SML/NJ, hvilket også ændrede dette krav. I stedet for at
+understøtte Moscow ML's indbyggede indkodning understøtter vi explicit
+Latin-1.
 
 \chapter{Yderligere funktionstests}
 
