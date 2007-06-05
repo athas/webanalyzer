@@ -55,7 +55,6 @@ fun initRobotsTxt robotsStr =
 
         (* String list containing info from Robots.txt that is of interest for our webcrawler *)
         val useableAgents = filterOtherUserAgents userAgents;
-
         (* Takes a String list and removes all information except
            the paths that follows from a 'Disallow:' *)
         fun makeDisallowLst strLst =

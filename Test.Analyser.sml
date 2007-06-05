@@ -25,20 +25,14 @@ fun calcLix ({w, p, lw, ...}: wordCount) = (i2r w / i2r p) + ((i2r lw * i2r 100)
 fun calcFre ({w, p, v, ...} : wordCount) = 206.835 - 1.015*(i2r w / i2r p) - 84.6*(i2r v / i2r w);
 fun calcFkgl ({w, p, v, ...} : wordCount) = 0.39*(i2r w / i2r p) + 11.8*(i2r v / i2r w) - 15.59;
 
-fun getLix ({document_results, ...}: TextAnalyser.documentresult) =
-    List.hd (List.mapPartial 
-                 (fn x => case x of TextAnalyser.Lix y => SOME y | _ => NONE) 
-                 document_results);
+fun getLix ({documentResults, ...}: TextAnalyser.documentresult) =
+    TextAnalyser.getLix documentResults
 
-fun getFre ({document_results, ...}: TextAnalyser.documentresult) =
-    List.hd (List.mapPartial 
-                 (fn x => case x of TextAnalyser.FleshReadingEase y => SOME y | _ => NONE) 
-                 document_results);
+fun getFre ({documentResults, ...}: TextAnalyser.documentresult) =
+    TextAnalyser.getFRE documentResults
 
-fun getFkgl ({document_results, ...}: TextAnalyser.documentresult) =
-    List.hd (List.mapPartial 
-                 (fn x => case x of TextAnalyser.FleshKincaidGradeLevel y => SOME y | _ => NONE) 
-                 document_results);
+fun getFkgl ({documentResults, ...}: TextAnalyser.documentresult) = 
+    TextAnalyser.getFKGL documentResults
 
 val analyze = TextAnalyser.analyse o 
               Sentencifier.sentencify o 
