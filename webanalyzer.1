@@ -1,67 +1,102 @@
-.TH WEBANALYZER 1 "29 May 2007"
-
-.SH NAME
-webanalyzer \- text analyze a webpage
-
-.SH SYNOPSIS
-.B webanalyzer
-\fPurl\fP [options]
-
-.SH DESCRIPTION
-\fBwebanalyzer\fP is a program for analyzing the difficulty of text on
-web pages.
-
-.SH Options
-.TP
-.B \-url
-The URL to molest.
-.TP
-.B \-d num
+.Dd May 29, 2007
+.Dt WEBANALYZER 1
+.Sh NAME
+.Nm webanalyzer 
+.Nd text analyze a webpage
+.Sh SYNOPSIS
+.Nm webanalyzer
+.Ns Ar url
+.Op Fl d Ar depth
+.Op Fl u Ar agent
+.Op Fl c Ar delay
+.Op Fl lix
+.Op Fl fre
+.Op Fl fkgl
+.Op Fl l Ar language
+.Op Fl o Ar directory
+.Op Fl ignore-tag Ar html_tag
+.Op Fl ignote-id Ar id
+.Sh DESCRIPTION
+.Nm
+er et program til at analyserer sværhedsgraden af tekst på hjemmesider.
+Dette gøres ved brug af forskellige analyse metoder og stavekontrol:
+.Bl -diag -offset indent
+.It LIX 
+er en forkortelse for læsbarhedsindeks og er en skala for en given teksts læsbarhed. Dette opgøres som det gennemsnitlige antal ord pr. helsætning, plus procentdelen af lange ord, altså ord der er over seks bogstaver lange. LIX blev introduceret af den svenske pædagog C.H. Björnsson (1916-1988).
+Jo større lixtallet altså er, desto sværere regnes teksten for at være. 
+.Pp
+Følgende skala bruges til at vurdere uddata:
+.Bl -tag -width Ds -compact
+.It >55 
+Meget svær, faglitteratur på akademisk niveau, lovtekster.
+.It 45-54 
+Svær, f.eks. saglige bøger, populærvidenskabelige værker, akademiske udgivelser.
+.It 35-44 
+Middel, f.eks. dagblade og tidsskrifter.
+.It 25-34 
+Let for øvede læsere, f.eks. ugebladslitteratur og skønlitteratur for voksne.
+.It <24 
+Let tekst for alle læsere, f.eks. børnelitteratur.
+.El
+.Cm Kilde: 
+http://da.wikipedia.org/wiki/LIX
+.It FKGL
+asdas
+.El
+.Sh OPTIONS
+.Bl -tag -width Ds
+.It Ns Ar url
+Angivelse af den internetadresse (URL) som 
+.Nm
+skal analysere. Adressen skal præfikses med 
+.Dq http:// 
+og kan enten angive et websted fx. 
+.Dq http://google.dk
+eller en specifik side fx.
+.Dq http://sigkill.dk/index.html .
+.It Fl d Ar num
 Overskriver dybden af links som crawleren skal følge.
-.TP
-.B \-u str
+.It Fl u Ar str
 Overskriver den User-agent som sendes med alle HTTP requests og som der identifiseres med i robots.txt filer
-.TP
-.B \-c num 
+.It Fl c Ar num 
 Overskriver pausen mellem hver HTTP request.
-.TP
-.B \-lix
+.It Fl lix
 Toggler hvorvidt der skal bruges lix analyse på teksten. 
 Læs mere: http://da.wikipedia.org/wiki/LIX
-.TP
-.B \-fre
+.It Fl fre
 Toggler hvorvidt der skal bruges 'Flesch Reading Ease' analyse på teksten. 
 Læs mere: http://en.wikipedia.org/wiki/Flesch-Kincaid_Readability_Test
-.TP
-.B \-fkgl
-Toggler hvorvidt der skal bruges 'Flesch-Kincaid Grade Level' analyse på teksten. 
+.It Fl fkgl
+Toggler hvorvidt der skal bruges "Flesch-Kincaid Grade Level" analyse på teksten. 
 Læs mere: http://en.wikipedia.org/wiki/Flesch-Kincaid_Readability_Test
-.TP
-.B \-l lang
+.It Fl l Ar lang
 Sætter default sprog kode som bruges hvis der ikke er angivet noget andet i det analyserede dokument. 
 'lang' angives som ISO 639 sprog kode eventuelt efterfulgt af en bindestreg ('-') eller underscore ('_') og 2 bogstavs ISO 3166 lande kode.
-.TP
-.B \-o dir
-Sætter output mappen til en relativ eller absolut sti. Hvis der ikke er angivet nogen sti bliver der oprettet en mappe (navngivet efter det domæne der er angivet som url) i den mappe som programmet startes fra.
-.TP
-.B \-ignore-tag tag
+.It Fl o Ar dir
+Sætter output mappen til en relativ eller absolut sti. Hvis der ikke er angivet nogen sti bliver der oprettet en mappe (navngivet efter det domæne der er angivet som URL) i den mappe som programmet startes fra.
+.It Fl ignore-tag Ar tag
 Angiver hvilket html tag der skal filtreres fra i analysen. Kan defineres flere gang hvis flere tags ønskes filtreret fra.
-.TP
-.B \-ignore-id id
+.It Fl ignore-id Ar id
 Angiver hvilket html tag med givet id der skal filtreres fra i analysen. Kan defineres flere gang hvis flere tags ønskes filtreret fra.
-
-.SH "SEE ALSO"
-uri(7), wget(1), sml(1), aspell(1)
-
-.SH BUGS
-Theres is no known bug at this moment.
-
-.SH AUTHOR
-Troels Henriksen, Martin Dybdal, Jesper Reenberg
-
-.SH COPYING
-Copyright (c) 2007 Troels Henriksen, Martin Dybdal, Jesper Reenberg
-
+.El
+.Sh AUTHORS
+.An Troels Henriksen Aq athas@sigkill.dk
+.An Martin Dybdal Aq mail@mail.com
+.An Jesper Reenberg Aq reenberg@kampsax.dtu.dk
+.Sh BUGS
+Der er rapporteret yderst få tilfælde hvor 
+.Cm sml/nj 
+er gået ned, formentlig på grund af socket-modulet. Dette bygger vi på det grundlag af at der ikke forud for socket-modulet er stødt på fejl af denne art.
+.Sh EXAMPLES 
+MUHAHHAHAHAHAHHAAHHAHA
+.Sh SEE ALSO
+.Xr uri 7 , 
+.Xr wget 1 , 
+.Xr sml 1 , 
+.Xr aspell 1
+.Sh COPYING
+Copyright (c) 2007 Troels Henriksen, Martin Dybdal and Jesper Reenberg.
+.Pp
 Permission is granted to copy, distribute and/or modify this document
 under the terms of the GNU Free Documentation License, Version 1.1 or
 any later version published by the Free Software Foundation; with no
