@@ -1,5 +1,5 @@
 
-\documentclass[a4paper,oneside,article, titlepage]{memoir}
+\documentclass[a4paper,oneside,article]{memoir}
 \usepackage[T1]{fontenc}
 \usepackage{textcomp}
 \usepackage[utf8]{inputenc}
@@ -7,6 +7,7 @@
 \usepackage[garamond]{mathdesign}
 \usepackage{url}
 \usepackage{graphicx}
+\usepackage{pdflscape}
 
 \DeclareTextFontCommand{\textfleur}
 {\fontencoding{T1}\fontfamily{FleurCornerCaps}\selectfont}
@@ -132,7 +133,7 @@ Vi vil systematisk gennemgå de krav vi har stillet til vores programs
 funktionalitet og beskrive hvorledes hvert enkelt krav kan
 afprøves. Vi henviser til kravspecifikationen for en uddybning af
 kravene, følgende afsnit vil kun omhandle hvorledes de kan testes.
-
+\begin{landscape}
 \section{Krav 1: Analyse af et helt websted}
 
 Det testrelevante i dette krav er programmets evne til at følge links
@@ -163,6 +164,17 @@ af at HTML--output (krav 6) fungerer korrekt.
   skal testes at hver side kun analyseres én gang, og at programmet
   terminerer (ikke går i uendeligt loop).
 \end{itemize}
+
+\subsubsection{Resultater}
+\begin{tabular*}{\textwidth}{l|l|l|r} 
+\textbf{Inddata} &
+\textbf{Forventet resultat} &
+\textbf{Faktisk resultat} &
+\textbf{Konklusion} \\ \hline
+ind1 & forventet1 & faktisk1 & konklusion1 \\ \hline
+ind2 & forventet2 & faktisk2 & konklusion2
+\end{tabular*}
+\end{landscape}
 
 \subsection{Krav 1.1: Respekter robots.txt}
 
@@ -668,8 +680,8 @@ browsere. Disse features vil således ikke blive testet.
   tekst blev opfattet som børne-elementer af \texttt{br}-tagget, bruge
   engelsk stavekontrol for den følgende tekst, hvilket ville være
   ukorrekt.
-\item HTML-entities skal understøttes. Som minimum skal \texttt{&amp;}
-  (ampersand), \texttt{&gt;} (større-end tegn), \texttt{&lt;}
+\item HTML-entities skal understøttes. Som minimum skal \texttt{\&amp;}
+  (ampersand), \texttt{\&gt;} (større-end tegn), \texttt{\&lt;}
   (mindre-end tegn) og de relevantie entities for de danske
   specialtegn (både store og små bogstaver).
 \item En side indeholdende tekst i HTML-kommentarer skal analyseres,
