@@ -365,6 +365,16 @@ afprøvningen.
 \end{itemize}
 
 \subsection{Krav 2.5: Beregning af sidesværhedsgrad}
+Ved en blackbox test kan vi ikke teste at der bliver beregnet en
+sidesværhedsgrad, da vi har valgt ikke at vise sidesværhedsgraden på
+siden, men bare brugt den til at farve og sortere siderne efter. Vi
+kan i stedet teste at oversigtssiden bliver sorteret efter sidernes
+sværhedsgrad.
+
+\subsubsection{Ækvivalens-klasser}
+\begin{itemize}
+\item 
+\end{itemize}
 
 \section{Krav 3: Analyse baseret på HTML-tags}
 
@@ -596,7 +606,9 @@ Det er temmelig åbentlyst hvad der skal testes her: det skal være
 muligt at starte en analyse direkte fra en kommandolinje.
 
 \section{Krav 6: Resultater i HTML-format.}
-
+Det skal kontrolleres at resultaterne gemmes i HTML--format og at der
+genereres en index--side der giver adgang til alle de analyserede
+undersider.
 
 \section{Krav 7: Platform}
 
@@ -610,7 +622,59 @@ program er afhængigt af en
 SML/NJ\footnote{\url{http://www.smlnj.org/}}-installation (som ikke
 findes på DIKU's system) kan dette heller ikke uden videre gøres.
 
-\section*{Krav 8: Håndtering af HTML/XHTML}
+\section{Krav 8: Håndtering af HTML/XHTML}
+
+Det er ikke muligt at lave en dybdegående test af dette krav - mængden
+af ækvivalensklasser indenfor gyldige HTML-dokumenter ville indeholde
+alle permutationer af alle gyldige HTML-elementer, en ekstrem
+størrelse. Derfor nøjes vi med at afprøve repræsentative elementer
+(f.eks. minder \texttt{br} og \texttt{hr} en del om hinanden i brug),
+og ikke inddrage hvert eneste tag. Vi placerer så at sige vores
+ækvivalensklasser på element-niveau i stedet for på dokument-niveau.
+
+Det gør det yderligere svært at black-box-teste dette at der ikke kan
+trækkes en direkte linje fra HTML-parsetræet til programmets output,
+så de testede ækvivalensklasser er nogen særligt udvalgte som ville
+have en direkte effekt på analyseresultatet såfremt de ikke blev
+parset ordentligt.
+
+I vores krav nævner vi behovet for at tage særlig hånd om
+\texttt{style} og \texttt{script}-elementer, idet disse kan indeholde
+HTML-lignende tegn som kan forstyrre parseren. Under implementationen
+fandt vi frem til at det ville være en fejlallokering af resourcer at
+implementere dette, idet problemet var noget mere komplekst end først
+antaget, og at det desuden ikke er så stort i praksis, idet mange
+HTML-sider enten refererer til eksterne scripts og stylesheets, eller
+omgiver dem med HTML-kommentarer for ikke at forvirre ældre
+browsere. Disse features vil således ikke blive testet.
+
+\subsection{Ækvivalens-klasser}
+\begin{itemize}
+\item Almindelig indlejring af tags skal understøttes. Dette vil vi
+  teste ved at bekræfte at de i krav 3.3 beskrevne tags fungerer
+  selvom de er indlejret i \texttt{em}-tags.
+\item Håndteringen af den implicitte afslutning af
+  \textit{block}-tags. \footnote{I HTML er det tilladt ikke at
+    afslutte f.eks. \texttt{p}-tags, de opfattes i stedet som implicit
+    afsluttede næste gang der bliver åbnet et \textit{block}-tag} Den
+  repræsentative side fra denne ækvivalens-klasse indeholder implicit
+  afsluttede \texttt{p}-tags, og programmet skal korrekt håndtere
+  dette og opdele siden korrekt i afsnit, noget der direkte kan
+  aflæses fra output.
+\item Tags der ikke behøver afslutning, som \texttt{hr} og
+  \texttt{br}, skal håndteres korrekt. En side indeholdende teksten
+  \texttt{<br lang=en} i et ellers dansk afsnit ville, hvis
+  implementationen var ukorrekt og den på \texttt{br}-tagget følgende
+  tekst blev opfattet som børne-elementer af \texttt{br}-tagget, bruge
+  engelsk stavekontrol for den følgende tekst, hvilket ville være
+  ukorrekt.
+\item HTML-entities skal understøttes. Som minimum skal \texttt{&amp;}
+  (ampersand), \texttt{&gt;} (større-end tegn), \texttt{&lt;}
+  (mindre-end tegn) og de relevantie entities for de danske
+  specialtegn (både store og små bogstaver).
+\item En side indeholdende tekst i HTML-kommentarer skal analyseres,
+  og teksten i kommentarerne skal ikke fremgå af analysen.
+\end{itemize}
 
 \section{Krav 8.1: Indkodning}
 
@@ -633,6 +697,8 @@ Ved alle de forskellige konfigurationer man kan lave er der mulighed
 for at angive noget ugyldigt, f.eks. ved at indtaste tegn hvor der
 forventes et tal. Denne test skal afdække om der gives fyldestgørene
 fejlmeddelelser i disse tilfælde.
+
+
 
 \subsubsection{Baggrund}
 Der er ikke stillet krav om dette, men (...)
