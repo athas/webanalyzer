@@ -178,7 +178,7 @@ fun trimStr str =
 
 fun equal x y = x = y;
 
-val equalICase = (equal o strToLower o strToLower);
+fun equalICase x y = equal (strToLower x) (strToLower y)
 
 (* x member y: ''a * ''a list -> bool
 
@@ -277,6 +277,22 @@ fun hueToHEX x =
         val rgb = hueToRGB x
     in
         "#" ^ hexify(#r rgb) ^ hexify (#g rgb) ^ hexify (#b rgb)
+    end;
+
+fun printLst lst = 
+    let
+        fun printLst' index = 
+            if index < (List.length lst) then
+                (print (List.nth(lst, index));
+                 printLst' (index+1)
+                 )
+            
+            else ()
+    in
+        if (List.length lst) > 0 then
+            printLst' 0
+        else
+            ()
     end;
     
 end;

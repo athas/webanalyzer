@@ -52,4 +52,5 @@ sig type 'a sock = ('a, Socket.active Socket.stream) Socket.sock
     val hueToRGB : int -> rgb;
     val hexify : int -> string;
     val hueToHEX : int -> string;
+    val printLst : string list -> unit;
 end;

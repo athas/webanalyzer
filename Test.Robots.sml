@@ -2,7 +2,6 @@
 (* Initialize Robots test *)
 Robots.initRobotsTxt (Util.readFrom "robots.txt");
 
-
 (* Test that we aren't disallowed from places that other User-agents
    are *)
 
