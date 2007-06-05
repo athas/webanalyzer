@@ -4,8 +4,11 @@ sig
 type text = TextExtractor.text;
 
 (* Result of a single word,
-   the boolean indicates whether the word is spelled correctly or not. *)
-datatype SentenceElementResult = WordResult of text * bool
+   the first boolean indicates whether the word is spelled correctly
+   or not.
+   the second boolean indicates whether the word is a repetition of
+   the preceding word. *)
+datatype SentenceElementResult = WordResult of text * bool * bool
                                | PunctuationResult of text;
 
 type results;

@@ -7,8 +7,11 @@ infix 0 member;
 type text = Sentencifier.text;
 
 (* Result of a single word,
-   the boolean indicates whether the word is spelled correctly or not. *)
-datatype SentenceElementResult = WordResult of text * bool
+   the first boolean indicates whether the word is spelled correctly
+   or not.
+   the second boolean indicates whether the word is a repetition of
+   the preceding word. *)
+datatype SentenceElementResult = WordResult of text * bool * bool
                                | PunctuationResult of text;
 
 datatype AnalysisResult = Lix of real
@@ -39,7 +42,8 @@ type documentresult = {titleResults : (results * sentenceresult list) option,
 fun getLix (results : results) = #lix results;
 fun getFRE (results : results) = #fleshReadingEase results;
 fun getFKGL (results : results) = #fleshKincaidGradeLevel results;
-fun getBadnessFactor (results : results) = (getLix results + (100.0 - (getFRE results / 3.0))) / 3.0;
+fun getBadnessFactor (results : results) =
+            (getLix results + (100.0 - (getFRE results / 3.0))) / 3.0;
 
 fun titleResults (documentresult : documentresult) = #titleResults documentresult;
 fun documentResults (documentresult : documentresult) = #documentResults documentresult;
@@ -227,31 +231,61 @@ local
                                           | _ => false)
                                         attributes;
 
-    fun spellCheckable attributes = not (List.exists (fn Sentencifier.Acronym => true
-                                                       | Sentencifier.Code => true
-                                                       | _ => false)
-                                                     attributes);
+    fun spellCheckable attributes = not (List.exists
+                                             (fn Sentencifier.Acronym => true
+                                               | Sentencifier.Code => true
+                                               | _ => false)
+                                             attributes);
 
-    fun analyseSentenceElement doc_lang (Sentencifier.Word (t, attributes)) = 
+    fun analyseSentenceElement doc_lang
+                               (SOME (Sentencifier.Word (prev, _)))
+                               (Sentencifier.Word (current, attrs)) = 
         let
-            val lang = case language attributes of
+            val lang = case language attrs of
+                           SOME (Sentencifier.Language x) => SOME x
+                         | _ => doc_lang;
+
+            val isRepetition = Util.strToLower prev = Util.strToLower current
+        in
+            WordResult (current,
+                        not (spellCheckable attrs) orelse
+                        checkSpelling lang current,
+                        isRepetition)
+        end
+      | analyseSentenceElement _ _ (Sentencifier.Punctuation w) = PunctuationResult w
+      | analyseSentenceElement doc_lang _ (Sentencifier.Word(w, attrs)) =
+        let
+            val lang = case language attrs of
                            SOME (Sentencifier.Language x) => SOME x
                          | _ => doc_lang;
         in
-            WordResult (t, not (spellCheckable attributes) orelse
-                           checkSpelling lang t)
+            WordResult (w,
+                        not (spellCheckable attrs) orelse
+                        checkSpelling lang w,
+                        false)
         end
-      | analyseSentenceElement _ (Sentencifier.Punctuation t) = PunctuationResult t;
 
-    fun analyseSentence doc_lang (counts, sentence) =
+    fun analyseSentenceElem' doc_lang (sElem as (Sentencifier.Word _), (prev, accumu)) = 
+            (SOME sElem, analyseSentenceElement doc_lang prev sElem :: accumu)
+      | analyseSentenceElem' doc_lang (sElem, (prev, accumu)) = 
+            (prev, analyseSentenceElement doc_lang prev sElem :: accumu)
+
+    fun analyseSentence'' doc_lang sentence = rev (#2 (foldl
+                                                           (analyseSentenceElem' doc_lang)
+                                                           (NONE, [])
+                                                           sentence))
+
+    fun analyseSentence doc_lang (counts, sentence as (x :: xs)) =
             (analyse' counts,
-             map (analyseSentenceElement doc_lang) sentence);
+             analyseSentence'' doc_lang sentence) : sentenceresult
+      | analyseSentence _ (counts, []) = (analyse' counts, [])
 
     fun resultOfTextResult (ParagraphResult (r, _, _)) = r
       | resultOfTextResult (HeadingResult (r, _)) = r
       | resultOfTextResult (QuotationResult (r, _)) = r;
 
-    fun analyseTextElement doc_lang (ParagraphCount (count, sentenceCounts, descsCounts)) =
+    fun analyseTextElement doc_lang
+                           (ParagraphCount (count, sentenceCounts, descsCounts)) =
         let
             val total = analyse' count;
             val sentenceResults = map (analyseSentence doc_lang) sentenceCounts;
@@ -277,7 +311,7 @@ local
       | hasWord (Sentencifier.Heading sub) = exists hasWord sub
       | hasWord (Sentencifier.Quotation sub) = exists hasWord sub
 
-    fun isMisspelled (WordResult (_, s)) = s
+    fun isMisspelled (WordResult (_, s, _)) = s
       | isMisspelled _ = false
 
     fun sentenceHasMisspelling (_, sentence) = exists isMisspelled sentence;

@@ -33,10 +33,12 @@ fun reportAnalyse results (title, analyse, link) =
 
 fun reportResults results = div1 "result" (prmap (reportAnalyse results) (analyses ()))
 
-fun reportSentenceElem (WordResult (text, correct)) = if correct
-                                                      then $ (htmlencode text)
-                                                      else span1 "spellerror"
-                                                                ($ (htmlencode text))
+fun reportSentenceElem (WordResult (text, correct, repetition)) =
+            if repetition
+            then span1 "repetition" ($ (htmlencode text))
+            else if correct
+            then $ (htmlencode text)
+            else span1 "spellerror" ($ (htmlencode text))
   | reportSentenceElem (PunctuationResult text) = $ (htmlencode text);
 
 fun colorByResults results = 
@@ -115,6 +117,7 @@ val style = mark1 "STYLE"
                       ^ ".fkincaidgl { background: yellow; }" *)
                       ^ ".document {max-width: 750px;}"
                       ^ ".spellerror {border:2px solid blue;}"
+                      ^ ".repetition {border:2px solid orange;}"
                    (* ^ ".result {margin-bottom: 10px; }" *)
                   ));
                                          
