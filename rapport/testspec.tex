@@ -512,6 +512,66 @@ for at lette afprøvningen.
 
 \section*{Krav 4: Konfiguration af analyse}
 
+Dette krav har vi af simplicitetshensyn slækket lidt på - når analyser
+``slås fra'' udføres de stadigvæk, og benyttes stadigvæk i beregningen
+af sidesværhedsgraden, men de vises ikke i programmets output.
+
+Kravet kræver også at man kan undtage elementer fra analyse baseret på
+deres \texttt{id} og \texttt{class}-attributter. I vores
+implementation endte vi med kun at understøtte frafiltrering baseret
+på \texttt{id}-attributten, men til gengæld også understøtte
+frafiltrering baseret på tagnavnet.
+
+\subsection{Ækvivalens-klasser}
+\begin{itemize}
+\item Hvis visning af LIX-tal slås fra skal der ikke fremgå LIX-tal af
+  programmets output.
+\item Hvis visning af FKGL-tal slås fra skal der ikke fremgå FKGL-tal
+  af programmets output.
+\item Hvis visning af FRE-tal slås fra skal der ikke fremgå FRE-tal
+  af programmets output.
+\item Hvis stavekontrol slås fra, og en side der ikke indeholder
+  stavefejl analyseres, skal ingen ord markeres som forkert stavede.
+\item Hvis stavekontrol slås fra, og en side indeholdende stavefejl
+  analyseres, skal ingen ord markeres som forkert stavede.
+\item Hvis markering af gentagne slås fra, og en side der ikke
+  indeholder gentagne ord analyseres, skal ingen ord markeres som
+  gentagne.
+\item Hvis markering af gentagne slås fra, og en side der indeholder
+  gentagne ord analyseres, skal ingen ord markeres som gentagne.
+\item Hvis det angives at elementer med et specifikt \texttt{id} ikke
+  skal medtages i analysen, skal elementer med dette \texttt{id} ikke
+  figurere i programmets output, og ikke medtages i beregning af
+  sidesværhedsgraden for en side. Sidesværhedsgraden skal altså ikke
+  blive påvirket af at disse elementer fjernes.
+\item Hvis det angives at elementer med et af flere angivne
+  \texttt{id}-værdier ikke skal medtages i analysen, skal elementer
+  med en af disse \texttt{id}-værdier ikke figurere i programmets
+  output, og ikke medtages i beregning af sidesværhedsgraden for en
+  side. Sidesværhedsgraden skal altså ikke blive påvirket af at disse
+  elementer fjernes. Dette tester at man kan frafiltrere baseret på
+  flere forskellige \texttt{id}-værdier i én analyse.
+\item Hvis det angives at elementer med et specifikt \texttt{id} ikke
+  skal medtages i analysen, skal elementer der ikke har det angivne
+  \texttt{id} figurere i programmets output, og medtages i beregning
+  af sidesværhedsgraden for en side.
+\item Hvis det angives at elementer med et specifikt tag ikke skal
+  medtages i analysen, skal elementer med dette tag ikke figurere i
+  programmets output, og ikke medtages i beregning af
+  sidesværhedsgraden for en side. Sidesværhedsgraden skal altså ikke
+  blive påvirket af at disse elementer fjernes.
+\item Hvis det angives at elementer med et blandt flere angivne tags
+  ikke skal medtages i analysen, skal elementer med et af disse tags
+  ikke figurere i programmets output, og ikke medtages i beregning af
+  sidesværhedsgraden for en side. Sidesværhedsgraden skal altså ikke
+  blive påvirket af at disse elementer fjernes. Dette tester at det er
+  muligt at frafiltrere mere end én type tag af gangen.
+\item Hvis det angives at elementer med et specifikt tag ikke skal
+  medtages i analysen, skal elementer der har et andet tag figurere i
+  programmets output, og medtages i beregning af sidesværhedsgraden
+  for en side.
+\end{itemize}
+
 \section*{Krav 5: Kommandobaseret interface}
 
 \section*{Krav 6: Resultater i HTML-format.}
