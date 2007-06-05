@@ -81,19 +81,28 @@
  
 
 \chapter{Strategi}
-Vores test er delt i to. Den første del --- funktionstesten --- skal
-afgøre om programmet kan alle de ting vi påstår det kan og at alle
-disse funktioner virker korrekt. Det optimale ville være hvis denne
-afprøvning kunne automatiseres, men i de fleste af testene vil det,
-grundet vores output i form af menneske-orienteret HTML, ikke kunne
-lade sig gøre uden at bruge mere tid på det end vi har
-tilgængelig. Hvis man eksempelvis vil tjekke om (...)  For næsten alle
+Vores test er delt i tre dele, hvor de to første omhandler
+funktionstests og den sidste omhandler brugertests. Den første del ---
+funktionstest af vores krav --- skal afgøre om programmet opfylder de
+krav vi har stillet i kravspecifikationen og at alle disse funktioner
+virker korrekt. Hvor kravene ikke er opfyldt (måske fordi det er
+blevet besluttet at de ikke var værd at implementere) vil dette blive
+noteret. Det optimale ville være hvis denne afprøvning kunne
+automatiseres, men i de fleste af testene vil det, grundet vores
+output i form af menneske-orienteret HTML, ikke kunne lade sig gøre
+uden at bruge mere tid på det end vi har tilgængelig. Hvis man
+eksempelvis vil automatisere afprøvning af LIX-tal implementationen
+ville det teoretisk kunne gøres ved at analysere programmets
+HTML-output (evt. via et XML-querysprog), men da outputformatet ikke
+er fast defineret vil det for det første være en yderst skrøbelig
+blackbox-test, og for det andet være uhyre besværligt. For næsten alle
 funktionstestene vil der være en test af ugyldig inddata, for at se om
 programmet giver en brugbar fejlmeddelelse. Vi har dog valgt at samle
-dette under et afsnit.
+dette under et afsnit. Den anden del af testen omhandler
+funktionstests som er sværere at knytte direkte til et krav, men som
+stadigvæk er vigtige for programmets korrekte virkemåde.
 
-
-Den anden del af testen --- brugertesten --- skal bruges til at finde
+Den tredje del af testen --- brugertesten --- skal bruges til at finde
 ud af om brugervejledningen er forståelig og om brugeren kan finde ud
 af at bruge programmet ved at læse brugermanualen. Derudover skal
 testen bruges til at finde ud af om resultatsiderne er vanskelige at
