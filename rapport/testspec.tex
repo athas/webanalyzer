@@ -140,7 +140,36 @@ af at HTML-output (krav 6) fungerer korrekt.
 \section*{Krav 1.1: Respekter robots.txt}
 
 Programmet skal tjekke det angivne websteds robots.txt og sørge for at
-websider angivet i filen ikke bliver hentet og analyseret.
+sider angivet i filen ikke bliver hentet og analyseret. Det giver kun
+mening at teste dette krav såfremt det er sikret at krav 1 (og krav 6)
+virker korrekt. Undersøgelsen af hvilke sider der ender med at blive
+analyseret kan foregå på samme måde som i krav 1.
+
+\subsection{Ækvivalens-klasser}
+\begin{itemize}
+\item Et website, der ikke indeholder en robots.txt-fil, og hvor alle
+  tilgængelige sider således skal analyseres.
+\item Et website hvor programmet har forbud mod at besøge nogen sider,
+  og hvor ingen sider således kan analyseres (bør give en
+  fejlmeddelelse).
+\item Et website hvor programmet har forbud mod at besøge en side, der
+  har eksklusive links til undersider på det analyserede website. Den
+  forbudte side, og de sider som kun den forbudte sider linker til,
+  skal således ikke analyseres (og faktisk heller ikke besøges, men
+  dette kan ikke testes via black-box-testing med mindre man
+  analyserer serverlogs)
+\item Et website hvor programmet har forbud mod at besøge en side, der
+  har ikke-eksklusive links til undersider på det analyserede
+  website. Den forbudte side skal således ikke analyseres, men de
+  sider den linker til skal besøges såfremt der er links ti l dem fra
+  andre, ikke-forbudte sider.
+\end{itemize}
+
+I de angivne tests adskilles der ikke mellem forbud hvor alle
+web-crawlere har forbud mod at besøge en side, og de, hvor vores
+program specifikt har forbud. Vi opfatter denne distinktion som så
+teknisk at den i højere grad hører hjemme i whitebox unit-tests, især
+fordi denne distinktion ikke er nævnt i krav 1.1.
 
 \section*{Krav 1.2: Dybde af crawling}
 Hvis man angiver en maksimal dybde af analysen, så skal programmet
