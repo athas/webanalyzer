@@ -133,9 +133,10 @@ in
     else continue ()
 end;
 
-fun filenameForAnalysis uri = String.map (fn #"/" => #"#"
+fun filenameForAnalysis uri = (String.map (fn #"/" => #"#"
                                            | char => char)
-                                         ((serverFromURI uri) ^ (pathFromURI uri));
+                                         ((serverFromURI uri) ^ (pathFromURI uri)))
+                              ^ ".html";
 
 fun writeIndex starturi outputDir outputFilename analysedPages =
     let open HTMLBuilder;
@@ -143,30 +144,28 @@ fun writeIndex starturi outputDir outputFilename analysedPages =
                                                    getBadnessFactor (documentResults y) >
                                                    getBadnessFactor (documentResults x))
                                                analysedPages
+        infix &&;
         val std = td o $
-        val alignr = "align=\"right\""
         val wseqFromURI = $ o stringFromURI
-        val wseqFromReal = $ o Util.formatForOutput
-        val wltr = tr o $$ o (List.map flatten)
         val wltable = table o $$ o (List.map flatten)
-    in writeTo (OS.Path.concat(outputDir, serverFromURI starturi ^ ".html"))
+        val pagetitle = "Analyse af " ^ (stringFromURI starturi)
+    in writeTo (OS.Path.concat(outputDir, "index_"  ^ (serverFromURI starturi) ^ ".html"))
                (flatten
-                    (html (&& ((head o title o $) ("Analyse af " ^ (stringFromURI starturi)),
-                               (body (wltable ((wltr [(std "Sidesv&aelig;rhedsgrad"), (std "URI")]) ::
-                                               (List.map
-                                                    (fn (uri, result) =>
-                                                        let val style = ("style=\"color:white; background-color: "
-                                                                         ^ (TextAnalysisReporter.colorByResults
-                                                                                (TextAnalyser.documentResults result))
-                                                                         ^ "\"");
-                                                        in
-                                                            (wltr [(tda (style ^ alignr)
-                                                                        (wseqFromReal (getBadnessFactor (documentResults result)))),
-                                                                   (tda style
-                                                                        (ahrefa (urlencode (outputFilename uri)) style
-                                                                               (wseqFromURI uri)))])
-                                                        end)
-                                                    sortedResults))))))))
+                    (html ((head o title o $) pagetitle) &&
+                          (body ((h1 ($ pagetitle)) &&
+                                      (h3 ($ "V&aelig;lg en underside for detaljer")) &&
+                                      (wltable ((List.map
+                                                     (fn (uri, result) =>
+                                                         let val style = ("style=\"color:white; background-color: "
+                                                                          ^ (TextAnalysisReporter.colorByResults
+                                                                                 (TextAnalyser.documentResults result))
+                                                                          ^ "\"");
+                                                         in
+                                                             (tr (tda style
+                                                                      (ahrefa (urlencode (outputFilename uri)) style
+                                                                              (wseqFromURI uri))))
+                                                         end)
+                                                     sortedResults)))))))
     end;
    
 fun mainProgram (arg :: rest) = 
