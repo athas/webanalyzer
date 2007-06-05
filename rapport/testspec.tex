@@ -84,11 +84,13 @@
 Vores test er delt i to. Den første del --- funktionstesten --- skal
 afgøre om programmet kan alle de ting vi påstår det kan og at alle
 disse funktioner virker korrekt. Det optimale ville være hvis denne
-afprøvning kunne automatiseres, men i de fleste af testene vil det
-ikke kunne lade sig gøre. Hvis man eksempelvis vil tjekke om (...)
-For næsten alle funktionstestene vil der være en test af ugyldig
-inddata, for at se om programmet giver en brugbar fejlmeddelelse. Vi
-har dog valgt at samle dette under et afsnit.
+afprøvning kunne automatiseres, men i de fleste af testene vil det,
+grundet vores output i form af menneske-orienteret HTML, ikke kunne
+lade sig gøre uden at bruge mere tid på det end vi har
+tilgængelig. Hvis man eksempelvis vil tjekke om (...)  For næsten alle
+funktionstestene vil der være en test af ugyldig inddata, for at se om
+programmet giver en brugbar fejlmeddelelse. Vi har dog valgt at samle
+dette under et afsnit.
 
 
 Den anden del af testen --- brugertesten --- skal bruges til at finde
@@ -99,7 +101,41 @@ læse.
 
 \chapter{Kravtest}
 
+Vi vil systematisk gennemgå de krav vi har stillet til vores programs
+funktionalitet og beskrive hvorledes hvert enkelt krav kan
+afprøves. Vi henviser til kravspecifikationen for en uddybning af
+kravene, følgende afsnit vil kun omhandle hvorledes de kan testes.
+
 \section*{Krav 1: Analyse af et helt websted}
+
+Det testrelevante i dette krav er programmets evne til at følge links
+rundt på det angivne website, og ikke at følge links der fører ud fra
+websitet. Andre tests dækker hvorvidt den resulterende analyse er
+korrekt, formålet med denne test er udelukkende at undersøge om alle
+sider rent faktisk bliver besøgt. Det er også relevant at sikre at
+sider ikke bliver analyseret mere end én gang, og at cirkulære links
+(side \textit{A} linker til side \textit{B} der igen linker tilbage
+til side \textit{A}). ikke forårsager at programmet går i et uendeligt
+loop. Det kan ses hvilke sider der er blevet analyseret ved at se på
+den genererede side-liste, hvilket betyder at denne test er afhængig
+af at HTML-output (krav 6) fungerer korrekt.
+
+\subsection{Ækvivalens-klasser}
+\begin{itemize}
+\item Et website der ikke indeholder links, og kun én side. Her skal
+  kun den ene side besøges.
+\item Et website der ikke indeholder interne links, men links til
+  andre sider. Her skal kun websitets egen side besøges.
+\item Et website der indeholder interne links uden cirkularitet, og
+  hvor hver side kun kan findes af én sti. Her skal alle tilgængelige
+  sider analyseres.
+\item Et website der indeholder interne links uden cirkularitet, og
+  hvor hver side kan tilgås af flere forskellige veje. Det skal testes
+  at de tilgængelige sider kun analyseres én gang hver.
+\item Et website der indeholder interne links med cirkulære links. Det
+  skal testes at hver side kun analyseres én gang, og at programmet
+  terminerer (ikke går i uendeligt loop).
+\end{itemize}
 
 \section*{Krav 1.1: Respekter robots.txt}
 
