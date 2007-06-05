@@ -12,6 +12,7 @@
 .Op Fl lix
 .Op Fl fre
 .Op Fl fkgl
+.Op Fl wordrep
 .Op Fl l Ar language
 .Op Fl o Ar directory
 .Op Fl ignore-tag Ar html_tag
@@ -19,7 +20,7 @@
 .Sh DESCRIPTION
 .Nm
 er et program til at analysere sværhedsgraden af tekst på hjemmesider.
-Dette gøres ved brug af forskellige analyse metoder og stavekontrol:
+Dette gøres ved brug af forskellige tekst analyser og stavekontrol:
 .Bl -diag -offset indent
 .It LIX 
 er en forkortelse for læsbarhedsindeks og er en skala for en given teksts læsbarhed. Dette opgøres som det gennemsnitlige antal ord pr. helsætning, plus procentdelen af lange ord, altså ord der er over seks bogstaver lange. LIX blev introduceret af den svenske pædagog C.H. Björnsson (1916-1988).
@@ -60,14 +61,21 @@ Lange ord påvirker dette analyse væsentlig mere end de gør i
 .It Cm Kilde (Frit oversat):
 http://en.wikipedia.org/wiki/Flesch-Kincaid_Readability_Test
 .El
+.It Sidesværhedsgrad 
+er en sammensat sværhedsgrad for siden i en helhed. Når analysen er færdig og der er genereret en indeks fil vil alle de analyserede sider stå i en tabel sorteret efter deres sidesværhedsgrad. Sidesværhedsgraden markeres ydermere med en baggrunds farve som går fra lys grøn (let) hen i brun (middel) og slutter i mørk rød (svær). Sidesværhedsgraden for de individuelle sider i indeks filen er sidens samlede værdi. Når hver enkelt analyserede fil åbnes for sig vil den analyserede teksts individuelle afsnit blive vist med en farvet kasse rundt om som afspejler sidesværhedsgraden for afsnittet selv. Teksten i hvert enkelt afsnit er også farvet med en baggrundsfarve som afspejler sidesværhedsgraden for den enkelte sætning.
 .It Stavekontrol
 bliver udført på alle analyserede ord. teksten analyseres tjekkes der for attributten 
 .Dq lang
 i alle HTML tags. Hvis et HTML tag indeholder denne attribut overskrives standard sproget for al tekst indkapslet af dette tag. Da stavekontrollen bruger
 .Xr aspell 1 
 er det krævet at denne er installeret samt ordbøger til de sprog som forventes analyseret.
-Hvis der ikke forefindes nogen ordbog for det givne sprog der analyseres vil der ikke blive reporteret nogle fejl, blot vil alle ord se ud som om de var stavet korrekt (Altså ingen ændringen i dokumentet grundet stavekontrollen)
+Hvis der ikke forefindes nogen ordbog for det givne sprog der analyseres vil der ikke blive reporteret nogle fejl, blot vil alle ord se ud som om de var stavet korrekt (Altså ingen ændringen i dokumentet grundet stavekontrollen).
+Når stavekontrollen finder et ord som ikke er stavet korrekt sættes en blå kasse rundt om ordet i uddata.
+It Gentagne ord
+bliver altid udført på den analyserede tekst. Analysen markerer det gentagne ord med en orange kasse i uddata.
 .El
+.Pp
+Alle tekstanalysernes brugbarhed afspejles i den analyseres teksts størrelse. For at brugbarheden er optimal skal den analyserede tekst være omkring 1.000 ord eller mere. Herved skal sidesværhedsgraden for enkelte sætninger i afsnit ikke vægtes højt men blot ses som en indikation af at en enkelt sætning eller et afsnit kan være svært.
 .Sh OPTIONS
 .Bl -tag -width Ds
 .It Ns Ar url
@@ -86,14 +94,16 @@ Overskriver den User-agent som sendes med alle HTTP requests og som der identifi
 .It Fl c Ar num 
 Overskriver pausen mellem hver HTTP request.
 .It Fl lix
-Toggler hvorvidt der skal bruges lix analyse på teksten. 
+Togler hvorvidt der skal bruges lix analyse på teksten. 
 Læs mere: http://da.wikipedia.org/wiki/LIX
 .It Fl fre
-Toggler hvorvidt der skal bruges 'Flesch Reading Ease' analyse på teksten. 
+Togler hvorvidt der skal bruges 'Flesch Reading Ease' analyse på teksten. 
 Læs mere: http://en.wikipedia.org/wiki/Flesch-Kincaid_Readability_Test
 .It Fl fkgl
-Toggler hvorvidt der skal bruges "Flesch-Kincaid Grade Level" analyse på teksten. 
+Togler hvorvidt der skal bruges "Flesch-Kincaid Grade Level" analyse på teksten. 
 Læs mere: http://en.wikipedia.org/wiki/Flesch-Kincaid_Readability_Test
+.It Fl wordrep
+Togler hvorvidt der skal tjekkes for gentagne ord.
 .It Fl l Ar lang
 Sætter default sprog kode som bruges hvis der ikke er angivet noget andet i det analyserede dokument. 
 'lang' angives som ISO 639 sprog kode.
@@ -113,8 +123,28 @@ Der er rapporteret yderst få tilfælde hvor
 .Cm sml/nj 
 er gået ned, formentlig på grund af socket-modulet. Dette bygger vi på det grundlag af at der ikke forud for socket-modulet er stødt på fejl af denne art.
 .Sh EXAMPLES 
+Analyser et websted med 
+.Cm FRE 
+og 
+.Cm FKGL 
+analyserne toglet:
 .Dl $ webanalyzer http://host.dk -fre -fkgl
-Analys
+.Pp
+Analyser et websted og brug "Tekst_Analyse" som user-agent i stedet for standard:
+.Dl $ webanalyzer http://host.dk -u Tekst_Analyse
+.Pp
+Analyser et websted og begræns crawlingen med dybde 3 og vent 10 sekunder mellem hver http request:
+.Dl $ webanalyzer http://host.dk -d 3 -c 10
+.Pp
+Analyser et websted og gem uddata i et andet bibliotek og tjek for gentagne ord:
+.Dl $ webanalyzer http://host.dk -o /home/bruger/valgt_mappe -wordrep
+.Pp
+Analyser et websted og ignorer al data der ligger i HTML <table> tags
+.Dl $ webanalyzer http://host.dk -ignore-tag table
+.Pp
+Analyser et websted og brug engelsk stavekontrol som standard og ignorer al data som ligger i HTML tags med attribut id som har værdien 
+.Dq menu
+.Dl $ webanalyzer http://host.dk -l en -ignore-id menu
 .Sh SEE ALSO
 .Xr uri 7 , 
 .Xr wget 1 , 
