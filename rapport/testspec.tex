@@ -341,20 +341,165 @@ afprøvningen.
 
 \section*{Krav 3: Analyse baseret på HTML-tags}
 
+Dette krav kan ikke testes for sig selv, idet det fungerer som
+``paraplykrav'' for en række mere specifikke underkrav der omhandler
+behandling af specifikke HTML-tags. Afprøvning af disse underkrav
+foregår alle på samme måde --- for hvert underkrav produceres en side
+indeholdende repræsentanter for de relevante ækvivalensklasser,
+programmet køres på disse sider, og resultatet sammenlignes med det
+forventede. Det er ikke nødvendigt at lave en side for hver eneste
+ækvivalensklasse. Disse krav afhænger af at krav 2 og krav 8 er
+opfyldt og fungerer korrekt.
+
 \section*{Krav 3.1: \texttt{em} og \texttt{strong}}
+
+Dette krav har vi valgt ikke at opfylde, da vi under implementationen
+af vores program nåede frem til den vurdering at det ikke ville
+forbedre analysen på en meningsfyldt måde. Det vil derfor ikke blive
+testet.
 
 \section*{Krav 3.2: \texttt{hN}}
 
+Dette krav har vi valgt ikke at opfylde, da vi under implementationen
+af vores program nåede frem til den vurdering at det ikke ville
+forbedre analysen på en meningsfyldt måde. Det vil derfor ikke blive
+testet.
+
 \section*{Krav 3.3: \texttt{abbr} og \texttt{acronym}}
 
+I det følgende opfattes et ord som værende ``angivet som forkortelse''
+hvis det befinder sig i et \texttt{abbr}- eller
+\texttt{acronym}-tag. Det skal testes at ord, der normalt ville
+markeres som stavefejl i det sprog som sidens tekst er angivet til at
+være skrevet i, ikke bliver opfattet som stavefejl hvis de er angivet
+som forkortelser. Dette krav er afhængigt af at krav 2.3 er opfyldt og
+fungerer. Følgende ækvivalensklasser repræsenterer forekomster i en
+test-side, og kan godt alle findes i samme test-side for at lette
+afprøvningen.
+
+\subsection{Ækvivalens-klasser}
+\begin{itemize}
+\item Forkert stavede ord der ikke er angivet som forkortelser skal
+  markeres som stavefejl.
+\item Korrekt stavede ord der ikke er angivet som forkortelser skal
+  ikke markeres som stavefejl (muligvis redundant ift. krav 2.3).
+\item Forkert stavede ord der er angivet som forkortelser skal ikke
+  markeres som stavefejl.
+\item Korrekt stavede ord der er angivet som forkortelser skal ikke
+  markeres som stavefejl.
+\end{itemize}
+
 \section*{Krav 3.4: Citater skal ikke analyseres.}
+
+Citater skal ikke medtages når sidesværhedsgraden beregnes. Afprøvning
+af dette foregår ved at fjerne den citerede tekst og undersøge om der
+bliver beregnet samme sidesværhedsgrad som når den citerede tekst er
+der. Denne afprøvningsmetode fungerer kun fordi stavefejl ikke
+påvirker sidesværhedsgraden, og derfor burde det ikke påvirke
+resultatet at citater indeholdende stavefejl fjernes.
+
+\subsection{Ækvivalens-klasser}
+\begin{itemize}
+\item En side indeholdende et afsnit som er designeret som et citat
+  (f.eks. via \texttt{blockquote}) og som ikke indeholder
+  stavefejl. Sidesværhedsgraden skal være den samme om citatet findes
+  på siden eller ej, men hvis citatet findes skal det vises i output.
+\item En side indeholdende et afsnit som er designeret som et citat
+  (f.eks. via \texttt{blockquote}) og som indeholder
+  stavefejl. Sidesværhedsgraden skal være den samme om citatet findes
+  på siden eller ej, men hvis citatet findes skal det vises i output
+  og de forkert stavede ord skal være markeret.
+\item En side hvori dele af sætninger er designeret som værende
+  citater (f.eks. via \texttt{cite}), og hvor disse citater ikke
+  indeholder stavefejl, skal ikke ændre sidesværhedsgrad hvis citatet
+  fjernes. Dog skal citat-teksten stadigvæk fremgå af output.
+\item En side hvori dele af sætninger er designeret som værende
+  citater (f.eks. via \texttt{cite}), og hvor disse citater indeholder
+  stavefejl, skal ikke ændre sidesværhedsgrad hvis citatet
+  fjernes. Dog skal citat-teksten stadigvæk fremgå af output, og de
+  forkert stavede ord skal markeres som stavefejl.
+\end{itemize}
 
 \section*{Krav 3.5: Tekst i andre sprog angivet med
   (\texttt{lang})}
 
+Det skal testes at ord, der har fået et sprog angivet via
+HTML-attributten \texttt{lang} bliver stavekontrolleret efter det
+angivne sprog, om muligt, og hvis det angivne sprog ikke kendes, at
+ordene ikke markeres som værende stavet forkert. Følgende
+ækvivalensklasser repræsenterer forekomster i en test-side, og kan
+godt alle findes i samme test-side for at lette afprøvningen.
+
+\subsection{Ækvivalens-klasser}
+\begin{itemize}
+\item Et ord angivet med en ugyldig sprogkode skal ikke
+  stavekontrolleres, og ikke markeres som stavet forkert.
+\item Et ord angivet med en ukendt sprogkode (en ordbog for sproget er
+  ikke installeret) skal ikke stavekontrolleres, og ikke markeres som
+  stavet forkert.
+\item Et ord angivet med en kendt sprogkode (en ordbog for sproget er
+  installeret) som er forskellig fra resten af sidens sprogkode, og
+  hvor ordet ikke ville være korrekt i det sprog som resten af siden
+  er skrevet i, men er korrekt indenfor det angivne sprog, skal
+  stavekontrolleres, og ikke markeres som stavet forkert. Som i krav
+  2.3 tages der forbehold for mangler i \texttt{aspell}'s ordbog.
+\item Et ord angivet med en kendt sprogkode (en ordbog for sproget er
+  installeret) som er forskellig fra resten af sidens sprogkode, og
+  hvor ordet ikke ville være korrekt i det sprog som resten af siden
+  er skrevet i, og ikke er korrekt indenfor det angivne sprog, skal
+  stavekontrolleres, og markeres som stavet forkert.
+\end{itemize}
+
 \section*{Krav 3.6: \texttt{kbd}, \texttt{var} og \texttt{code}}
 
+Ord angivet med disse tags (herefter refereret til som ``kode-ord'')
+bør ikke stavekontrolleres og ikke tælles med når sidesværhedsgraden
+beregnes. Afprøvningen af dette er praktisk identisk med afprøvningen
+af citat-håndteringen (se afprøvning af krav 3.4).
+
+\subsection{Ækvivalens-klasser}
+\begin{itemize}
+\item En side hvori dele af sætninger er designeret som værende
+  kode-ord, og disse kode-ord er korrekt stavede ord indenfor sidens
+  angivne sprog, skal ikke ændre sidesværhedsgrad hvis de fjernes. Dog
+  skal de stadigvæk være at finde i output.
+\item En side hvori dele af sætninger er designeret som værende
+  kode-ord, og disse kode-ord er ukorrekt stavede ord indenfor sidens
+  angivne sprog, skal ikke ændre sidesværhedsgrad hvis de fjernes. Dog
+  skal de stadigvæk være at finde i output, men ikke være markeret som
+  stavefejl.
+\end{itemize}
+
 \section*{Krav 3.7: \texttt{bdo}}
+
+Det skal testes at ord angivet som havende ikke-standard tegnretning
+(højre mod venstre) bliver vendt om før de bliver
+stavekontrolleret. Ydermere skal det kontrolleres at kun det inderste
+af på hinanden indlejrede \texttt{bdo}-tags benyttes til at finde
+tekstretningen (to gange ``højre mod venstre'' giver altså ikke
+``venstre mod højre''). Følgende ækvivalensklasser repræsenterer
+forekomster i en test-side, og kan godt alle findes i samme test-side
+for at lette afprøvningen.
+
+\subsection{Ækvivalens-klasser}
+\begin{itemize}
+\item Ord angivet som værende skrevet med ``højre mod venstre''
+  tegnretning, som ville være stavefejl i det aktuelle sprog hvis de
+  ikke blev vendt, og som ikke ville være stavefejl i det aktuelle
+  sprog hvis de blev vendt, skal ikke markeres som stavefejl.
+\item Ord angivet som værende skrevet med ``højre mod venstre''
+  tegnretning, som ville være stavefejl i det aktuelle sprog hvis de
+  blev vendt, og som ikke ville være stavefejl i det aktuelle sprog
+  hvis de ikke blev vendt, skal markeres som stavefejl.
+\item Ord angivet som værende skrevet med ``højre mod venstre''
+  tegnretning, som ville være stavefejl i det aktuelle sprog hvis de
+  ikke blev vendt, og som ville være stavefejl i det aktuelle sprog
+  hvis de blev vendt, skal markeres som stavefejl.
+\item Ord angivet som værende skrevet med ``højre mod venstre''
+  tegnretning, som ikke ville være stavefejl i det aktuelle sprog hvis
+  de ikke blev vendt, og som ikke ville være stavefejl i det aktuelle
+  sprog hvis de blev vendt, skal ikke markeres som stavefejl.
+\end{itemize}
 
 \section*{Krav 4: Konfiguration af analyse}
 
