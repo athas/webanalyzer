@@ -188,30 +188,154 @@ respektere denne og gøre det korrekt.
 
 \section*{Krav 2: Analysemetoder}
 
+Dette krav kan i sig selv ikke testes, da det fungerer som
+``paraplykrav'' for 3 underkrav. Disse kan dog alle testes på omtrent
+samme måde. En side med indhold der er repræsentativt for en
+ækvivalensklasse (og som opfylder andre krav som
+f.eks. tegnindkodning) analyseres, og programmets output sammenlignes
+med det ønskede resultat. Denne test er således afhængig af at krav 6
+omkring HTML-output er korrekt. Langt størsteparten af disse tests er
+baseret på korrekt at opdele tegnfølgerne på HTML-sider i afsnit,
+sætninger og ord, og at teste uddybende, selv med ækvivalensklasser,
+ville være en ekstremt omfangsrig opgave som vi hverken har tid eller
+grammatisk viden til at udføre. Derfor vil tests af opdelingen i ord
+og sætninger være rimeligt rudimentær. Det er også værd at notere at
+det fra et whitebox-perspektiv er unødvendigt at teste korrekt
+leksikalsk analyse for både LIX og FKRT, idet programmet er
+implementeret således at at opdelingen i leksikalske enheder er
+uafhængig af analysemetoderne, men fra et black-box perspektiv, som
+disse tests er designet ud fra, kan man ikke gå ud fra at det er
+tilfældet.
+
+Når vi i det følgende henfører til at noget bliver ``markeret'' i
+programmets output (f.eks. ``markering af stavefejl'') henfører vi til
+brugervejledningen for en beskrivelse af hvordan denne markering helt
+præcist ser ud.
+
 \section*{Krav 2.1: Læsbarhedsindeks, LIX}
+
+Det essentielle i dette krav er at teksten korrekt opdeles i sætninger
+og ord, og at det resulterende LIX-tal er korrekt. Idet vores
+outputformat ikke angiver LIX-tal for hver enkelt sætning kan denne
+sammenligning kun foregå for hele tekstafsnit, men vi er i stand til
+at bedømme om sætningsopdeling sker korrekt.
+
+\subsection{Ækvivalens-klasser}
+\begin{itemize}
+\item En side uden indhold skal kunne analyseres korrekt uden at
+  programmet går ned, men outputtet for siden skal naturligvis ikke
+  indeholde analyser af nogen tekst.
+\item En side med et enkelt afsnit indeholdende en enkelt
+  sætning. Ordene i sætningen skal opdeles korrekt og det beregnede
+  LIX-tal skal ligeledes være korrekt.
+\item En side med et enkelt afsnit indeholdende en enkelt simpel
+  sætning. Ordene i sætningen skal opdeles korrekt og det beregnede
+  LIX-tal skal ligeledes være korrekt.
+\item En side med et enkelt afsnit indeholdende en enkelt kompliceret
+  sætning indeholdende parenteser, apostroffer og citationer (som ikke
+  adskiller sætninger). Ordene i sætningen skal opdeles korrekt og det
+  beregnede LIX-tal skal ligeledes være korrekt.
+\item En side med et enkelt afsnit indeholdende adskillige
+  komplicerede sætninger indeholdende parenteser, apostroffer og
+  citationer (som ikke adskiller sætninger). Sætningerne i afsnittet
+  og ordene i sætningerne skal opdeles korrekt og det beregnede
+  LIX-tal skal ligeledes være korrekt.
+\item En side med adskllige afsnit indeholdende adskillige
+  komplicerede sætninger indeholdende parenteser, apostroffer og
+  citationer (som ikke adskiller sætninger). Afsnittene på siden,
+  sætningerne i afsnittene og ordene i sætningerne skal opdeles
+  korrekt og det beregnede LIX-tal skal ligeledes være korrekt.
+\end{itemize}
 
 \section*{Krav 2.2: Flesch-Kincaid Readability Test (FKRT)}
 
+Det essentielle i dette krav er at teksten korrekt opdeles i sætninger
+og ord, og at de resulterende FRE- og FKGL-tal er korrekte. Idet vores
+outputformat ikke angiver disse værdier for hver enkelt sætning kan
+denne sammenligning kun foregå for hele tekstafsnit, men vi er i stand
+til at bedømme om sætningsopdeling sker korrekt.
+
+\subsection{Ækvivalens-klasser}
+\begin{itemize}
+\item En side uden indhold skal kunne analyseres korrekt uden at
+  programmet går ned, men outputtet for siden skal naturligvis ikke
+  indeholde analyser af nogen tekst.
+\item En side med et enkelt afsnit indeholdende en enkelt
+  sætning. Ordene i sætningen skal opdeles korrekt og de beregnede
+  FKRT-værdier skal ligeledes være korrekte.
+\item En side med et enkelt afsnit indeholdende en enkelt simpel
+  sætning. Ordene i sætningen skal opdeles korrekt og det beregnede
+  FKRT-værdier skal ligeledes være korrekte.
+\item En side med et enkelt afsnit indeholdende en enkelt kompliceret
+  sætning indeholdende parenteser, apostroffer og citationer (som ikke
+  adskiller sætninger). Ordene i sætningen skal opdeles korrekt og det
+  beregnede FKRT-værdier skal ligeledes være korrekte.
+\item En side med et enkelt afsnit indeholdende adskillige
+  komplicerede sætninger indeholdende parenteser, apostroffer og
+  citationer (som ikke adskiller sætninger). Sætningerne i afsnittet
+  og ordene i sætningerne skal opdeles korrekt og de beregnede
+  FKRT-værdier skal ligeledes være korrekte.
+\item En side med adskllige afsnit indeholdende adskillige
+  komplicerede sætninger indeholdende parenteser, apostroffer og
+  citationer (som ikke adskiller sætninger). Afsnittene på siden,
+  sætningerne i afsnittene og ordene i sætningerne skal opdeles
+  korrekt og de beregnede FKRT-værdier skal ligeledes være korrekte.
+\end{itemize}
+
 \section*{Krav 2.3: Stavekontrol}
 
-Hvis en side er angivet til dansk og en dansk ordbog til aspell er
-installeret, så skal programmet kunne tjekke for stavefejl.
-
-\subsection{Baggrund}
+Hvis en side er angivet til dansk og en dansk ordbog til
+\texttt{aspell} (samt naturligvis selve programmet \texttt{aspell}) er
+installeret, så skal programmet kunne tjekke for stavefejl. I vores
+krav angiver vi ikke hvorledes stavekontrollen er implementeret, men i
+vores dokumentation beskriver vi at systemets
+\texttt{aspell}-installation benyttes, derfor mener vi at det er
+korrekt at basere blackbox-tests på eksistensen af
+\texttt{aspell}. Som med FKRT- og LIX-testene er afprøvning af
+stavekontrollen baseret på at køre programmet på en side og
+sammenligne resultatet med det korrekte resultat.
 
 \subsection{Ækvivalens-klasser}
 \begin{itemize}
 \item aspell er ikke installeret --- Stavekontrol skal ikke udføres og
-  brugeren skal have besked.
-\item De korrekte sprogpakker er ikke installeret --- Stavekontrol
-  skal ikke udføres på de relevante sektioner og brugeren skal have
-  besked.
-\item 
+  brugeren skal have besked, men programmet skal fortsætte. Ingen ord
+  markeres som forkert stavede.
+\item Den danske ordbog er ikke installeret --- Stavekontrol skal ikke
+  udføres på den danske tekst og ord i den markeres ikke som stavet
+  forkert.
+\item Den korrekte sprogpakke er installeret, og på en side
+  indeholdende både korrekt og forkert stavede ord markeres ordene
+  efter deres korrekthed. Idet vi erkender at \texttt{aspell} ikke er
+  perfekt tager vi forbehold for at der er en stor klasse af gyldige
+  ord som vil blive markeret som forkerte. Vi kræver blot at vores
+  program angiver de samme ord som forkert stavede som \texttt{aspell}
+  ville hvis \texttt{aspell} blev kørt direkte.
 \end{itemize}
 
 \section*{Krav 2.3.1: Flere sprog}
 
+Det skal testes at programmet fungerer med en ikke-dansk
+\texttt{aspell}-ordbog. Krav 2.3-testen udføres for to forskellige
+sider indeholdende hhv. engelsk og tysk tekst.
+
 \section*{Krav 2.4: Gentagne ord}
+
+Det skal testes at to på hinanden følgende identiske ord på en side
+markeres som gentagne ord, dog ikke hvis de befinder sig i forskellige
+sætninger. Følgende ækvivalensklasser repræsenterer forekomster i en
+test-side, og kan godt alle findes i samme test-side for at lette
+afprøvningen.
+
+\subsection{Ækvivalens-klasser}
+\begin{itemize}
+\item To på hinanden følgende ord, som ikke er ens, skal ikke
+  markeres som gentagne ord.
+\item To på hinanden følgende ord, som er ens, og som befinder sig i
+  samme sætning, skal markeres som gentagne ord.
+\item To på hinanden følgende ord, som er ens, og som befinder sig i
+  to forskellige sætninger (adskilt af punktum, udråbstegn, osv), skal
+  ikke markeres som gentagne ord.
+\end{itemize}
 
 \section*{Krav 2.5: Beregning af sidesværhedsgrad}
 
