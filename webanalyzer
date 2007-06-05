@@ -1,0 +1,3 @@
+#!/bin/sh
+
+./smlnjruntime @SMLload=webanalyzer.x86-linux $*
