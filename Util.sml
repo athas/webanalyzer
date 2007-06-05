@@ -240,25 +240,34 @@ fun hueToRGB hue : rgb  =
         val max = 255;
         val min = 0;
         val V = max;
+        val Vreal = Real.fromInt V;
         fun setS () = if max = 0 then 0 else 1-(min div max);
-        val S = setS();
-        val h = (hue div 60) mod 6
-        val f = (hue div 60) - h
-        val p = V*(1-S)
-        val q = V*(1-(f*S))
-        val t = V*(1-((1-f)*S))
+        val S = Real.fromInt (setS());
+        val hf = (Real.fromInt hue) / 60.0;
+        val i = Real.floor hf;
+        val f = hf - (Real.fromInt i);
+        val pv = round (Vreal * (1.0 - S));
+        val qv = round (Vreal * (1.0 - (S * f)));
+        val tv = round (Vreal * (1.0 - S * (1.0 - f)));
+        fun  makeRGB(r, g, b) = {r = r, g=g, b=b}
     in
-        if hue < 360 orelse hue > 0 then
-            case h of
-                0 => {r=V, g=t, b=p}
-              | 1 => {r=q, g=V, b=p}
-              | 2 => {r=p, g=V, b=t}
-              | 3 => {r=p, g=q, b=V}
-              | 4 => {r=t, g=p, b=V}
-              | 5 => {r=V, g=p, b=q}
-              | _ => raise Fail "Error in hue calculation"
+        if (V = 0) then
+            makeRGB(0, 0, 0)
+        else if (floor S) = 0 then
+            makeRGB(V, V, V)
         else
-            raise Fail ((Int.toString hue) ^ " is not in the valid range (0-360 degree)")
+            case i of 
+                0 => makeRGB(V, tv, pv)
+              | 1 => makeRGB(qv, V, pv)
+              | 2 => makeRGB(pv, V, tv)
+              | 3 => makeRGB(pv, qv, V)
+              | 4 => makeRGB(tv, pv, V)
+              | 5 => makeRGB(V, pv, qv)
+              | 6 => makeRGB(V, tv, pv) (* ought not to happen but just in case of 
+                                    mis calculation *)
+              | ~1 => makeRGB(V, pv, qv) (* same here *)
+              | _ => raise Fail ((Int.toString i) ^ " er ike gyldig, og convertering kan ikke ske")
+                           
     end;
 
 end;
