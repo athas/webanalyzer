@@ -97,9 +97,16 @@ af at bruge programmet ved at læse brugermanualen. Derudover skal
 testen bruges til at finde ud af om resultatsiderne er vanskelige at
 læse.
 
-\chapter{Funktionstest}
+\chapter{Kravtest}
 
-\section{Dybdeangivelse}
+\section*{Krav 1: Analyse af et helt websted}
+
+\section*{Krav 1.1: Respekter robots.txt}
+
+Programmet skal tjekke det angivne websteds robots.txt og sørge for at
+websider angivet i filen ikke bliver hentet og analyseret.
+
+\section*{Krav 1.2: Dybde af crawling}
 Hvis man angiver en maksimal dybde af analysen, så skal programmet
 respektere denne og gøre det korrekt.
 
@@ -117,15 +124,14 @@ Krav 1.2
   siden på.
 \end{itemize}
 
-\section{Links finder}
-Programmet skal finde alle eksisterene interne links på webstedet.
+\section*{Krav 2: Analysemetoder}
 
+\section*{Krav 2.1: Læsbarhedsindeks, LIX}
 
-\section{Analyse indhold}
-Al \underline{relevant} tekst fra hjemmesiden skal fremgå af
-analyseresultatet, herunder hjemmesidens titel.
+\section*{Krav 2.2: Flesch-Kincaid Readability Test (FKRT)}
 
-\section{Stavekontrol}
+\section*{Krav 2.3: Stavekontrol}
+
 Hvis en side er angivet til dansk og en dansk ordbog til aspell er
 installeret, så skal programmet kunne tjekke for stavefejl.
 
@@ -141,21 +147,46 @@ installeret, så skal programmet kunne tjekke for stavefejl.
 \item 
 \end{itemize}
 
-\section{Respekter robots.txt}
-Programmet skal tjekke det angivne websteds robots.txt og sørge for at
-websider angivet i filen ikke bliver hentet og analyseret.
+\section*{Krav 2.3.1: Flere sprog}
 
-\section{Udfør analyser angivet af brugeren}
+\section*{Krav 2.4: Gentagne ord}
 
+\section*{Krav 2.5: Beregning af sidesværhedsgrad}
 
-\section{Indkodning}
+\section*{Krav 3: Analyse baseret på HTML-tags}
+
+\section*{Krav 3.1: \texttt{em} og \texttt{strong}}
+
+\section*{Krav 3.2: \texttt{hN}}
+
+\section*{Krav 3.3: \texttt{abbr} og \texttt{acronym}}
+
+\section*{Krav 3.4: Citater skal ikke analyseres.}
+
+\section*{Krav 3.5: Tekst i andre sprog angivet med
+  (\texttt{lang})}
+
+\section*{Krav 3.6: \texttt{kbd}, \texttt{var} og \texttt{code}}
+
+\section*{Krav 3.7: \texttt{bdo}}
+
+\section*{Krav 4: Konfiguration af analyse}
+
+\section*{Krav 5: Kommandobaseret interface}
+
+\section*{Krav 6: Resultater i HTML-format.}
+
+\section*{Krav 7: Platform}
+
+\section*{Krav 8: Håndtering af HTML/XHTML}
+
+\section*{Krav 8.1: Indkodning}
+
 Programmet skal virke på hjemmesider indkodet med ASCII
 tegnsættet. Specielt skal det testes at de dansk tegn (æøåÆØÅ) virker
 korrekt.
 
-\section{Filtrering mekanisme}
-Programmet skal frasortere
-
+\chapter{Yderligere funktionstests}
 
 \section{Output-mappe}
 Hvis man angiver en output-mappe
@@ -170,7 +201,6 @@ fejlmeddelelser i disse tilfælde.
 Der er ikke stillet krav om dette, men (...)
 
 \chapter{Brugertest}
-
 
 Til at udføre vores brugertest skal vi bruge en eller flere personer
 indenfor vores målgruppe. I kravspecifikationen er vores målgruppe
