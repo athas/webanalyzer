@@ -38,7 +38,8 @@ end
 fun findLinks absoluteURI htmlTree = 
     let
         open HTMLParser;
-        fun valid "a" link = not (String.isPrefix "mailto:" link)
+        fun valid "a" link = not (String.isPrefix "mailto:" link) andalso
+                             not (String.isPrefix "javascript:" link)
           | valid tagname link = true
 
         fun checkAttribute tag attribute =
