@@ -61,11 +61,13 @@ fun createHeader () =
                 fun createBox ret 121 _ _ = ret
                   | createBox ret index from to = 
                     createBox (ret && 
-                                   (divia ("style=\"background:" ^ Util.hueToHEX index ^ "\"")  
-                                          ($"&nbsp;"))) 
+                                   (divia ("style=\"float: left; width: 3px; background:" ^ Util.hueToHEX index ^ "\"")  
+                                          ($""))) 
                               (index+1)
                               from 
                               to
+
+(* make the div style: float: left, width: 3 *)
             in
                 divia "id=\"BadnessFactorBar\"" (createBox ($"") 0 0 120)
             end
