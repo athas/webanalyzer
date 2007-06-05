@@ -22,8 +22,7 @@ datatype textresult = ParagraphResult of results *
                                          sentenceresult list list
                     | HeadingResult of results *
                                        textresult list
-                    | QuotationResult of results *
-                                         textresult list;
+                    | QuotationResult of textresult list;
 (* All results of a document *)
 type documentresult = {titleResults : (results * sentenceresult list) option,
                        documentResults : results,

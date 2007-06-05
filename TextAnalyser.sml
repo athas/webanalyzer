@@ -31,8 +31,7 @@ datatype textresult = ParagraphResult of results *
                                          sentenceresult list list
                     | HeadingResult of results *
                                        textresult list
-                    | QuotationResult of results *
-                                         textresult list;
+                    | QuotationResult of textresult list;
 (* All results of a document *)
 type documentresult = {titleResults : (results * sentenceresult list) option,
                        documentResults : results,
@@ -166,9 +165,8 @@ fun countTextElement (Sentencifier.Paragraph (sentences, descs)) =
   | countTextElement (Sentencifier.Quotation content) =
     let
         val subCounts = map countTextElement content
-        val total = sumCounts (map countOfTextCounts  subCounts)
     in
-        QuotationCount (total, subCounts)
+        QuotationCount (zeroCount, subCounts)
     end;
         
 
@@ -281,10 +279,6 @@ local
              analyseSentence'' doc_lang sentence) : sentenceresult
       | analyseSentence _ (counts, []) = (analyse' counts, [])
 
-    fun resultOfTextResult (ParagraphResult (r, _, _)) = r
-      | resultOfTextResult (HeadingResult (r, _)) = r
-      | resultOfTextResult (QuotationResult (r, _)) = r;
-
     fun analyseTextElement doc_lang
                            (ParagraphCount (count, sentenceCounts, descsCounts)) =
         let
@@ -297,7 +291,7 @@ local
       | analyseTextElement doc_lang (HeadingCount (count, subcounts)) =
             HeadingResult (analyse' count, map (analyseTextElement doc_lang) subcounts)
       | analyseTextElement doc_lang (QuotationCount (count, subcounts)) =
-            QuotationResult (analyse' count, map (analyseTextElement doc_lang) subcounts)
+            QuotationResult (map (analyseTextElement doc_lang) subcounts)
 
 
     open List;
@@ -321,7 +315,7 @@ local
         (exists sentenceHasMisspelling sentences) orelse
         (exists (exists sentenceHasMisspelling) descs)
       | hasMisspelling (HeadingResult (_,sub)) = exists hasMisspelling sub
-      | hasMisspelling (QuotationResult (_,sub)) = exists hasMisspelling sub
+      | hasMisspelling (QuotationResult sub) = exists hasMisspelling sub
 
     (* results -> bool 
        Returns true if the specified result-set is ok, and false
@@ -331,7 +325,7 @@ local
                                 
     fun badResultFilter (x as ParagraphResult (result, _, _)) = evaluateResult result orelse hasMisspelling x
       | badResultFilter (x as HeadingResult (result,_)) = evaluateResult result orelse hasMisspelling x
-      | badResultFilter (QuotationResult (result,_)) = true
+      | badResultFilter (QuotationResult _) = true
 
 in
 

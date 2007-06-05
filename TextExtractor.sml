@@ -38,7 +38,7 @@ type paragraphiseddocument = {title : text option,
 local
     val headings = ["h1", "h2", "h3", "h4", "h5", "h6"];
     val emphasizing = ["strong", "em", "b", "i", "u"];
-    val quotations = ["blockquote", "q"];
+    val quotations = ["blockquote"];
     val acronym = ["acronym", "abbr", "dfn"];
     val code = ["var", "kbd", "code", "samp"];
     val descriptionAttributes = ["title", "alt", "summary"];
@@ -55,7 +55,7 @@ local
 
     (* Tags that shouldn't cause any end of paragraphs and newlines. *)
     val inline = ["span", "font", "a", "bdo", "address", "center",
-                  "cite",
+                  "cite", "q",
                   "sub", "sup", "big", "small"]
                  @ emphasizing
                  @ acronym

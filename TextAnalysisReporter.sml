@@ -63,24 +63,23 @@ fun createColorBox results content =
                content
     end
 
-fun reportSentence (results, elemResults) = 
-    let
-        val color = colorByResults results;
-    in
-        mark1a "SPAN"
-               ("style=\"background-color:" ^ color ^ ";\"")
-               (prmap reportSentenceElem elemResults)
-    end;
+fun reportSentence color (results, elemResults) = 
+        if color
+        then 
+            mark1a "SPAN"
+                   ("style=\"background-color:" ^ (colorByResults results) ^ ";\"")
+                   (prmap reportSentenceElem elemResults)
+        else prmap reportSentenceElem elemResults
 
-fun reportSentences sentences = prmap reportSentence sentences;
+fun reportSentences color sentences = prmap (reportSentence color) sentences;
 
 (* onlyContent indicates whether this is a complete paragraph or occurs in some other
    context where the only wanted analyze is the content-analyze. *)
-fun reportContent onlyContent (ParagraphResult (results, sentences, descriptions)) =
+fun reportContent onlyContent color (ParagraphResult (results, sentences, descriptions)) =
     let
         val resultReport = reportResults results;
-        val sentencesReport = reportSentences sentences;
-        val descriptionsReport = prmap (li o reportSentences) descriptions;
+        val sentencesReport = reportSentences color sentences;
+        val descriptionsReport = prmap (li o (reportSentences color)) descriptions;
         val content = p (sentencesReport) && (if (length descriptions) > 0
                                               then p ((h4 ($ "Beskrivende tekst: "))
                                                       && (ul descriptionsReport))
@@ -91,23 +90,23 @@ fun reportContent onlyContent (ParagraphResult (results, sentences, descriptions
         then content
         else createColorBox results (resultReport && content)
     end
-  | reportContent display (HeadingResult (result, content)) = 
+  | reportContent display color (HeadingResult (result, content)) = 
     let
         val resultReport = reportResults result;
-        val contentReport = prmap (reportContent true) content;
+        val contentReport = prmap (reportContent true color) content;
 
     in
-        createColorBox result
-                       (resultReport && (h3 contentReport))
+        if display 
+        then h4 contentReport
+        else
+            createColorBox result
+                           (resultReport && (h3 contentReport))
     end
-  | reportContent display (QuotationResult (result, content)) = 
+  | reportContent display _ (QuotationResult content) = 
     let
-        val resultReport = reportResults result;
-        val contentReport = prmap (reportContent true) content;
-        val color = colorByResults result;
+        val contentReport = prmap (reportContent true false) content;
     in
-        createColorBox result
-                       (resultReport && (blockquote contentReport))
+        blockquote contentReport
     end;
 
 val style = mark1 "STYLE"
@@ -126,10 +125,10 @@ fun makeReport' ({titleResults,
                   documentResults,
                   contentResults} : documentresult) =
     let
-        val contentReport = prmap (reportContent false) contentResults;
+        val contentReport = prmap (reportContent false true) contentResults;
         val titleReport = case titleResults of
                               NONE => $("No title found.")
-                            | SOME (results, sentences) => createColorBox results ((reportResults results) && (reportSentences sentences));
+                            | SOME (results, sentences) => createColorBox results ((reportResults results) && (reportSentences true sentences));
                                         
         val documentReport = reportResults documentResults;
     in
