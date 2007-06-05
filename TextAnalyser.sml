@@ -245,7 +245,8 @@ local
                            SOME (Sentencifier.Language x) => SOME x
                          | _ => doc_lang;
 
-            val isRepetition = Util.strToLower prev = Util.strToLower current
+            val isRepetition = Config.findRepetitions () andalso
+                               Util.strToLower prev = Util.strToLower current
         in
             WordResult (current,
                         not (spellCheckable attrs) orelse

@@ -10,6 +10,7 @@ val LixDefault = true;
 val FreDefault = true;
 val FkglDefault = true;
 val SpellDefault = true;
+val FindRepetitionsDefault = true;
 val TagNameFilters : string list ref = ref [];
 val IdFilters : string list ref = ref [];
 
@@ -76,6 +77,11 @@ fun toggleFkgl () = Fkgl := not (fkgl());
 val Spell = ref SpellDefault;
 fun spell () = !Spell
 fun toggleSpell () = Spell := not (spell());
+
+(* Should repeated word be discovered? *)
+val FindRepetitions = ref FindRepetitionsDefault;
+fun findRepetitions () = !FindRepetitions
+fun toggleFindRepetitions () = FindRepetitions := not (findRepetitions ());
 
 fun addTagNameFilter filter = TagNameFilters := filter :: !TagNameFilters;    
 fun tagNameFilters () = !TagNameFilters;

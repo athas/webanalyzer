@@ -31,6 +31,8 @@ sig
     val fkgl: unit -> bool;
     val toggleSpell: unit -> unit;
     val spell: unit -> bool;
+    val toggleFindRepetitions: unit -> unit;
+    val findRepetitions: unit -> bool;
 
     val setDefaults: unit -> unit;
 

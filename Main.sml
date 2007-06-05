@@ -229,6 +229,8 @@ fun parseArguments ("-d" :: limit :: rest) =
        Config.toggleFkgl () before parseArguments rest
   | parseArguments ("-spell" :: rest) =
        Config.toggleSpell () before parseArguments rest
+  | parseArguments ("-wordrep" :: rest) =
+       Config.toggleFindRepetitions () before parseArguments rest
   | parseArguments ("-l" :: language :: rest) =
        Config.setDefaultLanguage language before parseArguments rest
   | parseArguments ("-o" :: outputDir :: rest) = 
