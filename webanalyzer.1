@@ -2,7 +2,7 @@
 .Dt WEBANALYZER 1
 .Sh NAME
 .Nm webanalyzer 
-.Nd text analyze a webpage
+.Nd tekst analyser et websted
 .Sh SYNOPSIS
 .Nm webanalyzer
 .Ns Ar url
@@ -18,7 +18,7 @@
 .Op Fl ignote-id Ar id
 .Sh DESCRIPTION
 .Nm
-er et program til at analyserer sværhedsgraden af tekst på hjemmesider.
+er et program til at analysere sværhedsgraden af tekst på hjemmesider.
 Dette gøres ved brug af forskellige analyse metoder og stavekontrol:
 .Bl -diag -offset indent
 .It LIX 
@@ -41,7 +41,32 @@ Let tekst for alle læsere, f.eks. børnelitteratur.
 .Cm Kilde: 
 http://da.wikipedia.org/wiki/LIX
 .It FKGL
-asdas
+bruges bl.a. inden for uddannelse, som er et af de mest åbenlyse steder at bruge læsbarheds analyser. FKGL (Flesch-Kincaid Grade Level) overfører resultatet (inden for 0-100) til det Amerikanske uddannelses trin, hvilket gør det nemmere for lærer, forældre, bibliotekarer og andre at bedømme uddannelses niveauet for forskellige bøger og tekster. Det kan også tolkes som antal års generel uddannelse som er krævet for at forstå teksten (Dette er brugbart når teksten giver resultat over 12.
+.Bl -ohang -compact  
+.It Cm Kilde (Frit oversat):
+http://en.wikipedia.org/wiki/Flesch-Kincaid_Readability_Test
+.El
+.It FRE
+som er en forkortelse for Flesch Reading Ease. Højere resultater indikerer materiale som er let læseligt og lavere resultater markerer sværere materiale.
+Som en tommelfinger regel, er tekster på 90.0\-100.0 tænkt let forstået af en gennemsnits 5. klasse. 8. og 9. klasses studerende kan nemt forstå passager med resultat på 60.0\-70.0 og passager på 0.0\-30.0 er bedst forstået af universitets studerende.
+Fx. har Reader's Digest magazine et læsbarheds indeks på ca. 65, Time magazine har omkring 52 og Havards Law Review har en generel læsbarheds indeks på 30.
+Denne test er blevet en Amerikansk regerings standard. Mange regerings afdelinger kræver at dokumenter eller former har et vis læsbarheds indeks bl.a.
+.Dq U.S. Department of Defense .
+De fleste stater kræver at forsikrings former skal have et resultat på 40.0\-50.0.
+Brug af denne test er så udbredt at den ofte findes i populære skrive programmer som KWord, Lotus WordPro og Microsoft Word.
+Lange ord påvirker dette analyse væsentlig mere end de gør i 
+.Cm FKGL .
+.Bl -ohang -compact  
+.It Cm Kilde (Frit oversat):
+http://en.wikipedia.org/wiki/Flesch-Kincaid_Readability_Test
+.El
+.It Stavekontrol
+bliver udført på alle analyserede ord. teksten analyseres tjekkes der for attributten 
+.Dq lang
+i alle HTML tags. Hvis et HTML tag indeholder denne attribut overskrives standard sproget for al tekst indkapslet af dette tag. Da stavekontrollen bruger
+.Xr aspell 1 
+er det krævet at denne er installeret samt ordbøger til de sprog som forventes analyseret.
+Hvis der ikke forefindes nogen ordbog for det givne sprog der analyseres vil der ikke blive reporteret nogle fejl, blot vil alle ord se ud som om de var stavet korrekt (Altså ingen ændringen i dokumentet grundet stavekontrollen)
 .El
 .Sh OPTIONS
 .Bl -tag -width Ds
@@ -71,7 +96,7 @@ Toggler hvorvidt der skal bruges "Flesch-Kincaid Grade Level" analyse på tekste
 Læs mere: http://en.wikipedia.org/wiki/Flesch-Kincaid_Readability_Test
 .It Fl l Ar lang
 Sætter default sprog kode som bruges hvis der ikke er angivet noget andet i det analyserede dokument. 
-'lang' angives som ISO 639 sprog kode eventuelt efterfulgt af en bindestreg ('-') eller underscore ('_') og 2 bogstavs ISO 3166 lande kode.
+'lang' angives som ISO 639 sprog kode.
 .It Fl o Ar dir
 Sætter output mappen til en relativ eller absolut sti. Hvis der ikke er angivet nogen sti bliver der oprettet en mappe (navngivet efter det domæne der er angivet som URL) i den mappe som programmet startes fra.
 .It Fl ignore-tag Ar tag
@@ -81,20 +106,21 @@ Angiver hvilket html tag med givet id der skal filtreres fra i analysen. Kan def
 .El
 .Sh AUTHORS
 .An Troels Henriksen Aq athas@sigkill.dk
-.An Martin Dybdal Aq mail@mail.com
+.An Martin Dybdal Aq dybber@dybber.dk
 .An Jesper Reenberg Aq reenberg@kampsax.dtu.dk
 .Sh BUGS
 Der er rapporteret yderst få tilfælde hvor 
 .Cm sml/nj 
 er gået ned, formentlig på grund af socket-modulet. Dette bygger vi på det grundlag af at der ikke forud for socket-modulet er stødt på fejl af denne art.
 .Sh EXAMPLES 
-MUHAHHAHAHAHAHHAAHHAHA
+.Dl $ webanalyzer http://host.dk -fre -fkgl
+Analys
 .Sh SEE ALSO
 .Xr uri 7 , 
 .Xr wget 1 , 
 .Xr sml 1 , 
 .Xr aspell 1
-.Sh COPYING
+.Sh COPYRIGHT
 Copyright (c) 2007 Troels Henriksen, Martin Dybdal and Jesper Reenberg.
 .Pp
 Permission is granted to copy, distribute and/or modify this document
