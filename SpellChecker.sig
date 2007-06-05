@@ -28,4 +28,9 @@ sig
     (* Return true if we are able to spell-check for the given language code. *)
     val hasDictionary : string -> bool;
 
+    (* Return a boolean value indicating whether spell-checking is
+    available at all. If this return value is false, all calls to
+    spellCheckWord will return true. *)
+    val spellCheckingAvailable : unit -> bool;
+
 end

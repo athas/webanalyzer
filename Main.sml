@@ -192,6 +192,9 @@ fun mainProgram (arg :: rest) =
                      (TextAnalysisReporter.makeReport analysis)
             before analysedPages := (uri, analysis) :: !analysedPages);
     in 
+        if (SpellChecker.spellCheckingAvailable ())
+        then print ("Stavekontrol er tilgængelig.\n")
+        else print ("Stavekontrol er ikke tilgængelig.\n");
         OS.FileSys.mkDir outputDir 
         handle OS.SysErr (_,_) => raise FatalError "Kunne ikke oprette output-mappe.";
         (* Useful when used interactively. *)

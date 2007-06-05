@@ -88,4 +88,6 @@ fun spellCheckWord languageCode word =
 fun spellCheckWords languageCode words = 
     map (fn word => (word, spellCheckWord languageCode word)) words;
 
+fun spellCheckingAvailable () = hasAspell ();
+
 end
