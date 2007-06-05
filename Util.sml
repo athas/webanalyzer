@@ -270,5 +270,14 @@ fun hueToRGB hue : rgb  =
                            
     end;
 
+fun hexify x = StringCvt.padLeft #"0" 2 (Int.fmt StringCvt.HEX x);
+
+fun hueToHEX x = 
+    let
+        val rgb = hueToRGB x
+    in
+        "#" ^ hexify(#r rgb) ^ hexify (#g rgb) ^ hexify (#b rgb)
+    end;
+    
 end;
 

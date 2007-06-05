@@ -50,4 +50,6 @@ sig type 'a sock = ('a, Socket.active Socket.stream) Socket.sock
     (* calculates the (R, G, B) color codes from the given hue degree (0-360)*)
     type rgb = {r: int, g: int, b: int};
     val hueToRGB : int -> rgb;
+    val hexify : int -> string;
+    val hueToHEX : int -> string;
 end;
