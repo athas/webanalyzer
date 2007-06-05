@@ -1,3 +1,11 @@
 #!/bin/sh
 
-./smlnjruntime @SMLload=webanalyzer.x86-linux $*
+HEAPFILE="webanalyzer.x86-linux"
+
+if [ -f $HEAPFILE ] 
+then
+    ./smlnjruntime @SMLload=$HEAPFILE $*
+else
+    echo Could not find heapfile: $HEAPFILE
+    exit 1
+fi
