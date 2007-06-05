@@ -521,9 +521,10 @@ for at lette afprøvningen.
 
 \section*{Krav 4: Konfiguration af analyse}
 
-Dette krav har vi af simplicitetshensyn slækket lidt på - når analyser
-``slås fra'' udføres de stadigvæk, og benyttes stadigvæk i beregningen
-af sidesværhedsgraden, men de vises ikke i programmets output.
+Dette krav har vi af simplicitetshensyn slækket lidt på --- når
+analyser ``slås fra'' udføres de stadigvæk, og benyttes stadigvæk i
+beregningen af sidesværhedsgraden, men de vises ikke i programmets
+output.
 
 Kravet kræver også at man kan undtage elementer fra analyse baseret på
 deres \texttt{id} og \texttt{class}-attributter. I vores
@@ -586,6 +587,16 @@ frafiltrering baseret på tagnavnet.
 \section*{Krav 6: Resultater i HTML-format.}
 
 \section*{Krav 7: Platform}
+
+Vi mener ikke at dette program kan testes på en systematisk måde ---
+for det første er det vagt (af nødvendighed, det er meget svært at
+definere en præcis platform), og for det andet er det ikke rimeligt at
+forvente at vi har en meningsfyldt måde at reagere på u-understøttede
+platforme i programmet. I vores kravspecifikation nævner vi som
+eksempel at programmet kan køre på DIKU's maskiner, men da vores
+program er afhængigt af en
+SML/NJ\footnote{\url{http://www.smlnj.org/}}-installation (som ikke
+findes på DIKU's system) kan dette heller ikke uden videre gøres.
 
 \section*{Krav 8: Håndtering af HTML/XHTML}
 
