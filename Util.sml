@@ -232,5 +232,34 @@ fun formatForOutput x =
     in
         sign ^ rounded
     end;
+
+(* calculates the (R, G, B) color codes from the given hue degree (0-360)*)
+type rgb = {r: int, g: int, b: int};
+fun hueToRGB hue : rgb  = 
+    let 
+        val max = 255;
+        val min = 0;
+        val V = max;
+        fun setS () = if max = 0 then 0 else 1-(min div max);
+        val S = setS();
+        val h = (hue div 60) mod 6
+        val f = (hue div 60) - h
+        val p = V*(1-S)
+        val q = V*(1-(f*S))
+        val t = V*(1-((1-f)*S))
+    in
+        if hue < 360 orelse hue > 0 then
+            case h of
+                0 => {r=V, g=t, b=p}
+              | 1 => {r=q, g=V, b=p}
+              | 2 => {r=p, g=V, b=t}
+              | 3 => {r=p, g=q, b=V}
+              | 4 => {r=t, g=p, b=V}
+              | 5 => {r=V, g=p, b=q}
+              | _ => raise Fail "Error in hue calculation"
+        else
+            raise Fail ((Int.toString hue) ^ " is not in the valid range (0-360 degree)")
+    end;
+
 end;
 

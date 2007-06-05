@@ -46,4 +46,8 @@ sig type 'a sock = ('a, Socket.active Socket.stream) Socket.sock
 
     (* Print how long it takes a function of a single argument to execute. *)
     val time : ('a -> 'b) -> 'a -> 'b;
+
+    (* calculates the (R, G, B) color codes from the given hue degree (0-360)*)
+    type rgb = {r: int, g: int, b: int};
+    val hueToRGB : int -> rgb;
 end;
