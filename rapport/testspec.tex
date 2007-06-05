@@ -108,6 +108,15 @@ af at bruge programmet ved at læse brugermanualen. Derudover skal
 testen bruges til at finde ud af om resultatsiderne er vanskelige at
 læse.
 
+Bemærk at en del tests omhandler muligheden for at brugeren kan slå
+dele af analysen fra - i disse tilfælde vil det ikke blive testet at
+den relevante del ikke bliver slået fra når det ikke er angivet -
+f.eks. vil det i forbindelse med afprøvningen af muligheden for at slå
+LIX-tal fra ikke også blive afprøvet at LIX-tal bliver vist når de
+ikke er slået fra. Det forventes at andre tests vil afprøve dette
+scenarie. Det testes altså ikke hvad der sker når features
+\textit{ikke} aktiveres.
+
 \chapter{Kravtest}
 
 Vi vil systematisk gennemgå de krav vi har stillet til vores programs
