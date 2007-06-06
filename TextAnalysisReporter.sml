@@ -67,7 +67,10 @@ fun createHeader () =
 
 (* make the div style: float: left, width: 3 *)
             in
-                ($"Let ") && (divia "id=\"BadnessFactorBar\"" (createBox ($"") 120)) && ($" Sv&aelig;r")
+                table (tr
+                           (td ($"Let ")) &&
+                           (td (divia "id=\"BadnessFactorBar\"" (createBox ($"") 120))) &&
+                           (td (($" Sv&aelig;r"))))
             end
     in 
         (p (createBadnessFactorBar ())) &&
@@ -138,7 +141,7 @@ val style = mark1 "STYLE"
                       ^ ".document {max-width: 750px;}"
                       ^ ".spellerror {border:2px solid blue;}"
                       ^ ".repetition {background: pink;}"
-                      ^ "#BadnessFactorBar {display: inline;}"
+                      ^ "#BadnessFactorBar {width: 620px;}"
                    (* ^ ".result {margin-bottom: 10px; }" *)
                   ));
                                          
