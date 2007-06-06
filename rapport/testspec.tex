@@ -684,19 +684,7 @@ hvis det befinder sig i et \texttt{abbr}- eller
 markeres som stavefejl i det sprog som sidens tekst er angivet til at
 være skrevet i, ikke bliver opfattet som stavefejl hvis de er angivet
 som forkortelser. Dette krav er afhængigt af at krav 2.3 er opfyldt og
-fungerer. Følgende ækvivalensklasser repræsenterer forekomster i en
-test-side, og kan godt alle findes i samme test-side for at lette
-afprøvningen.
-
-\subsubsection{Ækvivalens-klasser}
-\begin{itemize}
-\item Korrekt stavede ord der ikke er angivet som forkortelser skal
-  ikke markeres som stavefejl (muligvis redundant ift. krav 2.3).
-\item Forkert stavede ord der er angivet som forkortelser skal ikke
-  markeres som stavefejl.
-\item Korrekt stavede ord der er angivet som forkortelser skal ikke
-  markeres som stavefejl.
-\end{itemize}
+fungerer.
 
 \begin{longtable}[c]{p{20pt}|p{220pt}|p{130pt}|p{130pt}|p{50pt}}
 \textbf{Nr.} &
@@ -761,15 +749,6 @@ Det skal testes at ord der har fået et sprog angivet via
 HTML-attributten \texttt{lang} bliver stavekontrolleret efter det
 angivne sprog, om muligt. Hvis det angivne sprog ikke kendes skal
 ordene ikke markeres som værende stavet forkert.
-
-\subsubsection{Ækvivalens-klasser}
-\begin{itemize}
-\item Et ord angivet med en kendt sprogkode (en ordbog for sproget er
-  installeret) som er forskellig fra resten af sidens sprogkode, og
-  hvor ordet ikke ville være korrekt i det sprog som resten af siden
-  er skrevet i, og ikke er korrekt indenfor det angivne sprog, skal
-  stavekontrolleres, og markeres som stavet forkert.
-\end{itemize}
 
 \begin{longtable}[c]{p{20pt}|p{220pt}|p{130pt}|p{130pt}|p{50pt}}
 \textbf{Nr.} &
