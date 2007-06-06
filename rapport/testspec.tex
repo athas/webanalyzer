@@ -160,7 +160,7 @@ af at HTML--output (krav 6) fungerer korrekt.
 \textbf{Inddata} &
 \textbf{Forventet resultat} &
 \textbf{Faktisk resultat} &
-\textbf{Konklusion} \\ \hline
+\textbf{Konklusion} \\* \hline
 
 1 &
 Et website der ikke indeholder links, og kun én side. &
@@ -171,7 +171,7 @@ $\surd$ \\ \hline
 2 &
 Et website der ikke indeholder interne links, men links til
 sider på andre websites. &
-Kun websitets egen sider skal analyseres &
+Kun websitets egen sider skal analyseres. &
 Som forventet. &
 $\surd$ \\ \hline
 
@@ -218,27 +218,27 @@ fordi denne distinktion ikke er nævnt i krav 1.1.
 \textbf{Inddata} &
 \textbf{Forventet resultat} &
 \textbf{Faktisk resultat} &
-\textbf{Konklusion} \\ \hline
+\textbf{Konklusion} \\* \hline
 
 6 &
-Et website, der ikke har en robots.txt--fil &
-Alle tilgængelige sider analyseres &
-Som forventet &
+Et website, der ikke har en robots.txt--fil. &
+Alle tilgængelige sider analyseres. &
+Som forventet. &
 $\surd$ \\ \hline
 
 7 &
 Et website hvor programmet har forbud mod at besøge nogen sider
-overhovedet &
+overhovedet. &
 Ingen sider bliver analyseret, programmet giver en fejlmeddelelse. &
-Som forventet &
+Som forventet. &
 $\surd$ \\ \hline
 
 8 &
 Et website hvor programmet har forbud mod at besøge en side der har
 eksklusive links til undersider på det analyserede website. &
 Den forbudte side analyseres ikke, og ej heller gør de sider som kun
-er tilgængelige via den forbudte side &
-Som forventet &
+er tilgængelige via den forbudte side. &
+Som forventet. &
 $\surd$ \\ \hline
 
 9 &
@@ -247,7 +247,7 @@ ikke--eksklusive links til undersider (som kan tilgås via andre,
 ikke--forbudte, sider) på det analyserede website. &
 Den forbudte side analyseres ikke, men det gør de sider som den linker
 til. &
-Som forventet &
+Som forventet. &
 $\surd$ \\ \hline
 
 \end{longtable}
@@ -263,24 +263,24 @@ denne og gøre det korrekt.
 \textbf{Inddata} &
 \textbf{Forventet resultat} &
 \textbf{Faktisk resultat} &
-\textbf{Konklusion} \\ \hline
+\textbf{Konklusion} \\* \hline
 
 10 &
-Ingen angivet dybde og et 3 sider dybt website &
+Ingen angivet dybde og et 3 sider dybt website. &
 Alle sider skal analyseres. &
-Som forventet &
+Som forventet. &
 $\surd$ \\ \hline
 
 11 &
-Maksimal dybde 0 angivet og et 3 sider dybt website &
-Kun den øverste side (forsiden) skal analyseres &
-Som forventet &
+Maksimal dybde 0 angivet og et 3 sider dybt website. &
+Kun den øverste side (forsiden) skal analyseres. &
+Som forventet. &
 $\surd$ \\ \hline
 
 12 &
-Maksimal dybde 1 angivet og et 3 sider dybt website &
-Alle sider, med undtagelse af de(n) dybeste side, skal analyseres &
-Som forventet &
+Maksimal dybde 1 angivet og et 3 sider dybt website. &
+Alle sider, med undtagelse af de(n) dybeste side, skal analyseres. &
+Som forventet. &
 $\surd$ \\ \hline
 
 13 &
@@ -289,7 +289,7 @@ både dybde 2 og dybde 1. Hvis sider bliver undersøgt i den rækkefølge de
 bliver set i vil den først blive undersøgt som dybde 2. &
 Alle sider op til dybde 2 skal analyseres, og den nævnte side der både
 har dybde 2 og dybde 1 skal også analyseres. &
-Som forventet &
+Som forventet. &
 $\surd$ \\ \hline
 
 \end{longtable}
@@ -334,12 +334,12 @@ at bedømme om sætningsopdeling sker korrekt.
 \textbf{Inddata} &
 \textbf{Forventet resultat} &
 \textbf{Faktisk resultat} &
-\textbf{Konklusion} \\ \hline
+\textbf{Konklusion} \\* \hline
 
 14 &
-En side uden indhold &
+En side uden indhold. &
 Programmet skal køre som normalt, men output skal naturligvis ikke
-indeholde analyse af nogen specifik tekst &
+indeholde analyse af nogen specifik tekst. &
 Som forventet, men resultaterne for hele dokumentet og titlen er uden
 mening og burde ikke være med. &
 Delvist ok, fejlen er så lille og sker så sjældent at vi ikke har
@@ -398,19 +398,19 @@ opmærksomme på denne fejl og vi vil i testen ikke bruge ord hvor
 antallet af stavelserne er forskellige fra antallet af vokaler. Dette
 gør vi så vi kan teste at beregningen er korrekt, hvis man ser bort
 fra dette.
-
+\newpage
 \subsubsection{Resultater}
 \begin{longtable}[c]{p{20pt}|p{220pt}|p{130pt}|p{130pt}|p{50pt}}
 \textbf{Nr.} &
 \textbf{Inddata} &
 \textbf{Forventet resultat} &
 \textbf{Faktisk resultat} &
-\textbf{Konklusion} \\ \hline
+\textbf{Konklusion} \\* \hline
 
 19 &
-En side uden indhold &
+En side uden indhold. &
 Programmet skal køre som normalt, men output skal naturligvis ikke
-indeholde analyse af nogen specifik tekst &
+indeholde analyse af nogen specifik tekst. &
 Som forventet, men resultaterne for hele dokumentet og titlen er uden
 mening og burde ikke være med. &
 Delvist ok, fejlen er så lille og sker så sjældent at vi ikke har
@@ -474,7 +474,7 @@ som \texttt{aspell} ville hvis \texttt{aspell} blev kørt direkte.
 \textbf{Inddata} &
 \textbf{Forventet resultat} &
 \textbf{Faktisk resultat} &
-\textbf{Konklusion} \\ \hline
+\textbf{Konklusion} \\* \hline
 
 24 &
 Side med dansk tekst på en maskine der ikke har \texttt{aspell}
@@ -513,7 +513,7 @@ sider indeholdende hhv. engelsk og tysk tekst.
 \textbf{Inddata} &
 \textbf{Forventet resultat} &
 \textbf{Faktisk resultat} &
-\textbf{Konklusion} \\ \hline
+\textbf{Konklusion} \\* \hline
 
 27 &
 Side med engelsk tekst på en maskine der ikke har \texttt{aspell}
@@ -575,26 +575,26 @@ HTML-dokument.
 \textbf{Inddata} &
 \textbf{Forventet resultat} &
 \textbf{Faktisk resultat} &
-\textbf{Konklusion} \\ \hline
+\textbf{Konklusion} \\* \hline
 
 33 &
-To på hinanden følgende ord, som ikke er ens &
-De to ord skal ikke markeres som gentagne ord &
-Som forventet &
+To på hinanden følgende ord, som ikke er ens. &
+De to ord skal ikke markeres som gentagne ord. &
+Som forventet. &
 $\surd$ \\ \hline
 
 34 &
 To på hinanden følgende ord, som er ens, og som befinder sig i samme
-sætning &
-De to ord skal markeres som gentagne ord &
-Som forventet &
+sætning. &
+De to ord skal markeres som gentagne ord. &
+Som forventet. &
 $\surd$ \\ \hline
 
 35 &
 To på hinanden følgende ord, som er ens, og som befinder sig i
-to forskellige sætninger (adskilt af punktum, udråbstegn, osv) &
-De to ord skal ikke markeres som gentagne ord &
-Som forventet &
+to forskellige sætninger (adskilt af punktum, udråbstegn, osv). &
+De to ord skal ikke markeres som gentagne ord. &
+Som forventet. &
 $\surd$ \\ \hline
 
 \end{longtable}
@@ -624,15 +624,15 @@ informel test som vi udfører her.
 \textbf{Inddata} &
 \textbf{Forventet resultat} &
 \textbf{Faktisk resultat} &
-\textbf{Konklusion} \\ \hline
+\textbf{Konklusion} \\* \hline
 
 36 &
-En website indeholdende tre sider, hvoraf en er ``åbenlyst svær'', en
+Et website indeholdende tre sider, hvoraf en er ``åbenlyst svær'', en
 er ``åbenlyst nem'' og den tredje er mellemsvær. &
 Den svære side skal tildeles den højeste sidesværhedsgrad, den
 mellemsvære en lavere sidesværhedsgrad, og den nemme den laveste
 sidesværhedsgrad. &
-Som forventet &
+Som forventet. &
 $\surd$ \\ \hline
 
 \end{longtable}
@@ -679,18 +679,18 @@ fungerer.
 \textbf{Inddata} &
 \textbf{Forventet resultat} &
 \textbf{Faktisk resultat} &
-\textbf{Konklusion} \\ \hline
+\textbf{Konklusion} \\* \hline
 
 37 &
-Et forkert stavet ord, der er angivet som forkortelse &
+Et forkert stavet ord, der er angivet som forkortelse. &
 Ordet skal ikke markeres som stavefejl. &
-Som forventet &
+Som forventet. &
 $\surd$ \\ \hline
 
 38 &
-Et korrekt stavet ord, der er angivet som forkortelse &
+Et korrekt stavet ord, der er angivet som forkortelse. &
 Ordet skal ikke markeres som stavefejl. &
-Som forventet &
+Som forventet. &
 $\surd$ \\ \hline
 
 \end{longtable}
@@ -710,23 +710,23 @@ resultatet at citater indeholdende stavefejl fjernes.
 \textbf{Inddata} &
 \textbf{Forventet resultat} &
 \textbf{Faktisk resultat} &
-\textbf{Konklusion} \\ \hline
+\textbf{Konklusion} \\* \hline
 
 39 &
 En side indeholdende et afsnit som er designeret som et citat
-via \texttt{blockquote}) og som ikke indeholder stavefejl &
+via \texttt{blockquote}) og som ikke indeholder stavefejl. &
 Sidesværhedsgraden skal være den samme om citatet findes på siden
-eller ej, men når citatet findes skal det vises i output &
-Som forventet &
+eller ej, men når citatet findes skal det vises i output. &
+Som forventet. &
 $\surd$ \\ \hline
 
 40 &
 En side indeholdende et afsnit som er designeret som et citat (via
-\texttt{blockquote}) og som indeholder stavefejl &
+\texttt{blockquote}) og som indeholder stavefejl. &
 Sidesværhedsgraden skal være den samme om citatet findes på siden
 eller ej, men hvis citatet findes skal det vises i output og de
-forkert stavede ord skal være markeret &
-Som forventet &
+forkert stavede ord skal være markeret. &
+Som forventet. &
 $\surd$ \\ \hline
 
 \end{longtable}
@@ -745,14 +745,14 @@ ordene ikke markeres som værende stavet forkert.
 \textbf{Inddata} &
 \textbf{Forventet resultat} &
 \textbf{Faktisk resultat} &
-\textbf{Konklusion} \\ \hline
+\textbf{Konklusion} \\* \hline
 
 41 &
 En side skrevet på dansk som indeholder et ord der ikke er kendt på
 dansk (og som ville blive markeret som stavefejl), men som har fået
 angivet en ugyldig sprogkode. &
 Ordet skal ikke markeres som stavefejl. &
-Som forventet &
+Som forventet. &
 $\surd$ \\ \hline
 
 42 &
@@ -760,7 +760,7 @@ En side skrevet på dansk som indeholder et ord der ikke er kendt på
 dansk (og som ville blive markeret som stavefejl), men som har fået
 angivet en ukendt (men gyldig) sprogkode. &
 Ordet skal ikke markeres som stavefejl. &
-Som forventet &
+Som forventet. &
 $\surd$ \\ \hline
 
 43 &
@@ -769,7 +769,7 @@ dansk (og som ville blive markeret som stavefejl), men som har fået
 angivet en kendt sprogkode (ordbogen er installeret) og som ikke er en
 stavefejl på det angivne sprog. &
 Ordet skal ikke markeres som stavefejl. &
-Som forventet &
+Som forventet. &
 $\surd$ \\ \hline
 
 44 &
@@ -778,7 +778,7 @@ dansk (og som ville blive markeret som stavefejl), men som har fået
 angivet en kendt sprogkode (ordbogen er installeret) og som også er en
 stavefejl på det angivne sprog. &
 Ordet skal markeres som stavefejl. &
-Som forventet &
+Som forventet. &
 $\surd$ \\ \hline
 
 \end{longtable}
@@ -792,22 +792,22 @@ af citat-håndteringen (se afprøvning af krav 3.4). Det bliver testet
 af hvert eneste af ovenstående tags behandles korrekt (identisk).
 
 \subsubsection{Resultater}
-\begin{longtable}[c]{p{20pt}|p{220pt}|p{130pt}|p{130pt}|p{50pt}}
+\begin{longtable}[c]{p{20pt}|p{190pt}|p{130pt}|p{130pt}|p{80pt}}
 \textbf{Nr.} &
 \textbf{Inddata} &
 \textbf{Forventet resultat} &
 \textbf{Faktisk resultat} &
-\textbf{Konklusion} \\ \hline
+\textbf{Konklusion} \\* \hline
 
 45 &
 En side med dansk tekst, hvori dele af sætninger er designeret som
 værende kode-ord (med \texttt{kbd}), og disse kode-ord er korrekt
 stavede ord på dansk, samt en side med identisk indhold, bortset fra
-at kode-ordene er fjernet &
+at kode-ordene er fjernet. &
 De to sider har identisk sidesværhedsgrad, kode-ordene er at finde i
-output når de er til stede på HTML-siden &
+output når de er til stede på HTML-siden. &
 Kode-ordene bliver talt med når sidesværhedsgraden beregnes, de to
-sider har forskellig sidesværhedsgrad &
+sider har forskellig sidesværhedsgrad. &
 Grundet tidsnød blev det valgt ikke at rette dette, det blev opfattet
 som en mindre detalje. \\ \hline
 
@@ -815,26 +815,26 @@ som en mindre detalje. \\ \hline
 En side med dansk tekst, hvori dele af sætninger er designeret som
 værende kode-ord, og disse kode-ord (med \texttt{kdb}) er forkert
 stavede ord indenfor sidens angivne sprog, samt en side med identisk
-indhold, bortset fra at kode-ordene er fjernet &
+indhold, bortset fra at kode-ordene er fjernet. &
 De to sider har identisk sidesværhedsgrad, kode-ordene er at finde i
 output når de er til stede på HTML-siden. Kode-ordene skal ikke være
-markeret som stavefejl &
+markeret som stavefejl. &
 Kode-ordene bliver talt med når sidesværhedsgraden beregnes, de to
 sider har forskellig sidesværhedsgrad, men kode-ordene markeres dog
-ikke som stavefejl &
+ikke som stavefejl. &
 Grundet tidsnød, og det faktum at den vigtigste detalje (at
 kode-ordene ikke bliver markeret som stavefejl) fungerer, valgte vi
-ikke at rette dette \\ \hline
+ikke at rette dette. \\ \hline
 
 47 &
 En side med dansk tekst, hvori dele af sætninger er designeret som
 værende kode-ord (med \texttt{var}), og disse kode-ord er korrekt
 stavede ord på dansk, samt en side med identisk indhold, bortset fra
-at kode-ordene er fjernet &
+at kode-ordene er fjernet. &
 De to sider har identisk sidesværhedsgrad, kode-ordene er at finde i
-output når de er til stede på HTML-siden &
+output når de er til stede på HTML-siden. &
 Kode-ordene bliver talt med når sidesværhedsgraden beregnes, de to
-sider har forskellig sidesværhedsgrad &
+sider har forskellig sidesværhedsgrad. &
 Grundet tidsnød blev det valgt ikke at rette dette, det blev opfattet
 som en mindre detalje. \\ \hline
 
@@ -842,26 +842,26 @@ som en mindre detalje. \\ \hline
 En side med dansk tekst, hvori dele af sætninger er designeret som
 værende kode-ord, og disse kode-ord (med \texttt{var}) er forkert
 stavede ord indenfor sidens angivne sprog, samt en side med identisk
-indhold, bortset fra at kode-ordene er fjernet &
+indhold, bortset fra at kode-ordene er fjernet. &
 De to sider har identisk sidesværhedsgrad, kode-ordene er at finde i
 output når de er til stede på HTML-siden. Kode-ordene skal ikke være
-markeret som stavefejl &
+markeret som stavefejl. &
 Kode-ordene bliver talt med når sidesværhedsgraden beregnes, de to
 sider har forskellig sidesværhedsgrad, men kode-ordene markeres dog
-ikke som stavefejl &
+ikke som stavefejl. &
 Grundet tidsnød, og det faktum at den vigtigste detalje (at
 kode-ordene ikke bliver markeret som stavefejl) fungerer, valgte vi
-ikke at rette dette \\ \hline
+ikke at rette dette. \\ \hline
 
 49 &
 En side med dansk tekst, hvori dele af sætninger er designeret som
 værende kode-ord (med \texttt{code}), og disse kode-ord er korrekt
 stavede ord på dansk, samt en side med identisk indhold, bortset fra
-at kode-ordene er fjernet &
+at kode-ordene er fjernet. &
 De to sider har identisk sidesværhedsgrad, kode-ordene er at finde i
-output når de er til stede på HTML-siden &
+output når de er til stede på HTML-siden. &
 Kode-ordene bliver talt med når sidesværhedsgraden beregnes, de to
-sider har forskellig sidesværhedsgrad &
+sider har forskellig sidesværhedsgrad. &
 Grundet tidsnød blev det valgt ikke at rette dette, det blev opfattet
 som en mindre detalje. \\ \hline
 
@@ -869,16 +869,16 @@ som en mindre detalje. \\ \hline
 En side med dansk tekst, hvori dele af sætninger er designeret som
 værende kode-ord, og disse kode-ord (med \texttt{code}) er forkert
 stavede ord indenfor sidens angivne sprog, samt en side med identisk
-indhold, bortset fra at kode-ordene er fjernet &
+indhold, bortset fra at kode-ordene er fjernet. &
 De to sider har identisk sidesværhedsgrad, kode-ordene er at finde i
 output når de er til stede på HTML-siden. Kode-ordene skal ikke være
-markeret som stavefejl &
+markeret som stavefejl. &
 Kode-ordene bliver talt med når sidesværhedsgraden beregnes, de to
 sider har forskellig sidesværhedsgrad, men kode-ordene markeres dog
-ikke som stavefejl &
+ikke som stavefejl. &
 Grundet tidsnød, og det faktum at den vigtigste detalje (at
 kode-ordene ikke bliver markeret som stavefejl) fungerer, valgte vi
-ikke at rette dette \\ \hline
+ikke at rette dette. \\ \hline
 
 \end{longtable}
 
@@ -897,14 +897,14 @@ tekstretningen (to gange ``højre mod venstre'' giver altså ikke
 \textbf{Inddata} &
 \textbf{Forventet resultat} &
 \textbf{Faktisk resultat} &
-\textbf{Konklusion} \\ \hline
+\textbf{Konklusion} \\* \hline
 
 51 &
 En side skrevet på dansk med et ord angivet som værende skrevet med
 ``højre mod venstre'' tegnretning, som ville være stavefejl på dansk
 hvis det ikke blev vendt, men som ikke ville være en stavefejl hvis det blev vendt. &
 Ordet skal vendes og ikke markeres som stavefejl. &
-Som forventet &
+Som forventet. &
 $\surd$ \\ \hline
 
 52 &
@@ -913,7 +913,7 @@ En side skrevet på dansk med et ord angivet som værende skrevet med
 hvis det blev vendt, men som ikke ville være en stavefejl hvis det
 ikke blev vendt. &
 Ordet skal vendes og markeres som stavefejl. &
-Som forventet &
+Som forventet. &
 $\surd$ \\ \hline
 
 53 &
@@ -922,7 +922,7 @@ En side skrevet på dansk med et ord angivet som værende skrevet med
 hvis det ikke blev vendt, og som ville være en stavefejl hvis det blev
 vendt. &
 Ordet skal vendes og markeres som stavefejl. &
-Som forventet &
+Som forventet. &
 $\surd$ \\ \hline
 
 54 &
@@ -931,7 +931,7 @@ En side skrevet på dansk med et ord angivet som værende skrevet med
 hvis det ikke blev vendt, og som ikke ville være en stavefejl hvis
 det blev vendt. &
 Ordet skal vendes og ikke markeres som stavefejl. &
-Som forventet &
+Som forventet. &
 $\surd$ \\ \hline
 
 \end{longtable}
@@ -954,55 +954,55 @@ frafiltrering baseret på tagnavnet.
 \textbf{Inddata} &
 \textbf{Forventet resultat} &
 \textbf{Faktisk resultat} &
-\textbf{Konklusion} \\ \hline
+\textbf{Konklusion} \\* \hline
 
 55 &
-Den samme website to gange, med visning af LIX-tal slået hhv. fra og til &
+Den samme website to gange, med visning af LIX-tal slået hhv. fra og til. &
 De to analyser producerer identiske resultater, men i den hvor visning
-af LIX-tal er slået fra figurerer LIX-tallene ikke i analysen &
-Som forventet &
+af LIX-tal er slået fra figurerer LIX-tallene ikke i analysen. &
+Som forventet. &
 $\surd$ \\ \hline
 
 56 &
-Den samme website to gange, med visning af FKGL-tal slået hhv. fra og til &
+Den samme website to gange, med visning af FKGL-tal slået hhv. fra og til. &
 De to analyser producerer identiske resultater, men i den hvor visning
-af FKGL-tal er slået fra figurerer FKGL-tallene ikke i analysen &
-Som forventet &
+af FKGL-tal er slået fra figurerer FKGL-tallene ikke i analysen. &
+Som forventet. &
 $\surd$ \\ \hline
 
 57 &
-Den samme website to gange, med visning af FRE-tal slået hhv. fra og til &
+Den samme website to gange, med visning af FRE-tal slået hhv. fra og til. &
 De to analyser producerer identiske resultater, men i den hvor visning
-af FRE-tal er slået fra figurerer FRE-tallene ikke i analysen &
-Som forventet &
+af FRE-tal er slået fra figurerer FRE-tallene ikke i analysen. &
+Som forventet. &
 $\surd$ \\ \hline
 
 58 &
 En side uden stavefejl, og hvor mærkning af stavefejl er slået fra
-i analysen &
-Ingen ord markeres som stavefejl i output &
-Som forventet &
+i analysen. &
+Ingen ord markeres som stavefejl i output. &
+Som forventet. &
 $\surd$ \\ \hline
 
 59 &
 En side med stavefejl, og hvor mærkning af stavefejl er slået fra
-i analysen &
-Ingen ord markeres som stavefejl i output &
-Som forventet &
+i analysen. &
+Ingen ord markeres som stavefejl i output. &
+Som forventet. &
 $\surd$ \\ \hline
 
 60 &
 En side der ikke indeholder gentagne ord, og hvor mærkning af gentagne ord er slået fra
-i analysen &
-Ingen ord markeres som gentagne ord i output &
-Som forventet &
+i analysen. &
+Ingen ord markeres som gentagne ord i output. &
+Som forventet. &
 $\surd$ \\ \hline
 
 61 &
 En side med der indeholder gentagne ord, og hvor mærkning af gentagne ord er slået fra
-i analysen &
-Ingen ord markeres som gentagne ord i output &
-Som forventet &
+i analysen. &
+Ingen ord markeres som gentagne ord i output. &
+Som forventet. &
 $\surd$ \\ \hline
 
 62 &
@@ -1012,7 +1012,7 @@ med den relevante \texttt{id}-attribut. Programmet er sat til at
 filtrere elementet med den relevante \texttt{id}-attribut fra før
 analysen. &
 Analyseresultatet for de to sider er identisk. &
-Som forventet &
+Som forventet. &
 $\surd$ \\ \hline
 
 63 &
@@ -1022,7 +1022,7 @@ med de relevante \texttt{id}-attributter. Programmet er sat til at
 filtrere elementer med de relevante \texttt{id}-attributter fra før
 analysen. &
 Analyseresultatet for de to sider er identisk. &
-Som forventet &
+Som forventet. &
 $\surd$ \\ \hline
 
 64 &
@@ -1032,7 +1032,7 @@ med det relevante tag. Programmet er sat til at
 filtrere elementet med det relevante tag fra før
 analysen. &
 Analyseresultatet for de to sider er identisk. &
-Som forventet &
+Som forventet. &
 $\surd$ \\ \hline
 
 65 &
@@ -1042,7 +1042,7 @@ med de relevante tags. Programmet er sat til at
 filtrere elementer med de tags fra før
 analysen. &
 Analyseresultatet for de to sider er identisk. &
-Som forventet &
+Som forventet. &
 $\surd$ \\ \hline
 
 \end{longtable}
@@ -1066,15 +1066,15 @@ korrekte, kun at de findes i programmets output.
 \textbf{Inddata} &
 \textbf{Forventet resultat} &
 \textbf{Faktisk resultat} &
-\textbf{Konklusion} \\ \hline
+\textbf{Konklusion} \\* \hline
 
 66 & 
 Et website indeholdende en enkelt side. & 
 Den resulterende index-fil skal være beliggende i en mappe med navn
 efter det domæne som websitet er beliggende på, og være navngivnet
 \texttt{index.html}. Filen skal indeholde et link til en enkelt
-analyseside, som også ligger inde i mappen sammen med index-filen & 
-Som forventet & 
+analyseside, som også ligger inde i mappen sammen med index-filen. & 
+Som forventet. & 
 $\surd$ \\ \hline
 
 67 & 
@@ -1084,7 +1084,7 @@ Analysesiden for websitets ene side skal indeholde en liste over
 afsnit på siden, hvert afsnit skal indeholde analyseresultaterne for
 siden, og hver sætning i afsnittet skal være farvekodet efter dets
 sværhedsgrad. & 
-Som forventet & 
+Som forventet. & 
 $\surd$ \\ \hline
 
 \end{longtable}
@@ -1113,13 +1113,13 @@ er beskrevet i brugsvejledningen.
 \textbf{Inddata} &
 \textbf{Forventet resultat} &
 \textbf{Faktisk resultat} &
-\textbf{Konklusion} \\ \hline
+\textbf{Konklusion} \\* \hline
 
 68 &
 Kørsel program på GNU/Linux-baseret system, uden SML/NJ installeret, med direkte forbindelse til
-Internettet &
-Programmet virker og kan hente og analysere en hjemmeside &
-Som forventet &
+Internettet. &
+Programmet virker og kan hente og analysere en hjemmeside. &
+Som forventet. &
 $\surd$ \\ \hline
 
 \end{longtable}
@@ -1155,14 +1155,14 @@ browsere. Disse features vil således ikke blive testet.
 \textbf{Inddata} &
 \textbf{Forventet resultat} &
 \textbf{Faktisk resultat} &
-\textbf{Konklusion} \\ \hline
+\textbf{Konklusion} \\* \hline
 
 69 &
 En side på dansk indeholdende ord, der ikke er korrekt stavede danske
 ord, som er angivet som forkortelser og indlejret i \texttt{em}- og
-\texttt{strong}-tags &
-De ord der er angivet som forkortelser er ikke markeret som stavefejl &
-Som forventet &
+\texttt{strong}-tags. &
+De ord der er angivet som forkortelser er ikke markeret som stavefejl. &
+Som forventet. &
 $\surd$ \\ \hline
 
 70 &
@@ -1190,17 +1190,17 @@ En side indeholdende korrekt stavede danske ord indeholdende danske
 specialtegn, hvor disse specialtegn er repræsenteret ved
 \textit{HTML-entities} (\texttt{\&oslash;}, \texttt{\&aelig;},
 \texttt{\&aring;}), og det derfor er nødvendigt at erstatte disse
-entities med de tilsvarende tegn for at opnå en korrekt stavekontrol &
-Ingen af de danske ord er markeret som forkert stavede &
-Som forventet &
+entities med de tilsvarende tegn for at opnå en korrekt stavekontrol. &
+Ingen af de danske ord er markeret som forkert stavede. &
+Som forventet. &
 $\surd$ \\ \hline
 
 73 &
-2 identiske filer, hvoraf en af filerne dog indeholder lange HTML-kommentarer &
+2 identiske filer, hvoraf en af filerne dog indeholder lange HTML-kommentarer. &
 Analyseresultat for filerne er ens med henblik på
 dokumentresultatet og de individuelle afsnits--resultater, indholdet
-af HTML-kommentarerne skal ikke påvirke analyseresultatet &
-Som forventet &
+af HTML-kommentarerne skal ikke påvirke analyseresultatet. &
+Som forventet. &
 $\surd$ \\ \hline
 
 \end{longtable}
@@ -1212,19 +1212,19 @@ Moscow ML til SML/NJ, hvilket også ændrede dette krav. I stedet for at
 understøtte Moscow ML's indbyggede indkodning understøtter vi explicit
 Latin-1.
 
-\begin{longtable}[c]{p{20pt}|p{220pt}|p{130pt}|p{130pt}|r}
+\begin{longtable}[c]{p{20pt}|p{220pt}|p{130pt}|p{130pt}|p{50pt}}
 \textbf{Nr.} &
 \textbf{Inddata} &
 \textbf{Forventet resultat} &
 \textbf{Faktisk resultat} &
-\textbf{Konklusion} \\ \hline
+\textbf{Konklusion} \\* \hline
 
 74 &
 En HTML fil indkodet i Latin-1, direkte indeholdende danske
-specialtegn som del af danske ord &
+specialtegn som del af danske ord. &
 Korrekt stavekontrol af de danske ord der indeholder danske
-specialtegn indkodet efter Latin-1 &
-Som forventet &
+specialtegn indkodet efter Latin-1. &
+Som forventet. &
 $\surd$ \\ \hline
 
 \end{longtable}
@@ -1254,7 +1254,7 @@ Man kan sige at programmet brugsmæssigt er delt i to. Den ene del
 handler om at starte en analyse og den anden del om at aflæse
 resultatet. I udførelsen af brugertesten vil vi ikke direkte lave
 denne adskillelse, men det er sådan vi vil evaluere resultaterne.
-\newpage
+
 \section{Opgaver}
 Dette afsnit indeholder de opgaver vi vil stille brugeren.
 
@@ -1282,7 +1282,7 @@ Dette afsnit indeholder de opgaver vi vil stille brugeren.
   medtages i analysen.
 \item Hvad er sidens læsbarhedsindeks nu?
 \end{itemize}
-\newpage
+
 \section{Valg af forsøgspersoner}
 Til at udføre vores brugertest skal vi bruge en eller flere personer
 indenfor vores målgruppe. I kravspecifikationen er vores målgruppe

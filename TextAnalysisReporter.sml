@@ -43,13 +43,12 @@ fun reportSentenceElem (WordResult (text, correct, repetition)) =
 
 fun colorByResults results = 
     let
-        val faktor = getBadnessFactor results
         (* use only 0-120 degree of the hue scale to show red-yellow-green *)
         val lowerlimit = 20.0
-        val upperlimit = 80.0
+        val upperlimit = 65.0
         val multiplier = 100.0 / (upperlimit - lowerlimit)
-        val lix = Real.max(lowerlimit, Real.min(faktor, upperlimit))
-        val level = trunc (1.20 * (100.0 - (lix - lowerlimit) * multiplier))
+        val factor = Real.max(lowerlimit, Real.min(getBadnessFactor results, upperlimit))
+        val level = trunc (0.80 * (100.0 - (factor - lowerlimit) * multiplier)) + 20
     in
         Util.hueToHEX level
     end;
@@ -58,10 +57,10 @@ fun createHeader () =
     let
         fun createBadnessFactorBar () =
             let
-                fun createBox ret ~1 = ret
+                fun createBox ret 19 = ret
                   | createBox ret index = 
                     createBox (ret && 
-                                   (divia ("style=\"float: left; height: 10px; width: 5px; background:" ^ Util.hueToHEX index ^ "\"")  
+                                   (divia ("style=\"float: left; height: 10px; width: 7px; background:" ^ Util.hueToHEX index ^ "\"")  
                                           ($""))) 
                               (index-1)
 
@@ -71,7 +70,7 @@ fun createHeader () =
                    table
                    (tr ((td ($"Let ")) && (tda ("align=\"right\"") ($" Sv&aelig;r"))) &&
                        tr (tda ("colspan=\"2\"")
-                               (divia "id=\"BadnessFactorBar\"" (createBox ($"") 120)))) 
+                               (divia "id=\"BadnessFactorBar\"" (createBox ($"") 100)))) 
             end
     in 
         (p (createBadnessFactorBar ())) &&
