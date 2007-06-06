@@ -118,9 +118,12 @@ dele af analysen fra --- i disse tilfælde vil det ikke blive testet at
 den relevante del ikke bliver slået fra når det ikke er angivet ---
 f.eks. vil det i forbindelse med afprøvningen af muligheden for at slå
 LIX-tal fra ikke også blive afprøvet at LIX--tal bliver vist når de
-ikke er slået fra. Det forventes at andre tests vil afprøve dette
-scenarie. Det testes altså ikke hvad der sker når features
-\textit{ikke} aktiveres.
+ikke er slået fra, og når det testes at stavefejl angivet som
+forkortelser ikke bliver markeret som stavefejl testes det
+\textit{ikke} om forkert stavede ord markeres som stavefejl, når de
+ikke er angivet som forkortelser. Det forventes at de dedikerede tests
+for den relevante feature vil afprøve dette generelle scenarie. Det
+testes altså ikke hvad der sker når features \textit{ikke} aktiveres.
 
 Det absolut vigtigste funktionalitet i vores program er naturligvis
 den korrekte omdannelse af HTML-dokumenter til parsetræer, leksikalske
@@ -131,7 +134,7 @@ denne funktionalitet end mere undværlige features som de forskellige
 konfigurationsmuligheder.
 
 Kørselsresultater, såvel som inddata, er at finde sammen med vores
-kode i mappen \texttt{functionalitytesting}.
+kode i mappen \texttt{functionalitytesting}
 
 \chapter{Kravtest}
 
@@ -652,8 +655,7 @@ Dette krav kan ikke testes for sig selv, idet det fungerer som
 ``paraplykrav'' for en række mere specifikke underkrav der omhandler
 behandling af specifikke HTML-tags. Afprøvning af disse underkrav
 foregår alle på samme måde --- for hvert underkrav produceres en side
-
-  indeholdende repræsentanter for de relevante ækvivalensklasser,
+indeholdende repræsentanter for de relevante ækvivalensklasser,
 programmet køres på disse sider, og resultatet sammenlignes med det
 forventede. Det er ikke nødvendigt at lave en side for hver eneste
 ækvivalensklasse. Disse krav afhænger af at krav 2 og krav 8 er
@@ -687,8 +689,6 @@ afprøvningen.
 
 \subsubsection{Ækvivalens-klasser}
 \begin{itemize}
-\item Forkert stavede ord der ikke er angivet som forkortelser skal
-  markeres som stavefejl.
 \item Korrekt stavede ord der ikke er angivet som forkortelser skal
   ikke markeres som stavefejl (muligvis redundant ift. krav 2.3).
 \item Forkert stavede ord der er angivet som forkortelser skal ikke
@@ -696,6 +696,27 @@ afprøvningen.
 \item Korrekt stavede ord der er angivet som forkortelser skal ikke
   markeres som stavefejl.
 \end{itemize}
+
+\begin{longtable}[c]{p{20pt}|p{220pt}|p{130pt}|p{130pt}|r}
+\textbf{Nr.} &
+\textbf{Inddata} &
+\textbf{Forventet resultat} &
+\textbf{Faktisk resultat} &
+\textbf{Konklusion} \\ \hline
+
+37 &
+Et forkert stavet ord, der er angivet som forkortelse &
+Ordet skal ikke markeres som stavefejl. &
+Som forventet &
+$\surd$ \\ \hline
+
+38 &
+Et korrekt stavet ord, der er angivet som forkortelse &
+Ordet skal ikke markeres som stavefejl. &
+Som forventet &
+$\surd$ \\ \hline
+
+\end{longtable}
 
 \subsection{Krav 3.4: Citater skal ikke analyseres.}
 
