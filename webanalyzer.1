@@ -1,6 +1,6 @@
 .Dd May 29, 2007
 .Dt WEBANALYZER l
-.Sh NAME
+.Sh NAVN
 .Nm webanalyzer 
 .Nd tekst analyser et websted
 .Sh SYNOPSIS
@@ -17,7 +17,7 @@
 .Op Fl o Ar directory
 .Op Fl ignore-tag Ar html_tag
 .Op Fl ignote-id Ar id
-.Sh DESCRIPTION
+.Sh BESKRIVELSE
 .Nm
 er et program til at analysere sværhedsgraden af tekst på hjemmesider.
 Dette gøres ved brug af forskellige tekst analyser og stavekontrol:
@@ -76,7 +76,51 @@ bliver altid udført på den analyserede tekst. Analysen markerer det gentagne o
 .El
 .Pp
 Alle tekstanalysernes brugbarhed afspejles i den analyseres teksts størrelse. For at brugbarheden er optimal skal den analyserede tekst være omkring 1.000 ord eller mere. Herved skal sidesværhedsgraden for enkelte sætninger i afsnit ikke vægtes højt men blot ses som en indikation af at en enkelt sætning eller et afsnit kan være svært.
-.Sh OPTIONS
+.Sh OUTPUT
+Når programmet har analyseret et websted gemmes alle filerne i en mappe, enten specificeret ud fra 
+.Dq Fl o Ar dir
+parametren (se nedenfor) eller også laves en mappe (i det bibliotek
+som programmet blev startet fra) som navngives efter det domæne som er
+blevet analyseret.  Når en enkelt fil er blevet analyseret bliver den
+gemt i mappen og efter endt analyse bliver der skrevet en indeks fil
+kaldet
+.Dq index.html 
+hvor der er links til alle analyserede filer. Listen i indeks filen er
+sorteret efter højest sidesværhedsgrad i toppen ydermere er alle
+elementerne er også farvet ud sin sidesværhedsgrad.  Når en enkelt
+side er analyseret og skal gemmes bliver alle
+.Dq /
+erstattet med 
+.Dq #
+og alle filer bliver suffikset med
+.Dq .html
+så fx filen: 
+.Dq http://dybber.dk/test/test.html
+bliver gemt i mappen som:
+.Dq dybber.dk#test#test.html.html .
+Grunden til dette suffiks er at hvis den analyserede fil endte på 
+.Dq .php
+eller
+.Dq .jsp
+vil de fleste browsere ikke åbne dem da de logisk nok ikke tror det er html filer. 
+.Pp
+Når 
+.Dq index.html
+åbnes og der klikkes videre til en konkret side vil man se den enkelte
+sides analyse resultat. Resultatet er en strippet udgave af den
+originale side hvor kun tekst (der ikke er indkapslet af tags som er
+bedt ignoreret) optræder tilbage. Den oprindelige tekst er her blevet
+delt i afsnit som hver for sig vist sine analyse resultater. Hvert
+afsnit har herved en farvet kasse rundt om, som indikerer
+sidesværhedsgraden for afsnittet. I toppen af kassen på det
+individuelle afsnit står resultaterne for de individuelle tekst
+analyser som er valgt. Under analyse resultaterne for det individuelle
+afsnit er teksten som er har farvet baggrund alt de individuelle
+sætningers sidesværhedsgrad. De individuelle ord kan ydermere også
+have specielle farver. Hvis fx der er en blå kasse rundt om indikerer
+dette at ordet ikke er stavet korrekt og hvis ordet har pink baggrund
+er det fordi det er et gentagende ord.
+.Sh KOMMANDOLINJEPARAMETRE
 .Bl -tag -width Ds
 .It Ns Ar url
 Angivelse af den internetadresse (URL) som 
@@ -119,7 +163,7 @@ Angiver hvilket html tag med givet id der skal filtreres fra i
 analysen. Kan defineres flere gang hvis flere tags ønskes filtreret
 fra.
 .El
-.Sh EXAMPLES 
+.Sh EKSEMPLER
 Analyser et websted med 
 .Cm FRE 
 og 
@@ -142,58 +186,18 @@ Analyser et websted og ignorer al data der ligger i HTML <table> tags
 Analyser et websted og brug engelsk stavekontrol som standard og ignorer al data som ligger i HTML tags med attribut id som har værdien 
 .Dq menu
 .Dl $ webanalyzer http://host.dk -l en -ignore-id menu
-.Sh OUTPUT
-Når programmet har analyseret et websted gemmes alle filerne i en mappe enten specificeret ud fra 
-.Dq Fl o Ar dir
-parametren eller også laves en mappe (i det bibliotek som sml/nj blev
-startet fra) som navngives efter det domæne som er blevet analyseret.
-Når en enkelt fil er blevet analyseret bliver den gemt i mappen og
-efter endt analyse bliver der skrevet en indeks fil kaldet
-.Dq index.html 
-hvor der er links til alle analyserede filer. Listen i indeks filen er
-sorteret efter højest sidesværhedsgrad i toppen ydermere er alle
-elementerne er også farvet ud sin sidesværhedsgrad.  Når en enkelt
-side er analyseret og skal gemmes bliver alle
-.Dq /
-erstattet med 
-.Dq #
-og alle filer bliver suffikset med
-.Dq .html
-så fx filen: 
-.Dq http://dybber.dk/test/test.html
-bliver gemt i mappen som:
-.Dq dybber.dk#test#test.html.html .
-Grunden til dette suffiks er at hvis den analyserede fil endte på 
-.Dq .php
-eller
-.Dq .jsp
-vil de fleste browsere ikke åbne dem da de logisk nok ikke tror det er html filer. 
-.Pp
-Når 
-.Dq index.html
-åbnes og der klikkes videre til en konkret side vil man se den enkelte
-sides analyse resultat. Resultatet er en strippet udgave af den
-originale side hvor kun tekst (der ikke er indkapslet af tags som er
-bedt ignoreret) optræder tilbage. Den oprindelige tekst er her blevet
-delt i afsnit som hver for sig vist sine analyse resultater. Hvert
-afsnit har herved en farvet kasse rundt om, som indikerer
-sidesværhedsgraden for afsnittet. I toppen af kassen på det
-individuelle afsnit står resultaterne for de individuelle tekst
-analyser som er valgt. Under analyse resultaterne for det individuelle
-afsnit er teksten som er har farvet baggrund alt de individuelle
-sætningers sidesværhedsgrad. De individuelle ord kan ydermere også
-have specielle farver. Hvis fx der er en blå kasse rundt om indikerer
-dette at ordet ikke er stavet korrekt og hvis ordet har pink baggrund
-er det fordi det er et gentagende ord.
-.Sh AUTHORS
+.Sh FORFATTERE
 .An Troels Henriksen Aq athas@sigkill.dk
 .An Martin Dybdal Aq dybber@dybber.dk
 .An Jesper Reenberg Aq reenberg@kampsax.dtu.dk
-.Sh BUGS
+.Sh FEJL
 Der er rapporteret yderst få tilfælde hvor 
-.Cm sml/nj 
-er gået ned, formentlig på grund af socket-modulet. Dette bygger vi på det grundlag af at der ikke forud for socket-modulet er stødt på fejl af denne art.
-.Sh SEE ALSO
+.Cm SML/NJ 
+er gået ned, formentlig på grund af socket-modulet. Dette bygger vi på
+det grundlag af at der ikke forud for socket-modulet er stødt på fejl
+af denne art. Programmet kan også virke som om det "hænger" hvis en
+webserver er lang tid om at svare det.
+.Sh SE OGSÅ
 .Xr uri 7 , 
 .Xr wget 1 , 
 .Xr sml 1 , 
