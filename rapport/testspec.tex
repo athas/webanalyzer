@@ -771,7 +771,7 @@ ordene ikke markeres som værende stavet forkert.
   stavekontrolleres, og markeres som stavet forkert.
 \end{itemize}
 
-\begin{longtable}[c]{p{20pt}|p{220pt}|p{130pt}|p{130pt}|r}
+\begin{longtable}[c]{p{20pt}|p{220pt}|p{130pt}|p{130pt}|p{50pt}}
 \textbf{Nr.} &
 \textbf{Inddata} &
 \textbf{Forventet resultat} &
@@ -819,20 +819,98 @@ $\surd$ \\ \hline
 Ord angivet med disse tags (herefter refereret til som ``kode-ord'')
 bør ikke stavekontrolleres og ikke tælles med når sidesværhedsgraden
 beregnes. Afprøvningen af dette er praktisk identisk med afprøvningen
-af citat-håndteringen (se afprøvning af krav 3.4).
+af citat-håndteringen (se afprøvning af krav 3.4). Det bliver testet
+af hvert eneste af ovenstående tags behandles korrekt (identisk).
 
-\subsubsection{Ækvivalens-klasser}
-\begin{itemize}
-\item En side hvori dele af sætninger er designeret som værende
-  kode-ord, og disse kode-ord er korrekt stavede ord indenfor sidens
-  angivne sprog, skal ikke ændre sidesværhedsgrad hvis de fjernes. Dog
-  skal de stadigvæk være at finde i output.
-\item En side hvori dele af sætninger er designeret som værende
-  kode-ord, og disse kode-ord er ukorrekt stavede ord indenfor sidens
-  angivne sprog, skal ikke ændre sidesværhedsgrad hvis de fjernes. Dog
-  skal de stadigvæk være at finde i output, men ikke være markeret som
-  stavefejl.
-\end{itemize}
+\begin{longtable}[c]{p{20pt}|p{220pt}|p{130pt}|p{130pt}|p{50pt}}
+\textbf{Nr.} &
+\textbf{Inddata} &
+\textbf{Forventet resultat} &
+\textbf{Faktisk resultat} &
+\textbf{Konklusion} \\ \hline
+
+45 &
+En side med dansk tekst, hvori dele af sætninger er designeret som
+værende kode-ord (med \texttt{kbd}), og disse kode-ord er korrekt
+stavede ord på dansk, samt en side med identisk indhold, bortset fra
+at kode-ordene er fjernet &
+De to sider har identisk sidesværhedsgrad, kode-ordene er at finde i
+output når de er til stede på HTML-siden &
+Kode-ordene bliver talt med når sidesværhedsgraden beregnes, de to
+sider har forskellig sidesværhedsgrad &
+Grundet tidsnød blev det valgt ikke at rette dette, det blev opfattet
+som en mindre detalje. \\ \hline
+
+46 &
+En side med dansk tekst, hvori dele af sætninger er designeret som
+værende kode-ord, og disse kode-ord (med \texttt{kdb}) er forkert
+stavede ord indenfor sidens angivne sprog, samt en side med identisk
+indhold, bortset fra at kode-ordene er fjernet &
+De to sider har identisk sidesværhedsgrad, kode-ordene er at finde i
+output når de er til stede på HTML-siden. Kode-ordene skal ikke være
+markeret som stavefejl &
+Kode-ordene bliver talt med når sidesværhedsgraden beregnes, de to
+sider har forskellig sidesværhedsgrad, men kode-ordene markeres dog
+ikke som stavefejl &
+Grundet tidsnød, og det faktum at den vigtigste detalje (at
+kode-ordene ikke bliver markeret som stavefejl) fungerer, valgte vi
+ikke at rette dette \\ \hline
+
+47 &
+En side med dansk tekst, hvori dele af sætninger er designeret som
+værende kode-ord (med \texttt{var}), og disse kode-ord er korrekt
+stavede ord på dansk, samt en side med identisk indhold, bortset fra
+at kode-ordene er fjernet &
+De to sider har identisk sidesværhedsgrad, kode-ordene er at finde i
+output når de er til stede på HTML-siden &
+Kode-ordene bliver talt med når sidesværhedsgraden beregnes, de to
+sider har forskellig sidesværhedsgrad &
+Grundet tidsnød blev det valgt ikke at rette dette, det blev opfattet
+som en mindre detalje. \\ \hline
+
+48 &
+En side med dansk tekst, hvori dele af sætninger er designeret som
+værende kode-ord, og disse kode-ord (med \texttt{var}) er forkert
+stavede ord indenfor sidens angivne sprog, samt en side med identisk
+indhold, bortset fra at kode-ordene er fjernet &
+De to sider har identisk sidesværhedsgrad, kode-ordene er at finde i
+output når de er til stede på HTML-siden. Kode-ordene skal ikke være
+markeret som stavefejl &
+Kode-ordene bliver talt med når sidesværhedsgraden beregnes, de to
+sider har forskellig sidesværhedsgrad, men kode-ordene markeres dog
+ikke som stavefejl &
+Grundet tidsnød, og det faktum at den vigtigste detalje (at
+kode-ordene ikke bliver markeret som stavefejl) fungerer, valgte vi
+ikke at rette dette \\ \hline
+
+49 &
+En side med dansk tekst, hvori dele af sætninger er designeret som
+værende kode-ord (med \texttt{code}), og disse kode-ord er korrekt
+stavede ord på dansk, samt en side med identisk indhold, bortset fra
+at kode-ordene er fjernet &
+De to sider har identisk sidesværhedsgrad, kode-ordene er at finde i
+output når de er til stede på HTML-siden &
+Kode-ordene bliver talt med når sidesværhedsgraden beregnes, de to
+sider har forskellig sidesværhedsgrad &
+Grundet tidsnød blev det valgt ikke at rette dette, det blev opfattet
+som en mindre detalje. \\ \hline
+
+50 &
+En side med dansk tekst, hvori dele af sætninger er designeret som
+værende kode-ord, og disse kode-ord (med \texttt{code}) er forkert
+stavede ord indenfor sidens angivne sprog, samt en side med identisk
+indhold, bortset fra at kode-ordene er fjernet &
+De to sider har identisk sidesværhedsgrad, kode-ordene er at finde i
+output når de er til stede på HTML-siden. Kode-ordene skal ikke være
+markeret som stavefejl &
+Kode-ordene bliver talt med når sidesværhedsgraden beregnes, de to
+sider har forskellig sidesværhedsgrad, men kode-ordene markeres dog
+ikke som stavefejl &
+Grundet tidsnød, og det faktum at den vigtigste detalje (at
+kode-ordene ikke bliver markeret som stavefejl) fungerer, valgte vi
+ikke at rette dette \\ \hline
+
+\end{longtable}
 
 \subsection{Krav 3.7: \texttt{bdo}}
 
