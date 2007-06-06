@@ -62,7 +62,7 @@ Lange ord påvirker dette analyse væsentlig mere end de gør i
 http://en.wikipedia.org/wiki/Flesch-Kincaid_Readability_Test
 .El
 .It Sidesværhedsgrad 
-er en sammensat sværhedsgrad for siden i en helhed. Når analysen er færdig og der er genereret en indeks fil vil alle de analyserede sider stå i en tabel sorteret efter deres sidesværhedsgrad. Sidesværhedsgraden markeres ydermere med en baggrunds farve som går fra lys grøn (let) hen i brun (middel) og slutter i mørk rød (svær). Sidesværhedsgraden for de individuelle sider i indeks filen er sidens samlede værdi. Når hver enkelt analyserede fil åbnes for sig vil den analyserede teksts individuelle afsnit blive vist med en farvet kasse rundt om som afspejler sidesværhedsgraden for afsnittet selv. Teksten i hvert enkelt afsnit er også farvet med en baggrundsfarve som afspejler sidesværhedsgraden for den enkelte sætning.
+er en sammensat sværhedsgrad for siden i en helhed. Når analysen er færdig og der er genereret en indeks fil vil alle de analyserede sider stå i en tabel sorteret efter deres sidesværhedsgrad. Sidesværhedsgraden markeres ydermere med en baggrunds farve som går fra lys grøn (let) hen i gul (middel) og slutter i mørk rød (svær). Sidesværhedsgraden for de individuelle sider i indeks filen er hele sidens samlede værdi. Når hver enkelt analyserede fil åbnes for sig vil den analyserede teksts individuelle afsnit blive vist med en farvet kasse rundt om som afspejler sidesværhedsgraden for afsnittet selv. Teksten i hvert enkelt afsnit er også farvet med en baggrundsfarve som afspejler sidesværhedsgraden for den enkelte sætning.
 .It Stavekontrol
 bliver udført på alle analyserede ord. teksten analyseres tjekkes der for attributten 
 .Dq lang
@@ -108,20 +108,17 @@ Togler hvorvidt der skal tjekkes for gentagne ord.
 Sætter default sprog kode som bruges hvis der ikke er angivet noget andet i det analyserede dokument. 
 'lang' angives som ISO 639 sprog kode.
 .It Fl o Ar dir
-Sætter output mappen til en relativ eller absolut sti. Hvis der ikke er angivet nogen sti bliver der oprettet en mappe (navngivet efter det domæne der er angivet som URL) i den mappe som programmet startes fra.
+Sætter output mappen til en relativ eller absolut sti. Hvis der ikke
+er angivet nogen sti bliver der oprettet en mappe (navngivet efter det
+domæne der er angivet som URL) i den mappe som programmet startes fra.
 .It Fl ignore-tag Ar tag
-Angiver hvilket html tag der skal filtreres fra i analysen. Kan defineres flere gang hvis flere tags ønskes filtreret fra.
+Angiver hvilket html tag der skal filtreres fra i analysen. Kan
+defineres flere gang hvis flere tags ønskes filtreret fra.
 .It Fl ignore-id Ar id
-Angiver hvilket html tag med givet id der skal filtreres fra i analysen. Kan defineres flere gang hvis flere tags ønskes filtreret fra.
+Angiver hvilket html tag med givet id der skal filtreres fra i
+analysen. Kan defineres flere gang hvis flere tags ønskes filtreret
+fra.
 .El
-.Sh AUTHORS
-.An Troels Henriksen Aq athas@sigkill.dk
-.An Martin Dybdal Aq dybber@dybber.dk
-.An Jesper Reenberg Aq reenberg@kampsax.dtu.dk
-.Sh BUGS
-Der er rapporteret yderst få tilfælde hvor 
-.Cm sml/nj 
-er gået ned, formentlig på grund af socket-modulet. Dette bygger vi på det grundlag af at der ikke forud for socket-modulet er stødt på fejl af denne art.
 .Sh EXAMPLES 
 Analyser et websted med 
 .Cm FRE 
@@ -145,6 +142,57 @@ Analyser et websted og ignorer al data der ligger i HTML <table> tags
 Analyser et websted og brug engelsk stavekontrol som standard og ignorer al data som ligger i HTML tags med attribut id som har værdien 
 .Dq menu
 .Dl $ webanalyzer http://host.dk -l en -ignore-id menu
+.Sh OUTPUT
+Når programmet har analyseret et websted gemmes alle filerne i en mappe enten specificeret ud fra 
+.Dq Fl o Ar dir
+parametren eller også laves en mappe (i det bibliotek som sml/nj blev
+startet fra) som navngives efter det domæne som er blevet analyseret.
+Når en enkelt fil er blevet analyseret bliver den gemt i mappen og
+efter endt analyse bliver der skrevet en indeks fil kaldet
+.Dq index.html 
+hvor der er links til alle analyserede filer. Listen i indeks filen er
+sorteret efter højest sidesværhedsgrad i toppen ydermere er alle
+elementerne er også farvet ud sin sidesværhedsgrad.  Når en enkelt
+side er analyseret og skal gemmes bliver alle
+.Dq /
+erstattet med 
+.Dq #
+og alle filer bliver suffikset med
+.Dq .html
+så fx filen: 
+.Dq http://dybber.dk/test/test.html
+bliver gemt i mappen som:
+.Dq dybber.dk#test#test.html.html .
+Grunden til dette suffiks er at hvis den analyserede fil endte på 
+.Dq .php
+eller
+.Dq .jsp
+vil de fleste browsere ikke åbne dem da de logisk nok ikke tror det er html filer. 
+.Pp
+Når 
+.Dq index.html
+åbnes og der klikkes videre til en konkret side vil man se den enkelte
+sides analyse resultat. Resultatet er en strippet udgave af den
+originale side hvor kun tekst (der ikke er indkapslet af tags som er
+bedt ignoreret) optræder tilbage. Den oprindelige tekst er her blevet
+delt i afsnit som hver for sig vist sine analyse resultater. Hvert
+afsnit har herved en farvet kasse rundt om, som indikerer
+sidesværhedsgraden for afsnittet. I toppen af kassen på det
+individuelle afsnit står resultaterne for de individuelle tekst
+analyser som er valgt. Under analyse resultaterne for det individuelle
+afsnit er teksten som er har farvet baggrund alt de individuelle
+sætningers sidesværhedsgrad. De individuelle ord kan ydermere også
+have specielle farver. Hvis fx der er en blå kasse rundt om indikerer
+dette at ordet ikke er stavet korrekt og hvis ordet har pink baggrund
+er det fordi det er et gentagende ord.
+.Sh AUTHORS
+.An Troels Henriksen Aq athas@sigkill.dk
+.An Martin Dybdal Aq dybber@dybber.dk
+.An Jesper Reenberg Aq reenberg@kampsax.dtu.dk
+.Sh BUGS
+Der er rapporteret yderst få tilfælde hvor 
+.Cm sml/nj 
+er gået ned, formentlig på grund af socket-modulet. Dette bygger vi på det grundlag af at der ikke forud for socket-modulet er stødt på fejl af denne art.
 .Sh SEE ALSO
 .Xr uri 7 , 
 .Xr wget 1 , 
