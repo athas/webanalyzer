@@ -151,23 +151,6 @@ loop. Det kan ses hvilke sider der er blevet analyseret ved at se på
 den genererede side--liste, hvilket betyder at denne test er afhængig
 af at HTML--output (krav 6) fungerer korrekt.
 
-\subsubsection{Ækvivalens-klasser}
-\begin{itemize}
-\item Et website der ikke indeholder links, og kun én side. Her skal
-  kun den ene side besøges.
-\item Et website der ikke indeholder interne links, men links til
-  andre sider. Her skal kun websitets egen side besøges.
-\item Et website der indeholder interne links uden cirkularitet, og
-  hvor hver side kun kan findes af én sti. Her skal alle tilgængelige
-  sider analyseres.
-\item Et website der indeholder interne links uden cirkularitet, og
-  hvor hver side kan tilgås af flere forskellige veje. Det skal testes
-  at de tilgængelige sider kun analyseres én gang hver.
-\item Et website der indeholder interne links med cirkulære links. Det
-  skal testes at hver side kun analyseres én gang, og at programmet
-  terminerer (ikke går i uendeligt loop).
-\end{itemize}
-
 \subsubsection{Resultater}
 %\setlength\LTleft{0pt}
 %\setlength\LTright{0pt}
@@ -180,14 +163,14 @@ af at HTML--output (krav 6) fungerer korrekt.
 
 1 &
 Et website der ikke indeholder links, og kun én side. &
-Kun \textit{den} ene side besøges. &
+Kun den ene side analyseres. &
 Som forventet. &
 $\surd$ \\ \hline
 
 2 &
 Et website der ikke indeholder interne links, men links til
 sider på andre websites. &
-Kun websitets egen side skal besøges &
+Kun websitets egen sider skal analyseres &
 Som forventet. &
 $\surd$ \\ \hline
 
@@ -208,7 +191,7 @@ $\surd$ \\ \hline
 5 &
 Et website der indeholder interne links med cirkulære links. &
 Hver side skal kun analyseres én gang, og programmet skal
-terminerer. &
+terminere. &
 Som forventet. &
 $\surd$
 
