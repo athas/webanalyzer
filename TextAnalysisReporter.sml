@@ -49,7 +49,7 @@ fun colorByResults results =
         val upperlimit = 80.0
         val multiplier = 100.0 / (upperlimit - lowerlimit)
         val lix = Real.max(lowerlimit, Real.min(faktor, upperlimit))
-        val level = 120 - trunc (1.20 * (100.0 - (lix - lowerlimit) * multiplier))
+        val level = trunc (1.20 * (100.0 - (lix - lowerlimit) * multiplier))
     in
         Util.hueToHEX level
     end;
@@ -58,21 +58,21 @@ fun createHeader () =
     let
         fun createBadnessFactorBar () =
             let
-                fun createBox ret 121 _ _ = ret
-                  | createBox ret index from to = 
+                fun createBox ret ~1 = ret
+                  | createBox ret index = 
                     createBox (ret && 
-                                   (divia ("style=\"float: left; width: 3px; background:" ^ Util.hueToHEX index ^ "\"")  
+                                   (divia ("style=\"float: left; height: 10px; width: 5px; background:" ^ Util.hueToHEX index ^ "\"")  
                                           ($""))) 
-                              (index+1)
-                              from 
-                              to
+                              (index-1)
 
 (* make the div style: float: left, width: 3 *)
             in
-                divia "id=\"BadnessFactorBar\"" (createBox ($"") 0 0 120)
+                ($"Let ") && (divia "id=\"BadnessFactorBar\"" (createBox ($"") 120)) && ($" Sv&aelig;r")
             end
     in 
-        createBadnessFactorBar ()
+        (p (createBadnessFactorBar ())) &&
+        (p (span1 "spellerror" ($ "Stavefejl"))) &&
+        (p (span1 "repetition" ($ "Gentaget ord")))
     end;
 
 fun createColorBox results content =
@@ -138,6 +138,7 @@ val style = mark1 "STYLE"
                       ^ ".document {max-width: 750px;}"
                       ^ ".spellerror {border:2px solid blue;}"
                       ^ ".repetition {background: pink;}"
+                      ^ "#BadnessFactorBar {display: inline;}"
                    (* ^ ".result {margin-bottom: 10px; }" *)
                   ));
                                          
