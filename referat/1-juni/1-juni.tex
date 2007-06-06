@@ -1,0 +1,67 @@
+\documentclass[a4paper,10pt,draft]{article}
+
+\usepackage[utf8x]{inputenc}
+\usepackage[danish]{babel}
+
+\begin{document}
+
+\title{Møde om test specifikation}
+\author{Tilstedeværende: Martin Dybdal, Troels Henriksen, Jesper Reenberg og Dina.\\
+\textit{Ordstyrer: Martin Dybdal}.\\
+\textit{Referent: Jesper Reenberg}}
+\maketitle
+
+
+\textbf{På mødet blev følgende ting diskuteret:}
+\\
+
+\begin{itemize}
+
+\item Dina spørger til hvad gruppen selv syntes der mangler og gruppen kommer frem til at der mangler indhold på det, før mødet, sendte materiale til dina.
+
+\item Dina opfordre kraftigt gruppen til at tage følgende strattegi i brug:
+
+\begin{enumerate}
+\item Tag hver krav of find ekvaelens klasser
+\item Tag derefter hvert krav og find grænse tilfælde.
+\item Lav derefter test ud fra dette.
+\end{enumerate}
+
+\item Dina påpeger herunder også at vi skal sørge for at takle problematiske tests på en smart måde. Af problematiske tests har gruppen bl.a. tegnsæts håndtering og HTML dokument håndtering.
+
+\item Der blev specielt diskuteret omkring håndtering af tests for HTML dokument håndtering, da dette vil være utroligt omfattende at teste at al html håndteres efter hensigten og specielt også utroligt plads krævende i rapporten, sagde Dina at vi kunne lave ``nok'' tests og så herefter sige at ``resten må man stole på også virker efter hensigten når det første gør, da der ikke er tid nok til at udpensle alle tests vedrørende HTML'' eller noget i den stil
+
+\item Dina påpeger at i det udkast der har været udleveret før mødet ikke er dokumenterende nok mht. hvor og hvilke krav de enkelte tekst afsnit kommer fra.
+
+\item I det udleverede udkast bliver der bl.a. nævnt aspell men der er ikke umildbart før dette været noget andet forklarende tekst omkring dette så enten en fodnote eller en henvisning til hvor der kan læses nærmere om dette,
+
+\item Dina påpeger herved også at Lexeren på nuværende tidspunkt nok ikke er godt nok beskrevet. Selvom den formentlig bliver beskrevet i rapporten ses det gerne om muligt at der eventualt lå et seperat billag omkring dette og evt også parseren.
+
+\item Gænsetilfælde er mer eller mindre slet ikke beskrevet i det udleverede udkast.
+
+\item I det udleverede udkast står der at alt relavant tekst skal vises i analysen. Hvis der vælges at srkive sådan, skal det virkelig gøres 1.000\% klart hvad relavant tekst er. Ellers vil gruppen formentlig blive udspurgt om dette til eksamen og eventuelt ``hængt op i en galge'' på dette.
+
+\item Med hensyn til dokumentation af tests forslog dina at der blev lavet en tabel som indeholdte: 
+\begin{enumerate}
+ \item Test nr
+\item Grænse tilfælde (henvisning)
+\item Ind data (henvisning)
+\item Forventet uddata (kort beskrivelse og eventuel henvisning til billag med dybere beskrivelse eller specifik uddata)
+\item Resultat
+\end{enumerate}
+
+Da dette skal stå til sidst som konklusionen på vores tests skal henvisningerne selvfølgelig være til allerede defineret data. Fx kunne en html side være inddata og denne kunne være vedlagt(vist som HTML kode og vist i en browser) som billag for sig selv.
+
+\begin{center}
+\begin{tabular}{lllll}
+Test Nr & Grænse tilfælde & inddata & forventet uddata & Resultat \\ 
+1 & G1 & I1 & xxxx & ok \\ 
+2 & G2 & I1 & xxxx & ok \\ 
+3 & G1 & I2 & xxxx & ok
+\end{tabular}
+\end{center}
+
+
+\end{itemize}
+
+\end{document}
