@@ -271,20 +271,49 @@ $\surd$ \\ \hline
 
 \end{landscape}
 
+\begin{landscape}
 \subsection{Krav 1.2: Dybde af crawling}
-Hvis man angiver en maksimal dybde af analysen, så skal programmet
-respektere denne og gøre det korrekt.
+Hvis man angiver en maksimal dybde af analysen (reelt, hvor dybt links
+skal følges, idet forsiden er dybde 0), så skal programmet respektere
+denne og gøre det korrekt.
 
-\subsubsection{Ækvivalens-klasser}
-\begin{itemize}
-\item Ingen angivet dybde.
-\item Dybde 0 --- kun én side skal analyseres.
-\item Dybde 2 --- 2 links skal følges i dybden.
-\item Afprøvning på et websted hvor en enkelt side bliver linket til
-  fra flere steder, sådan at siden i realiteten er på flere
-  dybder. Den laveste dybde skal gælde, ikke den man først finder
-  siden på.
-\end{itemize}
+\begin{longtable}[c]{p{20pt}|p{220pt}|p{130pt}|p{130pt}|r}
+\textbf{Nr.} &
+\textbf{Inddata} &
+\textbf{Forventet resultat} &
+\textbf{Faktisk resultat} &
+\textbf{Konklusion} \\ \hline
+
+10 &
+Ingen angivet dybde og et 3 sider dybt website &
+Alle sider skal analyseres. &
+Som forventet &
+$\surd$ \\ \hline
+
+11 &
+Maksimal dybde 0 angivet og et 3 sider dybt website &
+Kun den øverste side (forsiden) skal analyseres &
+Som forventet &
+$\surd$ \\ \hline
+
+12 &
+Maksimal dybde 1 angivet og et 3 sider dybt website &
+Alle sider, med undtagelse af de(n) dybeste side, skal analyseres &
+Som forventet &
+$\surd$ \\ \hline
+
+13 &
+Maksimal dybde 1 angivet og et 3 sider dybt website, hvor en side har
+både dybde 2 og dybde 1. Hvis sider bliver undersøgt i den rækkefølge de
+bliver set i vil den først blive undersøgt som dybde 2. &
+Alle sider op til dybde 2 skal analyseres, og den nævnte side der både
+har dybde 2 og dybde 1 skal også analyseres. &
+Som forventet &
+$\surd$ \\ \hline
+
+\end{longtable}
+
+\end{landscape}
 
 \section{Krav 2: Analysemetoder}
 
