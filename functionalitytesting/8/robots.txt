@@ -1,0 +1,2 @@
+User-agent: *
+Disallow: /apache2-default/functionalitytesting/8/test2.html
