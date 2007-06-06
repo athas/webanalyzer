@@ -108,9 +108,9 @@ let
              end;
 in
     if shouldVisit uri depth then
-        (print "Visiting ";
+        (print "Besøger ";
          print (stringFromURI uri);
-         print (" at depth " ^ (Int.toString depth) ^ "\n");
+         print "\n";
          flushOut stdOut;
         let val parseTree = (getAndParse uri);
             val linksFound = if (depth+1) < (Config.crawlDepthLimit ())
@@ -121,11 +121,10 @@ in
             visitedPages := uri :: !visitedPages;
             waitingVisits := !waitingVisits @ [(linksFound, depth+1)];
             outputAnalysis uri (analyseHTML parseTree);
-            map (fn link => (print "Seeing ";
-                             print (stringFromURI link);
-                             print (" at depth " ^ (Int.toString (depth+1)) ^ "\n");
-                             flushOut stdOut))
-                linksFound;
+            print "Fandt ";
+            print (Int.toString (length linksFound));
+            print " links.\n";
+            flushOut stdOut;
             continue ()
         end handle Error (HTTP (code, _)) => continue ()
                  | Error (Socket s) => continue ()
@@ -149,7 +148,7 @@ fun writeIndex starturi outputDir outputFilename analysedPages =
         val wseqFromURI = $ o stringFromURI
         val wltable = table o $$ o (List.map flatten)
         val pagetitle = "Analyse af " ^ (stringFromURI starturi)
-    in writeTo (OS.Path.concat(outputDir, "index_"  ^ (serverFromURI starturi) ^ ".html"))
+    in writeTo (OS.Path.concat(outputDir, "index.html"))
                (flatten
                     (html ((head o title o $) pagetitle) &&
                           (body ((h1 ($ pagetitle)) &&
@@ -196,7 +195,7 @@ fun mainProgram (arg :: rest) =
         then print ("Stavekontrol er tilgængelig.\n")
         else print ("Stavekontrol er ikke tilgængelig.\n");
         OS.FileSys.mkDir outputDir 
-        handle OS.SysErr (_,_) => raise FatalError "Kunne ikke oprette output-mappe.";
+        handle OS.SysErr (_,_) => raise FatalError ("Kunne ikke oprette output-mappe \"" ^ outputDir ^ "\".");
         (* Useful when used interactively. *)
         visitedPages := [];
         waitingVisits := [];
