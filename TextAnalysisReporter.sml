@@ -71,13 +71,13 @@ fun createHeader () =
                    table
                    (tr ((td ($"Let ")) && (tda ("align=\"right\"") ($" Sv&aelig;r"))) &&
                        tr (tda ("colspan=\"2\"")
-                               (divia "id=\"BadnessFactorBar\"" (createBox ($"") 120)))) &&
-                   hr
+                               (divia "id=\"BadnessFactorBar\"" (createBox ($"") 120)))) 
             end
     in 
         (p (createBadnessFactorBar ())) &&
         (p (span1 "spellerror" ($ "Stavefejl"))) &&
-        (p (span1 "repetition" ($ "Gentaget ord")))
+        (p (span1 "repetition" ($ "Gentaget ord"))) &&
+        hr
     end;
 
 fun createColorBox results content =
