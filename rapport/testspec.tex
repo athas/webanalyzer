@@ -1287,6 +1287,60 @@ forsøgspersonerne: de skal have forudgående kendskab til
 kommando\-linje\-baserede programmer.
 
 \section{Afvikling af brugertest}
-Onsdag den 6. juni afviklede vi vores brugertest.
+Onsdag den 6. juni afviklede vi vores brugertest. Vi havde fået fat i
+Anders Boesen Lindbo Larsen, der indvilgede i at afprøve vores
+program. Han går ligesom os på første år på DIKU. Han kendte både til
+HTML, Linux og kommandobaserede programmer, så han opfylder alle vores
+krav til en forsøgsperson. Vi satte ham i gang med opgaverne og viste
+ham brugermanualen.
+
+\subsection{Opgave 1}
+Det var ikke svært for ham at få lavet første del af opgave 1 dog var
+blev han lidt forvirret og troede at analysen var færdig, da
+programmet i et stykke tid ikke skrev noget på skærmen, fordi det
+analyserede en stor side. Da han skulle kigge på index--siden og for
+at finde ud af hvilken side der var sværest gik han lidt i stå. Der
+stod intet sted på siden at hjemmesiderne var sorteret efter sidernes
+sværhedsgrad og at den sværeste side stod øverst. Han endte med at
+lave et gæt på at den sværeste side ville stå øverst.
+
+\subsection{Opgave 2}
+For at få løst opgave to måtte han kigge i manualen. Han fandt hurtigt
+``-d'' indstillingen der angiver den maksimale dybde, men han
+misforstod forklaringen. Han skrev ``-d 1'' hvor han skulle have
+skrevet ``-d 0'' for at få programmet til kun at analysere en side.
+Resten af opgaven gik uden problemer, selvom han var lidt hurtig og
+ikke fik læst toppen af resultatsiden, hvor der stod hvordan han kunne
+identificerede stavefejl mm.
+
+\subsection{Opgave 3}
+I opgave 3 skete der adskillige fejl. Først misforstod han manualen og
+brugte ``-ignore-tag'' i stedet for ``-ignore-id'' til at fra sortere
+Wikipedia's menuer. Derudover brugte han et forkert argument til
+funktionen. Han kopierede direkte fra opgaven og skrev
+\texttt{id=``column--one''}, meningen var at han skulle nøjes med
+\texttt{column--one}. Han fandt efter noget tid ud af at gøre det på
+den rigtige måde. De fejl der blev lavet her mener vi ikke skyldes at
+vores manual ikke var god nok, han var utålmodig og brugte ikke tid på
+at læse grundigt i manualen. Vi vil dog sige at opgaven kunne være
+formuleret bedre, den skulle nok have lagt mere op til at han ikke
+skulle have medtaget \texttt{id=`` ''}.
+
+\section{Konklusion på brugertest}
+Vi har fundet 3 brugervenlighedsproblemer i vores projekt.
+\begin{enumerate}
+\item Det er svært at se om programmet arbejder når det analyserer en
+  stor side med mange links. Det kan se ud som om at det er gået
+  ned. Dette problem ville kunne løses ved at udskrive et punktum
+  hvert andet sekund så længe programmet analyserer en side. Vi har
+  ikke rettet dette fordi det ville kræve at programmet var flertrådet
+  eller at vi brugte en system--timer, begge løsninger vil tage
+\item Når man ser index--siden er der ingen information om hvordan
+  siderne er sorteret og om de overhovedet er sorteret. Der er heller
+  ikke nogen forklaring af farverne. Dette kan nemt løses ved at
+  tilføje noget forklarende tekst.
+\item I manualen var forklaringen af dybdeangivelsen tvetydig. Dette
+  er rettet i den endelige manual.
+\end{enumerate}
 
 \end{document}
