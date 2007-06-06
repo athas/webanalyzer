@@ -746,32 +746,62 @@ $\surd$ \\ \hline
 \subsection{Krav 3.5: Tekst i andre sprog angivet med
   (\texttt{lang})}
 
-Det skal testes at ord, der har fået et sprog angivet via
+Det skal testes at ord der har fået et sprog angivet via
 HTML-attributten \texttt{lang} bliver stavekontrolleret efter det
-angivne sprog, om muligt, og hvis det angivne sprog ikke kendes, at
-ordene ikke markeres som værende stavet forkert. Følgende
-ækvivalensklasser repræsenterer forekomster i en test-side, og kan
-godt alle findes i samme test-side for at lette afprøvningen.
+angivne sprog, om muligt. Hvis det angivne sprog ikke kendes skal
+ordene ikke markeres som værende stavet forkert.
 
 \subsubsection{Ækvivalens-klasser}
 \begin{itemize}
-\item Et ord angivet med en ugyldig sprogkode skal ikke
-  stavekontrolleres, og ikke markeres som stavet forkert.
-\item Et ord angivet med en ukendt sprogkode (en ordbog for sproget er
-  ikke installeret) skal ikke stavekontrolleres, og ikke markeres som
-  stavet forkert.
-\item Et ord angivet med en kendt sprogkode (en ordbog for sproget er
-  installeret) som er forskellig fra resten af sidens sprogkode, og
-  hvor ordet ikke ville være korrekt i det sprog som resten af siden
-  er skrevet i, men er korrekt indenfor det angivne sprog, skal
-  stavekontrolleres, og ikke markeres som stavet forkert. Som i krav
-  2.3 tages der forbehold for mangler i \texttt{aspell}'s ordbog.
 \item Et ord angivet med en kendt sprogkode (en ordbog for sproget er
   installeret) som er forskellig fra resten af sidens sprogkode, og
   hvor ordet ikke ville være korrekt i det sprog som resten af siden
   er skrevet i, og ikke er korrekt indenfor det angivne sprog, skal
   stavekontrolleres, og markeres som stavet forkert.
 \end{itemize}
+
+\begin{longtable}[c]{p{20pt}|p{220pt}|p{130pt}|p{130pt}|r}
+\textbf{Nr.} &
+\textbf{Inddata} &
+\textbf{Forventet resultat} &
+\textbf{Faktisk resultat} &
+\textbf{Konklusion} \\ \hline
+
+41 &
+En side skrevet på dansk som indeholder et ord der ikke er kendt på
+dansk (og som ville blive markeret som stavefejl), men som har fået
+angivet en ugyldig sprogkode. &
+Ordet skal ikke markeres som stavefejl. &
+Som forventet &
+$\surd$ \\ \hline
+
+42 &
+En side skrevet på dansk som indeholder et ord der ikke er kendt på
+dansk (og som ville blive markeret som stavefejl), men som har fået
+angivet en ukendt (men gyldig) sprogkode. &
+Ordet skal ikke markeres som stavefejl. &
+Som forventet &
+$\surd$ \\ \hline
+
+43 &
+En side skrevet på dansk som indeholder et ord der ikke er kendt på
+dansk (og som ville blive markeret som stavefejl), men som har fået
+angivet en kendt sprogkode (ordbogen er installeret) og som ikke er en
+stavefejl på det angivne sprog. &
+Ordet skal ikke markeres som stavefejl. &
+Som forventet &
+$\surd$ \\ \hline
+
+44 &
+En side skrevet på dansk som indeholder et ord der ikke er kendt på
+dansk (og som ville blive markeret som stavefejl), men som har fået
+angivet en kendt sprogkode (ordbogen er installeret) og som også er en
+stavefejl på det angivne sprog. &
+Ordet skal markeres som stavefejl. &
+Som forventet &
+$\surd$ \\ \hline
+
+\end{longtable}
 
 \subsection{Krav 3.6: \texttt{kbd}, \texttt{var} og \texttt{code}}
 
