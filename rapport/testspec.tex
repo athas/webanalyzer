@@ -948,7 +948,48 @@ fejlmeddelelser i disse tilfælde.
 Der er ikke stillet krav om dette, men (...)
 
 \chapter{Brugertest}
+Brugertesten skal afsløre brugervenlighedsproblemer med vores program
+og skal samtidigt bruges til at evaluere detaljeniveauet i vores
+brugermanual. Vi vil udføre testen som et tænke-højt forsøg hvor
+brugeren skal udføre nogle opgaver og samtidigt fortælle hvad personen
+tænker og gør. Vi vil undervejs ikke hjælpe brugeren med ting der
+omhandler vores program, men hvis der er spørgsmål til andre ting, så
+vil vi gerne hjælpe.
 
+Man kan sige at programmet brugsmæssigt er delt i to. Den ene del
+handler om at starte en analyse og den anden del om at aflæse
+resultatet. I udførelsen af brugertesten vil vi ikke direkte lave
+denne adskillelse, men det er sådan vi vil evaluere resultaterne.
+
+\section{Opgaver}
+Dette afsnit indeholder de opgaver vi vil stille brugeren.
+
+\subsection{Opgave 1: Simpel analyse}
+\begin{itemize}
+\item Sæt en analyse i gang af http://dybber.dk/
+\item Åben analyseresultatet når analysen er afsluttet.
+\item Hvilken side er den sværeste på hjemmesiden?
+\end{itemize}
+
+\subsection{Opgave 2: Analyse med maks. dybde}
+\begin{itemize}
+\item Start en analyse af http://da.wikipedia.org/ hvor kun forsiden
+  analyseres, dvs. der skal ikke følges nogen links.
+\item Åben analyseresultatet og klik ind på den analyserede side.
+\item Hvad er sidens læsbarhedsindeks/LIX--tal?
+\item Er der nogen stavefejl på siden?
+\item Er der nogen ord der fejlagtigt er gentaget?
+\end{itemize}
+
+\subsection{Opgave 3: Begrænset analyse}
+\begin{itemize}
+\item Start en analysen på samme måde som sidste opgave, dog skal
+  analysen begrænses så HTML--tags med \texttt{id=``column--one''} ikke
+  medtages i analysen.
+\item Hvad er sidens læsbarhedsindeks nu?
+\end{itemize}
+
+\section{Valg af forsøgspersoner}
 Til at udføre vores brugertest skal vi bruge en eller flere personer
 indenfor vores målgruppe. I kravspecifikationen er vores målgruppe
 specificeret som:
@@ -964,5 +1005,8 @@ som et kommandolinjeværktøj og at det skal kunne køre på GNU--baserede
 Linux maskiner. Dette stiller herved ét yderligere krav til
 forsøgspersonerne: de skal have forudgående kendskab til
 kommando\-linje\-baserede programmer.
+
+\section{Afvikling af brugertest}
+Onsdag den 6. juni afviklede vi vores brugertest.
 
 \end{document}
