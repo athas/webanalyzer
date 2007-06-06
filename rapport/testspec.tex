@@ -727,27 +727,31 @@ der. Denne afprøvningsmetode fungerer kun fordi stavefejl ikke
 påvirker sidesværhedsgraden, og derfor burde det ikke påvirke
 resultatet at citater indeholdende stavefejl fjernes.
 
-\subsubsection{Ækvivalens-klasser}
-\begin{itemize}
-\item En side indeholdende et afsnit som er designeret som et citat
-  (f.eks. via \texttt{blockquote}) og som ikke indeholder
-  stavefejl. Sidesværhedsgraden skal være den samme om citatet findes
-  på siden eller ej, men hvis citatet findes skal det vises i output.
-\item En side indeholdende et afsnit som er designeret som et citat
-  (f.eks. via \texttt{blockquote}) og som indeholder
-  stavefejl. Sidesværhedsgraden skal være den samme om citatet findes
-  på siden eller ej, men hvis citatet findes skal det vises i output
-  og de forkert stavede ord skal være markeret.
-\item En side hvori dele af sætninger er designeret som værende
-  citater (f.eks. via \texttt{cite}), og hvor disse citater ikke
-  indeholder stavefejl, skal ikke ændre sidesværhedsgrad hvis citatet
-  fjernes. Dog skal citat-teksten stadigvæk fremgå af output.
-\item En side hvori dele af sætninger er designeret som værende
-  citater (f.eks. via \texttt{cite}), og hvor disse citater indeholder
-  stavefejl, skal ikke ændre sidesværhedsgrad hvis citatet
-  fjernes. Dog skal citat-teksten stadigvæk fremgå af output, og de
-  forkert stavede ord skal markeres som stavefejl.
-\end{itemize}
+\begin{longtable}[c]{p{20pt}|p{220pt}|p{130pt}|p{130pt}|r}
+\textbf{Nr.} &
+\textbf{Inddata} &
+\textbf{Forventet resultat} &
+\textbf{Faktisk resultat} &
+\textbf{Konklusion} \\ \hline
+
+39 &
+En side indeholdende et afsnit som er designeret som et citat
+via \texttt{blockquote}) og som ikke indeholder stavefejl &
+Sidesværhedsgraden skal være den samme om citatet findes på siden
+eller ej, men når citatet findes skal det vises i output &
+Som forventet &
+$\surd$ \\ \hline
+
+40 &
+En side indeholdende et afsnit som er designeret som et citat (via
+\texttt{blockquote}) og som indeholder stavefejl &
+Sidesværhedsgraden skal være den samme om citatet findes på siden
+eller ej, men hvis citatet findes skal det vises i output og de
+forkert stavede ord skal være markeret &
+Som forventet &
+$\surd$ \\ \hline
+
+\end{longtable}
 
 \subsection{Krav 3.5: Tekst i andre sprog angivet med
   (\texttt{lang})}
