@@ -1062,7 +1062,40 @@ muligt at starte en analyse direkte fra en kommandolinje.
 \section{Krav 6: Resultater i HTML-format.}
 Det skal kontrolleres at resultaterne gemmes i HTML--format og at der
 genereres en index--side der giver adgang til alle de analyserede
-undersider.
+undersider, som skal indeholde en vis mængde information om det
+analyserede website. Afprøvningen af dette krav har et vist overlap
+med afprøvningen af krav 1, og de to krav er gensidigt afhængige af at
+hverandre fungerer korrekt for at deres tests kan udføre. Afprøvningen
+af dette krav vil ikke gå op i hvorvidt analyseresultaterne er
+korrekte, kun at de findes i programmets output.
+
+\begin{longtable}[c]{p{20pt}|p{220pt}|p{130pt}|p{130pt}|p{50pt}}
+\textbf{Nr.} &
+\textbf{Inddata} &
+\textbf{Forventet resultat} &
+\textbf{Faktisk resultat} &
+\textbf{Konklusion} \\ \hline
+
+66 & 
+Et website indeholdende en enkelt side. & 
+Den resulterende index-fil skal være beliggende i en mappe med navn
+efter det domæne som websitet er beliggende på, og være navngivnet
+\texttt{index.html}. Filen skal indeholde et link til en enkelt
+analyseside, som også ligger inde i mappen sammen med index-filen & 
+Som forventet & 
+$\surd$ \\ \hline
+
+67 & 
+Et website indeholdende en enkelt side indeholdende flere afsnit og
+sætninger. &
+Analysesiden for websitets ene side skal indeholde en liste over
+afsnit på siden, hvert afsnit skal indeholde analyseresultaterne for
+siden, og hver sætning i afsnittet skal være farvekodet efter dets
+sværhedsgrad. & 
+Som forventet & 
+$\surd$ \\ \hline
+
+\end{longtable}
 
 \section{Krav 7: Platform}
 
