@@ -4,4 +4,5 @@ iconv -f utf8 -t latin1 webanalyzer.1 > webanalyzer.latin1
 man -l -T webanalyzer.latin1 > webanalyzer.ps
 ps2pdf webanalyzer.ps
 rm -rf webanalyzer.ps
+rm -rf webanalyzer.latin1
 
