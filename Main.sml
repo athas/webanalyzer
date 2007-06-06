@@ -193,7 +193,10 @@ fun mainProgram (arg :: rest) =
     in 
         if (SpellChecker.spellCheckingAvailable ())
         then print ("Stavekontrol er tilgængelig.\n")
-        else print ("Stavekontrol er ikke tilgængelig.\n");
+        else (print ("Stavekontrol er ikke tilgængelig.\n");
+              if (Config.spell ())
+              then Config.toggleSpell ()
+              else ());
         OS.FileSys.mkDir outputDir 
         handle OS.SysErr (_,_) => raise FatalError ("Kunne ikke oprette output-mappe \"" ^ outputDir ^ "\".");
         (* Useful when used interactively. *)
