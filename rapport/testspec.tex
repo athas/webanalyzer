@@ -8,6 +8,7 @@
 \usepackage{url}
 \usepackage{graphicx}
 \usepackage{pdflscape}
+\usepackage{longtable}
 
 \DeclareTextFontCommand{\textfleur}
 {\fontencoding{T1}\fontfamily{FleurCornerCaps}\selectfont}
@@ -15,7 +16,6 @@
 
 \renewcommand{\ttdefault}{pcr} % bedre typewriter font
 \renewcommand{\rmdefault}{ugm} % garamond
-
 
 \usepackage{lettrine}
 
@@ -44,9 +44,12 @@
 
 \begin{document}
 \maketitle
+\newpage
 \tableofcontents*
 \newpage
 
+\renewcommand\arraystretch{1.2} % større tabel-celler, placeret så det
+                                % ikke ødelægger forsiden
 
 
 % Testspecifikationen SKAL beskrive:
@@ -166,14 +169,66 @@ af at HTML--output (krav 6) fungerer korrekt.
 \end{itemize}
 
 \subsubsection{Resultater}
-\begin{tabular*}{\hsize}{p{210pt}|p{125pt}|p{125pt}|r}
+%\setlength\LTleft{0pt}
+%\setlength\LTright{0pt}
+\begin{longtable}[c]{p{20pt}|p{220pt}|p{130pt}|p{130pt}|r}
+\textbf{Nr.} &
 \textbf{Inddata} &
 \textbf{Forventet resultat} &
 \textbf{Faktisk resultat} &
 \textbf{Konklusion} \\ \hline
-ind1 & forventet1 & faktisk1 & konklusion1 \\ \hline
-ind2 & forventet2 & faktisk2 & konklusion2
-\end{tabular*}
+
+1 &
+Et website der ikke indeholder links, og kun én side. &
+Kun \textit{den} ene side besøges. &
+Som forventet. &
+$\surd$ \\ \hline
+
+2 &
+Et website der ikke indeholder interne links, men links til
+sider på andre websites. &
+Kun websitets egen side skal besøges &
+Som forventet. &
+$\surd$ \\ \hline
+
+3 &
+Et website der indeholder interne links uden cirkularitet, og
+hvor hver side kun kan findes af én sti. &
+Alle tilgængelige sider skal analyseres. &
+Som forventet. &
+$\surd$ \\ \hline
+
+4 &
+Et website der indeholder interne links uden cirkularitet, og hvor
+hver side kan tilgås af flere forskellige veje. &
+De tilgængelige sider skal kun analyseres én gang hver. &
+Som forventet. &
+$\surd$ \\ \hline
+
+5 &
+Et website der indeholder interne links med cirkulære links. &
+Hver side skal kun analyseres én gang, og programmet skal
+terminerer. &
+Som forventet. &
+$\surd$
+
+\end{longtable}
+
+\begin{longtable}[c]{p{20pt}|p{220pt}|p{130pt}|p{130pt}|r}
+\textbf{Nr.} &
+\textbf{Inddata} &
+\textbf{Forventet resultat} &
+\textbf{Faktisk resultat} &
+\textbf{Konklusion} \\ \hline
+
+% skabelon
+testnr &
+inddata &
+forventet &
+faktisk &
+konklusion \\ \hline
+\end{longtable}
+
 \end{landscape}
 
 \subsection{Krav 1.1: Respekter robots.txt}
