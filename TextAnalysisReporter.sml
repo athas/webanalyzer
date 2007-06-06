@@ -75,8 +75,12 @@ fun createHeader () =
             end
     in 
         (p (createBadnessFactorBar ())) &&
-        (p (span1 "spellerror" ($ "Stavefejl"))) &&
-        (p (span1 "repetition" ($ "Gentaget ord"))) &&
+        (if Config.spell () 
+         then (p (span1 "spellerror" ($ "Stavefejl")))
+         else Empty) &&
+        (if Config.findRepetitions ()
+         then (p (span1 "repetition" ($ "Gentaget ord")))
+         else Empty) &&
         hr
     end;
 
