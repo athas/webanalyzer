@@ -150,7 +150,11 @@ val style = mark1 "STYLE"
                       ^ "#BadnessFactorBar {width: 605px;}"
                    (* ^ ".result {margin-bottom: 10px; }" *)
                   ));
-                                         
+                             
+val meta = mark1a "META"
+                 ("http-equiv=\"Content-Type\" "
+                  ^ "content=\"text/html; charset=iso-8859-1\"")
+                 Empty
 
 fun makeReport' ({titleResults,
                   documentResults,
@@ -163,7 +167,7 @@ fun makeReport' ({titleResults,
                                         
         val documentReport = reportResults documentResults;
     in
-        (html (head (style && (title ($ "Results")))
+        (html (head (meta && style && (title ($ "Results")))
               &&
               (body (div1 "document"
                           ((createHeader ()) &&
