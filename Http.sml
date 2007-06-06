@@ -191,8 +191,7 @@ fun readChunked conn =
 
         val chunkSize = case chunkSizeOpt of
                            SOME x => x
-                         | NONE => raise Fail ("Expected HEX value not : \"" ^
-                                         chunkSizeHex ^ "\".")
+                         | NONE => raise Error (Socket ("Expected HEX value in chunked transmission."))
 
     in
         if chunkSize = 0
