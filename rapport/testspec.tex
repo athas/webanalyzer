@@ -405,6 +405,17 @@ outputformat ikke angiver disse værdier for hver enkelt sætning kan
 denne sammenligning kun foregå for hele tekstafsnit, men vi er i stand
 til at bedømme om sætningsopdeling sker korrekt.
 
+
+\textbf{OBS!} I udregningen af FRE og FKGL skal der bruges oplysninger
+om antallet af stavelser. I de fleste danske ord er antallet af
+stavelser lig antallet af vokaler, men der er mange fremmedord hvor
+dette ikke er tilfældet. Det franske ``niveau'' er således kun 2
+stavelser, og vi har i programmet ikke taget højde for dette. Vi er
+opmærksomme på denne fejl og vi vil i testen ikke bruge ord hvor
+antallet af stavelserne er forskellige fra antallet af vokaler. Dette
+gør vi så vi kan teste at beregningen er korrekt, hvis man ser bort
+fra dette.
+
 \begin{longtable}[c]{p{20pt}|p{220pt}|p{130pt}|p{130pt}|p{50pt}}
 \textbf{Nr.} &
 \textbf{Inddata} &
