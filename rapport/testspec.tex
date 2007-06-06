@@ -212,10 +212,6 @@ faktisk &
 konklusion \\ \hline
 \end{longtable}
 
-\end{landscape}
-
-\begin{landscape}
-
 \subsection{Krav 1.1: Respekter robots.txt}
 
 Programmet skal tjekke det angivne websteds robots.txt og sørge for at
@@ -578,20 +574,37 @@ $\surd$ \\ \hline
 
 Det skal testes at to på hinanden følgende identiske ord på en side
 markeres som gentagne ord, dog ikke hvis de befinder sig i forskellige
-sætninger. Følgende ækvivalensklasser repræsenterer forekomster i en
-test-side, og kan godt alle findes i samme test--side for at lette
-afprøvningen.
+sætninger. Alle følgende tests kan godt udføres med samme
+HTML-dokument.
 
-\subsubsection{Ækvivalens-klasser}
-\begin{itemize}
-\item To på hinanden følgende ord, som ikke er ens, skal ikke
-  markeres som gentagne ord.
-\item To på hinanden følgende ord, som er ens, og som befinder sig i
-  samme sætning, skal markeres som gentagne ord.
-\item To på hinanden følgende ord, som er ens, og som befinder sig i
-  to forskellige sætninger (adskilt af punktum, udråbstegn, osv), skal
-  ikke markeres som gentagne ord.
-\end{itemize}
+\begin{longtable}[c]{p{20pt}|p{220pt}|p{130pt}|p{130pt}|r}
+\textbf{Nr.} &
+\textbf{Inddata} &
+\textbf{Forventet resultat} &
+\textbf{Faktisk resultat} &
+\textbf{Konklusion} \\ \hline
+
+33 &
+To på hinanden følgende ord, som ikke er ens &
+De to ord skal ikke markeres som gentagne ord &
+Som forventet &
+$\surd$ \\ \hline
+
+34 &
+To på hinanden følgende ord, som er ens, og som befinder sig i samme
+sætning &
+De to ord skal markeres som gentagne ord &
+Som forventet &
+$\surd$ \\ \hline
+
+35 &
+To på hinanden følgende ord, som er ens, og som befinder sig i
+to forskellige sætninger (adskilt af punktum, udråbstegn, osv) &
+De to ord skal ikke markeres som gentagne ord &
+Som forventet &
+$\surd$ \\ \hline
+
+\end{longtable}
 
 \subsection{Krav 2.5: Beregning af sidesværhedsgrad}
 Ved en blackbox test kan vi ikke teste at der bliver beregnet en
