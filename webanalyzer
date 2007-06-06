@@ -1,11 +1,15 @@
 #!/bin/sh
 
-HEAPFILE="webanalyzer.x86-linux"
 
-if [ -f $HEAPFILE ] 
+HEAPFILE="webanalyzer.x86-linux"
+SCRIPTNAME=`[[ $0 = /* ]] && echo $0 || echo $PWD/$0`
+RUNDIR=${SCRIPTNAME%/*}
+HEAPFILEPATH="$RUNDIR/$HEAPFILE"
+
+if [ -f $HEAPFILEPATH ]
 then
-    ./smlnjruntime @SMLload=$HEAPFILE $*
+    $RUNDIR/smlnjruntime @SMLload=$HEAPFILEPATH $*
 else
-    echo Could not find heapfile: $HEAPFILE
+    echo Could not find heapfile: $HEAPFILEPATH
     exit 1
 fi
