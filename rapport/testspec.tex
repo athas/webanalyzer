@@ -463,7 +463,11 @@ vores dokumentation beskriver vi at systemets
 korrekt at basere blackbox-tests på eksistensen af
 \texttt{aspell}. Som med FKRT-- og LIX--testene er afprøvning af
 stavekontrollen baseret på at køre programmet på en side og
-sammenligne resultatet med det korrekte resultat.
+sammenligne resultatet med det korrekte resultat. Idet vi erkender at
+\texttt{aspell} ikke er perfekt tager vi forbehold for at der er en
+stor klasse af gyldige ord som vil blive markeret som forkerte. Vi
+kræver blot at vores program angiver de samme ord som forkert stavede
+som \texttt{aspell} ville hvis \texttt{aspell} blev kørt direkte.
 
 \subsubsection{Ækvivalens-klasser}
 \begin{itemize}
@@ -475,12 +479,40 @@ sammenligne resultatet med det korrekte resultat.
   forkert.
 \item Den korrekte sprogpakke er installeret, og på en side
   indeholdende både korrekt og forkert stavede ord markeres ordene
-  efter deres korrekthed. Idet vi erkender at \texttt{aspell} ikke er
-  perfekt tager vi forbehold for at der er en stor klasse af gyldige
-  ord som vil blive markeret som forkerte. Vi kræver blot at vores
-  program angiver de samme ord som forkert stavede som \texttt{aspell}
-  ville hvis \texttt{aspell} blev kørt direkte.
+  efter deres korrekthed. 
 \end{itemize}
+
+\begin{longtable}[c]{p{20pt}|p{220pt}|p{130pt}|p{130pt}|r}
+\textbf{Nr.} &
+\textbf{Inddata} &
+\textbf{Forventet resultat} &
+\textbf{Faktisk resultat} &
+\textbf{Konklusion} \\ \hline
+
+24 &
+Side med dansk tekst på en maskine der ikke har \texttt{aspell}
+installeret. &
+Brugeren informeres om problemet men programmet fortsætter, ingen ord
+markeres som forkert stavede. &
+Som forventet. &
+$\surd$ \\ \hline
+
+25 &
+Side med dansk tekst på en maskine der har \texttt{aspell}
+installeret, men ingen dansk ordbog. &
+Ingen ord markeres som forkert stavede. &
+Som forventet. &
+$\surd$ \\ \hline
+
+26 &
+Side med dansk tekst indeholdende både korrekt og ukorrekt stavede ord
+på en maskine der har \texttt{aspell}
+og en dansk ordbog installeret. &
+Ord markeres efter deres korrekthed. &
+Som forventet. &
+$\surd$ \\ \hline
+
+\end{longtable}
 
 \subsection{Krav 2.3.1: Flere sprog}
 
