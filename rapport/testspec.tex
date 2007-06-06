@@ -609,14 +609,39 @@ $\surd$ \\ \hline
 \subsection{Krav 2.5: Beregning af sidesværhedsgrad}
 Ved en blackbox test kan vi ikke teste at der bliver beregnet en
 sidesværhedsgrad, da vi har valgt ikke at vise sidesværhedsgraden på
-siden, men bare brugt den til at farve og sortere siderne efter. Vi
-kan i stedet teste at oversigtssiden bliver sorteret efter sidernes
-sværhedsgrad.
+siden, men bare brugt den til at farve og sortere siderne
+efter. Ydermere er sidesværhedsgraden ikke en kravdefineret
+størrelse. Beregningen af sidesværhedsgraden er baseret på LIX- og
+FKRT-resultaterne, så afprøvning af dette krav giver kun mening hvis
+afprøvningen af LIX- og FKRT- er positiv.
 
-\subsubsection{Ækvivalens-klasser}
-\begin{itemize}
-\item 
-\end{itemize}
+Vi kan i stedet teste at oversigtssiden bliver sorteret efter sidernes
+sværhedsgrad. Dette kræver dog at vi på forhånd har en idé om den
+``rette'' sidesværhedsgrad for en enkelt side, hvilket betyder af
+afprøvningen af dette bliver lidt vag og ulden i kanten fordi det er
+nødvendigt at inddrage sider som har ``åbenlyst svær'' og ``åbenlyst
+nem'' tekst. Idet sidesværhedsgraden kun bruges til at sortere
+resultaterne er det dog ikke kritisk at den er hundrede procent
+eksakt, og vi mener derfor også at vi kan slippe afsted med en så
+informel test som vi udfører her.
+
+\begin{longtable}[c]{p{20pt}|p{220pt}|p{130pt}|p{130pt}|r}
+\textbf{Nr.} &
+\textbf{Inddata} &
+\textbf{Forventet resultat} &
+\textbf{Faktisk resultat} &
+\textbf{Konklusion} \\ \hline
+
+36 &
+En website indeholdende tre sider, hvoraf en er ``åbenlyst svær'', en
+er ``åbenlyst nem'' og den tredje er mellemsvær. &
+Den svære side skal tildeles den højeste sidesværhedsgrad, den
+mellemsvære en lavere sidesværhedsgrad, og den nemme den laveste
+sidesværhedsgrad. &
+Som forventet &
+$\surd$ \\ \hline
+
+\end{longtable}
 
 \section{Krav 3: Analyse baseret på HTML-tags}
 
@@ -624,7 +649,10 @@ Dette krav kan ikke testes for sig selv, idet det fungerer som
 ``paraplykrav'' for en række mere specifikke underkrav der omhandler
 behandling af specifikke HTML-tags. Afprøvning af disse underkrav
 foregår alle på samme måde --- for hvert underkrav produceres en side
-indeholdende repræsentanter for de relevante ækvivalensklasser,
+\end{landscape}
+
+\begin{landscape}
+  indeholdende repræsentanter for de relevante ækvivalensklasser,
 programmet køres på disse sider, og resultatet sammenlignes med det
 forventede. Det er ikke nødvendigt at lave en side for hver eneste
 ækvivalensklasse. Disse krav afhænger af at krav 2 og krav 8 er
