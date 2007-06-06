@@ -121,9 +121,11 @@ in
             visitedPages := uri :: !visitedPages;
             waitingVisits := !waitingVisits @ [(linksFound, depth+1)];
             outputAnalysis uri (analyseHTML parseTree);
-            print "Fandt ";
-            print (Int.toString (length linksFound));
-            print " links.\n";
+            if length linksFound > 0
+            then (print "Fandt ";
+                  print (Int.toString (length linksFound));
+                  print " links.\n")
+            else ();
             flushOut stdOut;
             continue ()
         end handle Error (HTTP (code, _)) => continue ()
@@ -204,7 +206,9 @@ fun mainProgram (arg :: rest) =
         waitingVisits := [];
         visit analysisOutputter starturi 0;
         writeIndex starturi outputDir outputFilename (!analysedPages);
-        print "Done!\n";
+        print "Analysen er færdig! Åben ";
+        print outputDir;
+        print "/index.html i en internetbrowser, for at aflæse resultatet. \n";
         flushOut stdOut;
         OS.Process.success
     end
