@@ -1,0 +1,44 @@
+\documentclass[a4paper,10pt,draft]{article}
+
+\usepackage[utf8x]{inputenc}
+\usepackage[danish]{babel}
+
+\begin{document}
+
+\title{Møde efter code review}
+\author{Tilstedeværende: Martin Dybdal, Troels Henriksen, Jesper Reenberg og Dina.\\
+\textit{Ordstyrer: Martin Dybdal}.\\
+\textit{Referent: Jesper Reenberg}}
+\maketitle
+
+
+\textbf{På mødet blev følgende ting diskuteret:}
+\\
+
+\begin{itemize}
+
+\item Dina er utroligt imponeret over hvor langt gruppen egentlig er nået sammenlignet med mange af de andre, da gruppen på nuværende tidspunkt har implementeret 99\% af baseline designet.
+
+\item Med dette ville Dina utroligt gerne vide hvad gruppen egentlig manglede:
+
+\begin{enumerate}
+ \item Der skulle gerne ske en form for speciel semantisk håndterings af html tags så som <strong>, <em> osv.
+\item Der skal findes en løsning på håndtering af små sætninger. Fx sætninger på 0-3 ord som giver det enkelte tekst afsnit en meget forvrænget score (Dette gør sig gældende på alle tekste under ca. 1.000 ord).
+\item Finde en anden formel for ``sideslemhedsfaktoren'', der på nuværende tidspunkt bare udregnes rent ud fra lix tallet
+\end{enumerate}
+
+\item Dina påpeger at vi skal huske at have farve prints af uddata fra analyzen til den udprintede rapport, så man har en chance for at se uddata nu da der bruges mange farver.
+
+\item Der var en lille diskution om hvorvidt det endelige design var lavet færdigt, og det blev til at der manglede ganske lidt før det kunne afleveres. Der var blot nogle småting til Dataflow men ellers ikke det store
+
+\item Der blev snakket en smule om forskellige test, og vi kunne dog kun stå ved at vi var begyndt at lave unit tests og herigennem konstatere at det var utroligt få ting som ikke virkede efter hensigten.
+
+\item Gruppens mente at programmellet så småt var på vej til at kunne ``bruger testes'' så i den anledning påpegede Dina at der \underline{SKULLE} ligge en brugervejledning og en beskrivelse af hvordan det er planen at udfører disse bruger tests så der kunne være lidt sammenhæng i resultaterne.
+
+\item Til aller sidst blev gruppens code review diskuteret og selvom det var denne der skulle have været sankket mest om måtte gruppen detsvære sætte sig med takke at der ikke var kommet noget konstruktiv kretik af værdi.
+Eneste ting gruppen også havde fået nævnt et par gange tidligere er at: den farveskala som bruges til at farvelægge teksts afsnit og selve sætningerne går fra grøn til brun til rød, og dette kunne forvire med hvorledes brun intuitivt liger i forhold til rød og grøn. Så med dette er det således også blevet en opgave for gruppen at ændre skalaen til at gå fra grøn til gul til rød hvilken er mere intuitivt for alle 
+Med hensyn tl code reviewet havde Dina heller ikke nogle synderlige kommentarer andet end vi blot skulle klø på.
+
+\end{itemize}
+
+\end{document}
