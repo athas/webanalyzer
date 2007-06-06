@@ -1100,7 +1100,7 @@ $\surd$ \\ \hline
 \section{Krav 7: Platform}
 
 Vi mener ikke at dette program kan testes på en systematisk måde ---
-for det første er det vagt (af nødvendighed, det er meget svært at
+for det første er det valgt (af nødvendighed, det er meget svært at
 definere en præcis platform), og for det andet er det ikke rimeligt at
 forvente at vi har en meningsfyldt måde at reagere på u--understøttede
 platforme i programmet. I vores kravspecifikation nævner vi som
@@ -1108,6 +1108,25 @@ eksempel at programmet kan køre på DIKU's maskiner, men da vores
 program er afhængigt af en
 SML/NJ\footnote{\url{http://www.smlnj.org/}}-installation (som ikke
 findes på DIKU's system) kan dette heller ikke uden videre gøres.
+Ydermere understøtter vi ikke proxy forbindelser, hvilket også forhindre 
+at teste på DIKU's system.
+
+Dog har vi testet programmet som en ``standalone'' (SML/NJ runtime fil, heap image og et shell script til starte programmet) på maskiner uden SML/NJ installeret 
+
+\begin{longtable}[c]{p{20pt}|p{220pt}|p{130pt}|p{130pt}|r}
+\textbf{Nr.} &
+\textbf{Inddata} &
+\textbf{Forventet resultat} &
+\textbf{Faktisk resultat} &
+\textbf{Konklusion} \\ \hline
+
+xx &
+Kør program på maskine som ikke har SML/NJ installeret &&
+Det forventes at programmet virker og kan hente og analysere hjemmeside &&
+Som forventet &&
+$\surd$ \\ \hline
+
+\end{longtable}
 
 \section{Krav 8: Håndtering af HTML/XHTML}
 
@@ -1134,8 +1153,6 @@ antaget, og at det desuden ikke er så stort i praksis, idet mange
 HTML-sider enten refererer til eksterne scripts og stylesheets, eller
 omgiver dem med HTML-kommentarer for ikke at forvirre ældre
 browsere. Disse features vil således ikke blive testet.
-
-\subsection{Ækvivalens-klasser}
 
 \begin{longtable}[c]{p{20pt}|p{220pt}|p{130pt}|p{130pt}|r}
 \textbf{Nr.} &
@@ -1190,6 +1207,20 @@ Moscow ML til SML/NJ, hvilket også ændrede dette krav. I stedet for at
 understøtte Moscow ML's indbyggede indkodning understøtter vi explicit
 Latin-1.
 
+\begin{longtable}[c]{p{20pt}|p{220pt}|p{130pt}|p{130pt}|r}
+\textbf{Nr.} &
+\textbf{Inddata} &
+\textbf{Forventet resultat} &
+\textbf{Faktisk resultat} &
+\textbf{Konklusion} \\ \hline
+
+xx &
+Dette testes ved at lave en html fil der er encodet i Latin-1 og se at æøå vises korrekt &
+Det forventes at æøå vises korrekt &
+Som forventet &
+$\surd$ \\ \hline
+
+\end{longtable}
 \end{landscape}
 
 \chapter{Yderligere funktionstests}
