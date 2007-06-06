@@ -26,7 +26,7 @@
       val host = "dybber.dk";
       val port = 80;
 
-      val req  = "GET " ^ path ^ " HTTP/1.0\r\n" ^
+      val req  = "GET " ^ path ^ " HTTP/1.1\r\n" ^
                  "Host: " ^ host ^ "\r\n" ^
                  "User-Agent: webanalyzer\r\n\r\n";
 
@@ -43,6 +43,43 @@
               else (Byte.bytesToString vec) ^ (readAll conn)
           end;
 
+open Util;
+
+fun getHeader socket = if readLine socket = "\r\n" then ()
+                       else getHeader socket
+
+fun readChunked conn =
+    let fun readN n = let val vec = Socket.recvVec (conn, n);
+                          val string = Byte.bytesToString vec;
+                          val len = size string;
+                      in if len > 0 andalso len < n
+                         then string ^ (readN (n - len))
+                         else string
+                      end;
+        fun readNextLine conn = let val line = readLine conn
+                                in if size line > 0 andalso
+                                      List.all Char.isSpace (explode line)
+                                   then readNextLine conn
+                                   else line
+                                end;
+
+        val chunkSizeHex = readNextLine conn
+        val chunkSize = valOf (StringCvt.scanString (Int.scan StringCvt.HEX)
+                                                    chunkSizeHex)
+            handle _ => raise Fail ("expected hex value not : " ^ chunkSizeHex)
+
+    in
+        if chunkSize = 0
+        then ""
+        else let val stringResult = readN chunkSize;
+             in
+                 if size stringResult = 0
+                 then stringResult
+                 else stringResult ^ (readChunked conn)
+             end
+    end;
+
+
       (* Connect to the server *)
       val conn = connect host port;
 
@@ -50,7 +87,8 @@
       val send = send_request conn req;
 
       (* Get the resulting information. *)
-      val result = readAll conn;
+      val result = (getHeader conn;
+                    readChunked conn)
 
 
 
