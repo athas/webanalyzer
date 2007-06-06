@@ -520,6 +520,60 @@ Det skal testes at programmet fungerer med en ikke-dansk
 \texttt{aspell}-ordbog. Krav 2.3-testen udføres for to forskellige
 sider indeholdende hhv. engelsk og tysk tekst.
 
+\begin{longtable}[c]{p{20pt}|p{220pt}|p{130pt}|p{130pt}|r}
+\textbf{Nr.} &
+\textbf{Inddata} &
+\textbf{Forventet resultat} &
+\textbf{Faktisk resultat} &
+\textbf{Konklusion} \\ \hline
+
+27 &
+Side med engelsk tekst på en maskine der ikke har \texttt{aspell}
+installeret. &
+Brugeren informeres om problemet men programmet fortsætter, ingen ord
+markeres som forkert stavede. &
+Som forventet. &
+$\surd$ \\ \hline
+
+28 &
+Side med engelsk tekst på en maskine der har \texttt{aspell}
+installeret, men ingen engelsk ordbog. &
+Ingen ord markeres som forkert stavede. &
+Som forventet. &
+$\surd$ \\ \hline
+
+29 &
+Side med engelsk tekst indeholdende både korrekt og ukorrekt stavede ord
+på en maskine der har \texttt{aspell} og en engelsk ordbog
+installeret. &
+Ord markeres efter deres korrekthed. &
+Som forventet. &
+$\surd$ \\ \hline
+
+30 &
+Side med tysk tekst på en maskine der ikke har \texttt{aspell}
+installeret. &
+Brugeren informeres om problemet men programmet fortsætter, ingen ord
+markeres som forkert stavede. &
+Som forventet. &
+$\surd$ \\ \hline
+
+31 &
+Side med tysk tekst på en maskine der har \texttt{aspell}
+installeret, men ingen tysk ordbog. &
+Ingen ord markeres som forkert stavede. &
+Som forventet. &
+$\surd$ \\ \hline
+
+32 &
+Side med tysk tekst indeholdende både korrekt og ukorrekt stavede ord
+på en maskine der har \texttt{aspell} og en tysk ordbog installeret. &
+Ord markeres efter deres korrekthed. &
+Som forventet. &
+$\surd$ \\ \hline
+
+\end{longtable}
+
 \subsection{Krav 2.4: Gentagne ord}
 
 Det skal testes at to på hinanden følgende identiske ord på en side
