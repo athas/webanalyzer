@@ -155,8 +155,6 @@ den genererede side--liste, hvilket betyder at denne test er afhængig
 af at HTML--output (krav 6) fungerer korrekt.
 
 \subsubsection{Resultater}
-%\setlength\LTleft{0pt}
-%\setlength\LTright{0pt}
 \begin{longtable}[c]{p{20pt}|p{220pt}|p{130pt}|p{130pt}|p{50pt}}
 \textbf{Nr.} &
 \textbf{Inddata} &
@@ -200,21 +198,6 @@ $\surd$
 
 \end{longtable}
 
-\begin{longtable}[c]{p{20pt}|p{220pt}|p{130pt}|p{130pt}|p{50pt}}
-\textbf{Nr.} &
-\textbf{Inddata} &
-\textbf{Forventet resultat} &
-\textbf{Faktisk resultat} &
-\textbf{Konklusion} \\ \hline
-
-% skabelon
-testnr &
-inddata &
-forventet &
-faktisk &
-konklusion \\ \hline
-\end{longtable}
-
 \subsection{Krav 1.1: Respekter robots.txt}
 
 Programmet skal tjekke det angivne websteds robots.txt og sørge for at
@@ -229,6 +212,7 @@ program specifikt har forbud. Vi opfatter denne distinktion som så
 teknisk at den i højere grad hører hjemme i whitebox unit--tests, især
 fordi denne distinktion ikke er nævnt i krav 1.1.
 
+\subsubsection{Resultater}
 \begin{longtable}[c]{p{20pt}|p{220pt}|p{130pt}|p{130pt}|p{50pt}}
 \textbf{Nr.} &
 \textbf{Inddata} &
@@ -273,6 +257,7 @@ Hvis man angiver en maksimal dybde af analysen (reelt, hvor dybt links
 skal følges, idet forsiden er dybde 0), så skal programmet respektere
 denne og gøre det korrekt.
 
+\subsubsection{Resultater}
 \begin{longtable}[c]{p{20pt}|p{220pt}|p{130pt}|p{130pt}|p{50pt}}
 \textbf{Nr.} &
 \textbf{Inddata} &
@@ -343,6 +328,7 @@ outputformat ikke angiver LIX-tal for hver enkelt sætning kan denne
 sammenligning kun foregå for hele tekstafsnit, men vi er i stand til
 at bedømme om sætningsopdeling sker korrekt.
 
+\subsubsection{Resultater}
 \begin{longtable}[c]{p{20pt}|p{220pt}|p{130pt}|p{130pt}|p{50pt}}
 \textbf{Nr.} &
 \textbf{Inddata} &
@@ -413,6 +399,7 @@ antallet af stavelserne er forskellige fra antallet af vokaler. Dette
 gør vi så vi kan teste at beregningen er korrekt, hvis man ser bort
 fra dette.
 
+\subsubsection{Resultater}
 \begin{longtable}[c]{p{20pt}|p{220pt}|p{130pt}|p{130pt}|p{50pt}}
 \textbf{Nr.} &
 \textbf{Inddata} &
@@ -481,7 +468,7 @@ sammenligne resultatet med det korrekte resultat. Idet vi erkender at
 stor klasse af gyldige ord som vil blive markeret som forkerte. Vi
 kræver blot at vores program angiver de samme ord som forkert stavede
 som \texttt{aspell} ville hvis \texttt{aspell} blev kørt direkte.
-
+\subsubsection{Resultater}
 \begin{longtable}[c]{p{20pt}|p{220pt}|p{130pt}|p{130pt}|p{50pt}}
 \textbf{Nr.} &
 \textbf{Inddata} &
@@ -520,6 +507,7 @@ Det skal testes at programmet fungerer med en ikke-dansk
 \texttt{aspell}-ordbog. Krav 2.3-testen udføres for to forskellige
 sider indeholdende hhv. engelsk og tysk tekst.
 
+\subsubsection{Resultater}
 \begin{longtable}[c]{p{20pt}|p{220pt}|p{130pt}|p{130pt}|p{50pt}}
 \textbf{Nr.} &
 \textbf{Inddata} &
@@ -581,6 +569,7 @@ markeres som gentagne ord, dog ikke hvis de befinder sig i forskellige
 sætninger. Alle følgende tests kan godt udføres med samme
 HTML-dokument.
 
+\subsubsection{Resultater}
 \begin{longtable}[c]{p{20pt}|p{220pt}|p{130pt}|p{130pt}|p{50pt}}
 \textbf{Nr.} &
 \textbf{Inddata} &
@@ -629,6 +618,7 @@ resultaterne er det dog ikke kritisk at den er hundrede procent
 eksakt, og vi mener derfor også at vi kan slippe afsted med en så
 informel test som vi udfører her.
 
+\subsubsection{Resultater}
 \begin{longtable}[c]{p{20pt}|p{220pt}|p{130pt}|p{130pt}|p{50pt}}
 \textbf{Nr.} &
 \textbf{Inddata} &
@@ -683,6 +673,7 @@ være skrevet i, ikke bliver opfattet som stavefejl hvis de er angivet
 som forkortelser. Dette krav er afhængigt af at krav 2.3 er opfyldt og
 fungerer.
 
+\subsubsection{Resultater}
 \begin{longtable}[c]{p{20pt}|p{220pt}|p{130pt}|p{130pt}|p{50pt}}
 \textbf{Nr.} &
 \textbf{Inddata} &
@@ -713,6 +704,7 @@ der. Denne afprøvningsmetode fungerer kun fordi stavefejl ikke
 påvirker sidesværhedsgraden, og derfor burde det ikke påvirke
 resultatet at citater indeholdende stavefejl fjernes.
 
+\subsubsection{Resultater}
 \begin{longtable}[c]{p{20pt}|p{220pt}|p{130pt}|p{130pt}|p{50pt}}
 \textbf{Nr.} &
 \textbf{Inddata} &
@@ -747,6 +739,7 @@ HTML-attributten \texttt{lang} bliver stavekontrolleret efter det
 angivne sprog, om muligt. Hvis det angivne sprog ikke kendes skal
 ordene ikke markeres som værende stavet forkert.
 
+\subsubsection{Resultater}
 \begin{longtable}[c]{p{20pt}|p{220pt}|p{130pt}|p{130pt}|p{50pt}}
 \textbf{Nr.} &
 \textbf{Inddata} &
@@ -798,6 +791,7 @@ beregnes. Afprøvningen af dette er praktisk identisk med afprøvningen
 af citat-håndteringen (se afprøvning af krav 3.4). Det bliver testet
 af hvert eneste af ovenstående tags behandles korrekt (identisk).
 
+\subsubsection{Resultater}
 \begin{longtable}[c]{p{20pt}|p{220pt}|p{130pt}|p{130pt}|p{50pt}}
 \textbf{Nr.} &
 \textbf{Inddata} &
@@ -897,6 +891,7 @@ af på hinanden indlejrede \texttt{bdo}-tags benyttes til at finde
 tekstretningen (to gange ``højre mod venstre'' giver altså ikke
 ``venstre mod højre'').
 
+\subsubsection{Resultater}
 \begin{longtable}[c]{p{20pt}|p{220pt}|p{130pt}|p{130pt}|p{50pt}}
 \textbf{Nr.} &
 \textbf{Inddata} &
