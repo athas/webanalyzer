@@ -1163,32 +1163,40 @@ browsere. Disse features vil således ikke blive testet.
 \textbf{Konklusion} \\ \hline
 
 69 &
-Almindelig indlejring af tags skal understøttes. 
-Dette testes ved at bekræfte at de i krav 3.3 beskrevne tags bliver vist selvom de er indlejret i \texttt{em}- og \texttt{strong}-tags. &
-Under ``resultater for indhold'' forventes at se al tekst indlejret i de forskellige tags. &
+En side på dansk indeholdende ord, der ikke er korrekt stavede danske
+ord, som er angivet som forkortelser og indlejret i \texttt{em}- og
+\texttt{strong}-tags &
+De ord der er angivet som forkortelser er ikke markeret som stavefejl &
 Som forventet &
 $\surd$ \\ \hline
 
 70 &
-Håndteringen af den implicitte afslutning af
-  \textit{block}-tags. 
-\footnote{I HTML er det tilladt ikke at afslutte f.eks. \texttt{p}-tags, de opfattes i stedet som implicit afsluttede næste gang der bliver åbnet et \textit{block}-tag}&
-At afsnit er korrekt inddelt, hvilket implicit kan ses på uddata &
+En fil opdelt i afsnit via \texttt{p}-tags, men hvor ingen
+\texttt{p}-tags bliver eksplicit afsluttet.\footnote{I HTML er det
+  tilladt ikke at afslutte f.eks. \texttt{p}-tags, de opfattes i
+  stedet som implicit afsluttede næste gang der bliver åbnet et
+  \textit{block}-tag} &
+Analyseresultat-filen viser en korrekt opdeling i afsnit, som hvis
+sidens \texttt{p}-tags var blevet eksplicit afsluttet &
 Som forventet &
- $\surd$ \\ \hline
+$\surd$ \\ \hline
 
 71 &
-En side indeholdende teksten \texttt{<br lang=en>} i et dansk afsnit &
-Forventet uddata er at efter \texttt{br}-tagget vil der ikke være stavefejl i dansk grundet stavekontrollen tror den skal kontrollere engelsk tekst. &
+En side indeholdende teksten \texttt{<br lang=en>} i et dansk
+afsnit. \footnote{\texttt{br}-tagget er ikke afsluttet, idet dette
+  ikke er nødvendigt i traditionel HTML} &
+Forventet uddata er en korrekt dansk stavekontrol efter
+\texttt{br}-tagget &
 Som forventet &
- $\surd$ \\ \hline
+$\surd$ \\ \hline
 
 72 &
-Understøttelse af HTML-entities. 
-\texttt{\&amp;} (ampersand), \texttt{\&gt;} (større-end tegn), \texttt{\&lt;}
-  (mindre-end tegn) og de relevantie entities for de danske
-  specialtegn (både store og små bogstaver). &
-Forventet er korrekt visning af de forskellige entities &
+En side indeholdende korrekt stavede danske ord indeholdende danske
+specialtegn, hvor disse specialtegn er repræsenteret ved
+\textit{HTML-entities} (\texttt{\&oslash;}, \texttt{\&aelig;},
+\texttt{\&aring;}), og det derfor er nødvendigt at erstatte disse
+entities med de tilsvarende tegn for at opnå en korrekt stavekontrol &
+Ingen af de danske ord er markeret som forkert stavede &
 Som forventet &
 $\surd$ \\ \hline
 
@@ -1196,7 +1204,7 @@ $\surd$ \\ \hline
 2 identiske filer, hvoraf en af filerne dog indeholder lange HTML-kommentarer &
 Analyseresultat for filerne er ens med henblik på
 dokumentresultatet og de individuelle afsnits--resultater, indholdet
-af HTML-kommentarerne skal ikke påvirke analyseresultatet. &
+af HTML-kommentarerne skal ikke påvirke analyseresultatet &
 Som forventet &
 $\surd$ \\ \hline
 
@@ -1216,8 +1224,8 @@ Latin-1.
 \textbf{Faktisk resultat} &
 \textbf{Konklusion} \\ \hline
 
-xx &
-Dette testes ved at lave en html fil der er encodet i Latin-1 og se at æøå vises korrekt &
+74 &
+En HTML fil der er encodet i Latin-1 og se at æøå vises korrekt &
 Det forventes at æøå vises korrekt &
 Som forventet &
 $\surd$ \\ \hline
