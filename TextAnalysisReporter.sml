@@ -137,7 +137,7 @@ val style = mark1 "STYLE"
                       ^ ".fkincaidgl { background: yellow; }" *)
                       ^ ".document {max-width: 750px;}"
                       ^ ".spellerror {border:2px solid blue;}"
-                      ^ ".repetition {border:2px solid orange;}"
+                      ^ ".repetition {border:2px solid pink;}"
                    (* ^ ".result {margin-bottom: 10px; }" *)
                   ));
                                          
