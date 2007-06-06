@@ -88,7 +88,7 @@ fun findStartURI uri = if Robots.isPathAllowed (pathFromURI uri)
 val visitedPages : URI list ref = ref [];
 val waitingVisits : (URI list * int) list ref = ref [];
 
-fun shouldVisit uri depth = depth < (Config.crawlDepthLimit ()) andalso
+fun shouldVisit uri depth = depth <= (Config.crawlDepthLimit ()) andalso
                             contentTypeFromURI uri = "text/html" andalso
                             not (exists (fn x => x = uri) (!visitedPages)) andalso
                             Robots.isPathAllowed (pathFromURI uri);
@@ -113,7 +113,7 @@ in
          print "\n";
          flushOut stdOut;
         let val parseTree = (getAndParse uri);
-            val linksFound = if (depth+1) < (Config.crawlDepthLimit ())
+            val linksFound = if (depth+1) <= (Config.crawlDepthLimit ())
                              then filterExitLinks uri (findLinks (SOME uri) parseTree)
                              else []
         in
