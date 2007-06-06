@@ -1155,48 +1155,49 @@ HTML-sider enten refererer til eksterne scripts og stylesheets, eller
 omgiver dem med HTML-kommentarer for ikke at forvirre ældre
 browsere. Disse features vil således ikke blive testet.
 
-\begin{longtable}[c]{p{20pt}|p{220pt}|p{130pt}|p{130pt}|r}
+\begin{longtable}[c]{p{20pt}|p{220pt}|p{130pt}|p{130pt}|p{50pt}}
 \textbf{Nr.} &
 \textbf{Inddata} &
 \textbf{Forventet resultat} &
 \textbf{Faktisk resultat} &
 \textbf{Konklusion} \\ \hline
 
-xx &
+69 &
 Almindelig indlejring af tags skal understøttes. 
 Dette testes ved at bekræfte at de i krav 3.3 beskrevne tags bliver vist selvom de er indlejret i \texttt{em}- og \texttt{strong}-tags. &
 Under ``resultater for indhold'' forventes at se al tekst indlejret i de forskellige tags. &
 Som forventet &
 $\surd$ \\ \hline
 
-xx &
+70 &
 Håndteringen af den implicitte afslutning af
   \textit{block}-tags. 
 \footnote{I HTML er det tilladt ikke at afslutte f.eks. \texttt{p}-tags, de opfattes i stedet som implicit afsluttede næste gang der bliver åbnet et \textit{block}-tag}&
 At afsnit er korrekt inddelt, hvilket implicit kan ses på uddata &
-Som forventet udpakker den fint indlejrede \texttt{p}-tags &
+Som forventet &
  $\surd$ \\ \hline
 
-xx &
+71 &
 En side indeholdende teksten \texttt{<br lang=en>} i et dansk afsnit &
 Forventet uddata er at efter \texttt{br}-tagget vil der ikke være stavefejl i dansk grundet stavekontrollen tror den skal kontrollere engelsk tekst. &
-Som forventet har stavekontrollen ingen problemer med den danske tekst efter \texttt{br}-tagget &
+Som forventet &
  $\surd$ \\ \hline
 
-xx &
+72 &
 Understøttelse af HTML-entities. 
 \texttt{\&amp;} (ampersand), \texttt{\&gt;} (større-end tegn), \texttt{\&lt;}
   (mindre-end tegn) og de relevantie entities for de danske
   specialtegn (både store og små bogstaver). &
 Forventet er korrekt visning af de forskellige entities &
-Som forventet skrive både de danske ÆØÅæøå og de andre entities. &
- $\surd$ \\ \hline
+Som forventet &
+$\surd$ \\ \hline
 
-xx &
-HTML-kommentarer skal ikke analyseres, ej heller fremgå i uddata for analysen &
-Testes ved at lave 2 identiske filer hvor en af filerne dog indeholder lange HTML-kommentarer &
-Forventet uddata for begge filerne er ens med henblik på dokument resultatet og de individuelle afsnits resultater. &
-Som forventet er uddata for begge filer identisk &
+73 &
+2 identiske filer, hvoraf en af filerne dog indeholder lange HTML-kommentarer &
+Analyseresultat for filerne er ens med henblik på
+dokumentresultatet og de individuelle afsnits--resultater, indholdet
+af HTML-kommentarerne skal ikke påvirke analyseresultatet. &
+Som forventet &
 $\surd$ \\ \hline
 
 \end{longtable}
