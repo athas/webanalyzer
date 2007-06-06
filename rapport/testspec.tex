@@ -1055,32 +1055,52 @@ omgiver dem med HTML-kommentarer for ikke at forvirre ældre
 browsere. Disse features vil således ikke blive testet.
 
 \subsection{Ækvivalens-klasser}
-\begin{itemize}
-\item Almindelig indlejring af tags skal understøttes. Dette vil vi
-  teste ved at bekræfte at de i krav 3.3 beskrevne tags fungerer
-  selvom de er indlejret i \texttt{em}-tags.
-\item Håndteringen af den implicitte afslutning af
-  \textit{block}-tags. \footnote{I HTML er det tilladt ikke at
-    afslutte f.eks. \texttt{p}-tags, de opfattes i stedet som implicit
-    afsluttede næste gang der bliver åbnet et \textit{block}-tag} Den
-  repræsentative side fra denne ækvivalens-klasse indeholder implicit
-  afsluttede \texttt{p}-tags, og programmet skal korrekt håndtere
-  dette og opdele siden korrekt i afsnit, noget der direkte kan
-  aflæses fra output.
-\item Tags der ikke behøver afslutning, som \texttt{hr} og
-  \texttt{br}, skal håndteres korrekt. En side indeholdende teksten
-  \texttt{<br lang=en} i et ellers dansk afsnit ville, hvis
-  implementationen var ukorrekt og den på \texttt{br}-tagget følgende
-  tekst blev opfattet som børne-elementer af \texttt{br}-tagget, bruge
-  engelsk stavekontrol for den følgende tekst, hvilket ville være
-  ukorrekt.
-\item HTML-entities skal understøttes. Som minimum skal \texttt{\&amp;}
-  (ampersand), \texttt{\&gt;} (større-end tegn), \texttt{\&lt;}
+
+\begin{longtable}[c]{p{20pt}|p{220pt}|p{130pt}|p{130pt}|r}
+\textbf{Nr.} &
+\textbf{Inddata} &
+\textbf{Forventet resultat} &
+\textbf{Faktisk resultat} &
+\textbf{Konklusion} \\ \hline
+
+xx &
+Almindelig indlejring af tags skal understøttes. 
+Dette testes ved at bekræfte at de i krav 3.3 beskrevne tags bliver vist selvom de er indlejret i \texttt{em}- og \texttt{strong}-tags. &
+Under ``resultater for indhold'' forventes at se al tekst indlejret i de forskellige tags. &
+Som forventet &
+$\surd$ \\ \hline
+
+xx &
+Håndteringen af den implicitte afslutning af
+  \textit{block}-tags. 
+\footnote{I HTML er det tilladt ikke at afslutte f.eks. \texttt{p}-tags, de opfattes i stedet som implicit afsluttede næste gang der bliver åbnet et \textit{block}-tag}&
+At afsnit er korrekt inddelt, hvilket implicit kan ses på uddata &
+Som forventet udpakker den fint indlejrede \texttt{p}-tags &
+ $\surd$ \\ \hline
+
+xx &
+En side indeholdende teksten \texttt{<br lang=en>} i et dansk afsnit &
+Forventet uddata er at efter \texttt{br}-tagget vil der ikke være stavefejl i dansk grundet stavekontrollen tror den skal kontrollere engelsk tekst. &
+Som forventet har stavekontrollen ingen problemer med den danske tekst efter \texttt{br}-tagget &
+ $\surd$ \\ \hline
+
+xx &
+Understøttelse af HTML-entities. 
+\texttt{\&amp;} (ampersand), \texttt{\&gt;} (større-end tegn), \texttt{\&lt;}
   (mindre-end tegn) og de relevantie entities for de danske
-  specialtegn (både store og små bogstaver).
-\item En side indeholdende tekst i HTML-kommentarer skal analyseres,
-  og teksten i kommentarerne skal ikke fremgå af analysen.
-\end{itemize}
+  specialtegn (både store og små bogstaver). &
+Forventet er korrekt visning af de forskellige entities &
+Som forventet skrive både de danske ÆØÅæøå og de andre entities. &
+ $\surd$ \\ \hline
+
+xx &
+HTML-kommentarer skal ikke analyseres, ej heller fremgå i uddata for analysen &
+Testes ved at lave 2 identiske filer hvor en af filerne dog indeholder lange HTML-kommentarer &
+Forventet uddata for begge filerne er ens med henblik på dokument resultatet og de individuelle afsnits resultater. &
+Som forventet er uddata for begge filer identisk &
+$\surd$ \\ \hline
+
+\end{longtable}
 
 \section{Krav 8.1: Indkodning}
 
