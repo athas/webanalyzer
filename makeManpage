@@ -1,0 +1,6 @@
+#!/bin/sh
+rm -rf webanalyzer.pdf
+man -l -T webanalyzer.1 > webanalyzer.ps
+ps2pdf webanalyzer.ps
+rm -rf webanalyzer.ps
+
