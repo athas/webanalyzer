@@ -344,32 +344,55 @@ outputformat ikke angiver LIX-tal for hver enkelt sætning kan denne
 sammenligning kun foregå for hele tekstafsnit, men vi er i stand til
 at bedømme om sætningsopdeling sker korrekt.
 
-\subsubsection{Ækvivalens-klasser}
-\begin{itemize}
-\item En side uden indhold skal kunne analyseres korrekt uden at
-  programmet går ned, men outputtet for siden skal naturligvis ikke
-  indeholde analyser af nogen tekst.
-\item En side med et enkelt afsnit indeholdende en enkelt
-  sætning. Ordene i sætningen skal opdeles korrekt og det beregnede
-  LIX-tal skal ligeledes være korrekt.
-\item En side med et enkelt afsnit indeholdende en enkelt simpel
-  sætning. Ordene i sætningen skal opdeles korrekt og det beregnede
-  LIX-tal skal ligeledes være korrekt.
-\item En side med et enkelt afsnit indeholdende en enkelt kompliceret
-  sætning indeholdende parenteser, apostroffer og citationer (som ikke
-  adskiller sætninger). Ordene i sætningen skal opdeles korrekt og det
-  beregnede LIX-tal skal ligeledes være korrekt.
-\item En side med et enkelt afsnit indeholdende adskillige
-  komplicerede sætninger indeholdende parenteser, apostroffer og
-  citationer (som ikke adskiller sætninger). Sætningerne i afsnittet
-  og ordene i sætningerne skal opdeles korrekt og det beregnede
-  LIX-tal skal ligeledes være korrekt.
-\item En side med adskllige afsnit indeholdende adskillige
-  komplicerede sætninger indeholdende parenteser, apostroffer og
-  citationer (som ikke adskiller sætninger). Afsnittene på siden,
-  sætningerne i afsnittene og ordene i sætningerne skal opdeles
-  korrekt og det beregnede LIX-tal skal ligeledes være korrekt.
-\end{itemize}
+\begin{longtable}[c]{p{20pt}|p{220pt}|p{130pt}|p{130pt}|r}
+\textbf{Nr.} &
+\textbf{Inddata} &
+\textbf{Forventet resultat} &
+\textbf{Faktisk resultat} &
+\textbf{Konklusion} \\ \hline
+
+14 &
+En side uden indhold &
+Programmet skal køre som normalt, men output skal naturligvis ikke
+indeholde analyse af nogen specifik tekst &
+? &
+? \\ \hline
+
+15 & 
+En side med et enkelt afsnit indeholdende en enkelt simpel sætning. &
+Ordene i sætningen skal opdeles korrekt og det beregnede LIX-tal skal
+ligeledes være korrekt. &
+? &
+? \\ \hline
+
+16 & 
+En side med et enkelt afsnit indeholdende en enkelt kompliceret
+sætning indeholdende parenteser, apostroffer og citationer (som ikke
+adskiller sætninger). &
+Ordene i sætningen skal opdeles korrekt og det beregnede LIX-tal skal
+ligeledes være korrekt. &
+? &
+? \\ \hline
+
+17 &
+En side med et enkelt afsnit indeholdende adskillige
+komplicerede sætninger indeholdende parenteser, apostroffer og
+citationer (som ikke adskiller sætninger). &
+Sætningerne i afsnittet og ordene i sætningerne skal opdeles korrekt
+og det beregnede LIX-tal skal ligeledes være korrekt. &
+? &
+? \\ \hline
+
+18 &
+En side med adskllige afsnit indeholdende adskillige
+komplicerede sætninger indeholdende parenteser, apostroffer og
+citationer (som ikke adskiller sætninger). &
+Afsnittene på siden, sætningerne i afsnittene og ordene i sætningerne
+skal opdeles korrekt og det beregnede LIX-tal skal ligeledes være korrekt. &
+? &
+? \\ \hline
+
+\end{longtable}
 
 \subsection{Krav 2.2: Flesch-Kincaid Readability Test (FKRT)}
 
@@ -379,32 +402,55 @@ outputformat ikke angiver disse værdier for hver enkelt sætning kan
 denne sammenligning kun foregå for hele tekstafsnit, men vi er i stand
 til at bedømme om sætningsopdeling sker korrekt.
 
-\subsubsection{Ækvivalens-klasser}
-\begin{itemize}
-\item En side uden indhold skal kunne analyseres korrekt uden at
-  programmet går ned, men outputtet for siden skal naturligvis ikke
-  indeholde analyser af nogen tekst.
-\item En side med et enkelt afsnit indeholdende en enkelt
-  sætning. Ordene i sætningen skal opdeles korrekt og de beregnede
-  FKRT-værdier skal ligeledes være korrekte.
-\item En side med et enkelt afsnit indeholdende en enkelt simpel
-  sætning. Ordene i sætningen skal opdeles korrekt og det beregnede
-  FKRT-værdier skal ligeledes være korrekte.
-\item En side med et enkelt afsnit indeholdende en enkelt kompliceret
-  sætning indeholdende parenteser, apostroffer og citationer (som ikke
-  adskiller sætninger). Ordene i sætningen skal opdeles korrekt og det
-  beregnede FKRT-værdier skal ligeledes være korrekte.
-\item En side med et enkelt afsnit indeholdende adskillige
-  komplicerede sætninger indeholdende parenteser, apostroffer og
-  citationer (som ikke adskiller sætninger). Sætningerne i afsnittet
-  og ordene i sætningerne skal opdeles korrekt og de beregnede
-  FKRT-værdier skal ligeledes være korrekte.
-\item En side med adskllige afsnit indeholdende adskillige
-  komplicerede sætninger indeholdende parenteser, apostroffer og
-  citationer (som ikke adskiller sætninger). Afsnittene på siden,
-  sætningerne i afsnittene og ordene i sætningerne skal opdeles
-  korrekt og de beregnede FKRT-værdier skal ligeledes være korrekte.
-\end{itemize}
+\begin{longtable}[c]{p{20pt}|p{220pt}|p{130pt}|p{130pt}|r}
+\textbf{Nr.} &
+\textbf{Inddata} &
+\textbf{Forventet resultat} &
+\textbf{Faktisk resultat} &
+\textbf{Konklusion} \\ \hline
+
+19 &
+En side uden indhold &
+Programmet skal køre som normalt, men output skal naturligvis ikke
+indeholde analyse af nogen specifik tekst &
+? &
+? \\ \hline
+
+20 & 
+En side med et enkelt afsnit indeholdende en enkelt simpel sætning. &
+Ordene i sætningen skal opdeles korrekt og de beregnede FKRT-værdier skal
+ligeledes være korrekte. &
+? &
+? \\ \hline
+
+21 & 
+En side med et enkelt afsnit indeholdende en enkelt kompliceret
+sætning indeholdende parenteser, apostroffer og citationer (som ikke
+adskiller sætninger). &
+Ordene i sætningen skal opdeles korrekt og de beregnede FKRT-værdier
+skal ligeledes være korrekt. &
+? &
+? \\ \hline
+
+22 &
+En side med et enkelt afsnit indeholdende adskillige
+komplicerede sætninger indeholdende parenteser, apostroffer og
+citationer (som ikke adskiller sætninger). &
+Sætningerne i afsnittet og ordene i sætningerne skal opdeles korrekt
+og de beregnede FKRT-værdier skal ligeledes være korrekt. &
+? &
+? \\ \hline
+
+23 &
+En side med adskllige afsnit indeholdende adskillige
+komplicerede sætninger indeholdende parenteser, apostroffer og
+citationer (som ikke adskiller sætninger). &
+Afsnittene på siden, sætningerne i afsnittene og ordene i sætningerne
+skal opdeles korrekt og de beregnede FKRT-værdier skal ligeledes være korrekt. &
+? &
+? \\ \hline
+
+\end{longtable}
 
 \subsection{Krav 2.3: Stavekontrol}
 
