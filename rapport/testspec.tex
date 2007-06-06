@@ -898,29 +898,59 @@ Det skal testes at ord angivet som havende ikke-standard tegnretning
 stavekontrolleret. Ydermere skal det kontrolleres at kun det inderste
 af på hinanden indlejrede \texttt{bdo}-tags benyttes til at finde
 tekstretningen (to gange ``højre mod venstre'' giver altså ikke
-``venstre mod højre''). Følgende ækvivalensklasser repræsenterer
-forekomster i en test-side, og kan godt alle findes i samme test-side
-for at lette afprøvningen.
+``venstre mod højre'').
 
 \subsubsection{Ækvivalens-klasser}
 \begin{itemize}
-\item Ord angivet som værende skrevet med ``højre mod venstre''
-  tegnretning, som ville være stavefejl i det aktuelle sprog hvis de
-  ikke blev vendt, og som ikke ville være stavefejl i det aktuelle
-  sprog hvis de blev vendt, skal ikke markeres som stavefejl.
-\item Ord angivet som værende skrevet med ``højre mod venstre''
-  tegnretning, som ville være stavefejl i det aktuelle sprog hvis de
-  blev vendt, og som ikke ville være stavefejl i det aktuelle sprog
-  hvis de ikke blev vendt, skal markeres som stavefejl.
-\item Ord angivet som værende skrevet med ``højre mod venstre''
-  tegnretning, som ville være stavefejl i det aktuelle sprog hvis de
-  ikke blev vendt, og som ville være stavefejl i det aktuelle sprog
-  hvis de blev vendt, skal markeres som stavefejl.
 \item Ord angivet som værende skrevet med ``højre mod venstre''
   tegnretning, som ikke ville være stavefejl i det aktuelle sprog hvis
   de ikke blev vendt, og som ikke ville være stavefejl i det aktuelle
   sprog hvis de blev vendt, skal ikke markeres som stavefejl.
 \end{itemize}
+
+\begin{longtable}[c]{p{20pt}|p{220pt}|p{130pt}|p{130pt}|p{50pt}}
+\textbf{Nr.} &
+\textbf{Inddata} &
+\textbf{Forventet resultat} &
+\textbf{Faktisk resultat} &
+\textbf{Konklusion} \\ \hline
+
+51 &
+En side skrevet på dansk med et ord angivet som værende skrevet med
+``højre mod venstre'' tegnretning, som ville være stavefejl på dansk
+hvis det ikke blev vendt, men som ikke ville være en stavefejl hvis det blev vendt. &
+Ordet skal vendes og ikke markeres som stavefejl. &
+Som forventet &
+$\surd$ \\ \hline
+
+52 &
+En side skrevet på dansk med et ord angivet som værende skrevet med
+``højre mod venstre'' tegnretning, som ville være stavefejl på dansk
+hvis det blev vendt, men som ikke ville være en stavefejl hvis det
+ikke blev vendt. &
+Ordet skal vendes og markeres som stavefejl. &
+Som forventet &
+$\surd$ \\ \hline
+
+53 &
+En side skrevet på dansk med et ord angivet som værende skrevet med
+``højre mod venstre'' tegnretning, som ville være stavefejl på dansk
+hvis det ikke blev vendt, og som ville være en stavefejl hvis det blev
+vendt. &
+Ordet skal vendes og markeres som stavefejl. &
+Som forventet &
+$\surd$ \\ \hline
+
+54 &
+En side skrevet på dansk med et ord angivet som værende skrevet med
+``højre mod venstre'' tegnretning, som ikke ville være stavefejl på dansk
+hvis det ikke blev vendt, og som ikke ville være en stavefejl hvis
+det blev vendt. &
+Ordet skal vendes og ikke markeres som stavefejl. &
+Som forventet &
+$\surd$ \\ \hline
+
+\end{longtable}
 
 \section{Krav 4: Konfiguration af analyse}
 
