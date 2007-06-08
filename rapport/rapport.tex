@@ -363,13 +363,35 @@ følgende henfører ``moduler'' ikke nødvendigvis til Standard ML's
 modul--feature, selvom det ikke kan afvises at dette sprogkoncept vil
 blive brugt til at implementere enkelte af dem.
 
-\subsection{Brugerinput}
+\subsection{Brugerinput og brugervenlighed}
 Dette modul skal sætte en analyse i gang ud fra de parametre brugeren
 angiver. Det skal parse kommandolinjeparametrene og videregive
 brugerindstillingerne til de andre moduler i programmet. Hvis
 kommandolinjen er i et ugyldigt format, eller der er angivet ukendte
 indstillinger, er det også dette moduls ansvar at informere brugeren
 om fejlen og afslutte programmet.
+
+\subsubsection{Brugervenlighed}
+For at gøre programmet let at bruge, er det vigtigt at de
+indstillinger man kan angive er lette at huske for brugeren. En bruger
+vil hurtigt blive træt af at skulle slå op i manualen hver gang
+programmet skal bruges. Når man starter programmet er der én
+indstilling man \textit{altid} vil skulle angive --- startadressen for
+analysen. Denne indstilling skal, som den eneste, ikke angives med et
+specielt præfiks, netop fordi den er så vigtig. De andre indstillinger
+angives med et præfiks f.eks. ``-l'' for angivelsen af sprog. Måden
+disse indstillinger angives, er valgt ud fra at det skal være let at
+sætte deres navn/præfiks i forbindelse med deres
+betydning. Eksempelvis kan man angive hvor den maksimale dybde for
+analysen med indstillingen ``-d'', hvor \textit{d}'et står for
+depth. Udover at det skal være let at huske sammenhængen mellem
+betydning og navn, så skal tvetydigheder helst undgås. Tvetydigheder
+kan gøre at brugeren ikke så let husker forkert og føler det
+nødvendigt at slå op i manualen. Når flere indstillinger kunne have
+samme navn, har vi valgt at bruge et længere navn for at undgå
+disse tvetydigheder. F.eks. er der to indstillinger der begge kan
+angive at noget af dokumentet skal ignoreres i analysen, disse
+indstillingers navne er ``-ignore-tag'' og ``-ignore-id''.
 
 \subsection{Indstillinger}
 Da de brugerleverede indstillinger skal kunne tilgås fra vidt spredte
@@ -407,7 +429,7 @@ modificeret til vores behov. Det er også dette moduls job at tjekke om
 \textit{robots.txt} tillader at vi må crawle siden, da dette skal tjekkes
 hver gang der skal hentes en side.
 
-\subsection{HTML-Parsing}
+\subsection{HTML--Parsing}
 For at kunne udtrække tekst fra en HTML-side er det nødvendigt først
 at parse den. Da vi ikke har været i stand til at finde en HTML--parser
 skrevet i SML har vi valgt at implementere denne selv. Resultatet af
