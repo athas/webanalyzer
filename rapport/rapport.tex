@@ -49,7 +49,7 @@
 \newpage
 
 \chapter{Indledning}
-\label{indledning}
+
 Mange hjemmesider forfattes i dag uden omtanke for om sidens målgruppe
 er i stand til at læse sidens indhold --- det sproglige niveau er
 ganske enkelt for højt. Ydermere forfattes indholdet af mange
@@ -330,6 +330,256 @@ den vedlagte kravspecifikation for en mere detaljeret gennemgang.
 
 \chapter{Programdesign}
 
+\section{Overordnet designfilosofi}
+Vi har valgt at basere vores programimplementation på et {\em
+  dataflow}-design, hvori fokus er hvorledes data bliver ført rundt i
+programmets moduler. Idet vores program ikke er interaktivt, men
+derimod kører som et {\em batch--job} med en fra starten af
+veldefineret afslutning (når alle sider er blevet analyseret), i
+modsætning til interaktive programmer, som kører indtil brugeren
+vælger at afslutte dem, er et dataflow--design velegnet, da vi kan
+være sikre på i hvilken rækkefølge indkommende data skal behandles. Da
+programmet ydermere er baseret på at foretage gradvist mere
+raffinerede bearbejdninger af det indkommende data er et
+dataflow--diagram velegnet til at vise hvorledes den i starten ``rå''
+og ustrukturerede data bliver destilleret ned til den endelige analyse
+via gradvist mere finkornede processer. Programmeringssproget Standard
+ML er velegnet til en sådan opgave --- manglen på objektorienterede
+faciliteter vil ikke blive mærket, og programmets relativt korte og
+simple kørselstid betyder at manglen på mutérbar tilstand ikke vil
+være et problem.
+
+Her følger vores Dataflow diagram.
+\subsection{Dataflow diagram}
+\includegraphics[width=\textwidth]{endeligtdesignill.pdf}
+\\\\
+Det primære dataflow er angivet med solide linjer. Indstillingerne
+går uden om det primære dataflow og er angivet med stiplede linjer.
+
+\newpage
+\section{Moduler}
+Vi vil nu beskrive de moduler vi har inddelt programmet i. I det
+følgende henfører ``moduler'' ikke nødvendigvis til Standard ML's
+modul--feature, selvom det ikke kan afvises at dette sprogkoncept vil
+blive brugt til at implementere enkelte af dem.
+
+\subsection{Brugerinput}
+Dette modul skal sætte en analyse i gang ud fra de parametre brugeren
+angiver. Det skal parse kommandolinjeparametrene og videregive
+brugerindstillingerne til de andre moduler i programmet. Hvis
+kommandolinjen er i et ugyldigt format, eller der er angivet ukendte
+indstillinger, er det også dette moduls ansvar at informere brugeren
+om fejlen og afslutte programmet.
+
+\subsection{Indstillinger}
+Da de brugerleverede indstillinger skal kunne tilgås fra vidt spredte
+dele af programmet har vi fundet det bedst at lagre disse på et
+centralt, løst koblet sted, i modsætning til programmets egentligt
+arbejds--data, der i højere grad fører data rundt gennem tæt koblede
+moduler og strenge, typestærke interfaces. Dette sikrer også at det er
+let at tilføje nye indstillingsmuligheder --- idet der kun skal ændres
+i den kode der rent faktisk udnytter den nye indstillingsmulighed ---
+hvor ændringer i det primære dataflow kan resultere i en kaskade af
+ændringer over det meste af programmet. Den uafhængige plads
+indstillings---informationen har ville dog ikke være nær så passende
+til den primære data, idet det ville gøre det sværere at kontrollere
+hvor og hvornår den blev ændret, og ville svække muligheden for at
+garantere den sekventielt løbende raffinering af arbejdsdata som
+programmet er bygget op omkring.
+
+\subsection{Domæne check, indlæsning af robots.txt}
+Dette modul skal tjekke om det domæne brugeren har angivet kan tilgås
+og give en fejlmeddelelse hvis det ikke er tilfældet. Hvis brugeren
+har angivet det skal det undersøges om der er en
+\textit{robots.txt}-fil (en standard, der gør det muligt for websider
+at bede robotter om at lade være med at besøge dele af
+siden) \footnote{\url{http://www.robotstxt.org/}} på serveren og hvis
+det er tilfældet så skal den parses. Informationerne i
+\textit{robots.txt} skal gøres tilgængeligt for \textit{Hent
+  side}--modulet, så det kan se hvilke dele af websitet det må crawle.
+
+\subsection{Hent Side}
+Hent side modulet skal kunne hente en side fra en webserver via
+HTTP--protokollen. Da vores behov er små og vi ikke har for meget tid
+vil vi bruge et eksternt produceret
+HTTP--modul\footnote{\url{http://www.diku.dk/undervisning/2000e/dat0/filer200001/K1/brevkasse.html}},
+modificeret til vores behov. Det er også dette moduls job at tjekke om
+\textit{robots.txt} tillader at vi må crawle siden, da dette skal tjekkes
+hver gang der skal hentes en side.
+
+\subsection{HTML-Parsing}
+For at kunne udtrække tekst fra en HTML-side er det nødvendigt først
+at parse den. Da vi ikke har været i stand til at finde en HTML--parser
+skrevet i SML har vi valgt at implementere denne selv. Resultatet af
+HTML--parsingen er et ordinært parsetræ som så i senere moduler bruges
+til både at danne et mere højniveau--træ over teksten, og til at finde
+links til andre sider som skal hentes.
+
+Parseren er, for at lette implementationen, opdelt i to primære dele ---
+en lexer, der opdeler den indkommende sekvens af tegn i en liste af
+leksikalske enheder uden nærmere struktur, og en egentlig parser, som
+omdanner listen af de leksikale enheder til et struktureret
+parsetræ. Lexeren er specificeret med en SML--signatur, men det er ikke
+hensigten at denne bruges af andet end parser--modulet, og resten af
+programmet vil ikke være påvirket af parsertrinnets toparts--opdeling.
+
+De leksikale enheder produceret af lexeren vil være af tre forskellige
+typer --- begyndelsestags, afslutningstags og tekstelementer. De to
+tag--typer vil indeholde information om navnet på det relevante tag,
+samt en liste indeholdende attribut/værdi--tupler. Tekstelementer vil
+indeholde information om den sekvens af tegn de repræsenterer.
+
+Det af parseren producerede parsetræ består af knuder, repræsenterende
+tags, og blade, repræsenterende tekst. En knude kan have nul eller
+flere undergrene der angiver de HTML--elementer der findes mellem
+start-- og slut--tagget (nul undergrene kunne f.eks. være et
+``\texttt{<br />}''--element), hvor hver undergren igen kan være enten
+en knude eller et blad. For eksempel vil HTML--strengen
+``\textit{\texttt{<strong>} \texttt{<em>} Vigtigt! \texttt{</em>} 
+  Parseren skal fungere \texttt{</strong>}}'' bestå af en knude med to
+undergrene - endnu en knude og et blad indeholdende
+tekst. Undergrenene skal være ordnede i samme rækkefølge som deres
+optræden i det oprindelige HTML--dokument. En knude indeholder
+information om hvilket tag den repræsenterer, samt eventuelle
+HTML--attributes tagget har.
+
+\subsection{Find links}
+Dette modul skal ud fra HTML--parsetræet genereret af HTML--parseren,
+lave en liste af de links som linker til andre sider på samme domæne.
+Det skal derefter bede om at disse sider bliver hentet, parset og
+analyseret, og undersøge links på de nyhentede sider - en rekursiv
+proces der løber indtil alle tilgængelige sider er blevet analyseret.
+
+For at finde linksene skal alle \texttt{a}--tags findes --- deres
+\texttt{href} attribut angiver så det link der peges på. De adresser
+man finder kan være relative til den nuværende side, den absolutte
+adresse til den nuværende side skal derfor kombineres med den relative
+sti fra linket for at forme linkets absolutte sti. Det er dog ikke
+altid den nuværende sides absolutte sti som adresser skal være
+relative til, man angive en anden sti som de skal være relative til
+med \texttt{base}--tagget. 
+
+Det er ikke kun \texttt{a} der skal undersøges, hvis et HTML--dokument
+benytter sig af rammer (frames), så skal deres start--adresser også
+findes. Der er også andre tags der tillader at man specificerer
+adresser til forklaringer ol, disse skal der også tages hån om.
+
+På diagrammet går kun en enkelt pil fra ``Find links''--modulet til
+``Hent side''--modulet. Reelt bliver denne pil fulgt for hvert eneste
+fundet link som ikke allerede er blevet besøgt --- resultatet bliver at
+cyklussen i diagrammet fungerer som programmets primære loop der
+henter og analyserer links, indtil der ikke kan findes flere indenfor
+den angivne maksimaldybde.
+
+\subsection{HTML--filtrering}
+For at gøre det muligt at angive at nogle dele af en hjemmeside ikke
+skal analyseres er det nødvendigt med et modul der kan frasortere de
+ønskede elementer fra siden. Ud fra brugerens indstillinger skal dette
+modul kunne frasortere dele af en HTML--side.
+
+\subsection{Tekstudtrækker}
+Når et HTML--dokument er parset kan vi udtage teksten, det er dette
+moduls job at læse parsetræet for et HTML--dokument og omdanne det til
+afsnit, sætninger, overskrifter osv, som \textit{Tekstanalyse}--modulet
+kan analysere. Udover at opdele teksten skal de enkelte tekstpassagers
+semantiske betydning bibeholdes.
+
+Resultatet er en datastruktur indeholdende en liste af tekstafsnit
+(hvor ``afsnit'' er løst defineret og kan indeholde hvad der
+oprindeligt var tabeller, eller lister, i HTML), hvert indeholdende
+sætninger, og disse indeholdende ord. Hvert ord har semantisk
+information fra HTML'en tilknyttet, som f.eks. information om hvorvidt
+ordet er en forkortelse, eller oprindeligt har været inde i et
+\texttt{em}--tag. For hvert afsnit er der også en liste over
+``ekstra'' sætninger, som er den tekst der ikke umiddelbart optræder
+på HTML--siden, men som alligevel er interessant --- såsom
+\texttt{title} og \texttt{alt}--tekst for links og billeder.
+
+For ikke at låse programmet fuldstændig fast til HTML er dette modul
+delt i to delmoduler. Det ene modul (den egentlige tekstudtrækker)
+kender til selve HTML--formatet og omdanner det til en mere generisk
+datastruktur der symboliserer et dokument. Denne datastruktur
+indeholder information om tekstens inddeling i afsnit, overskrifter,
+citater mm. Datastrukturen viderebehandles af det andet delmodul
+(``sætningsifikatoren''), som udfører de beregninger der er ens for
+alle dokumenter. Dette inkluderer adskillelse af ord og punktuering
+(mellemrum, tegnsætning mv.) og opdeling i sætninger.  Det første
+delmodul kan på denne måde let udvides så det også kan håndtere andre
+dokumentformater.
+
+\subsection{Tekstanalyse}
+Her skal de egentlige analyser foretages, modulet får teksten fra
+\textit{Tekstudtrækkeren} og udfører de af brugeren valgte
+tekstanalyser.
+
+Til beregning af både lixtal og Flesh Reading Ease skal bruges
+informationer om bl.a. antal ord og antal sætninger. Det vil resultere
+i dobbeltarbejde hvis flere analyser beregner disse tal, for at
+afhjælpe dette vil vi lave en forudgående indsamling af informationer
+om teksten, der kan være relevante for flere af analyserne. Dette vil
+også lette arbejdet med evt. implementation af yderligere
+tekstanalyser, da det i princippet kun er den matematiske formel der
+skal indtastes, medmindre meget specifikke informationer ønskes
+(F.eks. ``Hvor mange ord er der med 3 stavelser eller færre?'').
+
+Uddata fra tekstanalysemodulet er en datastruktur der meget ligner
+input, men som i stedet for semantisk information har fået tilknyttet
+læsesværhedsgrad--data til de leksikale enheder (afsnit, sætninger og
+ord).
+
+Det er også i analysemodulet at ord stavekontrolleres baseret på deres
+angivne sprog, og får tilknyttet en værdi der angiver om de er korrekt
+stavet eller ej. Til at foretage selve stavekontrollen vil vi bruge
+GNU Aspell\footnote{http://aspell.net/}. Vi mener ikke det er et
+urimeligt krav til brugerenssystem at GNU Aspell skal være
+installeret, da det er et relativt almindeligt program på
+GNU/Linux-systemer (vor målplatform). For at gøre det muligt senere at
+skifte til en anden type stavekontrol, er det bedst at denne
+funktionalitet er adskilt så meget fra resten af programmet som
+muligt. Vi vil derfor indkapsle stavekontrollen i sit eget delmodul,
+som det egentlige tekstanalyse--modul kan forespørge.
+
+\subsection{Generer individuelle HTML--sider}
+Dette modul skal lave de HTML--filer der skal præsentere
+analyseresultaterne for brugeren. Givet analyse resultaterne for en
+enkelt side skal det generere en HTML side. HTML--siden vil få et
+deterministisk navn baseret på HTML--filens navn og placering på
+websitet, således at der kan skabes links til den genererede HTML--fil
+fra analyseindekset. Til at generere HTML'en bruger vi et modul
+baseret på Msp (ML Serverpages), dette er en del af Moscow ML's
+standardbibliotek\footnote{\url{http://www.dina.kvl.dk/~sestoft/mosmllib/Msp.html}}.
+
+\subsection{Resultatopsamling}
+For hver side udregnes en sidesværhedsgrad som skal vises på
+oversigtssiden for analyseresultatet. Dette modul skal gemme
+sidesværhedsgrad for hver side, så der kan genereres en index fil når
+analysen af alle undersiderne er afsluttet.
+
+\subsection{Generer index HTML--side}
+For at brugeren nemt kan få adgang til analyseresultaterne vil vi også
+generere en index fil. Dette skridt er det absolut sidste der tages i
+programmet, og først når alle websitets undersider er blevet
+analyseret.
+
+\section{Redegørelse for designets kvaliteter}
+Ved at bruge dette design vil vi kunne indfri alle de krav der er
+stillet i kravspecifikationen. Derudover vil designet gøre det nemt at
+udvide programmet til at understøtte flere tekstformater og flere
+analysemetoder.
+
+Alle modulerne kan testes systematisk, måske med undtagelse af
+\textit{Hent side} modulet, da testen af dette modul kræver en
+forbindelse til en webserver, som vi kan være sikker på ikke ændrer
+indhold. Men fordi det at hente en side er meget veldefineret vil det
+sandsynligvis ikke være et problem.
+
+Den klare opdeling i moduler som udveksler data gør det muligt at
+parallelisere udviklingen, således at de enkelte moduler kan
+implementeres og testes for sig selv, uden at afhænge af en færdig
+implementation af de andre moduler. Hvert konceptuelt modul kan, om
+ikke fuldstændigt, så til en vis grad, implementeres som en SML
+modulsignatur og struktur.
+
 \chapter{Implementation}
 
 \section{Robots.txt}
@@ -407,89 +657,8 @@ Analyserer et \texttt{Sentencifyer.document} ved at:
  \item Returnerer title resultatet, det samlede dokument resultat og det filtrerede indholds resultat.
 \end{itemize}
 
-\section{Main}
-
-Main sørger for at håndtere al indput fra brugere i form af
-kommandolinje parametrene. Hvis der ingen parametre er givet lukker
-programmet og skriver en hjælpebesked ud om hvordan det er meningen
-programmet skal startes og hvad de forsellige argumenter betyder.
-
-Hvis der som minimum er angivet en \texttt{url} går programmet igang
-med at analysere.  Først tjekkes form om webstedet har en robots.txt i
-roden. Hvis denne eksisterer hentes og parses den, ellers foretages
-ingen ting.
-
-Derefter tjekkes det at den angivne \texttt{url} må crawles. Hvis ikke
-dette er tilfældet ændres start \texttt{url}'en til roden af domænet
-og igen tjekkes om denne må crawles. Hvis denne ikke må crawles kaster
-programmet en FatalError exeption.
-
-Når start \texttt{url}'en er fastlagt oprettes en output mappe(Se....
-\fixme{Se kommandoelinje parametre}) hvor de generede filer gemmes i.
-Hvis stavekontrol ikke er tilgængelig på systemet
-(Se... \fixme{stavekontrol}) og det er sat til, sørges der for at
-disable dette i Config modulet.
-
-Herefter kan selve analysen gå igang på den url som blev besluttet
-tidligere.  Når analysen af alle fundne sider er færdig skrives en
-index (Se ... \fixme{index}) side og programmet terminerer.
-
-
-Under analysen af de individuelle sider holder der styr på essentielle ting som:
-
-\begin{enumerate}
- \item Angivet max crawl dybde
- \item Liste over ventende sider der skal crawles
- \item Liste over besøgte sider.
- \item Cashe indeholdende uri'er der er blevet lavet et HTTP ``head'' request til (Se... \fixme{URLCashe})
-\end{enumerate}
-
-\subsection{FindLinks}
-Finder mulige links på den side som er under analyse. Mulige links dækker over:
-
-\begin{itemize}
- \item \texttt{href} attribute fra \texttt{a} tags
- \item \texttt{src} attribute fra \texttt{frame} tags
- \item \texttt{src} attribute fra \texttt{iframe} tags
- \item \texttt{src} attribute fra \texttt{iframe} tags
- \item \texttt{longdesc} attribute fra \texttt{img} tags
- \item \texttt{cite} attribute fra \texttt{ins} tags
- \item \texttt{cite} attribute fra \texttt{del} tags
-\end{itemize}
-
-Hvoraf almindelige links (\texttt{a} tags) bliver filtreret fra hvis
-\texttt{url}'en er prefixed med ``mailto:'' og ``javascript:''.
-
-Når linksne findes i dokumentet konstrueres en Http.URI (Se URICasche \fixme{uri Cashe})
-
-\subsection{URI / URICache}
-
-\texttt{Http} modulets buildURI funktion har vi udbygget med en
-makeURI i \texttt{Main} modulet. Dette er gjort med henblik på
-implementationen af en URICasche. URICaschen er implementeret som et
-Binært Map med:
-
-\begin{verbatim}
- structure URIMap = BinaryMapFn (struct 
-         type ord_key = URI; 
-                                 fun compare (x, y) = 
-          String.compare(stringFromURI x, 
-             stringFromURI y);
-         end);
-val URICache : URI URIMap.map ref = ref URIMap.empty;
-\end{verbatim}
-
-Hver gang der skal laves en URI ud fra en string tjekkes caschen om
-der allerede eksisterer en en URI. Hvis der ikke findes en laves denne
-og tilføjes caschen
-
-\subsection{Kommandolinje parametre}
-
-\subsection{index side}
-
-
-
 \chapter{Afprøvning}
+
 
 \chapter{Konklusion}
 
