@@ -670,7 +670,6 @@ modulsignatur og struktur.
 \chapter{Implementation}
 
 \section{Robots.txt}
-\label{Robots}
 
 For at kunne overholde en eventuel robots.txt bliver denne fil hentet
 og parset.  Parseren leder efter alle user-agent tags som matcher
@@ -681,7 +680,7 @@ Parseren kan forstå det almindelige ``disallow:'' statement men
 ydermere har vi også implementeret ``request-rate:'' fra den udvidede
 standard og ``crawl-delay:'' som ikke er en del af standarden men blot
 et kompliment til
-``request-rate:''\footnote{http://en.wikipedia.org/wiki/Robots.txt}.
+``request-rate:''\footnote{\url{http://en.wikipedia.org/wiki/Robots.txt}}.
 
 Vi har explicit valgt ikke at implementere andre statements fra den
 udvidede standard da disse ikke har nogen praktisk betydning for vores
@@ -696,7 +695,6 @@ setCrawlDelay i Config modulet. Hvis et ``request-rate:'' statement
 findes udregnes først den mente delay ud fra $sekunder / sider$
 
 \section{HTMLFilter}
-\label{HTMLFilter}
 
 HTMLFilteret implementerer en filter datastruktur som bruges til at
 konstruere en liste over HTML tags eller attributes som skal filtreres
@@ -726,7 +724,6 @@ ikke kan filtrere html, head, og body HTML tagsne fra.
 
 
 \section{TextAnalyser}
-\label{TextAnalyser}
 
 Analyserer et \texttt{Sentencifyer.document} ved at:
 \begin{itemize}
@@ -748,7 +745,6 @@ Analyserer et \texttt{Sentencifyer.document} ved at:
 \end{itemize}
 
 \section{Main}
-\label{Main}
 
 Main sørger for at håndtere al indput fra brugere i form af
 kommandolinje parametrene. Hvis der ingen parametre er givet lukker
@@ -786,8 +782,6 @@ Under analysen af de individuelle sider holder der styr på essentielle ting som
 \end{enumerate}
 
 \subsection{FindLinks}
-\label{FindLinks}
-
 Finder mulige links på den side som er under analyse. Mulige links dækker over:
 
 \begin{itemize}
@@ -806,7 +800,6 @@ Hvoraf almindelige links (\texttt{a} tags) bliver filtreret fra hvis
 Når linksne findes i dokumentet konstrueres en Http.URI (Se URICache \fixme{uri Cache})
 
 \subsection{URI / URICache}
-\label{URICache}
 
 \texttt{Http} modulets buildURI funktion har vi udbygget med en
 makeURI i \texttt{Main} modulet. Dette er gjort med henblik på
