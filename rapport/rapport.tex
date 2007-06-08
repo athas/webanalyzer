@@ -761,15 +761,14 @@ dette er tilfældet ændres start \texttt{url}'en til roden af domænet
 og igen tjekkes om denne må crawles. Hvis denne ikke må crawles kaster
 programmet en FatalError exeption.
 
-Når start \texttt{url}'en er fastlagt oprettes en output mappe(Se....
-\fixme{Se kommandoelinje parametre}) hvor de generede filer gemmes i.
+Når start \texttt{url}'en er fastlagt oprettes en output mappe(Se \ref{CommandLine}) hvor de generede filer gemmes i.
 Hvis stavekontrol ikke er tilgængelig på systemet
-(Se... \fixme{stavekontrol}) og det er sat til, sørges der for at
+(Se \ref{Spellchecker}) og det er sat til, sørges der for at
 disable dette i Config modulet.
 
 Herefter kan selve analysen gå igang på den url som blev besluttet
 tidligere.  Når analysen af alle fundne sider er færdig skrives en
-index (Se ... \fixme{index}) side og programmet terminerer.
+index (Se.. \fixme{forklaring omkring index side}) side og programmet terminerer.
 
 
 Under analysen af de individuelle sider holder der styr på essentielle ting som:
@@ -778,7 +777,7 @@ Under analysen af de individuelle sider holder der styr på essentielle ting som
  \item Angivet max crawl dybde
  \item Liste over ventende sider der skal crawles
  \item Liste over besøgte sider.
- \item Cashe indeholdende uri'er der er blevet lavet et HTTP ``head'' request til (Se... \fixme{URLCashe})
+ \item Cashe indeholdende uri'er der er blevet lavet et HTTP ``head'' request til (se \ref{URICasche})
 \end{enumerate}
 
 \subsection{FindLinks}
@@ -797,7 +796,7 @@ Finder mulige links på den side som er under analyse. Mulige links dækker over
 Hvoraf almindelige links (\texttt{a} tags) bliver filtreret fra hvis
 \texttt{url}'en er prefixed med ``mailto:'' og ``javascript:''.
 
-Når linksne findes i dokumentet konstrueres en Http.URI (Se URICache \fixme{uri Cache})
+ Når linksne findes i dokumentet konstrueres en Http.URI (Se \ref{URICasche})
 
 \subsection{URI / URICache}
 
@@ -821,10 +820,11 @@ der allerede eksisterer en en URI. Hvis der ikke findes en laves denne
 og tilføjes caschen
 
 \subsection{Kommandolinje parametre}
-
-\subsection{index side}
+\label{Commandline}
 
 \section{Stavekontrol}
+\label{Spellchecker}
+
 Tekstanalyse strukturen foretager en stavekontrol af hvert ord den
 møder. Til at foretage stavekontrollen har vi implementeret en
 struktur \texttt{SpellChecker} der med funktionerne
