@@ -8,6 +8,10 @@
 \usepackage{graphicx}
 \usepackage{pdflscape}
 \usepackage{longtable}
+\usepackage[draft]{fixme}
+\usepackage{hyperref}
+\usepackage{memhfixc}
+\usepackage{listings}
 
 \DeclareTextFontCommand{\textfleur}
 {\fontencoding{T1}\fontfamily{FleurCornerCaps}\selectfont}
@@ -402,7 +406,7 @@ nødvendigt at slå op i manualen. Når flere indstillinger kunne have
 samme navn, har vi valgt at bruge et længere navn for at undgå
 disse tvetydigheder. F.eks. er der to indstillinger der begge kan
 angive at noget af dokumentet skal ignoreres i analysen, disse
-indstillingers navne er ``-ignore-tag'' og ``-ignore-id''.
+indstillingers navne er ``-ignore--tag'' og ``-ignore--id''.
 
 \subsection{Indstillinger}
 Da de brugerleverede indstillinger skal kunne tilgås fra vidt spredte
@@ -707,6 +711,107 @@ Analyserer et \texttt{Sentencifyer.document} ved at:
  \item Udregner resultat for dokumentet title.
  \item Returnerer title resultatet, det samlede dokument resultat og det filtrerede indholds resultat.
 \end{itemize}
+
+v v v v v v v
+\section{Main}
+
+Main sørger for at håndtere al indput fra brugere i form af
+kommandolinje parametrene. Hvis der ingen parametre er givet lukker
+programmet og skriver en hjælpebesked ud om hvordan det er meningen
+programmet skal startes og hvad de forsellige argumenter betyder.
+
+Hvis der som minimum er angivet en \texttt{url} går programmet igang
+med at analysere.  Først tjekkes form om webstedet har en robots.txt i
+roden. Hvis denne eksisterer hentes og parses den, ellers foretages
+ingen ting.
+
+Derefter tjekkes det at den angivne \texttt{url} må crawles. Hvis ikke
+dette er tilfældet ændres start \texttt{url}'en til roden af domænet
+og igen tjekkes om denne må crawles. Hvis denne ikke må crawles kaster
+programmet en FatalError exeption.
+
+Når start \texttt{url}'en er fastlagt oprettes en output mappe(Se....
+\fixme{Se kommandoelinje parametre}) hvor de generede filer gemmes i.
+Hvis stavekontrol ikke er tilgængelig på systemet
+(Se... \fixme{stavekontrol}) og det er sat til, sørges der for at
+disable dette i Config modulet.
+
+Herefter kan selve analysen gå igang på den url som blev besluttet
+tidligere.  Når analysen af alle fundne sider er færdig skrives en
+index (Se ... \fixme{index}) side og programmet terminerer.
+
+
+Under analysen af de individuelle sider holder der styr på essentielle ting som:
+
+\begin{enumerate}
+ \item Angivet max crawl dybde
+ \item Liste over ventende sider der skal crawles
+ \item Liste over besøgte sider.
+ \item Cashe indeholdende uri'er der er blevet lavet et HTTP ``head'' request til (Se... \fixme{URLCashe})
+\end{enumerate}
+
+\subsection{FindLinks}
+Finder mulige links på den side som er under analyse. Mulige links dækker over:
+
+\begin{itemize}
+ \item \texttt{href} attribute fra \texttt{a} tags
+ \item \texttt{src} attribute fra \texttt{frame} tags
+ \item \texttt{src} attribute fra \texttt{iframe} tags
+ \item \texttt{src} attribute fra \texttt{iframe} tags
+ \item \texttt{longdesc} attribute fra \texttt{img} tags
+ \item \texttt{cite} attribute fra \texttt{ins} tags
+ \item \texttt{cite} attribute fra \texttt{del} tags
+\end{itemize}
+
+Hvoraf almindelige links (\texttt{a} tags) bliver filtreret fra hvis
+\texttt{url}'en er prefixed med ``mailto:'' og ``javascript:''.
+
+Når linksne findes i dokumentet konstrueres en Http.URI (Se URICache \fixme{uri Cache})
+
+\subsection{URI / URICache}
+
+\texttt{Http} modulets buildURI funktion har vi udbygget med en
+makeURI i \texttt{Main} modulet. Dette er gjort med henblik på
+implementationen af en URICasche. URICaschen er implementeret som et
+Binært Map med:
+
+\begin{verbatim}
+ structure URIMap = BinaryMapFn (struct 
+         type ord_key = URI; 
+                                 fun compare (x, y) = 
+          String.compare(stringFromURI x, 
+             stringFromURI y);
+         end);
+val URICache : URI URIMap.map ref = ref URIMap.empty;
+\end{verbatim}
+
+Hver gang der skal laves en URI ud fra en string tjekkes caschen om
+der allerede eksisterer en en URI. Hvis der ikke findes en laves denne
+og tilføjes caschen
+
+\subsection{Kommandolinje parametre}
+
+\subsection{index side}
+
+\section{Stavekontrol}
+Tekstanalyse strukturen foretager en stavekontrol af hvert ord den
+møder. Til at foretage stavekontrollen har vi implementeret en
+struktur \texttt{SpellChecker} der med funktionerne
+\texttt{spellCheckWord} og \texttt{spellCheckWords} kan angive om ord
+er stavet korrekt. Til at gøre dette bruger vi GNU Aspell, dette er
+væsentligt nemmere end at implementere et stavekontrolsystem i selve
+vores program. SpellChecker--strukturen holder et sæt
+\texttt{aspell}--processor i live (et for hvert sprog der er brug for)
+sender forespørgsler til disse processer hver gang et ord ønskes
+kontrolleret.
+
+Kommunikationen med \texttt{aspell} foregår således at
+vi automatisk understøtter stavekontrol af alle sprog kendt af den
+lokale \texttt{aspell}-installation. Det følger heraf at vi ikke selv
+leverer \texttt{aspell} som en del af vores program, men derimod
+udnytter en eksisterende installation på systemet (og slår
+stavekontrol fra hvis en sådan ikke kan findes).
+
 
 \chapter{Afprøvning}
 
