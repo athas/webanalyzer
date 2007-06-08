@@ -761,7 +761,7 @@ dette er tilfældet ændres start \texttt{url}'en til roden af domænet
 og igen tjekkes om denne må crawles. Hvis denne ikke må crawles kaster
 programmet en FatalError exeption.
 
-Når start \texttt{url}'en er fastlagt oprettes en output mappe(Se \ref{CommandLine}) hvor de generede filer gemmes i.
+Når start \texttt{url}'en er fastlagt oprettes en output mappe(Se \fixme{forklaring om kommandolinje parametre}) hvor de generede filer gemmes i.
 Hvis stavekontrol ikke er tilgængelig på systemet
 (Se \ref{Spellchecker}) og det er sat til, sørges der for at
 disable dette i Config modulet.
@@ -818,9 +818,6 @@ val URICache : URI URIMap.map ref = ref URIMap.empty;
 Hver gang der skal laves en URI ud fra en string tjekkes caschen om
 der allerede eksisterer en en URI. Hvis der ikke findes en laves denne
 og tilføjes caschen
-
-\subsection{Kommandolinje parametre}
-\label{Commandline}
 
 \section{Stavekontrol}
 \label{Spellchecker}
