@@ -331,6 +331,58 @@ den vedlagte kravspecifikation for en mere detaljeret gennemgang.
 
 \chapter{Implementation}
 
+\section{Robots.txt}
+
+For at kunne overholde en eventuel robots.txt bliver denne fil hentet og parset.
+Parseren leder efter alle user-agent tags som matcher programmets egen\footnote{Defineret i Config.sml} og ``*''. Herefter parses alle de fundne statements.
+
+Parseren kan forstå det almindelige ``disallow:'' statement men ydermere har vi også implementeret ``request-rate:'' fra den udvidede standard og ``crawl-delay:'' som ikke er en del af standarden men blot et kompliment til ``request-rate:''\footnote{http://en.wikipedia.org/wiki/Robots.txt}.
+
+Vi har explicit valgt ikke at implementere andre statements fra den udvidede standard da disse ikke har nogen praktisk betydning for vores program.
+\\
+\\
+Når ``robots.txt'' er kan man query Robots modulet om en given relativ url my crawles eller ej. Dette gøres ved at løbe listen igennem og se om der findes et match der prefixer den relative url.
+\\
+\\
+Når parseren finder et ``request-rate':'' statement kaldes setCrawlDelay i Config modulet. Hvis et ``request-rate:'' statement findes udregnes først den mente delay ud fra $sekunder / sider$
+
+
+\section{HTMLFilter}
+
+HTMLFilteret implementerer en filter datastruktur som bruges til at konstruere en liste over HTML tags eller attributes som skal filtreres fra eller ikke filtreres fra.
+Standard filteret beskriver at html, head og body HTML tags ikke skal filtreres fra men script, style, colgroup og col HTML tags skal.
+
+Filter strukture implementere at filtre kan sættes sammen med \texttt{And}, \texttt{Or} og tags eller attributes kan vælges ikke filtreret fra ved \texttt{Not}. Se neden under.
+
+Ud fra dette \texttt{Or}'es standard filteret sammen med et eventuelle tag filtere og id filter som brugeren har mulighed for at angive via komandolinje parametrene \texttt{-ignore-tag} og \texttt{-ignore-id}. Grunden til at disse \texttt{Or}'es sammen er for at garantare at standard filteret ikke kan overskrives og man derved ikke kan filtrere html, head, og body HTML tagsne fra.
+
+\begin{verbatim}
+ datatype Filter = ByTagName of string
+                 | ByAttribute of (string * string)
+                 | And of Filter * Filter
+                 | Or of Filter * Filter
+                 | Not of Filter
+                 | None;
+\end{verbatim}
+
+
+\section{TextAnalyser}
+
+Analyserer et \texttt{Sentencifyer.document} ved at:
+\begin{itemize}
+ \item Fjerne elementer der ikke indeholder ord.
+\item Tæller sætninger, org, lange ord og vokaler i paragraffer
+\item Tæller alle resultaterne sammen til et dokument resultat.
+\item Fjerner individuelle dårlige resultater fra indholds resultat så disse ikke bliver vist til brugeren, men stadig talt med i den samlede analyse. Definitionen på et dårligt resultat er:
+	\begin{itemize}
+		\item FRE > 200 eller FRE <= -50
+	\end{itemize}
+Hvis resultatet bliver dømt dårligt undersøges der dog om der er stavefejl sætningen og hvis der er dette vælger vi alligevel at vise denne til brugeren så denne kan bliver opmærksom på dette (Se Kravspec 2.3)
+
+\item Udregner resultat for dokumentet title.
+\item Returnerer title resultatet, det samlede dokument resultat og det filtrerede indholds resultat.
+\end{itemize}
+
 \chapter{Afprøvning}
 
 \chapter{Konklusion}
