@@ -1,0 +1,53 @@
+digraph g
+{
+//size="8,11"
+//margin=5
+//rankdir="LR";
+edge[arrowhead="none"];
+node[shape=diamond];
+//edge[arrowsize=0.7, len=0.7]
+
+HTML[label="HTML"];
+HEAD[label="HEAD"];
+TITLE[label="TITLE"];
+titel[label="\"Sidens titel\"", shape="none"];
+BODY[label="BODY"];
+P[label="P"];
+OL[label="OL"];
+LI1[label="LI"];
+LI2[label="LI"];
+
+HTMLattrs[label="AttributeSet", shape="ellipse"];
+HEADattrs[label="AttributeSet", shape="ellipse"];
+TITLEattrs[label="AttributeSet", shape="ellipse"];
+BODYattrs[label="AttributeSet", shape="ellipse"];
+Pattrs[label="AttributeSet", shape="ellipse"];
+Ptekst[label="\"Et afsnit\"", shape="none"];
+OLattrs[label="AttributeSet", shape="ellipse"];
+LI1attrs[label="AttributeSet", shape="ellipse"];
+LI1tekst[label="\"Listeelement 1\"", shape="none"];
+LI2attrs[label="AttributeSet", shape="ellipse"];
+LI2tekst[label="\"Listeelement 2\"", shape="none"];
+
+HTML-> HTMLattrs [arrowhead="dot"];
+HTML -> HEAD;
+HTML -> BODY;
+HEAD -> HEADattrs [arrowhead="dot"];
+HEAD -> TITLE;
+TITLE -> titel [arrowhead="normal"];
+TITLE -> TITLEattrs [arrowhead="dot"];
+BODY -> BODYattrs [arrowhead="dot"];
+BODY -> P;
+BODY -> OL;
+P -> Pattrs [arrowhead="dot"];
+P -> Ptekst [arrowhead="normal"];
+OL -> OLattrs [arrowhead="dot"];
+OL -> LI1;
+OL -> LI2;
+LI1 -> LI1attrs [arrowhead="dot"];
+LI1 -> LI1tekst [arrowhead="normal"];
+LI2 -> LI2attrs [arrowhead="dot"];
+LI2 -> LI2tekst [arrowhead="normal"];
+
+
+}

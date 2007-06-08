@@ -16,6 +16,18 @@
 \renewcommand{\ttdefault}{pcr} % bedre typewriter font
 \renewcommand{\rmdefault}{ugm} % garamond
 
+
+\lstloadlanguages{HTML}
+\lstset{language     = ML,
+        extendedchars= false,
+        breaklines   = false,
+        tabsize      = 2,
+        showstringspaces = false,
+        basicstyle   = \small\ttfamily,
+        commentstyle = \em
+      }
+
+
 \usepackage{lettrine}
 
 %\overfullrule=5pt
@@ -48,7 +60,7 @@
 \newpage
 
 \chapter{Indledning}
-
+\label{indledning}
 Mange hjemmesider forfattes i dag uden omtanke for om sidens målgruppe
 er i stand til at læse sidens indhold --- det sproglige niveau er
 ganske enkelt for højt. Ydermere forfattes indholdet af mange
@@ -425,8 +437,10 @@ HTTP--protokollen. Da vores behov er små og vi ikke har for meget tid
 vil vi bruge et eksternt produceret
 HTTP--modul\footnote{\url{http://www.diku.dk/undervisning/2000e/dat0/filer200001/K1/brevkasse.html}},
 modificeret til vores behov. Det er også dette moduls job at tjekke om
-\textit{robots.txt} tillader at vi må crawle siden, da dette skal tjekkes
-hver gang der skal hentes en side.
+\textit{robots.txt} tillader at vi må crawle siden, da dette skal
+tjekkes hver gang der skal hentes en side.
+
+
 
 \subsection{HTML--Parsing}
 For at kunne udtrække tekst fra en HTML-side er det nødvendigt først
@@ -462,7 +476,23 @@ undergrene - endnu en knude og et blad indeholdende
 tekst. Undergrenene skal være ordnede i samme rækkefølge som deres
 optræden i det oprindelige HTML--dokument. En knude indeholder
 information om hvilket tag den repræsenterer, samt eventuelle
-HTML--attributes tagget har.
+HTML--attributter tagget har.
+
+\begin{lstlisting}[language=HTML]
+<HTML>
+<HEAD><TITLE>Sidens titel</TITLE></HEAD>
+<BODY>
+<P>Et afsnit</P>
+<OL> <!-- En kommentar -->
+  <LI>Listeelement 1</LI>
+  <LI>Listeelement 2</LI>
+</OL>
+</BODY>
+</HTML>
+\end{lstlisting}
+
+\includegraphics[width=\textwidth]{parsetree.pdf}
+
 
 \subsection{Find links}
 Dette modul skal ud fra HTML--parsetræet genereret af HTML--parseren,
