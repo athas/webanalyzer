@@ -387,12 +387,14 @@ faciliteter vil ikke blive mærket, og programmets relativt korte og
 simple kørselstid betyder at manglen på mutérbar tilstand ikke vil
 være et problem.
 
-Her følger vores Dataflow diagram.
-\subsection{Dataflow diagram}
-\includegraphics[width=\textwidth]{endeligtdesignill.pdf}
-\\\\
-Det primære dataflow er angivet med solide linjer. Indstillingerne
-går uden om det primære dataflow og er angivet med stiplede linjer.
+På figur \ref{dataflowdia} kan vores Dataflow diagram ses. Det primære
+dataflow er angivet med solide linjer. Indstillingerne går uden om det
+primære dataflow og er angivet med stiplede linjer.
+\begin{figure}
+  \includegraphics[width=\textwidth]{endeligtdesignill.pdf}
+  \caption{Dataflow diagram}
+  \label{dataflowdia}
+\end{figure}
 
 \newpage
 \section{Moduler}
@@ -496,15 +498,15 @@ tags, og blade, repræsenterende tekst. En knude kan have nul eller
 flere undergrene der angiver de HTML--elementer der findes mellem
 start-- og slut--tagget (nul undergrene kunne f.eks. være et
 ``\texttt{<br />}''--element), hvor hver undergren igen kan være enten
-en knude eller et blad. For eksempel vil HTML--strengen
-``\textit{\texttt{<strong>} \texttt{<em>} Vigtigt! \texttt{</em>} 
-  Parseren skal fungere \texttt{</strong>}}'' bestå af en knude med to
-undergrene - endnu en knude og et blad indeholdende
-tekst. Undergrenene skal være ordnede i samme rækkefølge som deres
-optræden i det oprindelige HTML--dokument. En knude indeholder
-information om hvilket tag den repræsenterer, samt eventuelle
-HTML--attributter tagget har.
+en knude eller et blad. Undergrenene skal være ordnede i samme
+rækkefølge som deres optræden i det oprindelige HTML--dokument. En
+knude indeholder information om hvilket tag den repræsenterer, samt
+eventuelle HTML--attributter tagget har.
 
+For eksempel vil det følgende HTML--dokument give et parsetræ, som det
+illustreret på figur \ref{parse}.
+
+\begin{figure}
 \begin{lstlisting}[language=HTML]
 <HTML>
 <HEAD><TITLE>Sidens titel</TITLE></HEAD>
@@ -518,8 +520,15 @@ HTML--attributter tagget har.
 </HTML>
 \end{lstlisting}
 
-\includegraphics[width=\textwidth]{parsetree.pdf}
+  \caption{HTML--dokument}
+  \label{htmlex}
+\end{figure}
 
+\begin{figure}
+  \includegraphics[width=\textwidth]{parsetree.pdf}
+  \caption{Parsetræ}
+  \label{parse}
+\end{figure}
 
 \subsection{Find links}
 Dette modul skal ud fra HTML--parsetræet genereret af HTML--parseren,
