@@ -1,0 +1,76 @@
+\documentclass[a4paper,oneside,article]{memoir}
+\usepackage[T1]{fontenc}
+\usepackage{textcomp}
+\usepackage[utf8]{inputenc}
+\usepackage[danish]{babel}
+\usepackage[garamond]{mathdesign}
+\usepackage{url}
+\usepackage{graphicx}
+\usepackage{pdflscape}
+\usepackage{longtable}
+
+\DeclareTextFontCommand{\textfleur}
+{\fontencoding{T1}\fontfamily{FleurCornerCaps}\selectfont}
+
+
+\renewcommand{\ttdefault}{pcr} % bedre typewriter font
+\renewcommand{\rmdefault}{ugm} % garamond
+
+\usepackage{lettrine}
+
+%\overfullrule=5pt
+
+%\setsecnumdepth{part}
+
+\title{Hjemmesideanalyse  \\ \small{Førsteårsprojekt}}
+
+\author
+{
+  Gruppe 1:\\
+  Troels Henriksen (athas@sigkill.dk)\\
+  Jesper Reenberg (reenberg@kampsax.dtu.dk)\\
+  Martin Dybdal (dybber@dybber.dk)\\ \\
+  Vejledere: Dina og Kasper
+}
+
+
+\setcounter{tocdepth}{2}
+\setcounter{secnumdepth}{0}
+
+\pagestyle{plain}
+
+\date{\today}
+
+\begin{document}
+\maketitle
+\newpage
+\tableofcontents*
+\newpage
+
+\section{Indledning}
+
+Mange hjemmesider forfattes i dag uden omtanke for om sidens målgruppe
+er i stand til at læse sidens indhold - det sproglige niveau er ganske
+enkelt for højt. Ydermere forfattes indholdet af mange hjemmesider med
+primitive værktøjer (f.eks. simple tekstfelter direkte på siden, eller
+simple skriveprogrammer), der mangler de hjælpefeatures som findes i
+almindelige skriveprogrammer. Dette resulterer i at hjemmesider ofte
+indeholder flere stavefejl end gennemsnitlig tekst. Disse mangler kan
+gøre hjemmesider sværere at bruge for den tilsigtede målgruppe, og
+derved reducere deres effektivitet, ligegyldigt hvad målet med siden
+så end er.
+
+Baseret på denne problemstilling har vi implementeret et program
+designet til at bistå hjemmesideforfattere med at forbedre den
+sproglige kvalitet af deres sider, hvad enten dette er ved at reducere
+antallet at stavefejl eller at omskrive unødigt kompliceret tekst.
+
+Denne rapport beskriver design- og implementeringsprocessen bag vores
+løsning af problemet, en arbejdsproces der blev udført i forbindelse
+med Førsteårsprojektet på DIKU i blok 4, 2007.
+
+Det forventes at læseren af denne rapport har en hvis grad af teknisk
+kompetence, har erfaring med programmering og har en overordnet
+forståelse for sproget HTML.
+
+\end{document}
