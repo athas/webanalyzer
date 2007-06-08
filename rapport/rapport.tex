@@ -334,28 +334,47 @@ den vedlagte kravspecifikation for en mere detaljeret gennemgang.
 
 \section{Robots.txt}
 
-For at kunne overholde en eventuel robots.txt bliver denne fil hentet og parset.
-Parseren leder efter alle user-agent tags som matcher programmets egen\footnote{Defineret i Config.sml} og ``*''. Herefter parses alle de fundne statements.
+For at kunne overholde en eventuel robots.txt bliver denne fil hentet
+og parset.  Parseren leder efter alle user-agent tags som matcher
+programmets egen\footnote{Defineret i Config.sml} og ``*''. Herefter
+parses alle de fundne statements.
 
-Parseren kan forstå det almindelige ``disallow:'' statement men ydermere har vi også implementeret ``request-rate:'' fra den udvidede standard og ``crawl-delay:'' som ikke er en del af standarden men blot et kompliment til ``request-rate:''\footnote{http://en.wikipedia.org/wiki/Robots.txt}.
+Parseren kan forstå det almindelige ``disallow:'' statement men
+ydermere har vi også implementeret ``request-rate:'' fra den udvidede
+standard og ``crawl-delay:'' som ikke er en del af standarden men blot
+et kompliment til
+``request-rate:''\footnote{http://en.wikipedia.org/wiki/Robots.txt}.
 
-Vi har explicit valgt ikke at implementere andre statements fra den udvidede standard da disse ikke har nogen praktisk betydning for vores program.
-\\
-\\
-Når ``robots.txt'' er kan man query Robots modulet om en given relativ url my crawles eller ej. Dette gøres ved at løbe listen igennem og se om der findes et match der prefixer den relative url.
-\\
-\\
-Når parseren finder et ``request-rate':'' statement kaldes setCrawlDelay i Config modulet. Hvis et ``request-rate:'' statement findes udregnes først den mente delay ud fra $sekunder / sider$
+Vi har explicit valgt ikke at implementere andre statements fra den
+udvidede standard da disse ikke har nogen praktisk betydning for vores
+program.
 
+Når ``robots.txt'' er kan man query Robots modulet om en given relativ
+url my crawles eller ej. Dette gøres ved at løbe listen igennem og se
+om der findes et match der prefixer den relative url.
+
+Når parseren finder et ``request-rate':'' statement kaldes
+setCrawlDelay i Config modulet. Hvis et ``request-rate:'' statement
+findes udregnes først den mente delay ud fra $sekunder / sider$
 
 \section{HTMLFilter}
 
-HTMLFilteret implementerer en filter datastruktur som bruges til at konstruere en liste over HTML tags eller attributes som skal filtreres fra eller ikke filtreres fra.
-Standard filteret beskriver at html, head og body HTML tags ikke skal filtreres fra men script, style, colgroup og col HTML tags skal.
+HTMLFilteret implementerer en filter datastruktur som bruges til at
+konstruere en liste over HTML tags eller attributes som skal filtreres
+fra eller ikke filtreres fra.  Standard filteret beskriver at html,
+head og body HTML tags ikke skal filtreres fra men script, style,
+colgroup og col HTML tags skal.
 
-Filter strukture implementere at filtre kan sættes sammen med \texttt{And}, \texttt{Or} og tags eller attributes kan vælges ikke filtreret fra ved \texttt{Not}. Se neden under.
+Filter strukture implementere at filtre kan sættes sammen med
+\texttt{And}, \texttt{Or} og tags eller attributes kan vælges ikke
+filtreret fra ved \texttt{Not}. Se neden under.
 
-Ud fra dette \texttt{Or}'es standard filteret sammen med et eventuelle tag filtere og id filter som brugeren har mulighed for at angive via komandolinje parametrene \texttt{-ignore-tag} og \texttt{-ignore-id}. Grunden til at disse \texttt{Or}'es sammen er for at garantare at standard filteret ikke kan overskrives og man derved ikke kan filtrere html, head, og body HTML tagsne fra.
+Ud fra dette \texttt{Or}'es standard filteret sammen med et eventuelle
+tag filtere og id filter som brugeren har mulighed for at angive via
+komandolinje parametrene \texttt{-ignore-tag} og
+\texttt{-ignore-id}. Grunden til at disse \texttt{Or}'es sammen er for
+at garantare at standard filteret ikke kan overskrives og man derved
+ikke kan filtrere html, head, og body HTML tagsne fra.
 
 \begin{verbatim}
  datatype Filter = ByTagName of string
@@ -372,37 +391,57 @@ Ud fra dette \texttt{Or}'es standard filteret sammen med et eventuelle tag filte
 Analyserer et \texttt{Sentencifyer.document} ved at:
 \begin{itemize}
  \item Fjerne elementer der ikke indeholder ord.
-\item Tæller sætninger, org, lange ord og vokaler i paragraffer
-\item Tæller alle resultaterne sammen til et dokument resultat.
-\item Fjerner individuelle dårlige resultater fra indholds resultat så disse ikke bliver vist til brugeren, men stadig talt med i den samlede analyse. Definitionen på et dårligt resultat er:
-	\begin{itemize}
-		\item FRE > 200 eller FRE <= -50
-	\end{itemize}
-Hvis resultatet bliver dømt dårligt undersøges der dog om der er stavefejl sætningen og hvis der er dette vælger vi alligevel at vise denne til brugeren så denne kan bliver opmærksom på dette (Se Kravspec 2.3)
-
-\item Udregner resultat for dokumentet title.
-\item Returnerer title resultatet, det samlede dokument resultat og det filtrerede indholds resultat.
+ \item Tæller sætninger, org, lange ord og vokaler i paragraffer
+ \item Tæller alle resultaterne sammen til et dokument resultat.
+ \item Fjerner individuelle dårlige resultater fra indholds resultat
+   så disse ikke bliver vist til brugeren, men stadig talt med i den
+   samlede analyse. Definitionen på et dårligt resultat er:
+   \begin{itemize}
+   \item FRE > 200 eller FRE <= -50
+   \end{itemize}
+   Hvis resultatet bliver dømt dårligt undersøges der dog om der er
+   stavefejl sætningen og hvis der er dette vælger vi alligevel at
+   vise denne til brugeren så denne kan bliver opmærksom på dette (Se
+   Kravspec 2.3)
+ \item Udregner resultat for dokumentet title.
+ \item Returnerer title resultatet, det samlede dokument resultat og det filtrerede indholds resultat.
 \end{itemize}
 
 \section{Main}
-Main sørger for at håndtere al indput fra brugere i form af kommandolinje parametrene. Hvis der ingen parametre er givet lukker programmet og skriver en hjælpebesked ud om hvordan det er meningen programmet skal startes og hvad de forsellige argumenter betyder. 
 
-Hvis der som minimum er angivet en \texttt{url} går programmet igang med at analysere.
-Først tjekkes form om webstedet har en robots.txt i roden. Hvis denne eksisterer hentes og parses den, ellers foretages ingen ting.
-Derefter tjekkes det at den angivne \texttt{url} må crawles. Hvis ikke dette er tilfældet ændres start \texttt{url}'en til roden af domænet og igen tjekkes om denne må crawles. Hvis denne ikke må crawles kaster programmet en FatalError exeption.
+Main sørger for at håndtere al indput fra brugere i form af
+kommandolinje parametrene. Hvis der ingen parametre er givet lukker
+programmet og skriver en hjælpebesked ud om hvordan det er meningen
+programmet skal startes og hvad de forsellige argumenter betyder.
+
+Hvis der som minimum er angivet en \texttt{url} går programmet igang
+med at analysere.  Først tjekkes form om webstedet har en robots.txt i
+roden. Hvis denne eksisterer hentes og parses den, ellers foretages
+ingen ting.
+
+Derefter tjekkes det at den angivne \texttt{url} må crawles. Hvis ikke
+dette er tilfældet ændres start \texttt{url}'en til roden af domænet
+og igen tjekkes om denne må crawles. Hvis denne ikke må crawles kaster
+programmet en FatalError exeption.
+
 Når start \texttt{url}'en er fastlagt oprettes en output mappe(Se....
 \fixme{Se kommandoelinje parametre}) hvor de generede filer gemmes i.
-Hvis stavekontrol ikke er tilgængelig på systemet (Se... \fixme{stavekontrol}) og det er sat til, sørges der for at disable dette i Config modulet.
-Herefter kan selve analysen gå igang på den url som blev besluttet tidligere. 
-Når analysen af alle fundne sider er færdig skrives en index (Se ... \fixme{index}) side og programmet terminerer.
-\\
-\\
+Hvis stavekontrol ikke er tilgængelig på systemet
+(Se... \fixme{stavekontrol}) og det er sat til, sørges der for at
+disable dette i Config modulet.
+
+Herefter kan selve analysen gå igang på den url som blev besluttet
+tidligere.  Når analysen af alle fundne sider er færdig skrives en
+index (Se ... \fixme{index}) side og programmet terminerer.
+
+
 Under analysen af de individuelle sider holder der styr på essentielle ting som:
+
 \begin{enumerate}
  \item Angivet max crawl dybde
-\item Liste over ventende sider der skal crawles
-\item Liste over besøgte sider.
-\item Cashe indeholdende uri'er der er blevet lavet et HTTP ``head'' request til (Se... \fixme{URLCashe})
+ \item Liste over ventende sider der skal crawles
+ \item Liste over besøgte sider.
+ \item Cashe indeholdende uri'er der er blevet lavet et HTTP ``head'' request til (Se... \fixme{URLCashe})
 \end{enumerate}
 
 \subsection{FindLinks}
@@ -410,31 +449,39 @@ Finder mulige links på den side som er under analyse. Mulige links dækker over
 
 \begin{itemize}
  \item \texttt{href} attribute fra \texttt{a} tags
-\item \texttt{src} attribute fra \texttt{frame} tags
-\item \texttt{src} attribute fra \texttt{iframe} tags
-\item \texttt{src} attribute fra \texttt{iframe} tags
-\item \texttt{longdesc} attribute fra \texttt{img} tags
-\item \texttt{cite} attribute fra \texttt{ins} tags
-\item \texttt{cite} attribute fra \texttt{del} tags
+ \item \texttt{src} attribute fra \texttt{frame} tags
+ \item \texttt{src} attribute fra \texttt{iframe} tags
+ \item \texttt{src} attribute fra \texttt{iframe} tags
+ \item \texttt{longdesc} attribute fra \texttt{img} tags
+ \item \texttt{cite} attribute fra \texttt{ins} tags
+ \item \texttt{cite} attribute fra \texttt{del} tags
 \end{itemize}
 
-Hvoraf almindelige links (\texttt{a} tags) bliver filtreret fra hvis \texttt{url}'en er prefixed med ``mailto:'' og ``javascript:''.
+Hvoraf almindelige links (\texttt{a} tags) bliver filtreret fra hvis
+\texttt{url}'en er prefixed med ``mailto:'' og ``javascript:''.
 
 Når linksne findes i dokumentet konstrueres en Http.URI (Se URICasche \fixme{uri Cashe})
 
-\subsection{URI / URICasche}
-\texttt{Http} modulets buildURI funktion har vi udbygget med en makeURI i \texttt{Main} modulet. Dette er gjort med henblik på implementationen af en URICasche. URICaschen er implementeret som et Binært Map med:
+\subsection{URI / URICache}
+
+\texttt{Http} modulets buildURI funktion har vi udbygget med en
+makeURI i \texttt{Main} modulet. Dette er gjort med henblik på
+implementationen af en URICasche. URICaschen er implementeret som et
+Binært Map med:
+
 \begin{verbatim}
  structure URIMap = BinaryMapFn (struct 
-								 type ord_key = URI; 
+         type ord_key = URI; 
                                  fun compare (x, y) = 
-									 String.compare(stringFromURI x, 
-													stringFromURI y);
-								 end);
+          String.compare(stringFromURI x, 
+             stringFromURI y);
+         end);
 val URICache : URI URIMap.map ref = ref URIMap.empty;
 \end{verbatim}
 
-Hver gang der skal laves en URI ud fra en string tjekkes caschen om der allerede eksisterer en en URI. Hvis der ikke findes en laves denne og tilføjes caschen
+Hver gang der skal laves en URI ud fra en string tjekkes caschen om
+der allerede eksisterer en en URI. Hvis der ikke findes en laves denne
+og tilføjes caschen
 
 \subsection{Kommandolinje parametre}
 
