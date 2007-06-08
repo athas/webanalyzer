@@ -394,11 +394,11 @@ programmet skal bruges. Når man starter programmet er der én
 indstilling man \textit{altid} vil skulle angive --- startadressen for
 analysen. Denne indstilling skal, som den eneste, ikke angives med et
 specielt præfiks, netop fordi den er så vigtig. De andre indstillinger
-angives med et præfiks f.eks. ``-l'' for angivelsen af sprog. Måden
+angives med et præfiks f.eks. ``--l'' for angivelsen af sprog. Måden
 disse indstillinger angives, er valgt ud fra at det skal være let at
 sætte deres navn/præfiks i forbindelse med deres
 betydning. Eksempelvis kan man angive hvor den maksimale dybde for
-analysen med indstillingen ``-d'', hvor \textit{d}'et står for
+analysen med indstillingen ``--d'', hvor \textit{d}'et står for
 depth. Udover at det skal være let at huske sammenhængen mellem
 betydning og navn, så skal tvetydigheder helst undgås. Tvetydigheder
 kan gøre at brugeren ikke så let husker forkert og føler det
@@ -406,7 +406,7 @@ nødvendigt at slå op i manualen. Når flere indstillinger kunne have
 samme navn, har vi valgt at bruge et længere navn for at undgå
 disse tvetydigheder. F.eks. er der to indstillinger der begge kan
 angive at noget af dokumentet skal ignoreres i analysen, disse
-indstillingers navne er ``-ignore--tag'' og ``-ignore--id''.
+indstillingers navne er ``--ignore--tag'' og ``--ignore--id''.
 
 \subsection{Indstillinger}
 Da de brugerleverede indstillinger skal kunne tilgås fra vidt spredte
@@ -681,14 +681,14 @@ komandolinje parametrene \texttt{-ignore-tag} og
 at garantare at standard filteret ikke kan overskrives og man derved
 ikke kan filtrere html, head, og body HTML tagsne fra.
 
-\begin{verbatim}
+\begin{lstlisting}
  datatype Filter = ByTagName of string
                  | ByAttribute of (string * string)
                  | And of Filter * Filter
                  | Or of Filter * Filter
                  | Not of Filter
                  | None;
-\end{verbatim}
+\end{lstlisting}
 
 
 \section{TextAnalyser}
@@ -712,7 +712,6 @@ Analyserer et \texttt{Sentencifyer.document} ved at:
  \item Returnerer title resultatet, det samlede dokument resultat og det filtrerede indholds resultat.
 \end{itemize}
 
-v v v v v v v
 \section{Main}
 
 Main sørger for at håndtere al indput fra brugere i form af
@@ -775,7 +774,7 @@ makeURI i \texttt{Main} modulet. Dette er gjort med henblik på
 implementationen af en URICasche. URICaschen er implementeret som et
 Binært Map med:
 
-\begin{verbatim}
+\begin{lstlisting}
  structure URIMap = BinaryMapFn (struct 
          type ord_key = URI; 
                                  fun compare (x, y) = 
@@ -783,7 +782,7 @@ Binært Map med:
              stringFromURI y);
          end);
 val URICache : URI URIMap.map ref = ref URIMap.empty;
-\end{verbatim}
+\end{lstlisting}
 
 Hver gang der skal laves en URI ud fra en string tjekkes caschen om
 der allerede eksisterer en en URI. Hvis der ikke findes en laves denne
