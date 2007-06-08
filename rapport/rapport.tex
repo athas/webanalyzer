@@ -48,7 +48,7 @@
 \newpage
 
 \chapter{Indledning}
-
+\label{indledning}
 Mange hjemmesider forfattes i dag uden omtanke for om sidens målgruppe
 er i stand til at læse sidens indhold --- det sproglige niveau er
 ganske enkelt for højt. Ydermere forfattes indholdet af mange
@@ -71,9 +71,261 @@ med Førsteårsprojektet på DIKU i blok 4, 2007.
 
 Det forventes at læseren af denne rapport har en hvis grad af teknisk
 kompetence, har erfaring med programmering og har en overordnet
-forståelse for sproget HTML.
+forståelse for sproget HTML\footnote{Et sprog der bruges til at
+  beskrive struktur og indhold af websites}.
 
 \chapter{Analyse}
+
+I dette afsnit vil vi beskrive de tanker vi gjorde os omkring
+problemet, og de forskellige løsningsmuligheder vi vurderede.
+
+\section{Målgruppe}
+\label{målgruppe}
+Der er adskillige mulige målgrupper en løsning på problemet kunne være
+orienteret imod --- fra hjemmebrugere der skriver personlige sider,
+over de individuelle skribenter på et større website til selve
+webmasteren på en stor side. Ydermere kan et websites indhold
+fortolkes på flere forskellige måder --- enten som almindelig tekst
+omgivet af HTML-data uden betydning, eller med et forsøg på at benytte
+den information som HTML-strukturen udtrykker. Sidstnævnte gør det
+væsentligt lettere for et program at undersøge indholdet på et
+website, idet mere information om sidernes indhold så er eksplicit
+udtrykket i sidernes kode, i stedet for at programmet skal
+``gætte''. Dette har også relevans i forhold til målgruppen, idet
+HTML's avancerede features for at udtrykke semantisk information
+omkring teksten (information om sprog, forkortelser, osv) primært
+benyttes af tekniske brugere, og det virkede paradoksalt at lave en
+løsning til ikke-tekniske brugere der virker bedst med data produceret
+af tekniske brugere. Vi besluttede os for at det ville være et spild
+at undlade at udnytte HTML's muligheder for at angive semantisk
+information omkring teksten, men da en så lille del af verdens
+websites benytter sig af HTML's muligheder indenfor dette område,
+ville det heller ikke være hensigtsmæssigt at handikappe programmet
+til kun at virke acceptabelt på denne form for HTML. Vores endelige
+målgruppe endte med at blive todelt --- webmastere og
+(semi-)professionelle skribenter. Dette valg baserer vi på at både
+webmastere og skribenter har en stor interesse i at deres sider eller
+tekst er let at læse, og har motivation til at sætte sig ind i
+hvorledes man skriver god HTML, og derved gør det muligt for et
+program at foretage en så god undersøgelse af websitet som
+muligt.\footnote{Det kan nævnes at HTML-sider rig på semantisk
+  information også gør det lettere for brugere af alternative
+  weblæsere, som f.eks. blinde der benytter sig at netoplæsere, at
+  benytte sig af siden} De, der ikke har interesse eller motivation
+til at sætte sig ind i teknikken, har sandsynligvis også mindre
+interesse i at deres websites er lette at læse --- ejerne af
+professionelt orienterede websites har en væsentligt større interesse
+i at deres sider er let læsbare end forfatterne af f.eks. en families
+hjemmeside.
+
+\section{Overvejelser omkring brugsscenarier}
+\label{brugsovervejelser}
+Vi blev hurtigt enige om at det er langt mere interessant at analysere
+et website som helhed, end kun at analysere en specifik HTML-side, og
+samtidigt at det er en nødvendighed at løsningen kan gennemgå
+(``crawle'') et online website, og ikke være afhængig af at det i
+forvejen er hentet og er beliggende som filer på brugerens
+harddisk. Hvor det er relativt nemt at få et program, der kan
+analysere et helt website, til kun at analysere en enkelt side, er det
+omvendte langt sværere, idet man så skal implementere crawling seperat
+fra programmet. Ydermere er især den ene del af vores målgruppe ---
+webmastere --- sandsynligvis langt mere interesserede i at
+analysere hele det website de er ansvarlige for, for at finde ud af
+hvilke undersider der er uacceptabelt svære at læse, end at analysere
+enkeltsider. Idet vi kan let kan forestille os at det kan tage lang
+tid at analysere alle undersider på et stort website, forestiller vi
+os også et brugsmønster hvori programmet automatisk bliver kørt med et
+fast interval, og producerer et resultat som er tilgængeligt for alle
+der arbejder på siden. Dette er langt mere effektivt end at alle
+skribenter hver især skal køre tidskrævende analyser hver for sig. Dog
+opfatter vi det også som sandsynligt at skribenter, der arbejder på at
+forbedre læsbarheden af en specifik underside, vil have en mulighed
+for hurtigt at analysere denne side for at se resultatet af deres
+ændringer, i stedet for at de skal vente på at den automatiske analyse
+bliver kørt (og bliver færdig igen).
+
+\section{Brugergrænseflade og resultatpræsentation}
+\label{brugergrænseflade}
+En løsning på opgavens overordnede problem kan formuleres som at
+analysere et website og producere en eller anden form for resultat,
+der indeholder information om dets læsbarhed. Der er flere forskellige
+muligheder for hvorledes brugeren skal kunne sætte en analyse i gang,
+og hvorledes brugeren skal præsenteres for resultatet, og det rette
+valg afhænger primært af den valgte målgruppe. Valget af
+resultatpræsentation har stor betydning for løsningen, idet både valg
+af teknologi, udformning af design og strategien for den endelige
+implementation bliver påvirket hvorledes brugeren skal præsenteres for
+resultatet. Der er også forskel på hvor godt forskellige
+brugergrænseflader gør det muligt at analysere hele websites,
+automatisere kørsel af programmet eller dele resultatet med andre
+brugere (så hver bruger ikke skal køre en ny analyse fra start
+af). Forskellige muligheder blev overvejet:
+
+\begin{description}
+\item[Integreret med webbrowser:]
+  Programmet kan være en del af brugerens webbrowser --- når
+  programmet er aktivt vil det, når brugeren besøger en side, indikere
+  læsbarheden af siden. Dette kan ske på forskellige måder --- når
+  brugeren holder musen over en sætning eller et afsnit kan f.eks. et
+  LIX-tal (eller lignende) vises, et panel kan komme til syne i siden
+  af browseren der indeholder information om sidens læsbarhed, eller
+  teksten på siden kan farves efter hvor svær den er at læse. Fordelen
+  ved denne løsning er at den er en udvidelse af brugerens normale
+  brug af Internettet, og at information om læsbarheden af en given
+  side præsenteres sammen med selve siden, og derved gør det let at
+  forbinde læsbarhedsresultatet med sidens indhold. Det føles
+  naturligt og intuitivt at bevæge sig ned af en side og lede efter
+  indikerede problemer. 
+
+  Ulempen ved denne præsentationsform er at det ikke umiddelbart lader
+  sig gøre at analysere et helt website og kun søge detaljeret
+  information om de mindst læsbare sider. En anden ulempe er at
+  integrationen med browseren kan gøre det svært at automatisere
+  kørslen af programmet, og at en præsentation der foregår i
+  forbindelse med browserens egen visning af siden kan gøre det svært,
+  for ikke at sige umuligt, at gøre resultatet tilgængeligt for andre
+  brugere.
+
+\item[Webapplikation:]
+  Programmets brugerinterface kan være udformet som et website (en
+  webapplikation), hvor brugeren kan angive adressen på et andet
+  website, som så bliver analyseret. Præsentationen af resultatet
+  kunne være en dynamisk genereret kopi af websitet, som brugeren kan
+  navigere igennem online som hvis det var det oprindelige website,
+  men hvor der på hver side er indsat information om tekstens
+  læsbarhed. 
+
+  Problemet med denne mulighed er at en komplet analyse af et
+  middelstort website sandsynligvis tager længere tid end de fleste
+  brugere er villige til at vente på en hjemmeside i, og at der ikke
+  er en umiddelbar måde at dele resultatet med andre brugere på.
+
+\item[Grafisk standalone-applikation:] 
+  Præsentationen kan udføres omtrent som nævnt i første mulighed, men
+  i stedet for at køre som en del af webbrowseren, er det et vindue
+  for sig selv, og det er selv ansvarligt for at vise indholdet af en
+  analyseret side og sætte det i forbindelse med
+  analyseresultatet. Hvis brugeren ønsker at analysere et helt website
+  kan dette også gøres ved at programmet systematisk følger links på
+  websitet og analyserer hver side det finder. Der kan så produceres
+  en liste over de analyserede sider, hvorfra brugeren kan vælge at få
+  mere detaljeret information (f.eks. den førnævnte visning af siden
+  med uacceptabelt svært læsbar tekst markeret). Denne liste kan
+  eventuelt sorteres efter sidernes læsbarhed eller lignende.
+
+  Denne løsnings primære problem er at det er relativt svært at
+  automatisere grafiske programmer, og at det stadigvæk ikke
+  umiddelbart er muligt at dele et analyseresultat med flere
+  brugere. En løsning på dette problem kunne være at opdele programmet
+  i to dele --- en del der udfører den konkrete analyse og laver
+  resultatet som en fil eller lignende, og en del der visuelt kan vise
+  resultatet ud fra denne fil. En variant over dette er hvad næste
+  mulighed går ud på.
+
+\item[Output i form af HTML:]
+  Programmet kan som foreslået ovenfor være konceptuelt opdelt i
+  to --- en del der ``crawler'' et website og producerer et
+  analyseresultat, og en del der giver en visuel præsentation af
+  resultatet for brugeren. Dog er finessen at den første del
+  præsenterer et sæt af HTML-filer, som kan læses af enhver
+  webbrowser, hvilket betyder at vi ikke har behov for at implementere
+  præsentationsdelen af løsningen. Programmet skal blot producere
+  HTML-filer indeholdende websitets oprindelige tekst i forbindelse
+  med analyseresultatet, og gøre det muligt at se alle undersider på
+  websitet (f.eks. ved at producere en HTML-fil der indeholder en
+  liste over alle de sider programmet besøgte under kørslen). Idet
+  programmet ikke har behov for selv at præsentere resultatet visuelt
+  (det håndteres af brugerens webbrowser) kan det implementeres som et
+  kommandolinjeprogram, hvilket gør det nemt at automatisere, og da
+  programmets output er almindelige HTML-filer kan disse nemt gøres
+  tilgængelige for andre brugere.
+\end{description}
+
+Vi valgte sidstnævnte mulighed, og valgte også at implementere
+løsningen som et kommandolinjeprogram. Dette sikrer et af vores
+brugsscenarier, hvori programmet køres med et regulært interval og
+producerer resultater der er tilgængelige for alle der arbejder på
+websitet, og samtidigt er vi overbeviste om at det er muligt at lave
+et så simpelt kommandolinjeinterface at skribenter hurtigt også kan
+lære at bruge det. At output er i form af HTML-filer gør det også
+muligt at lave nogle senere udvidelser eller alternative
+brugergrænseflader --- en interessant idé kunne være en webapplikation
+hvori brugere kan ``bestille'' analyser, og få en email med et link
+til den producerede analyse (programmets output i form af HTML) når
+den er færdig.
+
+\section{Konkrete features}
+
+Idet vores primære brugsscenarie omhandler analyse af alle sider på et
+helt website tilgængeligt online (se sektion \ref{brugsovervejelser}),
+er vores program nødt til at være i stand til at tage forbindelse
+forbindelse til en webserver, hente en HTML-fil, forstå indholdet af
+HTML-filen, udføre en analyse af teksten i filen og følge hyperlinks
+angivet i HTML-filen til andre sider på websitet. At følge hyperlinks
+fra side til side er vores eneste mulighed for at besøge alle sider på
+websitet, hvilket giver mulighed for at der findes isolerede sider som
+vi ikke er i stand til at besøge, men da menneskelige besøgende på
+siden også er nødt til at følge hyperlinks for at komme omkring, og
+det derfor er yderst sjældent at der findes isolerede sider på et
+website, mener vi ikke at dette er et problem.
+
+For at analysere teksten på siderne valgte vi at benytte to
+analysemetoder -
+læsbarhedsindeks\footnote{\url{http://www.elkan.dk/lixtal.asp}} og
+FKRT\footnote{\url{http://en.wikipedia.org/wiki/Flesch-Kincaid_Readability_Test}}.
+Læsbarhedsindeks (herefter refereret til som LIX) er en klassisk
+algoritme til at analysere læsbarheden af en tekst, den er velforstået
+af mange og virker derfor som et godt valg til programmet. Ydermere
+har vi også valgt at benytte os af FKRT, der primært bruges til
+engelsk tekst, men som også producerer brugbare resultater for dansk
+tekst. Desuden fandt vi det også relevant at foretage stavekontrol af
+de analyserede sider, idet mange sider bliver skrevet med primitive
+værktøjer der ikke indeholder automatisk stavekontrol (se sektion
+\ref{indledning}). Vi har nævnt at det er oplagt at benytte os af den
+information som en sides HTML fortæller om dens tekst (se sektion
+\ref{målgruppe}), og det er i forbindelse med stavekontrollen især
+nærliggende at inddrage HTML's \texttt{lang}-attribut, som angiver en
+teksts sprog, således at vi altid bruger den rigtige ordbog til at
+stavekontrollen. Det gør det muligt for vores program at fungere med
+sider der indeholder tekst skrevet på flere sprog, uden at det
+ukorrekt angiver forkert stavede ord. Slutteligt taler vores egen
+erfaring for at en hændelig skrivefejl er fejlagtig gentagelse af ord,
+så denne fejl valgte vi ligeledes gøre opmærksom på (skriveprogrammer
+med grammatikcheck fanger denne fejl, men det gør en selvstændig
+stavekontrol, som den i vores program, ikke).
+
+Som nævnt i sektion \ref{brugergrænseflade} består programmets output
+af HTML-filer --- disse filer skal kommunikere resultatet på en
+forståelig måde, idet de skal kunne stå alene når de ses i en
+browser. Vi fandt det mest intuitivt at programmet laver en fil med
+analyseresultater for hver side det besøger, og slutteligt laver en
+overordnet indeks-fil der indeholder en liste over alle de besøgte
+sider, og indeholder et link til den fil, der indeholder detaljerne
+omkring analyse af siden. Disse sider indeholder den relevante sides
+tekst, samt talværdier der angiver sidens læsbarhed (LIX-tal, FRE-tal
+og FKGL-tal). Teksten på siden er opdelt i afsnit\footnote{I vores
+  program dækker begrebet afsnit både over HTML's koncept om afsnit,
+  adskilt af \texttt{p}-tags, samt over anden selvstændig tekst, som
+  er strukturelt separat i HTML-dokumentet}, og for hvert afsnit
+optræder der igen information om afsnittets læsbarhed --- dette er for
+at gøre det lettere at finde, og få rettet, de mindst læsbare afsnit
+på en side. Hver enkelt sætning har også en værdi associeret med sig,
+der angiver hvor læsbar sætningen er - men eksperimenter viste at det
+var uholdbart at præsentere sætninger med tre tilknyttede talværdier,
+på samme måde som med afsnittene, idet det ødelagde flowet i teksten,
+og gjorde det trægt og besværligt at læse analysesiderne
+igennem. Derfor bliver læsbarheden af sætningerne i et afsnit i stedet
+indikeret via deres baggrundsfarve, som går fra lysegrøn for meget
+læsbare sætninger, til blodrød for ulæselige sætninger. Vores
+oplevelse er at farverne hurtigt gør det muligt at skimme en
+analyseside og identificere afsnit der ser ``meget røde'' ud, uden at
+man har behov for at gennemgå alle afsnittenes analyseresultater for
+at finde den med den dårligste værdi.
+
+Programmet understøtter flere features, især omkring
+indstillingsparametre og håndtering af specifikke HTML-tags, men disse
+er ikke analysemæssigt særligt interessante, og vi henviser derfor til
+den vedlagte kravspecifikation for en mere detaljeret gennemgang.
 
 \chapter{Programdesign}
 
