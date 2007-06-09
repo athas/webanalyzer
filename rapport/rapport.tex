@@ -316,20 +316,20 @@ forståelig måde, idet de skal kunne stå alene når de ses i en
 browser. Vi fandt det mest intuitivt at programmet laver en fil med
 analyseresultater for hver side det besøger, og slutteligt laver en
 overordnet indeks-fil der indeholder en liste over alle de besøgte
-sider, og indeholder et link til den fil, der indeholder detaljerne
-omkring analyse af siden. Disse sider indeholder den relevante sides
-tekst, samt talværdier der angiver sidens læsbarhed (LIX-tal, FRE-tal
-og FKGL-tal). Teksten på siden er opdelt i afsnit\footnote{I vores
-  program dækker begrebet afsnit både over HTML's koncept om afsnit,
-  adskilt af \texttt{p}-tags, samt over anden selvstændig tekst, som
-  er strukturelt separat i HTML-dokumentet}, og for hvert afsnit
-optræder der igen information om afsnittets læsbarhed --- dette er for
-at gøre det lettere at finde, og få rettet, de mindst læsbare afsnit
-på en side. Hver enkelt sætning har også en værdi associeret med sig,
-der angiver hvor læsbar sætningen er - men eksperimenter viste at det
-var uholdbart at præsentere sætninger med tre tilknyttede talværdier,
-på samme måde som med afsnittene, idet det ødelagde flowet i teksten,
-og gjorde det trægt og besværligt at læse analysesiderne
+sider samt links til de filer, der indeholder detaljerne omkring
+analysen af siderne. Disse sider indeholder den relevante sides tekst,
+samt talværdier der angiver sidens læsbarhed (LIX-tal, FRE-tal og
+FKGL-tal). Teksten på siden er opdelt i afsnit\footnote{I vores
+  program dækker begrebet ``afsnit'' både over HTML's koncept om
+  afsnit, adskilt af \texttt{p}-tags, samt over anden selvstændig
+  tekst, som er strukturelt separat i HTML-dokumentet}, og for hvert
+afsnit optræder der igen information om afsnittets læsbarhed --- dette
+er for at gøre det lettere at finde, og få rettet, de mindst læsbare
+afsnit på en side. Hver enkelt sætning har også en værdi associeret
+med sig, der angiver hvor læsbar sætningen er --- men eksperimenter
+viste at det var uholdbart at præsentere sætninger med tre tilknyttede
+talværdier, på samme måde som med afsnittene, idet det ødelagde flowet
+i teksten, og gjorde det trægt og besværligt at læse analysesiderne
 igennem. Derfor bliver læsbarheden af sætningerne i et afsnit i stedet
 indikeret via deres baggrundsfarve, som går fra lysegrøn for meget
 læsbare sætninger, til blodrød for ulæselige sætninger. Vores
