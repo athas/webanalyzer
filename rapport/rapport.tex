@@ -369,10 +369,10 @@ den vedlagte kravspecifikation for en mere detaljeret gennemgang.
 \chapter{Programdesign}
 
 \section{Overordnet designfilosofi}
-Vi har valgt at basere vores programimplementation på et {\em
-  dataflow}-design, hvori fokus er hvorledes data bliver ført rundt i
-programmets moduler. Idet vores program ikke er interaktivt, men
-derimod kører som et {\em batch--job} med en fra starten af
+Vi har valgt at basere vores programimplementation på et
+\textit{dataflow}--design, hvori fokus er hvorledes data bliver ført
+rundt i programmets moduler. Idet vores program ikke er interaktivt,
+men derimod kører som et \textit{batch--job} med en fra starten af
 veldefineret afslutning (når alle sider er blevet analyseret), i
 modsætning til interaktive programmer, som kører indtil brugeren
 vælger at afslutte dem, er et dataflow--design velegnet, da vi kan
@@ -385,7 +385,7 @@ via gradvist mere finkornede processer. Programmeringssproget Standard
 ML er velegnet til en sådan opgave --- manglen på objektorienterede
 faciliteter vil ikke blive mærket, og programmets relativt korte og
 simple kørselstid betyder at manglen på mutérbar tilstand ikke vil
-være et problem.
+være et problem. \fixme{Der mangler da ikke muterbar tilstand?}
 
 På figur \ref{dataflowdia} kan vores Dataflow diagram ses. Det primære
 dataflow er angivet med solide linjer. Indstillingerne går uden om det
@@ -424,7 +424,7 @@ disse indstillinger angives, er valgt ud fra at det skal være let at
 sætte deres navn/præfiks i forbindelse med deres
 betydning. Eksempelvis kan man angive hvor den maksimale dybde for
 analysen med indstillingen ``--d'', hvor \textit{d}'et står for
-depth. Udover at det skal være let at huske sammenhængen mellem
+\textit{depth}. Udover at det skal være let at huske sammenhængen mellem
 betydning og navn, så skal tvetydigheder helst undgås. Tvetydigheder
 kan gøre at brugeren ikke så let husker forkert og føler det
 nødvendigt at slå op i manualen. Når flere indstillinger kunne have
@@ -453,12 +453,12 @@ programmet er bygget op omkring.
 Dette modul skal tjekke om det domæne brugeren har angivet kan tilgås
 og give en fejlmeddelelse hvis det ikke er tilfældet. Hvis brugeren
 har angivet det skal det undersøges om der er en
-\textit{robots.txt}-fil (en standard, der gør det muligt for websider
-at bede robotter om at lade være med at besøge dele af
-siden) \footnote{\url{http://www.robotstxt.org/}} på serveren og hvis
-det er tilfældet så skal den parses. Informationerne i
+\textit{robots.txt}--fil (en standard, der gør det muligt for websteder
+at bede søgemaskiner og andre robotter om at lade være med at besøge
+dele af siden) \footnote{\url{http://www.robotstxt.org/}} på serveren
+og hvis det er tilfældet så skal den parses. Informationerne i
 \textit{robots.txt} skal gøres tilgængeligt for \textit{Hent
-  side}--modulet, så det kan se hvilke dele af websitet det må crawle.
+  side}--modulet, så det kan se hvilke dele af webstedet det må crawle.
 
 \subsection{Hent Side}
 Hent side modulet skal kunne hente en side fra en webserver via
@@ -466,7 +466,7 @@ HTTP--protokollen. Da vores behov er små og vi ikke har for meget tid
 vil vi bruge et eksternt produceret
 HTTP--modul\footnote{\url{http://www.diku.dk/undervisning/2000e/dat0/filer200001/K1/brevkasse.html}},
 modificeret til vores behov. Det er også dette moduls job at tjekke om
-\textit{robots.txt} tillader at vi må crawle siden, da dette skal
+den indlæste \textit{robots.txt} tillader at vi må crawle siden, da dette skal
 tjekkes hver gang der skal hentes en side.
 
 
@@ -537,17 +537,17 @@ er indholdet af disse dog udeladt.
 Dette modul skal ud fra HTML--parsetræet genereret af HTML--parseren,
 lave en liste af de links som linker til andre sider på samme domæne.
 Det skal derefter bede om at disse sider bliver hentet, parset og
-analyseret, og undersøge links på de nyhentede sider - en rekursiv
+analyseret, og undersøge links på de nyhentede sider --- en rekursiv
 proces der løber indtil alle tilgængelige sider er blevet analyseret.
 
 For at finde linksene skal alle \texttt{a}--tags findes --- deres
 \texttt{href} attribut angiver så det link der peges på. De adresser
-man finder kan være relative til den nuværende side, den absolutte
+man finder kan være relative til den nuværende side. Den absolutte
 adresse til den nuværende side skal derfor kombineres med den relative
 sti fra linket for at forme linkets absolutte sti. Det er dog ikke
 altid den nuværende sides absolutte sti som adresser skal være
-relative til, man angive en anden sti som de skal være relative til
-med \texttt{base}--tagget. 
+relative til, man kan angive en anden sti som de skal være relative
+til med \texttt{base}--tagget.
 
 Det er ikke kun \texttt{a} der skal undersøges, hvis et HTML--dokument
 benytter sig af rammer (frames), så skal deres start--adresser også
