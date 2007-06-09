@@ -310,6 +310,8 @@ så denne fejl valgte vi ligeledes gøre opmærksom på (skriveprogrammer
 med grammatikcheck fanger denne fejl, men det gør en selvstændig
 stavekontrol, som den i vores program, ikke).
 
+\subsection{Overvejelser omkring output}
+
 Som nævnt i sektion \ref{brugergraenseflade} består programmets output
 af HTML-filer --- disse filer skal kommunikere resultatet på en
 forståelig måde, idet de skal kunne stå alene når de ses i en
@@ -337,6 +339,27 @@ oplevelse er at farverne hurtigt gør det muligt at skimme en
 analyseside og identificere afsnit der ser ``meget røde'' ud, uden at
 man har behov for at gennemgå alle afsnittenes analyseresultater for
 at finde den med den dårligste værdi.
+
+HTML-dokumenter kan indeholde ``skjult'' tekst (herefter refereret til
+som \textit{beskrivelser}), som f.eks. beskrivelser af links og
+billeder, som ikke passer direkte ind i sætningsstrukturen. Idet denne
+tekst også er relevant at medtage i resultatet bliver der efter hvert
+afsnit vist en liste med beskrivelser fra afsnittet. Da denne tekst
+kan fremkomme midt inde i en sætning fandt vi det ikke passende blot
+at indsætte teksten hvor den er skrevet i HTML-dokumentet, og den
+anden mulighed, at simulere hvordan teksten fungerer i det oprindelige
+dokument ved først at vise den når man holder musen over sætningen der
+indeholder den, ville skjule disse sætninger og deres farve fra en
+hurtig skimning af analysesiden. Ovenfor blev det beskrevet hvordan en
+sådan farvefølsom skimning er en af de mest praktisk måder at gennemse
+et analyseresultat på, så en sådan løsning fandt vi uacceptabel. At
+præsentere beskrivelserne som en liste efter selve afsnittets tekst
+betyder at det er sværere at kode den sammen med den egentlige tekst i
+HTML-dokumentet, men idet beskrivelserne i listen har samme rækkefølge
+som beskrivelserne på den oprindelige side, og fordi der ofte er
+relativt få beskrivelser i et afsnit, mener vi ikke at dette er et
+stort problem, og vi mener at denne løsning er at foretrække frem for
+de alternativer vi overvejede.
 
 Programmet understøtter flere features, især omkring
 indstillingsparametre og håndtering af specifikke HTML-tags, men disse
