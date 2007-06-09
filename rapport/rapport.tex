@@ -469,8 +469,6 @@ modificeret til vores behov. Det er også dette moduls job at tjekke om
 den indlæste \textit{robots.txt} tillader at vi må crawle siden, da dette skal
 tjekkes hver gang der skal hentes en side.
 
-
-
 \subsection{HTML--Parsing}
 For at kunne udtrække tekst fra en HTML-side er det nødvendigt først
 at parse den. Da vi ikke har været i stand til at finde en HTML--parser
@@ -565,7 +563,11 @@ den angivne maksimaldybde.
 For at gøre det muligt at angive at nogle dele af en hjemmeside ikke
 skal analyseres er det nødvendigt med et modul der kan frasortere de
 ønskede elementer fra siden. Ud fra brugerens indstillinger skal dette
-modul kunne frasortere dele af en HTML--side.
+modul kunne frasortere dele af en HTML--side. Dette kan f.eks. bruges
+til at frasortere menuer, brugerkommentarer og andet tekst som vil
+kunne påvirke analysen, på en måde så resultatet bliver
+misvisende. Beregningen af læsbarhedsindekset kan eksempelvis blive
+påvirket af at der i menuer ofte er en stor andel lange ord.
 
 \subsection{Tekstudtrækker}
 Når et HTML--dokument er parset kan vi udtage teksten, det er dette

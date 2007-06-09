@@ -29,6 +29,15 @@ LI1tekst[label="\"Listeelement 1\"", shape="none"];
 LI2attrs[label="Attributsæt", shape="ellipse"];
 LI2tekst[label="\"Listeelement 2\"", shape="none"];
 
+{rank=same; HTML; HTMLattrs;}
+{rank=same; HEAD; HEADattrs;}
+{rank=same; TITLE; TITLEattrs;}
+{rank=same; BODY; BODYattrs;}
+{rank=same; P; Pattrs;}
+{rank=same; OL; OLattrs;}
+{rank=same; LI1; LI1attrs;}
+{rank=same; LI2; LI2attrs;}
+
 HTML-> HTMLattrs [arrowhead="dot"];
 HTML -> HEAD;
 HTML -> BODY;
