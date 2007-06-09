@@ -14,9 +14,9 @@ FindLinks[label="Find Links"];
 afHTMLificering[label="Tekstudtrækker"];
 Tekstanalyse[label="Tekstanalyse"]
 HTMLFilter[label="HTML-filtrering"]
-
-Brugerinput -> "Domæne check, indlæsning af robots.txt"
-            -> HentSide [label="URL"];
+DomCheck[label="Domæne check, indlæsning af robots.txt"]
+Brugerinput -> DomCheck
+DomCheck -> HentSide [label="URL og robots.txt"];
 Brugerinput -> Indstillinger [label="Brugerindstillinger", style=dashed];
 
 Indstillinger -> Tekstanalyse [label="Analyseindstillinger", style=dashed];
