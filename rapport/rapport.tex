@@ -503,8 +503,11 @@ rækkefølge som deres optræden i det oprindelige HTML--dokument. En
 knude indeholder information om hvilket tag den repræsenterer, samt
 eventuelle HTML--attributter tagget har.
 
-For eksempel vil det følgende HTML--dokument give et parsetræ, som det
-illustreret på figur \ref{parse}.
+For eksempel vil HTML--dokumentet på figur \ref{htmldoc1} give et
+parsetræ, som det illustreret på figur \ref{parsetree}. På figuren er
+børnene arrangeret så det første barn står længst til venstre og det
+sidste længst til højre. Hvert tag har et sæt attributter, på figuren
+er indholdet af disse dog udeladt.
 
 \begin{figure}
 \begin{lstlisting}[language=HTML]
@@ -521,13 +524,13 @@ illustreret på figur \ref{parse}.
 \end{lstlisting}
 
   \caption{HTML--dokument}
-  \label{htmlex}
+  \label{htmldoc1}
 \end{figure}
 
 \begin{figure}
   \includegraphics[width=\textwidth]{parsetree.pdf}
   \caption{Parsetræ}
-  \label{parse}
+  \label{parsetree}
 \end{figure}
 
 \subsection{Find links}

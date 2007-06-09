@@ -17,16 +17,16 @@ OL[label="OL"];
 LI1[label="LI"];
 LI2[label="LI"];
 
-HTMLattrs[label="AttributeSet", shape="ellipse"];
-HEADattrs[label="AttributeSet", shape="ellipse"];
-TITLEattrs[label="AttributeSet", shape="ellipse"];
-BODYattrs[label="AttributeSet", shape="ellipse"];
-Pattrs[label="AttributeSet", shape="ellipse"];
+HTMLattrs[label="Attributsæt", shape="ellipse"];
+HEADattrs[label="Attributsæt", shape="ellipse"];
+TITLEattrs[label="Attributsæt", shape="ellipse"];
+BODYattrs[label="Attributsæt", shape="ellipse"];
+Pattrs[label="Attributsæt", shape="ellipse"];
 Ptekst[label="\"Et afsnit\"", shape="none"];
-OLattrs[label="AttributeSet", shape="ellipse"];
-LI1attrs[label="AttributeSet", shape="ellipse"];
+OLattrs[label="Attributsæt", shape="ellipse"];
+LI1attrs[label="Attributsæt", shape="ellipse"];
 LI1tekst[label="\"Listeelement 1\"", shape="none"];
-LI2attrs[label="AttributeSet", shape="ellipse"];
+LI2attrs[label="Attributsæt", shape="ellipse"];
 LI2tekst[label="\"Listeelement 2\"", shape="none"];
 
 HTML-> HTMLattrs [arrowhead="dot"];
