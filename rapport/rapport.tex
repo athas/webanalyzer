@@ -819,7 +819,7 @@ Under analysen af de individuelle sider holder der styr på essentielle ting som
  \item Angivet max crawl dybde
  \item Liste over ventende sider der skal crawles
  \item Liste over besøgte sider.
- \item Cashe indeholdende uri'er der er blevet lavet et HTTP ``head'' request til (se \ref{URICasche})
+ \item Cashe indeholdende uri'er der er blevet lavet et HTTP ``head'' request til (se \ref{URICache})
 \end{enumerate}
 
 \subsection{FindLinks}
@@ -839,7 +839,7 @@ Finder mulige links på den side som er under analyse. Mulige links dækker over
 Hvoraf almindelige links (\texttt{a} tags) bliver filtreret fra hvis
 \texttt{url}'en er prefixed med ``mailto:'' og ``javascript:''.
 
- Når linksne findes i dokumentet konstrueres en Http.URI (Se \ref{URICasche})
+ Når linksne findes i dokumentet konstrueres en Http.URI (Se \ref{URICache})
 
 \subsection{URI / URICache}
 \label{URICache}
