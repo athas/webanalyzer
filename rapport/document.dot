@@ -1,0 +1,42 @@
+graph G
+{
+        compound=true;
+        Titel;
+        Sprog;
+        
+        subgraph cluster_tekstelementer
+        {
+                label="Tekstelementer";
+                subgraph cluster_citat
+                {
+                        label="Citat";
+                        Afsnit;
+                }
+
+                subgraph cluster_afsnit
+                {
+                        label="Afsnit";
+
+                        subgraph cluster_sentence2
+                        {
+                                labelloc="b";
+                                label="Sætning"
+                                node [shape=Mrecord];
+                                struct1 [label="Ja|\ ."];
+                        }
+                        subgraph cluster_sentence
+                        {
+                                labelloc="b";
+                                label="Sætning"
+                                node [shape=Mrecord];
+                                struct2 [label="Går|\ |det|?"];
+                        }
+                }
+
+                subgraph cluster_overskrift
+                {
+                        label="Overskrift";
+                        Sætninger;
+                }
+        }
+}
