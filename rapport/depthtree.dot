@@ -1,0 +1,19 @@
+digraph G
+{
+                struct5 [label="Dybde 0:", shape="none"];
+                struct6 [label="Dybde 1:", shape="none"];
+                struct7 [label="Dybde 2:", shape="none"];
+                struct8 [label="Dybde 3:", shape="none"];
+                struct5 -> struct6 [color="white", len="0.2", arrowhead="none"];
+                struct6 -> struct7 [color="white", len="0.2", arrowhead="none"];
+                struct7 -> struct8 [color="white", len="0.2", arrowhead="none"];
+                
+                struct1 [label="startside"];
+                struct2 [label="underside X"];
+                struct3 [label="underside Y"];
+                struct4 [label="underside Z"];
+                struct1 -> struct2
+                struct1 -> struct3;
+                struct2 -> struct3;
+                struct3 -> struct4;
+}
