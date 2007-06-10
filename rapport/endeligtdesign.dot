@@ -16,11 +16,12 @@ Tekstanalyse[label="Tekstanalyse"]
 HTMLFilter[label="HTML-filtrering"]
 DomCheck[label="Domæne check, indlæsning af robots.txt"]
 Brugerinput -> DomCheck
-DomCheck -> HentSide [label="URL og robots.txt"];
+DomCheck -> HentSide [label="URL"];
+DomCheck -> Indstillinger [label="robots.txt begrænsninger", style=dashed];
 Brugerinput -> Indstillinger [label="Brugerindstillinger", style=dashed];
 
 Indstillinger -> Tekstanalyse [label="Analyseindstillinger", style=dashed];
-Indstillinger -> HentSide [label="Netværksindstillinger", style=dashed];
+Indstillinger -> HentSide [label="Netværksindstillinger og robots.txt", style=dashed];
 Indstillinger -> HTMLFilter [label="Filterindstillinger", style=dashed];
 
 FindLinks -> HentSide [label="Fundne URLs"]
