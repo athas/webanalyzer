@@ -64,6 +64,7 @@
 \tableofcontents*
 
 \fixme{forskellig brug af fx os f.eks.}
+\fixme{website eller websted?}
 
 \chapter{Indledning}
 \label{indledning}
@@ -118,14 +119,14 @@ problemet, og de forskellige løsningsmuligheder vi vurderede.
 
 \section{Målgruppe}
 \label{målgruppe}
-Der er adskillige mulige målgrupper og en løsning på problemet kunne være
-orienteret imod --- fra hjemmebrugere der skriver personlige sider,
-over de individuelle skribenter på et større website til selve
+Der er adskillige mulige målgrupper og en løsning på problemet kunne
+være orienteret imod --- fra hjemmebrugere der skriver personlige
+sider, over de individuelle skribenter på et større website til selve
 webmasteren på en stor side. Ydermere kan et websites indhold
 fortolkes på flere forskellige måder --- enten som almindelig tekst
-omgivet af HTML-data uden betydning, eller med et forsøg på at benytte
-den information som HTML-strukturen udtrykker. Sidstnævnte gør det
-væsentligt lettere for et program at undersøge indholdet på et
+omgivet af HTML--data uden betydning, eller med et forsøg på at
+benytte den information som HTML--strukturen udtrykker. Sidstnævnte
+gør det væsentligt lettere for et program at undersøge indholdet på et
 website, idet mere information om sidernes indhold så er eksplicit
 udtrykket i sidernes kode, i stedet for at programmet skal
 ``gætte''. Dette har også relevans i forhold til målgruppen, idet
@@ -140,7 +141,7 @@ websites benytter sig af HTML's muligheder indenfor dette område,
 ville det heller ikke være hensigtsmæssigt at handikappe programmet
 til kun at virke acceptabelt på denne form for HTML. Vores endelige
 målgruppe endte med at blive todelt --- webmastere og
-(semi-)professionelle skribenter. Dette valg baserer vi på at både
+(semi--)professionelle skribenter. Dette valg baserer vi på at både
 webmastere og skribenter har en stor interesse i at deres sider eller
 tekst er let at læse, og har motivation til at sætte sig ind i
 hvorledes man skriver god HTML, og derved gør det muligt for et
@@ -165,7 +166,7 @@ brugergrupper.
 \section{Overvejelser omkring brugsscenarier}
 \label{brugsovervejelser}
 Vi blev hurtigt enige om at det er langt mere interessant at analysere
-et website som helhed, end kun at analysere en specifik HTML-side, og
+et website som helhed, end kun at analysere en specifik HTML--side, og
 samtidigt at det er en nødvendighed at løsningen kan gennemgå
 (``crawle''\footnote{\url{http://en.wikipedia.org/wiki/Web_crawler}}) et online website, og ikke være afhængig af at det i
 forvejen er hentet og er beliggende som filer på brugerens
@@ -244,7 +245,7 @@ af). Forskellige muligheder blev overvejet:
   brugere er villige til at vente på, at en hjemmeside generer. Og der er ikke
   en umiddelbar måde at dele resultatet med andre brugere på.
 
-\item[Grafisk standalone-applikation:] 
+\item[Grafisk standalone--applikation:] 
   Præsentationen kan udføres omtrent som nævnt i første mulighed, men
   i stedet for at køre som en del af webbrowseren, er det et vindue
   for sig selv, og det er selv ansvarligt for at vise indholdet af en
@@ -271,17 +272,17 @@ af). Forskellige muligheder blev overvejet:
   to --- en del der ``crawler'' et website og producerer et
   analyseresultat, og en del der giver en visuel præsentation af
   resultatet for brugeren. Dog er finessen at den første del
-  præsenterer et sæt af HTML-filer, som kan læses af enhver
-  webbrowser, hvilket betyder at vi ikke har behov for at implementere
+  præsenterer et sæt af HTML--filer, som kan læses af enhver
+  webbrowser, hvilket betyder at man ikke har behov for at implementere
   præsentationsdelen af løsningen. Programmet skal blot producere
-  HTML-filer indeholdende websitets oprindelige tekst i forbindelse
+  HTML--filer indeholdende websitets oprindelige tekst i forbindelse
   med analyseresultatet, og gøre det muligt at se alle undersider på
-  websitet (f.eks. ved at producere en HTML-fil der indeholder en
+  websitet (f.eks. ved at producere en HTML--fil der indeholder en
   liste over alle de sider programmet besøgte under kørslen). Idet
   programmet ikke har behov for selv at præsentere resultatet visuelt
   (det håndteres af brugerens webbrowser) kan det implementeres som et
   kommandolinjeprogram, hvilket gør det nemt at automatisere, og da
-  programmets output er almindelige HTML-filer kan disse nemt gøres
+  programmets output er almindelige HTML--filer kan disse nemt gøres
   tilgængelige for andre brugere.
 \end{description}
 
@@ -291,7 +292,7 @@ brugsscenarier, hvori programmet køres med et regulært interval og
 producerer resultater der er tilgængelige for alle der arbejder på
 websitet, og samtidigt er vi overbeviste om at det er muligt at lave
 et så simpelt kommandolinjeinterface at skribenter hurtigt også kan
-lære at bruge det. At output er i form af HTML-filer gør det også
+lære at bruge det. At output er i form af HTML--filer gør det også
 muligt at lave nogle senere udvidelser eller alternative
 brugergrænseflader --- en interessant idé kunne være en webapplikation
 hvori brugere kan ``bestille'' analyser, og få en email med et link
@@ -303,9 +304,9 @@ den er færdig.
 Idet vores primære brugsscenarie omhandler analyse af alle sider på et
 helt website tilgængeligt online (se sektion \ref{brugsovervejelser}),
 er vores program nødt til at kunne lave en
-forbindelse til en webserver, hente en HTML-fil, forstå indholdet af
-HTML-filen, udføre en analyse af teksten i filen og følge hyperlinks
-angivet i HTML-filen til andre sider på websitet. At følge hyperlinks
+forbindelse til en webserver, hente en HTML--fil, forstå indholdet af
+HTML--filen, udføre en analyse af teksten i filen og følge hyperlinks
+angivet i HTML--filen til andre sider på websitet. At følge hyperlinks
 fra side til side er vores eneste mulighed for at besøge alle sider på
 websitet, hvilket giver mulighed for at der findes isolerede sider som
 vi ikke er i stand til at besøge, men da menneskelige besøgende på
@@ -316,7 +317,7 @@ website, mener vi ikke at dette er et problem.
 \subsection{Indgrænsning af analysen}
 \label{begraensning}
 Der er mange faktorer der har indflydelse på læsbarheden af en
-hjemmeside - fra tekstens indhold, typografier og det visuelle
+hjemmeside --- fra tekstens indhold, typografier og det visuelle
 design, og selv valget af teknologi kan have indflydelse på
 læsbarheden for visse brugere --- en side skrevet i Flash eller Java
 kan f.eks. ikke benyttes af blinde der bruger netoplæsere. Indenfor
@@ -326,37 +327,40 @@ det eneste programmet inddrager i vurderingen af en sides læsbarhed
 (dette afspejler sig også i problemformuleringen, se sektion
 \ref{problemformulering}).
 
-Udover at angive indhold og grafik kan HTML-sider også indeholde
+Udover at angive indhold og grafik kan HTML---sider også indeholde
 \textit{scripts} --- \textit{ECMAScript} (også kendt som
 \textit{JavaScript}) er det mest udbredte --- og disse scripts kan
 under visningen af siden indsætte yderligere indhold på siden, ofte
-som respons på brugerinput. For tiden er det faktisk moderne at
-opbygge et helt website som en enkelt side, der baseret på input fra
-brugeren dynamisk ændrer indhold uden at genindlæse hele siden fra
-webserveren\footnote{\texttt{AJAX} (Asynchronous JavaScript and XML) Se:
-\url{http://en.wikipedia.org/wiki/AJAX}}. Igen vurderede vi at vores program
-ikke ville være i stand til at understøtte denne form for sider, idet den eneste
-korrekte implementation ville være en komplet
-\textit{JavaScript}-fortolker, kombineret med simuleret brugerinput,
-en opgave som vi anslog til alene at ville tage \textit{væsentligt}
-mere tid end de afsatte 7 uger.
+som respons på brugerinput. For tiden er det moderne at opbygge et
+helt website som en enkelt side, der baseret på input fra brugeren
+dynamisk ændrer indhold uden at genindlæse hele siden fra
+webserveren\footnote{\texttt{AJAX} (Asynchronous JavaScript and XML)
+  Se: \url{http://en.wikipedia.org/wiki/AJAX}}. Igen vurderede vi at
+vores program ikke ville være i stand til at understøtte denne form
+for sider, idet den eneste korrekte implementation ville være en
+komplet \textit{JavaScript}--fortolker, kombineret med simuleret
+brugerinput, en opgave som vi anslog til alene at ville tage
+\textit{væsentligt} mere tid end de afsatte 7 uger.
 
-Vi vælger altså derfor at begrænse os til kun at håndtere tekst der
-findes direkte i HTML-siderne, men dog at understøtte alle nuværende
+Vi vælger derfor at begrænse os til kun at håndtere tekst der findes
+direkte i HTML--siderne, men dog at understøtte alle nuværende
 eksisterende versioner af HTML og XHTML (HTML skrevet i XML), dog ikke
 alle features i XML, idet disse sjældent bruges i XHTML-sider (se
 sektion \ref{htmlparserimpl}). Vores understøttelse af XML er
-begrænset til den del der ligner SGML, og vi håndterer derfor ikke
-namespaces\footnote{\url{http://www.w3.org/TR/REC-xml-names/}},
-DTD'er \footnote{\url{http://www.w3.org/TR/2000/REC-xml-20001006\#sec-prolog-dtd}}
+begrænset til den del der ligner
+SGML\footnote{http://www.w3.org/MarkUp/SGML/}, og vi håndterer derfor
+ikke namespaces\footnote{\url{http://www.w3.org/TR/REC-xml-names/}},
+DTD'er
+\footnote{\url{http://www.w3.org/TR/2000/REC-xml-20001006\#sec-prolog-dtd}}
 eller andre avancerede features.
 
 \subsection{Analysemetoder}
 \label{analysemetoder}
 For at analysere teksten på siderne valgte vi at benytte to
-analysemetoder -
+analysemetoder ---
 læsbarhedsindeks\footnote{\url{http://www.elkan.dk/lixtal.asp}} og
-FKRT\footnote{\url{http://en.wikipedia.org/wiki/Flesch-Kincaid_Readability_Test}}.
+Flesh-Kincaid Readability Test
+(FKRT)\footnote{\url{http://en.wikipedia.org/wiki/Flesch-Kincaid_Readability_Test}}.
 Læsbarhedsindeks (herefter refereret til som LIX) er en klassisk
 algoritme til at analysere læsbarheden af en tekst, den er velforstået
 af mange og virker derfor som et godt valg til programmet. Ydermere
@@ -368,7 +372,7 @@ værktøjer der ikke indeholder automatisk stavekontrol (se sektion
 \ref{indledning}). Vi har nævnt at det er oplagt at benytte os af den
 information som en sides HTML fortæller om dens tekst (se sektion
 \ref{målgruppe}), og det er i forbindelse med stavekontrollen især
-nærliggende at inddrage HTML's \texttt{lang}-attribut, som angiver en
+nærliggende at inddrage HTML's \texttt{lang}--attribut, som angiver en
 teksts sprog, således at vi altid bruger den rigtige ordbog til at
 stavekontrollen. Det gør det muligt for vores program at fungere med
 sider der indeholder tekst skrevet på flere sprog, uden at det
@@ -381,15 +385,15 @@ stavekontrol, som den i vores program, ikke).
 \subsection{Overvejelser omkring output}
 
 Som nævnt i sektion \ref{brugergraenseflade} består programmets output
-af HTML-filer --- disse filer skal kommunikere resultatet på en
+af HTML--filer --- disse filer skal kommunikere resultatet på en
 forståelig måde, idet de skal kunne stå alene når de ses i en
 browser. Vi fandt det mest intuitivt at programmet laver en fil med
 analyseresultater for hver side det besøger, og slutteligt laver en
 overordnet indeks-fil der indeholder en liste over alle de besøgte
 sider samt links til de filer, der indeholder detaljerne omkring
 analysen af siderne. Disse sider indeholder den relevante sides tekst,
-samt talværdier der angiver sidens læsbarhed (LIX-tal, FRE-tal og
-FKGL-tal). Teksten på siden er opdelt i afsnit\footnote{I vores
+samt talværdier der angiver sidens læsbarhed (LIX--tal, FRE--tal og
+FKGL--tal). Teksten på siden er opdelt i afsnit\footnote{I vores
   program dækker begrebet ``afsnit'' både over HTML's koncept om
   afsnit, adskilt af \texttt{p}-tags, samt over anden selvstændig
   tekst, som er strukturelt separat i HTML-dokumentet}, og for hvert
@@ -408,13 +412,13 @@ analyseside og identificere afsnit der ser ``meget røde'' ud, uden at
 man har behov for at gennemgå alle afsnittenes analyseresultater for
 at finde den med den dårligste værdi.
 
-HTML-dokumenter kan indeholde ``skjult'' tekst (herefter refereret til
+HTML--dokumenter kan indeholde ``skjult'' tekst (herefter refereret til
 som \textit{beskrivelser}), som f.eks. beskrivelser af links og
 billeder, som ikke passer direkte ind i sætningsstrukturen. Idet denne
 tekst også er relevant at medtage i resultatet bliver der efter hvert
 afsnit vist en liste med beskrivelser fra afsnittet. Da denne tekst
 kan fremkomme midt inde i en sætning fandt vi det ikke passende blot
-at indsætte teksten hvor den er skrevet i HTML-dokumentet, og den
+at indsætte teksten hvor den er skrevet i HTML--dokumentet, og den
 anden mulighed, at simulere hvordan teksten fungerer i det oprindelige
 dokument ved først at vise den når man holder musen over sætningen der
 indeholder den, ville skjule disse sætninger og deres farve fra en
@@ -423,7 +427,7 @@ sådan farvefølsom skimning er en af de mest praktisk måder at gennemse
 et analyseresultat på, så en sådan løsning fandt vi uacceptabel. At
 præsentere beskrivelserne som en liste efter selve afsnittets tekst
 betyder at det er sværere at kode den sammen med den egentlige tekst i
-HTML-dokumentet, men idet beskrivelserne i listen har samme rækkefølge
+HTML--dokumentet, men idet beskrivelserne i listen har samme rækkefølge
 som beskrivelserne på den oprindelige side, og fordi der ofte er
 relativt få beskrivelser i et afsnit, mener vi ikke at dette er et
 stort problem, og vi mener at denne løsning er at foretrække frem for
@@ -1193,7 +1197,7 @@ håndteringen af kombinationer af forskellige grænsetilfælde.
 \label{brugertesting}
 Brugertesten skal afsløre brugervenlighedsproblemer med vores program
 og skal samtidigt bruges til at evaluere detaljeniveauet i vores
-brugermanual. Vi vil udføre testen som et tænke-højt forsøg hvor
+brugermanual. Vi vil udføre testen som et tænke--højt forsøg hvor
 brugeren skal udføre nogle opgaver og samtidigt fortælle hvad personen
 tænker og gør. Vi vil undervejs ikke hjælpe brugeren med ting der
 omhandler vores program, men hvis der er spørgsmål til andre ting, så
