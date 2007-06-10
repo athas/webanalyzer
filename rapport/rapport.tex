@@ -508,6 +508,29 @@ indstillingsparametre og håndtering af specifikke HTML-tags, men disse
 er ikke analysemæssigt særligt interessante, og vi henviser derfor til
 den vedlagte kravspecifikation for en mere detaljeret gennemgang.
 
+\subsection{Konfigurationsmuligheder}
+Da programmet er skrevet til UNIX platformen har vi valgt ikke at implementere
+en desideret config fil, men derimod bruge kommandolinje parametre. Dette
+skyldes at men for det meste vil køre programmet med forskellige parametre og i
+de tilfælde hvor man kører programmet med de samme parametre vil man normalt
+lave et \texttt{shell script} til starte programmet med, hvilket også gør det
+nemmere at bruge programmet i et \texttt{batch job}.
+
+Vi ønsker at understøtte fornuftige konfigurations muligheder som er relavante
+for en analyse af websteder, så som at kunne kontrollere uddata og hvilke
+analyser der skal lave på disse (Se kravspecifikation, krav: 4).
+
+Vi har afviget fra kravspesifikationen ved ikke at implementere udelukkelse af
+HTML--tags baseret på deres \texttt{class}--attribute. Vi antog at det var mere
+relavant --- inden for tidsperioden --- at implementere ignorering baseret på
+selve HTML--tagget og \texttt{id}--attributen. Det antages også at hvis der
+havde været tid, kunne dette implementeres meget simpelt ved blot at kopiere
+koden for filtrering vha. \texttt{id}--attributten og blot tilpasse det til
+\texttt{class}--attributten.
+
+Se brugervejledning for liste over implementerede parametre og deres
+beskrivelse.
+
 \chapter{Programdesign}
 
 For at gøre implementationsfasen af projektet så nem og effektiv som
@@ -1046,7 +1069,7 @@ computeren løber tør for hukommelse under indlæsning af et for stort
 HTML--dokument end at parseren laver stakoverløb.
 
 \section{Robots.txt}
-\label{Robots} 
+\label{robots} 
 
 \fixme{skriv noget indledende tekst}
 
@@ -1199,7 +1222,7 @@ sætninger ikke blive adskilt: \textit{``Hun stemte på liste O. Det var jo en
 ren fadæse!''}.
 
 \section{Tekstanalyse}
-\label{Tekstanalyse}
+\label{tekstanalyse}
 
 \fixme{Skriv herremeget her.}
 
@@ -1224,6 +1247,7 @@ gøres for ikke at forstyrre brugeren med dårligere resultater.
 
 \section{Stavekontrol}
 \label{spellchecker}
+
 
 Tekstanalyse strukturen foretager en stavekontrol af hvert ord den
 møder. Til at foretage stavekontrollen har vi implementeret en
@@ -1589,52 +1613,9 @@ svært at give en objektiv vurdering af kvaliteten af et program, med
 mindre det kan gøres baseret på antallet af fejl, at vi vil undlade at
 forsøge på det.
 
-\section{Kravstatus}
-\label{kravstatus}
-Herpå følger en beskrivelse af slut--status for hvert krav nævnt i
-vores kravspecifikation i forhold til det endelige program.
 
-\begin{description}
-\item[Krav 1 --- Analyse af et helt websted (med underkrav)] Dette
-  krav og dets underkrav er fuldt ud implementeret og afprøvet. Se
-  evt. beskrivelsen af dataflow--cyklussen i sektion \ref{cyklus}.
-\item[Krav 2 --- Analysemetoder (med underkrav)] Dette krav og alle
-  dets underkrav er fuldt ud implementeret og virker korrekt med vores
-  testdata.
-\item[Krav 3 --- Analyse baseret på HTML--tags:] Visse af dette kravs
-  underkrav er blevet implementeret. Se nedenfor.
-\item[Krav 3.1 --- \texttt{em} og \texttt{strong}:] Dette krav blev
-  droppet, se sektion \ref{ejspecialbehandling}.
-\item[Krav 3.2 --- \texttt{hN}:] Dette krav blev droppet, se sektion
-  \ref{ejspecialbehandling}.
-\item[Krav 3.3 --- \texttt{abbr} og \texttt{acronym}:] Dette krav er
-  fuldt ud implementeret og virker korrekt med vores testdata.
-\item[Krav 3.4 --- Citater skal ikke analyseres:] Dette krav er
-  delvist implementeret (se sektion \ref{citater}) og den
-  implementerede del fungerer korrekt med vores testdata.
-\item[Krav 3.5 --- Tekst i andre sprog angivet med (lang):] Dette krav er
-  fuldt ud implementeret og virker korrekt med vores testdata.
-\item[Krav 3.6 --- \texttt{kbd}, \texttt{var} og \texttt{code}:] Dette
-  krav er fuldt ud implementeret og virker korrekt med vores testdata.
-\item[Krav 3.7 --- \texttt{bdo}:] Dette
-  krav er fuldt ud implementeret og virker korrekt med vores testdata.
-\item[Krav 4 --- Konfiguration af analyse:] Dette krav er delvist
-  implementeret og den implementerede del fungerer korrekt med vores
-  testdata.
-\item[Krav 5 --- Kommandobaseret interface:] Dette krav er
-  implementeret, men ikke systematisk afprøvet.
-\item[Krav 6 --- Resultater i HTML--format:] Dette krav er
-  implementeret og afprøvet, men se testspecifikationen og sektion
-  \ref{funktionstests} for forbehold omkring systematisk afprøvning af
-  dette.
-\item[Krav 7 --- Platform:] Dette krav er implementeret og afprøvet,
-  men se testspecifikationen for forbehold omkring systematisk
-  afprøvning af dette.
-\item[Krav 8 --- Håndtering af HTML/XHTML:] Dette krav er fuldt ud
-  implementeret og virker korrekt med vores testdata.
-\item[Krav 8.1 --- Indkodning:] Dette krav er fuldt ud implementeret
-  og virker korrekt med vores testdata.
-\end{description}
+\fixme{Uopfyldte krav}
+\fixme{Arbejdsfordeling}
 
 \begin{thebibliography}{9}
 \bibitem{smlbook} Michael R. Hansen og Hans Rischel: {\em
