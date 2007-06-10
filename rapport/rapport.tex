@@ -72,14 +72,15 @@
 \label{indledning}
 Mange hjemmesider forfattes i dag uden omtanke for om sidens målgruppe
 er i stand til at læse sidens indhold --- det sproglige niveau er
-ganske enkelt for højt. Ydermere forfattes indholdet af mange
-hjemmesider med primitive værktøjer (f.eks. simple tekstfelter direkte
-på siden, eller simple skriveprogrammer), der mangler de
-hjælpefunktioner som findes i almindelige skriveprogrammer. Dette
-resulterer i at hjemmesider ofte indeholder flere stavefejl end
-konventionelle tekster. Disse mangler kan gøre hjemmesider sværere at
-bruge for den tilsigtede målgruppe, og derved reducere deres
-effektivitet, ligegyldigt hvad målet med siden så end er.
+ganske enkelt for højt (eller for dårligt, om man vil). Ydermere
+forfattes indholdet af mange hjemmesider med primitive værktøjer
+(f.eks. simple tekstfelter direkte på siden, eller simple
+skriveprogrammer), der mangler de hjælpefunktioner som findes i
+almindelige skriveprogrammer. Dette resulterer i at hjemmesider ofte
+indeholder flere stavefejl end konventionelle tekster. Disse mangler
+kan gøre hjemmesider sværere at bruge for den tilsigtede målgruppe, og
+derved reducere deres effektivitet, ligegyldigt hvad målet med siden
+så end er.
 
 Baseret på denne problemstilling har vi implementeret et program,
 designet til at bistå hjemmesideforfattere med at forbedre den
@@ -99,7 +100,7 @@ endelige tilstand, se konklusionen i sektion \ref{konklusion}.
 Det forventes at læseren af denne rapport har en hvis grad af teknisk
 kompetence, har erfaring med programmering og har en overordnet
 forståelse for sproget HTML\footnote{Et sprog der bruges til at
-  beskrive struktur og indhold af webstedder}.
+  beskrive struktur og indhold af websteder}.
 
 \section{Terminologi}
 
@@ -136,7 +137,7 @@ problemet, og de forskellige løsningsmuligheder vi vurderede.
 Der er adskillige mulige målgrupper en løsning på problemet kunne være
 orienteret imod --- fra hjemmebrugere der skriver personlige sider,
 over individuelle skribenter på et større websted til selve
-webmasteren på en stor side. Ydermere kan et webstedder indhold
+webmasteren på en stor side. Ydermere kan et websteder indhold
 fortolkes på flere forskellige måder --- enten som almindelig tekst
 omgivet af HTML--data uden betydning, eller med et forsøg på at
 benytte den information som HTML--strukturen udtrykker. Sidstnævnte
@@ -151,10 +152,10 @@ løsning til ikke-tekniske brugere der fungerer bedst med data
 produceret af tekniske brugere. Idéen er jo ikke blot at brugeren skal
 kunne køre en analyse, men også derefter foretage rettelser på
 baggrund af analyseresultatet, og derfor går vi ud fra at brugeren
-kører programmet på webstedder som vedkommende selv har mulighed for at
+kører programmet på websteder som vedkommende selv har mulighed for at
 ændre. Vi besluttede os for at det ville være et spild at undlade at
 udnytte HTML's muligheder for at angive semantisk information omkring
-teksten, men da en så lille del af verdens webstedder benytter sig af
+teksten, men da en så lille del af verdens websteder benytter sig af
 HTML's muligheder indenfor dette område, ville det heller ikke være
 hensigtsmæssigt at handikappe programmet til kun at virke acceptabelt
 på denne form for HTML. Vores endelige målgruppe endte med at blive
@@ -168,8 +169,8 @@ som muligt.\footnote{Det kan nævnes at HTML-sider rig på semantisk
   weblæsere, som f.eks. blinde der benytter sig at netoplæsere, at
   benytte sig af siden} De, der ikke har interesse eller motivation
 til at sætte sig ind i teknikken, har sandsynligvis også mindre
-interesse i at deres webstedder er lette at læse --- ejerne af
-professionelt orienterede webstedder har en væsentligt større interesse
+interesse i at deres websteder er lette at læse --- ejerne af
+professionelt orienterede websteder har en væsentligt større interesse
 i at deres sider er let læsbare end forfatterne af f.eks. en families
 hjemmeside.
 
@@ -222,7 +223,7 @@ stor betydning for løsningen, idet både valg af teknologi, udformning
 af design og strategien for den endelige implementation bliver
 påvirket hvorledes brugeren skal præsenteres for resultatet. Der er
 også forskel på hvor godt forskellige brugergrænseflader gør det
-muligt at analysere hele webstedder, automatisere kørsel af programmet
+muligt at analysere hele websteder, automatisere kørsel af programmet
 eller dele resultatet med andre brugere (så hver bruger ikke skal køre
 en ny analyse fra start af). Forskellige muligheder blev overvejet:
 
@@ -262,8 +263,9 @@ en ny analyse fra start af). Forskellige muligheder blev overvejet:
 
   Problemet med denne mulighed er at en komplet analyse af et
   middelstort websted sandsynligvis tager længere tid end de fleste
-  brugere er villige til at vente på, at en hjemmeside generer. Og der er ikke
-  en umiddelbar måde at dele resultatet med andre brugere på.
+  brugere er villige til at vente på, at en hjemmeside
+  generer. Ydermere er der ikke umiddelbart en måde at dele resultatet
+  med andre brugere på.
 
 \item[Grafisk standalone--applikation:] 
   Præsentationen kan udføres omtrent som nævnt i første mulighed, men
@@ -287,23 +289,22 @@ en ny analyse fra start af). Forskellige muligheder blev overvejet:
   resultatet ud fra denne fil. En variant over dette er hvad næste
   mulighed går ud på.
 
-\item[Output i form af HTML:]
-  Programmet kan som foreslået ovenfor være konceptuelt opdelt i
-  to --- en del der ``crawler'' et websted og producerer et
-  analyseresultat, og en del der giver en visuel præsentation af
-  resultatet for brugeren. Dog er finessen at den første del
-  præsenterer et sæt af HTML--filer, som kan læses af enhver
-  webbrowser, hvilket betyder at man ikke har behov for at implementere
-  præsentationsdelen af løsningen. Programmet skal blot producere
-  HTML--filer indeholdende webstedets oprindelige tekst i forbindelse
-  med analyseresultatet, og gøre det muligt at se alle undersider på
-  webstedet (f.eks. ved at producere en HTML--fil der indeholder en
-  liste over alle de sider programmet besøgte under kørslen). Idet
-  programmet ikke har behov for selv at præsentere resultatet visuelt
-  (det håndteres af brugerens webbrowser) kan det implementeres som et
-  kommandolinjeprogram, hvilket gør det nemt at automatisere, og da
-  programmets output er almindelige HTML--filer kan disse nemt gøres
-  tilgængelige for andre brugere.
+\item[Output i form af HTML:] Programmet kan som foreslået ovenfor
+  være konceptuelt opdelt i to --- en del der ``crawler'' et websted
+  og producerer et analyseresultat, og en del der giver en visuel
+  præsentation af resultatet for brugeren. Dog er finessen at den
+  første del producerer et sæt af HTML--filer, som kan læses af enhver
+  webbrowser, hvilket betyder at man ikke har behov for at
+  implementere præsentationsdelen af løsningen. Programmet skal blot
+  producere HTML--filer indeholdende webstedets oprindelige tekst i
+  forbindelse med analyseresultatet, og gøre det muligt at se alle
+  undersider på webstedet (f.eks. ved at producere en HTML--fil der
+  indeholder en liste over alle de sider programmet besøgte under
+  kørslen). Idet programmet ikke har behov for selv at præsentere
+  resultatet visuelt (det håndteres af brugerens webbrowser) kan det
+  implementeres som et kommandolinjeprogram, hvilket gør det nemt at
+  automatisere, og da programmets output er almindelige HTML--filer
+  kan disse nemt gøres tilgængelige for andre brugere.
 \end{description}
 
 Vi valgte sidstnævnte mulighed, og valgte også at implementere
@@ -314,7 +315,7 @@ webstedet, og samtidigt er vi overbeviste om at det er muligt at lave
 et så simpelt kommandolinjeinterface at skribenter hurtigt også kan
 lære at bruge det. At output er i form af HTML--filer gør det også
 muligt at lave nogle senere udvidelser eller alternative
-brugergrænseflader --- en interessant idé kunne være en webapplikation
+brugergrænseflader --- en interessant idé kunne være en web\-applikation
 hvori brugere kan ``bestille'' analyser, og få en email med et link
 til den producerede analyse (programmets output i form af HTML) når
 den er færdig.
@@ -1374,7 +1375,7 @@ ikke--HTML filer (som f.eks. lydfiler eller CD--billeder).
 
 Det viste sig hurtigt at programmet brugte uacceptabelt meget tid blot
 på at udføre \texttt{HTTP HEAD}-forespørgsler for URI'er på et
-webstedder forskellige sider. Dette blev identificeret som unødvendigt,
+websteder forskellige sider. Dette blev identificeret som unødvendigt,
 idet mange sider indeholder de samme URI'er (man kan f.eks. forestille
 sig at alle sider på et websted indeholder en række navigations--links
 til en nogle centrale sider). Derfor blev funktionen \texttt{makeURI}
