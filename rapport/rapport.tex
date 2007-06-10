@@ -12,7 +12,7 @@
 \usepackage{hyperref}
 \usepackage{memhfixc}
 \usepackage{listings}
-
+\usepackage{amsmath}
 \DeclareTextFontCommand{\textfleur}
 {\fontencoding{T1}\fontfamily{FleurCornerCaps}\selectfont}
 
@@ -929,11 +929,8 @@ Ikke genkendte start statements i filen bliver ignoreret.
   User-agent: *
   Disallow: /directory/file.html
   Disallow: /private
-
-  # Comments appear after the "#" symbol at the start of a 
-  # line, or after a directive
-
-  User-agent: BadBot
+  # Kommentarer forekommer efter "#" symbolet ved linje start eller
+  User-agent: BadBot  # efter et statement
   Disallow: /
 \end{verbatim}
 
@@ -945,8 +942,8 @@ Ikke genkendte start statements i filen bliver ignoreret.
 \subsection{Implementation}
 
 For at kunne overholde en eventuel robots.txt, Hentes og parses denne fil.
-Parseren leder efter alle user-agent tags som matcher
-programmets egen\footnote{Defineret i Config.sml} og ``*''. Herefter
+Parseren leder efter alle user-agent værdier som matcher
+programmets egen\footnote{Defineret i Config modulet} og ``*''. Herefter
 parses alle de fundne statements.
 
 Parseren kan forstå det almindelige \texttt{disallow} statement men
@@ -967,7 +964,7 @@ og se om der findes et match der prefixer den relative url.
 Når parseren finder et \texttt{crawl-delay} statement gemmes værdien i Config
 modulet. Hvis et \texttt{request-rate}\footnote{Værdien af \texttt{request-rate}
 angives som SIDER/SEKUNDER} statement
-findes udregnes først det mente delay ud fra $sekunder / sider$
+findes udregnes først det mente delay ud fra $\dfrac{sekunder}{sider}$
 
 \section{HTMLFilter}
 \label{HTMLFilter}
