@@ -519,23 +519,31 @@ den vedlagte kravspecifikation for en mere detaljeret gennemgang.
 \section{Konfigurationsmuligheder}
 \label{konfigurationsmuligheder}
 Da programmet er skrevet til UNIX platformen har vi valgt ikke at
-implementere en desideret config fil, men derimod bruge kommandolinje
-parametre (se \cite{artofunixbook}). Dette skyldes at man for det
-meste vil køre programmet med forskellige parametre og i de tilfælde
-hvor man kører programmet med de samme parametre vil man normalt lave
-et \texttt{shell script} til starte programmet med, hvilket også gør
-det nemmere at bruge programmet i et \texttt{batch job}.
+implementere en decideret konfigurationsfil, men derimod bruge
+kommandolinje parametre (se \cite{artofunixbook}). Dette skyldes at
+man for det meste vil køre programmet med forskellige parametre for
+forskellige websteder, og i de tilfælde hvor man kører programmet med
+de samme parametre (begribeligvis til at analysere det samme websted
+hver gang) vil man normalt lave et \texttt{shell script} til starte
+programmet med, hvilket også gør det nemmere at bruge programmet i et
+\texttt{batch job}. Dette passer fint med vores overvejelser omkring
+automatisk kørsel af programmet, som nævnt i afsnit
+\ref{brugsovervejelser}.
 
-Vi ønsker at understøtte fornuftige konfigurations muligheder som er relavante
-for en analyse af websteder, så som at kunne kontrollere uddata og hvilke
-analyser der skal lave på disse (Se kravspecifikation, krav: 4).
+Vi ønsker at understøtte fornuftige konfigurations muligheder som er
+relevante for en analyse af websteder, såsom at kunne kontrollere
+detaljer vedrørende uddata (hvilken mappe denne skrives i, f.eks) og
+hvilke analyser der skal lave på disse (se kravspecifikation, krav 4).
 
-Vi har afviget fra kravspesifikationen ved ikke at implementere udelukkelse af
-HTML--tags baseret på deres \texttt{class}--attribute. Vi antog at det var mere
-relavant --- inden for tidsperioden --- at implementere ignorering baseret på
-selve HTML--tagget og \texttt{id}--attributen. Det antages også at hvis der
-havde været tid, kunne dette implementeres meget simpelt ved blot at kopiere
-koden for filtrering vha. \texttt{id}--attributten og blot tilpasse det til
+Vi har afviget fra kravspecifikationen ved ikke at implementere
+udelukkelse af HTML--tags baseret på deres
+\texttt{class}--attribut. Vi vurderede at det var mere relevant ---
+med vores begrænsede tidsresurser i tankerne --- at implementere
+filtrering baseret på selve HTML--tagget og
+\texttt{id}--attributten. Det antages også at hvis der havde været
+tid, kunne filtrering baseret på \texttt{class}--attributten
+implementeres meget simpelt, blot ved at kopiere koden for filtrering
+vha. \texttt{id}--attributten og tilpasse det til
 \texttt{class}--attributten.
 
 Se brugervejledning for liste over implementerede parametre og deres
