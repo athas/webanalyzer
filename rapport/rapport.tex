@@ -873,29 +873,58 @@ computeren løber tør for hukommelse under indlæsning af et for stort
 HTML--dokument end at parseren laver stakoverløb.
 
 \section{Robots.txt}
-\label{Robots} \fixme{Forklaring af robots.txt opbygning og syntaks?}
-For at kunne overholde en eventuel robots.txt bliver denne fil hentet
-og parset.  Parseren leder efter alle user-agent tags som matcher
+\label{Robots} 
+
+\fixme{skriv noget indledende tekst}
+
+\subsection{Forklaring, ogbygning og syntaks af robots.txt}
+
+\texttt{The robots exclusion standard} eller \texttt{Robots Exclusion Protocol}
+er en meget simpel standard som dog ikke er godkendt af nogle officielle
+organisationer. 
+Filens format\footnote{\url{http://www.robotstxt.org/wc/norobots.html#format}}
+består af en eller flere statements sepereret af et eller flere tomme linjer.
+Hver linje indeholder statements på formen:
+``<field>:<optionalspace><value><optionalspace>'' hvoraf \texttt{field} er case
+insensitive og ``#'' indikerer at det efterfølgende mellemrum (hvis der er et)
+og alt til og med linjens afslutning skal ignoreres (fortolkes som kommentarer).
+
+Filen starter med en eller flere \texttt{user-agent}\footnote{Værdien af dette
+statement er navnet for den robot som der angives adgangs politik for}
+statements efter fulgt af en eller flere \texttt{disallow}\footnote{Værdien af
+dette statement angiver en relativ \texttt{URL} som ikke må crawles. Dette kan
+være en full sti eller en del af en sti, hvilket angiver at alle \texttt{URL}s
+som prefixes af dette ikke må crawles.} statements\footnote{Der er foreslået
+udvidelser til standarden som udervider funktionaliteten med flere statements,
+se: \url{http://en.wikipedia.org/wiki/Robots.txt}} 
+Ikke genkendte start statements i filen bliver ignoreret.
+
+\subsection{Implementation}
+
+For at kunne overholde en eventuel robots.txt, Hentes og parses denne fil.
+Parseren leder efter alle user-agent tags som matcher
 programmets egen\footnote{Defineret i Config.sml} og ``*''. Herefter
 parses alle de fundne statements.
 
-Parseren kan forstå det almindelige ``disallow:'' statement men
-ydermere har vi også implementeret ``request-rate:'' fra den udvidede
-standard og ``crawl-delay:'' som ikke er en del af standarden men blot
-et kompliment til
-``request-rate:''\footnote{\url{http://en.wikipedia.org/wiki/Robots.txt}}.
+Parseren kan forstå det almindelige \texttt{disallow} statement men
+ydermere har vi også implementeret \texttt{request-rate} fra den udvidede
+standard\footnote{\url{http://en.wikipedia.org/wiki/Robots.txt}} og
+\texttt{crawl-delay} som ikke er en del af den udvidede standard men blot et
+forslag af mange som kompliment til \texttt{request-rate}'s kontroversielle
+syntaks'.
 
 Vi har explicit valgt ikke at implementere andre statements fra den
 udvidede standard da disse ikke har nogen praktisk betydning for vores
 program.
 
-Når ``robots.txt'' er kan man query Robots modulet om en given relativ
-url my crawles eller ej. Dette gøres ved at løbe listen igennem og se
-om der findes et match der prefixer den relative url.
+Når \texttt{robots.txt} er parset kan man query Robots modulet om en given
+relativ \texttt{url} må crawles eller ej. Dette gøres ved at løbe listen igennem
+og se om der findes et match der prefixer den relative url.
 
-Når parseren finder et ``request-rate':'' statement kaldes
-setCrawlDelay i Config modulet. Hvis et ``request-rate:'' statement
-findes udregnes først den mente delay ud fra $sekunder / sider$
+Når parseren finder et \texttt{crawl-delay} statement gemmes værdien i Config
+modulet. Hvis et \texttt{request-rate}\footnote{Værdien af \texttt{request-rate}
+angives som SIDER/SEKUNDER} statement
+findes udregnes først det mente delay ud fra $sekunder / sider$
 
 \section{HTMLFilter}
 \label{HTMLFilter}
