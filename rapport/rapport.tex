@@ -471,7 +471,6 @@ overordnet indeks-fil der indeholder en liste over alle de besøgte
 sider samt links til de filer, der indeholder detaljerne omkring
 analysen af siderne. Disse sider indeholder den relevante sides tekst,
 samt talværdier der angiver sidens læsbarhed (LIX--tal, FRE--tal og
-\fixme{Note om FRE, da det ikke er omtalt før}
 FKGL--tal). Teksten på siden er opdelt i afsnit\footnote{I vores
   program dækker begrebet ``afsnit'' både over HTML's koncept om
   afsnit, adskilt af \texttt{p}-tags, samt over anden selvstændig
@@ -551,7 +550,8 @@ men ikke behøver revision hvis der under implementationen opstår
 komplikationer som det oprindelige design ikke tog højde for. Derfor
 vil vi beskrive centrale datastrukturer og algoritmer på et abstrakt
 plan, men ikke angive f.eks. konkrete typer eller beskrive deres
-konkrete implementation eller interface.\fixme{eventuel henvisning til hvor den konkrete implementetion bliver beskrevet ??}
+konkrete implementation eller interface. Dette er i stedet til en vis
+grad beskrevet i kapitel \ref{implementation}
 
 Dette afsnit vil beskrive det overordnede design vi valgte at
 implementere vores program omkring, samt begrundelser for hvorfor
@@ -633,13 +633,12 @@ moduler og typestærke interfaces. Dette sikrer også at det er let at
 tilføje nye indstillingsmuligheder --- idet der kun skal ændres i den
 kode der rent faktisk udnytter den nye indstillingsmulighed --- hvor
 ændringer i det primære dataflow kan resultere i en kaskade af
-ændringer over det meste af programmet. \fixme{Tekst der følger her
-  giver ikke meget mening} Den uafhængige plads som
-indstillings---informationen har, ville dog ikke være nær så passende
-til den primære data, idet det ville gøre det sværere at kontrollere
-hvor og hvornår den blev ændret, og ville svække muligheden for at
-garantere den sekventielt løbende raffinering af arbejdsdata som
-programmet er bygget op omkring.
+ændringer over det meste af programmet. Den fra det primære
+dataflow--uafhængige plads som indstillings--informationen har, ville
+dog ikke være nær så passende til den primære data, idet det ville
+gøre det sværere at kontrollere hvor og hvornår den blev ændret, og
+ville svække muligheden for at garantere den sekventielt løbende
+raffinering af arbejdsdata som programmet er bygget op omkring.
 
 \subsubsection{Krav}
 Dette modul gør det --- sammen med Brugerinput--modulet --- muligt at
@@ -939,6 +938,7 @@ lagt på plads). Hvert konceptuelt modul kan, om ikke fuldstændigt, så
 til en vis grad, implementeres som en SML modulsignatur og struktur.
 
 \chapter{Implementation}
+\label{implementation}
 
 \section{Parsing af HTML}
 \label{htmlparserimpl}
@@ -1279,16 +1279,16 @@ stavekontrol fra hvis en sådan ikke kan findes).
 
 \section{Sidesværhedsgrad}
 For at kunne sortere de analyserede sider efter deres sværhedsgrad
-bliver vi nødt til at beregne et entydigt tal for hver side, der
+bliver vi nødt til at beregne et entydigt tal for hver side der
 angiver sidens tekstmæssige sværhedsgrad. Vi har baseret
 sidesværhedsgraden på resultaterne af LIX-- og FRE--analyserne. Begge
 resulterer i en talværdi der angiver tekstens sværhedsgrad. Da disse
 talværdier ikke befinder sig på samme skala, er det nødvendigt at
 finde en vægtningsfaktor som kan sikrer at en af de to algoritmer ikke
 vil have en uforholdsmæssigt stor indflydelse på
-sidesværhedsgraden. Vi har valgt at vægte lix med 100\% også bare
-justere fre værdien derefter.\fixme{Skal de stå mere her?}
-
+sidesværhedsgraden. Vi har valgt at vægte LIX med 100\% og justere FRE
+værdien derefter (naturligvis først inverteret, idet høj FRE angiver
+let læsbar tekst, hvor det omvendte er tilfældet med LIX).
 
 \section{Repræsentation af URI'er}
 \label{uriimpl}
@@ -1742,9 +1742,6 @@ vores kravspecifikation i forhold til det endelige program.
 \item[Krav 8.1 --- Indkodning:] Dette krav er fuldt ud implementeret
   og virker korrekt med vores testdata.
 \end{description}
-
-\fixme{Uopfyldte krav}
-\fixme{Arbejdsfordeling}
 
 \begin{thebibliography}{9}
 \bibitem{smlbook} Michael R. Hansen og Hans Rischel: {\em
