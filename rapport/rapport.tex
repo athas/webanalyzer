@@ -64,7 +64,6 @@
 \tableofcontents*
 
 \fixme{forskellig brug af fx os f.eks.}
-\fixme{website eller websted?}
 
 \chapter{Indledning}
 \label{indledning}
@@ -921,6 +920,22 @@ implementeret således at den kan fungere med vilkårligt stort input,
 så længe der er tilstrækkeligt med hukommelse. Dette fandt vi
 nødvendigt, idet et HTML-dokument let kan indeholde flere tusinde
 tegn. \fixme{Figur der beskriver lexing af et tag?}
+
+\begin{figure}
+  Inddata: <a href=``foo''>
+
+$\box 3$
+  $\blacksquare$ a href=``foo''>
+  \^LexingTag
+
+  <$\blacksquare$ href=``foo''>
+   $\blacktriangle$ LexingTagName
+
+
+  \caption{Eksempel genereret data af lexer}
+  \label{ekslexeroutput}
+\end{figure}
+
 
 \subsection{HTML--parser}
 
