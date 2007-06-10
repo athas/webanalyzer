@@ -1070,23 +1070,22 @@ tegn.
 \begin{figure}[h]
   \begin{tabular}{lll}
 \textbf{Inddata} &
-\textbf{Lexeme} & 
-\textbf{Status}\\
+\textbf{Lexertilstand} \\
 
-$\blacksquare$<a href=``foo''> & & START  \\
-\hspace*{10pt}$\blacksquare$a href=``foo''> & LexingTag & \\
-\hspace*{10pt}<$\blacksquare$ href=``foo''> & LexingTagName & \\
-\hspace*{10pt}<a$\blacksquare$href=``foo''> & LexingAttributes & \\
-\hspace*{10pt}<a $\blacksquare$ref=``foo''> & LexingAttributeName & \\
-\hspace*{10pt}<a h$\blacksquare$ef=``foo''> & LexingAttributeName & \\
-\hspace*{10pt}<a hr$\blacksquare$f=``foo''> & LexingAttributeName & \\
-\hspace*{10pt}<a hre$\blacksquare$=``foo''> & LexingAttributeName & \\
-\hspace*{10pt}<a href$\blacksquare$``foo''> & LexingAttributeValueStart & \\
-\hspace*{10pt}<a href=``$\blacksquare$oo''> & LexingAttributeValue & \\
-\hspace*{10pt}<a href=``f$\blacksquare$o''> & LexingAttributeValue & \\
-\hspace*{10pt}<a href=``fo$\blacksquare$''> & LexingAttributeValue & \\
-\hspace*{10pt}<a href=``foo''$\blacksquare$ & LexingAttributes & \\
-\hspace*{10pt}<a href=``foo''>$\blacksquare$ & & FÆRDIG\\
+$\blacksquare$<a href=``foo''> & New \\
+\hspace*{10pt}$\blacksquare$a href=``foo''> & LexingTag \\
+\hspace*{10pt}<$\blacksquare$ href=``foo''> & LexingTagName \\
+\hspace*{10pt}<a$\blacksquare$href=``foo''> & LexingAttributes \\
+\hspace*{10pt}<a $\blacksquare$ref=``foo''> & LexingAttributeName \\
+\hspace*{10pt}<a h$\blacksquare$ef=``foo''> & LexingAttributeName \\
+\hspace*{10pt}<a hr$\blacksquare$f=``foo''> & LexingAttributeName \\
+\hspace*{10pt}<a hre$\blacksquare$=``foo''> & LexingAttributeName \\
+\hspace*{10pt}<a href$\blacksquare$``foo''> & LexingAttributeValueStart \\
+\hspace*{10pt}<a href=``$\blacksquare$oo''> & LexingAttributeValue \\
+\hspace*{10pt}<a href=``f$\blacksquare$o''> & LexingAttributeValue \\
+\hspace*{10pt}<a href=``fo$\blacksquare$''> & LexingAttributeValue \\
+\hspace*{10pt}<a href=``foo''$\blacksquare$ & LexingAttributes \\
+\hspace*{10pt}<a href=``foo''>$\blacksquare$ & Done \\
 \end{tabular}
   \caption{Eksempel af lexeme returneret af lexeren ud fra givet et tegn
 i indput. Den sorte firkant indikerer det tegn som lexeren behandler}
