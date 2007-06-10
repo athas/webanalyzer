@@ -961,14 +961,14 @@ sætte det sammen til et træ.
 Den overordnede algoritme er som følger: Parseren ser en leksikalsk
 enhed. Er denne ikke et tag, gemmes den, og næste leksikalsk enhed
 analyseres. Hvis enheden dog er et tag findes alle leksikalske enheder
-op til et matchende slut-tag, og disse indsættes som børne--elementer
+op til et matchende slut--tag, og disse indsættes som børne--elementer
 til det fundne tag. Parsingen går videre med den leksikalske enhed
 efter slut--tagget. Børne--elementerne parses naturligvis også, så de
 også får træstrukturen.
 
 Parseren er, i modsætning til lexeren, \textit{ikke} skrevet således
 at den kan håndtere arbitrært stort input. Den primære parserfunktion
-er en rekursiv, men ikke hale-rekursiv, funktion som kalder sig selv
+er en rekursiv, men ikke hale--rekursiv, funktion som kalder sig selv
 for at finde både børne--elementer og efterfølgende elementer. Den er
 derfor begrænset i hvor ``dybe'' og ``lange'' dokumenter den kan
 håndtere, hvor grænsen er sat ved SML--implementationens maksimale
@@ -1305,15 +1305,18 @@ I kravspecifikationen står der også at programmet skal være udformet
 som et kommandolinjeværktøj og at det skal kunne køre på GNU--baserede
 Linux maskiner. Dette stiller herved ét yderligere krav til
 forsøgspersonerne: de skal have forudgående kendskab til
-kommando\-linje\-baserede programmer.
+kommando\-linje\-baserede programmer og basal brug af GNU/Linux.
 
 \subsection{Afvikling af brugertest}
 Onsdag den 6. juni afviklede vi vores brugertest. Vi havde fået fat i
 Anders Boesen Lindbo Larsen, der indvilgede i at afprøve vores
 program. Han går ligesom os på første år på DIKU. Han kendte både til
-HTML, Linux og kommandobaserede programmer, så han opfylder alle vores
-krav til en forsøgsperson. Vi satte ham i gang med opgaverne og viste
-ham brugermanualen.
+HTML, Linux og kommandobaserede programmer, så han opfylder vores krav
+til en forsøgsperson, han havde måske ikke en professionel interesse i
+at teksten er læsbar, men dette er ingen forhindring for at løse de
+opgaver vi har stillet.
+
+Vi satte ham i gang med opgaverne og viste ham brugermanualen.
 
 \subsubsection{Opgave 1}
 Det var ikke svært for ham at få lavet første del af opgave 1 dog var
@@ -1327,18 +1330,18 @@ lave et gæt på at den sværeste side ville stå øverst.
 
 \subsubsection{Opgave 2}
 For at få løst opgave to måtte han kigge i manualen. Han fandt hurtigt
-``-d'' indstillingen der angiver den maksimale dybde, men han
-misforstod forklaringen. Han skrev ``-d 1'' hvor han skulle have
-skrevet ``-d 0'' for at få programmet til kun at analysere en side.
+``--d'' indstillingen der angiver den maksimale dybde, men han
+misforstod forklaringen. Han skrev ``--d 1'' hvor han skulle have
+skrevet ``--d 0'' for at få programmet til kun at analysere en side.
 Resten af opgaven gik uden problemer, selvom han var lidt hurtig og
 ikke fik læst toppen af resultatsiden, hvor der stod hvordan han kunne
 identificerede stavefejl mm.
 
 \subsubsection{Opgave 3}
 I opgave 3 skete der adskillige fejl. Først misforstod han manualen og
-brugte ``-ignore-tag'' i stedet for ``-ignore-id'' til at fra sortere
-Wikipedia's menuer. Derudover brugte han et forkert argument til
-funktionen. Han kopierede direkte fra opgaven og skrev
+brugte ``--ignore--tag'' i stedet for ``--ignore--id'' til at fra
+sortere Wikipedia's menuer. Derudover brugte han et forkert argument
+til funktionen. Han kopierede direkte fra opgaven og skrev
 \texttt{id=``column--one''}, meningen var at han skulle nøjes med
 \texttt{column--one}. Han fandt efter noget tid ud af at gøre det på
 den rigtige måde. De fejl der blev lavet her mener vi ikke skyldes at
@@ -1348,7 +1351,7 @@ formuleret bedre, den skulle nok have lagt mere op til at han ikke
 skulle have medtaget \texttt{id=`` ''}.
 
 \subsection{Konklusion på brugertest}
-Vi har fundet 3 brugervenlighedsproblemer i vores projekt.
+Vi har fundet 3 brugsmæssige problemer i vores projekt.
 \begin{enumerate}
 \item Det er svært at se om programmet arbejder når det analyserer en
   stor side med mange links. Det kan se ud som om at det er gået
@@ -1363,6 +1366,16 @@ Vi har fundet 3 brugervenlighedsproblemer i vores projekt.
 \item I manualen var forklaringen af dybdeangivelsen tvetydig. Dette
   er rettet i den endelige manual.
 \end{enumerate}
+
+Vi ville formentlig have fundet flere problemer hvis vi havde afprøvet
+programmet på mere end en person, da alle mennesker er forskellige og
+vil blive forvirret af forskellige ting afhængigt af deres forudgående
+IT--kundskaber. Vi har dog kun udført denne ene brugertest, da vi
+hellere ville rette fokus mod funktionstesten. Brugertest er på den
+ene side ikke så væsentligt for os da det er begrænset hvor mange af
+den slags forbedringer man kan lave på et kommandolinjeprogram, på den
+anden side er det vigtigt at de genererede HTML--dokumenter er nemme
+at forstå.
 
 \chapter{Konklusion}
 \label{konklusion}
@@ -1384,7 +1397,7 @@ Valget af programmeringssproget Standard ML, et valg som mange af
 vores medstuderende åbenbart fandt underligt, viste sig at være et
 godt valg. De primære problemer vi oplevede med det var håndtering af
 tekstindkodning (hvilket er årsagen til at vi begrænser os til
-ISO-8859-1 i vores kravspecifikation) og den relative mangel på
+ISO--8859--1 i vores kravspecifikation) og den relative mangel på
 programbiblioteker. Det sidste viste sig dog ikke at være et stort
 problem --- kun manglen på en HTML--parser gjorde det nødvendigt for os
 at skrive en større mængde kode som ikke ville have været nødvendigt i
@@ -1403,7 +1416,7 @@ praktiske, men uformelle afprøvninger viser at de nuværende
 analyseresultater er brugbare --- sider som mennesker vurderer som
 svære bliver generelt også opfattet som svære af programmet. Om
 programmet producerer ``brugbare resultater'' er desværre noget som
-ikke kunne testes i funktionsafprøvningen - vi har verificeret at de
+ikke kunne testes i funktionsafprøvningen --- vi har verificeret at de
 forskellige analysemetoder fungerer korrekt og giver de rigtige
 resultater (se testspecifikationen), men dette siger jo ikke
 nødvendigvis noget om hvorvidt de er brugbare. I sidste ende er det så
