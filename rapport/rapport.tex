@@ -555,6 +555,13 @@ modificeret til vores behov. Det er også dette moduls job at tjekke om
 den indlæste \textit{robots.txt} tillader at vi må crawle siden, da dette skal
 tjekkes hver gang der skal hentes en side.
 
+Når en side er analyseret en gang, så skal den ikke analyseres igen,
+hvis det skete ville programmet kunne gå i en ikke terminerende
+tilstand hvis 2 sider linker til hinanden (forudsat at der ikke er
+nogen dybdebegrænsning). For at undgå dette skal adressen til de
+allerede besøgte sider gemmes, så det kan tjekkes at man ikke besøger
+samme side igen.
+
 \subsection{HTML--Parsing}
 \label{htmlparsing}
 For at kunne udtrække tekst fra en HTML--side er det nødvendigt først
@@ -800,7 +807,7 @@ stillet i kravspecifikationen. Som omtalt ved Tekstudtrækkeren
 programmet med yderligere tekstformater og analysemetoder.
 
 Alle modulerne kan testes automatisk. Dog er det ikke muligt at lave
-en decideret Unit--testing af alle modulerne, da de er så tæt koblede
+en decideret unit--testing af alle modulerne, da de er så tæt koblede
 som de er. Hvis man vil teste Tekstudtrækkeren skal man f.eks. bruge
 et parsetræ som kun kan genereres af HTML--parseren.
 
@@ -954,15 +961,16 @@ se: \url{http://en.wikipedia.org/wiki/Robots.txt}}
 Ikke genkendte start statements i filen bliver ignoreret.
 
 \begin{figure}
-\begin{verbatim}
+\begin{lstlisting}[language=csh,
+                   escapechar=\@]
   User-agent: BadBot
   Disallow: /
   # Kommentarer forekommer efter "#" symbolet ved linje start eller
-  User-agent: *     # efter et statement
+  User-agent: *                          # efter et statement
   Disallow: /directory/file.html
   Disallow: /private 
-  Request-rate: 2/10    # Medfører 10sek/2sider = 5sek crawl delay
-\end{verbatim}
+  Request-rate: 2/10    # Medf@\o@rer 10sek/2sider = 5sek crawl delay
+\end{lstlisting}
 
   \caption{Eksempel på en robots.txt fil}
   \label{eksrobotstxtfile}
@@ -1247,7 +1255,7 @@ godt valg. De primære problemer vi oplevede med det var håndtering af
 tekstindkodning (hvilket er årsagen til at vi begrænser os til
 ISO-8859-1 i vores kravspecifikation) og den relative mangel på
 programbiblioteker. Det sidste viste sig dog ikke at være et stort
-problem - kun manglen på en HTML--parser gjorde det nødvendigt for os
+problem --- kun manglen på en HTML--parser gjorde det nødvendigt for os
 at skrive en større mængde kode som ikke ville have været nødvendigt i
 andre sprog. Til gengæld passede Standard ML's features, især
 mønstergenkendelse og højere--ordensfunktioner, ganske vel til
