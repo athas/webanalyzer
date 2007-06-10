@@ -2,8 +2,8 @@ digraph G
 {
         compound=true;
         Titel[label="Titel: \"Sidetitel\""];
-        Sprog[label="Sprog: Intet"];
-        Titel -> Sprog;
+        Sprog[label="Sprog: Ikke angivet"];
+        Titel -> Sprog [color="white", arrowhead="none"];
         
         subgraph cluster_tekstelementer
         {
