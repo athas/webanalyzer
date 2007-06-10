@@ -912,7 +912,8 @@ Hver linje indeholder statements på formen:\\
 insensitive og ``\#'' indikerer at det efterfølgende mellemrum (hvis der er et)
 og alt til og med linjens afslutning skal ignoreres (fortolkes som kommentarer).
 
-Filen starter med en eller flere \texttt{user-agent}\footnote{Værdien af dette
+Filen(Se figur \ref{eksrobotstxtfile} for eksempel på en robots.txt fil) starter
+med en eller flere \texttt{user-agent}\footnote{Værdien af dette
 statement er navnet for den robot som der angives adgangs politik for}
 statements efter fulgt af en eller flere \texttt{disallow}\footnote{Værdien af
 dette statement angiver en relativ \texttt{URL} som ikke må crawles. Dette kan
@@ -921,6 +922,24 @@ som prefixes af dette ikke må crawles.} statements\footnote{Der er foreslået
 udvidelser til standarden som udervider funktionaliteten med flere statements,
 se: \url{http://en.wikipedia.org/wiki/Robots.txt}} 
 Ikke genkendte start statements i filen bliver ignoreret.
+
+\begin{figure}
+\begin{verbatim}
+  User-agent: *
+  Disallow: /directory/file.html
+  Disallow: /private
+
+  # Comments appear after the "#" symbol at the start of a 
+  # line, or after a directive
+
+  User-agent: BadBot
+  Disallow: /
+\end{verbatim}
+
+  \caption{Eksempel på en robots.txt fil}
+  \label{eksrobotstxtfile}
+\end{figure}
+
 
 \subsection{Implementation}
 
