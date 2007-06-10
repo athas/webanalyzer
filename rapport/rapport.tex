@@ -68,9 +68,6 @@
 \newpage
 \tableofcontents*
 
-\fixme{website eller websted?}
-
-
 \chapter{Indledning}
 \label{indledning}
 Mange hjemmesider forfattes i dag uden omtanke for om sidens målgruppe
@@ -102,7 +99,19 @@ endelige tilstand, se konklusionen i sektion \ref{konklusion}.
 Det forventes at læseren af denne rapport har en hvis grad af teknisk
 kompetence, har erfaring med programmering og har en overordnet
 forståelse for sproget HTML\footnote{Et sprog der bruges til at
-  beskrive struktur og indhold af websites}.
+  beskrive struktur og indhold af webstedder}.
+
+\section{Terminologi}
+
+Herpå følger definitionen af enkelte begreber brugt i denne rapport.
+
+\begin{description}
+\item[Websted ---] en samling HTML-sider placeret på samme domæne. Et
+  websted indeholder én eller flere \textit{sider}.
+\item[Side ---] en enkelt HTML-side på et websted.
+\item[Sidesværhedsgrad ---] et tal der angiver hvor svær en given side er
+  at læse.
+\end{description}
 
 \chapter{Problemformulering}
 \label{problemformulering}
@@ -126,13 +135,13 @@ problemet, og de forskellige løsningsmuligheder vi vurderede.
 \label{målgruppe}
 Der er adskillige mulige målgrupper en løsning på problemet kunne være
 orienteret imod --- fra hjemmebrugere der skriver personlige sider,
-over individuelle skribenter på et større website til selve
-webmasteren på en stor side. Ydermere kan et websites indhold
+over individuelle skribenter på et større websted til selve
+webmasteren på en stor side. Ydermere kan et webstedder indhold
 fortolkes på flere forskellige måder --- enten som almindelig tekst
 omgivet af HTML--data uden betydning, eller med et forsøg på at
 benytte den information som HTML--strukturen udtrykker. Sidstnævnte
 gør det væsentligt lettere for et program at undersøge indholdet på et
-website, idet mere information om sidernes indhold så er eksplicit
+websted, idet mere information om sidernes indhold så er eksplicit
 udtrykket i sidernes kode, i stedet for at programmet skal
 ``gætte''. Dette har også relevans i forhold til målgruppen, idet
 HTML's avancerede features for at udtrykke semantisk information
@@ -142,10 +151,10 @@ løsning til ikke-tekniske brugere der fungerer bedst med data
 produceret af tekniske brugere. Idéen er jo ikke blot at brugeren skal
 kunne køre en analyse, men også derefter foretage rettelser på
 baggrund af analyseresultatet, og derfor går vi ud fra at brugeren
-kører programmet på websites som vedkommende selv har mulighed for at
+kører programmet på webstedder som vedkommende selv har mulighed for at
 ændre. Vi besluttede os for at det ville være et spild at undlade at
 udnytte HTML's muligheder for at angive semantisk information omkring
-teksten, men da en så lille del af verdens websites benytter sig af
+teksten, men da en så lille del af verdens webstedder benytter sig af
 HTML's muligheder indenfor dette område, ville det heller ikke være
 hensigtsmæssigt at handikappe programmet til kun at virke acceptabelt
 på denne form for HTML. Vores endelige målgruppe endte med at blive
@@ -153,20 +162,20 @@ todelt --- webmastere og (semi--)professionelle skribenter. Dette valg
 baserer vi på at både webmastere og skribenter har en stor interesse i
 at deres sider eller tekst er let at læse, og har motivation til at
 sætte sig ind i hvorledes man skriver god HTML, og derved gør det
-muligt for et program at foretage en så god undersøgelse af websitet
+muligt for et program at foretage en så god undersøgelse af webstedet
 som muligt.\footnote{Det kan nævnes at HTML-sider rig på semantisk
   information også gør det lettere for brugere af alternative
   weblæsere, som f.eks. blinde der benytter sig at netoplæsere, at
   benytte sig af siden} De, der ikke har interesse eller motivation
 til at sætte sig ind i teknikken, har sandsynligvis også mindre
-interesse i at deres websites er lette at læse --- ejerne af
-professionelt orienterede websites har en væsentligt større interesse
+interesse i at deres webstedder er lette at læse --- ejerne af
+professionelt orienterede webstedder har en væsentligt større interesse
 i at deres sider er let læsbare end forfatterne af f.eks. en families
 hjemmeside.
 
 I vores kravspecifikation er målgruppen defineret endnu løsere, som en
 person bekendt med HTML som har en professionel interesse i at
-websitet er læsbart. Dette er hvilke brugere vi ønsker at programmet
+webstedet er læsbart. Dette er hvilke brugere vi ønsker at programmet
 skal kunne \textit{benyttes} af, men programmet er optimeret mod at
 fungere bedst i de ovenfor nævnte scenarier med de nævnte
 brugergrupper.
@@ -174,20 +183,20 @@ brugergrupper.
 \section{Overvejelser omkring brugsscenarier}
 \label{brugsovervejelser}
 Vi blev hurtigt enige om at det er langt mere interessant at analysere
-et website som helhed, end kun at analysere en specifik HTML--side, og
+et websted som helhed, end kun at analysere en specifik HTML--side, og
 samtidigt at det er en nødvendighed at løsningen kan gennemgå
-(``crawle'') et online website, og ikke være afhængig af at det i
+(``crawle'') et online websted, og ikke være afhængig af at det i
 forvejen er hentet og er beliggende som filer på brugerens
 harddisk. Årsagen til denne beslutning er bl.a. at hvor det er
-relativt nemt at få et program, der kan analysere et helt website, til
+relativt nemt at få et program, der kan analysere et helt websted, til
 kun at analysere en enkelt side, er det omvendte langt sværere, idet
 man så skal implementere crawling separat fra programmet. Ydermere er
 især den ene del af vores målgruppe --- webmastere --- sandsynligvis
-langt mere interesserede i at analysere hele det website de er
+langt mere interesserede i at analysere hele det websted de er
 ansvarlige for, for at finde ud af hvilke undersider der er
 uacceptabelt svære at læse, end at analysere enkeltsider. Idet vi let
 kan forestille os at det kan tage lang tid at analysere alle
-undersider på et stort website, forestiller vi os også et brugsmønster
+undersider på et stort websted, forestiller vi os også et brugsmønster
 hvori programmet automatisk bliver kørt med et fast interval, og
 producerer et resultat som er tilgængeligt for alle der arbejder på
 siden. Dette er langt mere effektivt end at alle skribenter hver især
@@ -198,13 +207,13 @@ analysere denne side for at se resultatet af deres ændringer, i stedet
 for at de skal vente på at den automatiske analyse bliver kørt (og
 bliver færdig igen). Dette implementerede vi som en mulighed for at
 indstille hvor dybt programmet skal crawle når det analyserer et
-website. Ved at angive den ønskede side som URI, og begrænse dybden
+websted. Ved at angive den ønskede side som URI, og begrænse dybden
 til 0, kan man således få en analyse af blot én side.
 
 \section{Brugergrænseflade og resultatpræsentation}
 \label{brugergraenseflade}
 En løsning på opgavens overordnede problem kan formuleres som at
-analysere et website og producere et resultat der indeholder
+analysere et websted og producere et resultat der indeholder
 information om dets læsbarhed. Der er flere forskellige muligheder for
 hvorledes brugeren skal kunne sætte en analyse i gang, og hvorledes
 brugeren skal præsenteres for resultatet, og det rette valg afhænger
@@ -213,7 +222,7 @@ stor betydning for løsningen, idet både valg af teknologi, udformning
 af design og strategien for den endelige implementation bliver
 påvirket hvorledes brugeren skal præsenteres for resultatet. Der er
 også forskel på hvor godt forskellige brugergrænseflader gør det
-muligt at analysere hele websites, automatisere kørsel af programmet
+muligt at analysere hele webstedder, automatisere kørsel af programmet
 eller dele resultatet med andre brugere (så hver bruger ikke skal køre
 en ny analyse fra start af). Forskellige muligheder blev overvejet:
 
@@ -234,7 +243,7 @@ en ny analyse fra start af). Forskellige muligheder blev overvejet:
   indikerede problemer. 
 
   Ulempen ved denne præsentationsform er at det ikke umiddelbart lader
-  sig gøre at analysere et helt website og kun søge detaljeret
+  sig gøre at analysere et helt websted og kun søge detaljeret
   information om de mindst læsbare sider. En anden ulempe er at
   integrationen med browseren kan gøre det svært at automatisere
   kørslen af programmet, og at en præsentation der foregår i
@@ -243,16 +252,16 @@ en ny analyse fra start af). Forskellige muligheder blev overvejet:
   brugere.
 
 \item[Webapplikation:]
-  Programmets brugerinterface kan være udformet som et website (en
+  Programmets brugerinterface kan være udformet som et websted (en
   webapplikation), hvor brugeren kan angive adressen på et andet
-  website, som så bliver analyseret. Præsentationen af resultatet
-  kunne være en dynamisk genereret kopi af websitet, som brugeren kan
-  navigere igennem online som hvis det var det oprindelige website,
+  websted, som så bliver analyseret. Præsentationen af resultatet
+  kunne være en dynamisk genereret kopi af webstedet, som brugeren kan
+  navigere igennem online som hvis det var det oprindelige websted,
   men hvor der på hver side er indsat information om tekstens
   læsbarhed. 
 
   Problemet med denne mulighed er at en komplet analyse af et
-  middelstort website sandsynligvis tager længere tid end de fleste
+  middelstort websted sandsynligvis tager længere tid end de fleste
   brugere er villige til at vente på, at en hjemmeside generer. Og der er ikke
   en umiddelbar måde at dele resultatet med andre brugere på.
 
@@ -261,9 +270,9 @@ en ny analyse fra start af). Forskellige muligheder blev overvejet:
   i stedet for at køre som en del af webbrowseren, er det et vindue
   for sig selv, og det er selv ansvarligt for at vise indholdet af en
   analyseret side og sætte det i forbindelse med
-  analyseresultatet. Hvis brugeren ønsker at analysere et helt website
+  analyseresultatet. Hvis brugeren ønsker at analysere et helt websted
   kan dette også gøres ved at programmet systematisk følger links på
-  websitet og analyserer hver side det finder. Der kan så produceres
+  webstedet og analyserer hver side det finder. Der kan så produceres
   en liste over de analyserede sider, hvorfra brugeren kan vælge at få
   mere detaljeret information (f.eks. den førnævnte visning af siden
   med uacceptabelt svært læsbar tekst markeret). Denne liste kan
@@ -280,15 +289,15 @@ en ny analyse fra start af). Forskellige muligheder blev overvejet:
 
 \item[Output i form af HTML:]
   Programmet kan som foreslået ovenfor være konceptuelt opdelt i
-  to --- en del der ``crawler'' et website og producerer et
+  to --- en del der ``crawler'' et websted og producerer et
   analyseresultat, og en del der giver en visuel præsentation af
   resultatet for brugeren. Dog er finessen at den første del
   præsenterer et sæt af HTML--filer, som kan læses af enhver
   webbrowser, hvilket betyder at man ikke har behov for at implementere
   præsentationsdelen af løsningen. Programmet skal blot producere
-  HTML--filer indeholdende websitets oprindelige tekst i forbindelse
+  HTML--filer indeholdende webstedets oprindelige tekst i forbindelse
   med analyseresultatet, og gøre det muligt at se alle undersider på
-  websitet (f.eks. ved at producere en HTML--fil der indeholder en
+  webstedet (f.eks. ved at producere en HTML--fil der indeholder en
   liste over alle de sider programmet besøgte under kørslen). Idet
   programmet ikke har behov for selv at præsentere resultatet visuelt
   (det håndteres af brugerens webbrowser) kan det implementeres som et
@@ -301,7 +310,7 @@ Vi valgte sidstnævnte mulighed, og valgte også at implementere
 løsningen som et kommandolinjeprogram. Dette sikrer et af vores
 brugsscenarier, hvori programmet køres med et regulært interval og
 producerer resultater der er tilgængelige for alle der arbejder på
-websitet, og samtidigt er vi overbeviste om at det er muligt at lave
+webstedet, og samtidigt er vi overbeviste om at det er muligt at lave
 et så simpelt kommandolinjeinterface at skribenter hurtigt også kan
 lære at bruge det. At output er i form af HTML--filer gør det også
 muligt at lave nogle senere udvidelser eller alternative
@@ -313,17 +322,17 @@ den er færdig.
 \section{Konkrete features}
 
 Idet vores primære brugsscenarie omhandler analyse af alle sider på et
-helt website tilgængeligt online (se sektion \ref{brugsovervejelser}),
+helt websted tilgængeligt online (se sektion \ref{brugsovervejelser}),
 er vores program nødt til at kunne lave en
 forbindelse til en webserver, hente en HTML--fil, forstå indholdet af
 HTML--filen, udføre en analyse af teksten i filen og følge hyperlinks
-angivet i HTML--filen til andre sider på websitet. At følge hyperlinks
+angivet i HTML--filen til andre sider på webstedet. At følge hyperlinks
 fra side til side er vores eneste mulighed for at besøge alle sider på
-websitet, hvilket giver mulighed for at der findes isolerede sider som
+webstedet, hvilket giver mulighed for at der findes isolerede sider som
 vi ikke er i stand til at besøge, men da menneskelige besøgende på
 siden også er nødt til at følge hyperlinks for at komme omkring, og
 det derfor er yderst sjældent at der findes sådanne isolerede sider på et
-website, mener vi ikke at dette er et problem.
+websted, mener vi ikke at dette er et problem.
 
 \subsection{Indgrænsning af analysen}
 \label{begraensning}
@@ -343,7 +352,7 @@ Udover at angive indhold og grafik kan HTML---sider også indeholde
 \textit{JavaScript}) er det mest udbredte --- og disse scripts kan
 under visningen af siden indsætte yderligere indhold på siden, ofte
 som respons på brugerinput. For tiden er det moderne at opbygge et
-helt website som en enkelt side, der baseret på input fra brugeren
+helt websted som en enkelt side, der baseret på input fra brugeren
 dynamisk ændrer indhold uden at genindlæse hele siden fra
 webserveren. Igen vurderede vi at vores program ikke ville være i
 stand til at understøtte denne form for sider, idet den eneste
@@ -883,7 +892,7 @@ Dette modul skal lave de HTML--filer der skal præsentere
 analyseresultaterne for brugeren. Givet analyse resultaterne for en
 enkelt side skal det generere en HTML side. HTML--siden vil få et
 deterministisk navn baseret på HTML--filens navn og placering på
-websitet, således at der kan skabes links til den genererede HTML--fil
+webstedet, således at der kan skabes links til den genererede HTML--fil
 fra analyseindekset. Til at generere HTML'en bruger vi et modul
 baseret på Msp (ML Serverpages), dette er en del af Moscow ML's
 standardbibliotek\footnote{\url{http://www.dina.kvl.dk/~sestoft/mosmllib/Msp.html}}.
@@ -902,7 +911,7 @@ analysen af alle undersiderne er afsluttet.
 \subsection{Generer index HTML--side}
 For at brugeren nemt kan få adgang til analyseresultaterne vil vi også
 generere en index fil. Dette skridt er det absolut sidste der tages i
-programmet, og først når alle websitets undersider er blevet
+programmet, og først når alle webstedets undersider er blevet
 analyseret.
 
 \subsubsection{Krav}
@@ -933,7 +942,7 @@ til en vis grad, implementeres som en SML modulsignatur og struktur.
 \section{Parsing af HTML}
 \label{htmlparserimpl}
 For korrekt at udtrække tekst, og information om teksten, fra et
-website, er det nødvendigt at kunne parse HTML, eller have en anden
+websted, er det nødvendigt at kunne parse HTML, eller have en anden
 måde at adskille tekst fra tags og forbinde informationen i tags til
 den tekst der står under dem. I vores program valgte vi at
 implementere en nogenlunde fuldgyldig HTML parser (se nedenfor for
@@ -1287,7 +1296,7 @@ URI'er\footnote{\url{http://www.w3.org/Addressing/}} der angiver en
 resurse beliggende på en angivet server tilgået via en angivet
 protokol. URI'er kan være både relative og absolutte, og førstnævnte
 opfattes på HTML-sider som i forhold til den side der indeholder den
-relative URI. I et program som vores, der skal crawle et helt website,
+relative URI. I et program som vores, der skal crawle et helt websted,
 er det naturligvis yderst relevant at kunne repræsentere og arbejde
 med URI'er på en fornuftig og effektiv måde. Den grundlæggende
 repræsentation er en type ved navn \texttt{URI} beliggende i
@@ -1313,14 +1322,14 @@ ikke--HTML filer (som f.eks. lydfiler eller CD--billeder).
 
 Det viste sig hurtigt at programmet brugte uacceptabelt meget tid blot
 på at udføre \texttt{HTTP HEAD}-forespørgsler for URI'er på et
-websites forskellige sider. Dette blev identificeret som unødvendigt,
+webstedder forskellige sider. Dette blev identificeret som unødvendigt,
 idet mange sider indeholder de samme URI'er (man kan f.eks. forestille
-sig at alle sider på et website indeholder en række navigations--links
+sig at alle sider på et websted indeholder en række navigations--links
 til en nogle centrale sider). Derfor blev funktionen \texttt{makeURI}
 implementeret. Denne har samme signatur som \texttt{buildURI}, men
 gemmer (``cacher'') resultatet af \text{HTTP HEAD}-forespørgslem,
 således at det kun skal udføres en gang for hver URI. Derved sparer vi
-en voldsom mængde forespørgsler på et typisk website hvori der er en
+en voldsom mængde forespørgsler på et typisk websted hvori der er en
 stor mængde links som er at finde på mange sider. Cachen er
 implementeret som et binært træ for at gøre det hurtigt at finde den
 cachede værdi. Vi har ikke konkrete tal for hvad denne optimering
@@ -1599,7 +1608,7 @@ tidligere, og immutérbare, data.
 
 Vi er selv af den opfattelse at vores program er i stand til at blive
 brugt i praksis i forbindelse med forbedring af læsbarheden på et
-website, af den målgruppe (se sektion \ref{målgruppe}) som vi
+websted, af den målgruppe (se sektion \ref{målgruppe}) som vi
 designede programmet til. Flere analysemetoder kunne naturligvis være
 praktiske, men uformelle afprøvninger viser at de nuværende
 analyseresultater er brugbare --- sider som mennesker vurderer som
@@ -1613,6 +1622,65 @@ svært at give en objektiv vurdering af kvaliteten af et program, med
 mindre det kan gøres baseret på antallet af fejl, at vi vil undlade at
 forsøge på det.
 
+\section{Kravstatus}
+\label{kravstatus}
+Herpå følger en beskrivelse af slut--status for hvert krav nævnt i
+vores kravspecifikation i forhold til det endelige program.
+
+\begin{description}
+\item[Krav 1 --- Analyse af et helt websted:] Dette krav er fuldt ud
+  implementeret og afprøvet. Se
+  evt. beskrivelsen af dataflow--cyklussen i sektion \ref{cyklus}.
+\item[Krav 1.1 --- Respekter robots.txt:] Dette krav er fuldt ud
+  implementeret og afprøvet.
+\item[Krav 1.2 --- Dybde af crawling:] Dette krav er fuldt ud
+  implementeret og afprøvet.
+\item[Krav 2, 2.1, 2.2 --- Analysemetoder:] De nævnte analysemetoder er
+  implementeret og virker korrekt med vores testdata.
+\item[Krav 2.3 --- Stavekontrol:] Dette krav er fuldt ud implementeret og
+  virker korrekt med vores testdata.
+\item[Krav 2.3.1 --- Flere sprog:] Dette krav er fuldt ud implementeret og
+  virker korrekt med vores testdata.
+\item[Krav 2.4 --- Gentagne ord:] Dette krav er fuldt ud implementeret og
+  virker korrekt med vores testdata.
+\item[Krav 2.5 --- Beregning af sidesværhedsgrad:] Dette krav er fuldt
+  ud implementeret, men er ikke så præcist defineret som vi ønskede i
+  kravspecifikationen, men se testspecifikationen for problemer
+  omkring afprøvning.
+\item[Krav 3 --- Analyse baseret på HTML--tags:] Visse af dette kravs
+  underkrav er blevet implementeret. Se nedenfor.
+\item[Krav 3.1 --- \texttt{em} og \texttt{strong}:] Dette krav blev
+  droppet, se sektion \ref{ejspecialbehandling}.
+\item[Krav 3.2 --- \texttt{hN}:] Dette krav blev droppet, se sektion
+  \ref{ejspecialbehandling}.
+\item[Krav 3.3 --- \texttt{abbr} og \texttt{acronym}:] Dette krav er
+  fuldt ud implementeret og virker korrekt med vores testdata.
+\item[Krav 3.4 --- Citater skal ikke analyseres:] Dette krav er
+  delvist implementeret (se sektion \ref{citater}) og den
+  implementerede del fungerer korrekt med vores testdata.
+\item[Krav 3.5 --- Tekst i andre sprog angivet med (lang):] Dette krav er
+  fuldt ud implementeret og virker korrekt med vores testdata.
+\item[Krav 3.6 --- \texttt{kbd}, \texttt{var} og \texttt{code}:] Dette
+  krav er fuldt ud implementeret og virker korrekt med vores testdata.
+\item[Krav 3.7 --- \texttt{bdo}:] Dette
+  krav er fuldt ud implementeret og virker korrekt med vores testdata.
+\item[Krav 4 --- Konfiguration af analyse:] Dette krav er delvist
+  implementeret og den implementerede del fungerer korrekt med vores
+  testdata.
+\item[Krav 5 --- Kommandobaseret interface:] Dette krav er
+  implementeret, men ikke systematisk afprøvet.
+\item[Krav 6 --- Resultater i HTML--format:] Dette krav er
+  implementeret og afprøvet, men se testspecifikationen og sektion
+  \ref{funktionstests} for forbehold omkring systematisk afprøvning af
+  dette.
+\item[Krav 7 --- Platform:] Dette krav er implementeret og afprøvet,
+  men se testspecifikationen for forbehold omkring systematisk
+  afprøvning af dette.
+\item[Krav 8 --- Håndtering af HTML/XHTML:] Dette krav er fuldt ud
+  implementeret og virker korrekt med vores testdata.
+\item[Krav 8.1 --- Indkodning:] Dette krav er fuldt ud implementeret
+  og virker korrekt med vores testdata.
+\end{description}
 
 \fixme{Uopfyldte krav}
 \fixme{Arbejdsfordeling}
