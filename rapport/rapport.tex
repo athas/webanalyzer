@@ -68,7 +68,6 @@
 \newpage
 \tableofcontents*
 
-\fixme{tjek alle wikipedia links om de kan erstattes og ellers put datoer på}
 \fixme{website eller websted?}
 
 
@@ -177,31 +176,30 @@ brugergrupper.
 Vi blev hurtigt enige om at det er langt mere interessant at analysere
 et website som helhed, end kun at analysere en specifik HTML--side, og
 samtidigt at det er en nødvendighed at løsningen kan gennemgå
-(``crawle''\footnote{\url{http://en.wikipedia.org/wiki/Web_crawler}})
-et online website, og ikke være afhængig af at det i forvejen er
-hentet og er beliggende som filer på brugerens harddisk. Årsagen til
-denne beslutning er bl.a. at hvor det er relativt nemt at få et
-program, der kan analysere et helt website, til kun at analysere en
-enkelt side, er det omvendte langt sværere, idet man så skal
-implementere crawling separat fra programmet. Ydermere er især den ene
-del af vores målgruppe --- webmastere --- sandsynligvis langt mere
-interesserede i at analysere hele det website de er ansvarlige for,
-for at finde ud af hvilke undersider der er uacceptabelt svære at
-læse, end at analysere enkeltsider. Idet vi let kan forestille os at
-det kan tage lang tid at analysere alle undersider på et stort
-website, forestiller vi os også et brugsmønster hvori programmet
-automatisk bliver kørt med et fast interval, og producerer et resultat
-som er tilgængeligt for alle der arbejder på siden. Dette er langt
-mere effektivt end at alle skribenter hver især skal køre tidskrævende
-analyser hver for sig. Dog opfatter vi det også som sandsynligt at
-skribenter, der arbejder på at forbedre læsbarheden af en specifik
-underside, vil have en mulighed for hurtigt at analysere denne side
-for at se resultatet af deres ændringer, i stedet for at de skal vente
-på at den automatiske analyse bliver kørt (og bliver færdig
-igen). Dette implementerede vi som en mulighed for at indstille hvor
-dybt programmet skal crawle når det analyserer et website. Ved at
-angive den ønskede side som URI, og begrænse dybden til 0, kan man
-således få en analyse af blot én side.
+(``crawle'') et online website, og ikke være afhængig af at det i
+forvejen er hentet og er beliggende som filer på brugerens
+harddisk. Årsagen til denne beslutning er bl.a. at hvor det er
+relativt nemt at få et program, der kan analysere et helt website, til
+kun at analysere en enkelt side, er det omvendte langt sværere, idet
+man så skal implementere crawling separat fra programmet. Ydermere er
+især den ene del af vores målgruppe --- webmastere --- sandsynligvis
+langt mere interesserede i at analysere hele det website de er
+ansvarlige for, for at finde ud af hvilke undersider der er
+uacceptabelt svære at læse, end at analysere enkeltsider. Idet vi let
+kan forestille os at det kan tage lang tid at analysere alle
+undersider på et stort website, forestiller vi os også et brugsmønster
+hvori programmet automatisk bliver kørt med et fast interval, og
+producerer et resultat som er tilgængeligt for alle der arbejder på
+siden. Dette er langt mere effektivt end at alle skribenter hver især
+skal køre tidskrævende analyser hver for sig. Dog opfatter vi det også
+som sandsynligt at skribenter, der arbejder på at forbedre læsbarheden
+af en specifik underside, vil have en mulighed for hurtigt at
+analysere denne side for at se resultatet af deres ændringer, i stedet
+for at de skal vente på at den automatiske analyse bliver kørt (og
+bliver færdig igen). Dette implementerede vi som en mulighed for at
+indstille hvor dybt programmet skal crawle når det analyserer et
+website. Ved at angive den ønskede side som URI, og begrænse dybden
+til 0, kan man således få en analyse af blot én side.
 
 \section{Brugergrænseflade og resultatpræsentation}
 \label{brugergraenseflade}
@@ -347,13 +345,12 @@ under visningen af siden indsætte yderligere indhold på siden, ofte
 som respons på brugerinput. For tiden er det moderne at opbygge et
 helt website som en enkelt side, der baseret på input fra brugeren
 dynamisk ændrer indhold uden at genindlæse hele siden fra
-webserveren\footnote{\texttt{AJAX} (Asynchronous JavaScript and XML)
-  Se: \url{http://en.wikipedia.org/wiki/AJAX}}. Igen vurderede vi at
-vores program ikke ville være i stand til at understøtte denne form
-for sider, idet den eneste korrekte implementation ville være en
-komplet \textit{JavaScript}--fortolker, kombineret med simuleret
-brugerinput, en opgave som vi anslog til alene at ville tage
-\textit{væsentligt} mere tid end de afsatte 7 uger.
+webserveren. Igen vurderede vi at vores program ikke ville være i
+stand til at understøtte denne form for sider, idet den eneste
+korrekte implementation ville være en komplet
+\textit{JavaScript}--fortolker, kombineret med simuleret brugerinput,
+en opgave som vi anslog til alene at ville tage \textit{væsentligt}
+mere tid end de afsatte 7 uger.
 
 Vi vælger derfor at begrænse os til kun at håndtere tekst der findes
 direkte i HTML--siderne, men dog at understøtte alle nuværende
@@ -1441,8 +1438,8 @@ Dette afsnit indeholder de opgaver vi vil stille brugeren.
 
 \subsubsection{Opgave 2: Analyse med maks. dybde}
 \begin{itemize}
-\item Start en analyse af http://da.wikipedia.org/ hvor kun forsiden
-  analyseres, dvs. der skal ikke følges nogen links.
+\item Start en analyse af \url{http://da.wikipedia.org/} hvor kun
+  forsiden analyseres, dvs. der skal ikke følges nogen links.
 \item Åben analyseresultatet og klik ind på den analyserede side.
 \item Hvad er sidens læsbarhedsindeks/LIX--tal?
 \item Er der nogen stavefejl på siden?
