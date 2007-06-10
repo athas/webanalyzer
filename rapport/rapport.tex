@@ -63,6 +63,8 @@
 \tableofcontents*
 \newpage
 
+\fixme{forskellig brug af fx os f.eks.}
+
 \chapter{Indledning}
 \label{indledning}
 Mange hjemmesider forfattes i dag uden omtanke for om sidens målgruppe
@@ -70,13 +72,13 @@ er i stand til at læse sidens indhold --- det sproglige niveau er
 ganske enkelt for højt. Ydermere forfattes indholdet af mange
 hjemmesider med primitive værktøjer (f.eks. simple tekstfelter direkte
 på siden, eller simple skriveprogrammer), der mangler de
-hjælpefeatures som findes i almindelige skriveprogrammer. Dette
+hjælpefunktioner som findes i almindelige skriveprogrammer. Dette
 resulterer i at hjemmesider ofte indeholder flere stavefejl end
-gennemsnitlig tekst. Disse mangler kan gøre hjemmesider sværere at
+gennemsnitlige tekster\fixme{hvilke tekster?}. Disse mangler kan gøre hjemmesider sværere at
 bruge for den tilsigtede målgruppe, og derved reducere deres
 effektivitet, ligegyldigt hvad målet med siden så end er.
 
-Baseret på denne problemstilling har vi implementeret et program
+Baseret på denne problemstilling har vi implementeret et program,
 designet til at bistå hjemmesideforfattere med at forbedre den
 sproglige kvalitet af deres sider, hvad enten dette er ved at reducere
 antallet at stavefejl eller at omskrive unødigt kompliceret tekst.
@@ -110,7 +112,7 @@ problemet, og de forskellige løsningsmuligheder vi vurderede.
 
 \section{Målgruppe}
 \label{målgruppe}
-Der er adskillige mulige målgrupper en løsning på problemet kunne være
+Der er adskillige mulige målgrupper og en løsning på problemet kunne være
 orienteret imod --- fra hjemmebrugere der skriver personlige sider,
 over de individuelle skribenter på et større website til selve
 webmasteren på en stor side. Ydermere kan et websites indhold
@@ -152,7 +154,7 @@ hjemmeside.
 Vi blev hurtigt enige om at det er langt mere interessant at analysere
 et website som helhed, end kun at analysere en specifik HTML-side, og
 samtidigt at det er en nødvendighed at løsningen kan gennemgå
-(``crawle'') et online website, og ikke være afhængig af at det i
+(``crawle''\footnote{\url{http://en.wikipedia.org/wiki/Web_crawler}}) et online website, og ikke være afhængig af at det i
 forvejen er hentet og er beliggende som filer på brugerens
 harddisk. Hvor det er relativt nemt at få et program, der kan
 analysere et helt website, til kun at analysere en enkelt side, er det
@@ -161,7 +163,7 @@ fra programmet. Ydermere er især den ene del af vores målgruppe ---
 webmastere --- sandsynligvis langt mere interesserede i at
 analysere hele det website de er ansvarlige for, for at finde ud af
 hvilke undersider der er uacceptabelt svære at læse, end at analysere
-enkeltsider. Idet vi kan let kan forestille os at det kan tage lang
+enkeltsider. Idet vi let kan forestille os at det kan tage lang
 tid at analysere alle undersider på et stort website, forestiller vi
 os også et brugsmønster hvori programmet automatisk bliver kørt med et
 fast interval, og producerer et resultat som er tilgængeligt for alle
@@ -226,8 +228,8 @@ af). Forskellige muligheder blev overvejet:
 
   Problemet med denne mulighed er at en komplet analyse af et
   middelstort website sandsynligvis tager længere tid end de fleste
-  brugere er villige til at vente på en hjemmeside i, og at der ikke
-  er en umiddelbar måde at dele resultatet med andre brugere på.
+  brugere er villige til at vente på, at en hjemmeside generer. Og der er ikke
+  en umiddelbar måde at dele resultatet med andre brugere på.
 
 \item[Grafisk standalone-applikation:] 
   Præsentationen kan udføres omtrent som nævnt i første mulighed, men
@@ -287,7 +289,7 @@ den er færdig.
 
 Idet vores primære brugsscenarie omhandler analyse af alle sider på et
 helt website tilgængeligt online (se sektion \ref{brugsovervejelser}),
-er vores program nødt til at være i stand til at tage forbindelse
+er vores program nødt til at kunne lave en
 forbindelse til en webserver, hente en HTML-fil, forstå indholdet af
 HTML-filen, udføre en analyse af teksten i filen og følge hyperlinks
 angivet i HTML-filen til andre sider på websitet. At følge hyperlinks
@@ -295,7 +297,7 @@ fra side til side er vores eneste mulighed for at besøge alle sider på
 websitet, hvilket giver mulighed for at der findes isolerede sider som
 vi ikke er i stand til at besøge, men da menneskelige besøgende på
 siden også er nødt til at følge hyperlinks for at komme omkring, og
-det derfor er yderst sjældent at der findes isolerede sider på et
+det derfor er yderst sjældent at der findes sådanne isolerede sider på et
 website, mener vi ikke at dette er et problem.
 
 \subsection{Indgrænsning af analysen}
@@ -359,7 +361,7 @@ sider der indeholder tekst skrevet på flere sprog, uden at det
 ukorrekt angiver forkert stavede ord. Slutteligt taler vores egen
 erfaring for at en hændelig skrivefejl er fejlagtig gentagelse af ord,
 så denne fejl valgte vi ligeledes gøre opmærksom på (skriveprogrammer
-med grammatikcheck fanger denne fejl, men det gør en selvstændig
+med grammatikkontrol fanger denne fejl, men det gør en selvstændig
 stavekontrol, som den i vores program, ikke).
 
 \subsection{Overvejelser omkring output}
@@ -428,7 +430,7 @@ men ikke behøver revision hvis der under implementationen opstår
 komplikationer som det oprindelige design ikke tog højde for. Derfor
 vil vi beskrive centrale datastrukturer og algoritmer på et abstrakt
 plan, men ikke angive f.eks. konkrete typer eller beskrive deres
-konkrete implementation eller interface.
+konkrete implementation eller interface.\fixme{eventuel henvisning til hvor den konkrete implementetion bliver beskrevet ??}
 
 Dette afsnit vil beskrive det overordnede design vi valgte at
 implementere vores program omkring, samt begrundelser for hvorfor
@@ -452,7 +454,7 @@ ML er velegnet til en sådan opgave --- manglen på objektorienterede
 faciliteter vil ikke blive mærket idet problemet og designet ikke
 passer umiddelbart ind i den objektorienterede filosofi, og
 programmets relativt korte og simple kørselstid betyder at der ikke er
-et så stort behov for mutérbar tilstand.
+et så stort behov for mutérbar tilstande. 
 
 På figur \ref{dataflowdia} kan vores Dataflow diagram ses. Det primære
 dataflow er angivet med solide linjer. Indstillingerne går uden om det
@@ -493,7 +495,7 @@ betydning. Eksempelvis kan man angive hvor den maksimale dybde for
 analysen med indstillingen ``--d'', hvor \textit{d}'et står for
 \textit{depth}. Udover at det skal være let at huske sammenhængen mellem
 betydning og navn, så skal tvetydigheder helst undgås. Tvetydigheder
-kan gøre at brugeren ikke så let husker forkert og føler det
+kan gøre at brugeren husker forkert og føler det
 nødvendigt at slå op i manualen. Når flere indstillinger kunne have
 samme navn, har vi valgt at bruge et længere navn for at undgå
 disse tvetydigheder. F.eks. er der to indstillinger der begge kan
@@ -505,11 +507,11 @@ Da de brugerleverede indstillinger skal kunne tilgås fra vidt spredte
 dele af programmet har vi fundet det bedst at lagre disse på et
 centralt, løst koblet sted, i modsætning til programmets egentligt
 arbejds--data, der i højere grad fører data rundt gennem tæt koblede
-moduler og strenge, typestærke interfaces. Dette sikrer også at det er
+moduler og typestærke interfaces. Dette sikrer også at det er
 let at tilføje nye indstillingsmuligheder --- idet der kun skal ændres
 i den kode der rent faktisk udnytter den nye indstillingsmulighed ---
 hvor ændringer i det primære dataflow kan resultere i en kaskade af
-ændringer over det meste af programmet. Den uafhængige plads
+ændringer over det meste af programmet. \fixme{Tekst der følger her giver ikke meget mening} Den uafhængige plads
 indstillings---informationen har ville dog ikke være nær så passende
 til den primære data, idet det ville gøre det sværere at kontrollere
 hvor og hvornår den blev ændret, og ville svække muligheden for at
@@ -617,7 +619,10 @@ adresse til den nuværende side skal derfor kombineres med den relative
 sti fra linket for at forme linkets absolutte sti. Det er dog ikke
 altid den nuværende sides absolutte sti som adresser skal være
 relative til, man kan angive en anden sti som de skal være relative
-til med \texttt{base}--tagget.
+til med \texttt{base}--tagget. Da \texttt{a}--tags også bruges til andet 
+end links til almindelige htmlsider, sørger vi for at filtrere dette fra. 
+Dette kunne fx være links til mails \texttt{mailto:} eller javascript
+funktioner \texttt{javascript:}
 
 Det er ikke kun \texttt{a} der skal undersøges, hvis et HTML--dokument
 benytter sig af rammer (frames), så skal deres start--adresser også
@@ -635,7 +640,7 @@ den angivne maksimaldybde.
 For at gøre det muligt at angive at nogle dele af en hjemmeside ikke
 skal analyseres er det nødvendigt med et modul der kan frasortere de
 ønskede elementer fra siden. Ud fra brugerens indstillinger skal dette
-modul kunne frasortere dele af en HTML--side. Dette kan f.eks. bruges
+modul kunne frasortere dele af en HTML--side. Dette kan fx bruges
 til at frasortere menuer, brugerkommentarer og andet tekst som vil
 kunne påvirke analysen, på en måde så resultatet bliver
 misvisende. Beregningen af læsbarhedsindekset kan eksempelvis blive
@@ -674,11 +679,11 @@ kender til selve HTML--formatet og omdanner det til en mere generisk
 datastruktur der symboliserer et dokument. Denne datastruktur
 indeholder information om tekstens inddeling i afsnit, overskrifter,
 citater mm. Datastrukturen viderebehandles af det andet delmodul
-(``sætningsifikatoren''), som udfører de operationer der skal gøres
-for alle dokumenter. Dette inkluderer opdeling af teksten i ord og
-punktuering (tegnsætning, mellemrum mv.) og opdeling afsnittene i
-sætninger.  Det første delmodul kan på denne måde lettere udvides så
-det også kan håndtere andre dokumentformater.
+(``sætningsifikatoren''), som udfører de beregninger der er ens for
+alle dokumenter. Dette inkluderer adskillelse af ord og punktuering
+(mellemrum, tegnsætning mv.) og opdeling i sætninger.  Det første
+delmodul kan på denne måde let udvides så det også kan håndtere andre
+dokumentformater.
 
 \subsection{Tekstanalyse}
 Her skal de egentlige analyser foretages, modulet får teksten fra
@@ -693,7 +698,7 @@ om teksten, der kan være relevante for flere af analyserne. Dette vil
 også lette arbejdet med evt. implementation af yderligere
 tekstanalyser, da det i princippet kun er den matematiske formel der
 skal indtastes, medmindre meget specifikke informationer ønskes
-(F.eks. ``Hvor mange ord er der med 3 stavelser eller færre?'').
+(Fx ``Hvor mange ord er der med 3 stavelser eller færre?'').
 
 Uddata fra tekstanalysemodulet er en datastruktur der meget ligner
 input, men som i stedet for semantisk information har fået tilknyttet
@@ -703,7 +708,7 @@ ord).
 Det er også i analysemodulet at ord stavekontrolleres baseret på deres
 angivne sprog, og får tilknyttet en værdi der angiver om de er korrekt
 stavet eller ej. Til at foretage selve stavekontrollen vil vi bruge
-GNU Aspell\footnote{http://aspell.net/}. Vi mener ikke det er et
+GNU Aspell\footnote{\url{http://aspell.net/}}. Vi mener ikke det er et
 urimeligt krav til brugerens system at GNU Aspell skal være
 installeret, da det er et relativt almindeligt program på
 GNU/Linux-systemer (vor målplatform). For at gøre det muligt senere at
@@ -740,7 +745,8 @@ stillet i kravspecifikationen. Derudover vil designet gøre det nemt at
 udvide programmet til at understøtte flere tekstformater og flere
 analysemetoder.
 
-Alle modulerne kan testes systematisk, måske med undtagelse af
+Alle modulerne kan testes systematisk \fixme{Unit testing?}, måske med
+undtagelse af
 \textit{Hent side} modulet, da testen af dette modul kræver en
 forbindelse til en webserver, som vi kan være sikker på ikke ændrer
 indhold. Men fordi det at hente en side er meget veldefineret vil det
