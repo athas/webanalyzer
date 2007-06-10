@@ -91,7 +91,7 @@ forståelse for sproget HTML\footnote{Et sprog der bruges til at
   beskrive struktur og indhold af websites}.
 
 \chapter{Problemformulering}
-
+\label{problemformulering}
 Formålet med projektet er at skabe et program der kan bistå med at
 forøge læsbarheden og den tekstmæssige kvalitet af hjemmesider. Af
 simplicitetshensyn understøtter vi kun sider primært skrevet på dansk,
@@ -298,6 +298,45 @@ siden også er nødt til at følge hyperlinks for at komme omkring, og
 det derfor er yderst sjældent at der findes isolerede sider på et
 website, mener vi ikke at dette er et problem.
 
+\subsection{Indgrænsning af analysen}
+\label{begraensning}
+Der er mange faktorer der har indflydelse på læsbarheden af en
+hjemmeside - fra tekstens indhold over de typografien og det visuelle
+design, og selv valget af teknologi kan have indflydelse på
+læsbarheden for visse brugere --- en side skrevet i Flash eller Java
+kan f.eks. ikke benyttes af blinde der bruger netoplæsere. Indenfor
+tidsrammen fandt vi det urealistisk at forsøge at vurdere siders
+læsbarhed baseret på andre kriterier end selve teksten, så dette er
+det eneste programmet inddrager i vurderingen af en sides læsbarhed
+(dette afspejler sig også i problemformuleringen, se sektion
+\ref{problemformulering}).
+
+Udover at angive indhold og grafik kan HTML-sider også indeholde
+\textit{scripts} --- \textit{ECMAScript} (også kendt som
+\textit{JavaScript}) er det mest udbredte --- og disse scripts kan
+under visningen af siden indsætte yderligere indhold på siden, ofte
+som respons på brugerinput. For tiden er det faktisk moderne at
+opbygge et helt website som en enkelt side, der baseret på input fra
+brugeren dynamisk ændrer indhold uden at genindlæse hele siden fra
+webserveren. Igen vurderede vi at vores program ikke ville være i
+stand til at understøtte denne form for sider, idet den eneste
+korrekte implementation ville være en komplet
+\textit{JavaScript}-fortolker, kombineret med simuleret brugerinput,
+en opgave som vi anslog til alene at ville tage \textit{væsentligt}
+mere tid end de afsatte 7 uger.
+
+Vi vælger altså derfor at begrænse os til kun at håndtere tekst der
+findes direkte i HTML-siderne, men dog at understøtte alle nuværende
+eksisterende versioner af HTML og XHTML (HTML skrevet i XML), dog ikke
+alle features i XML, idet disse sjældent bruges i XHTML-sider (se
+sektion \ref{htmlparserimpl}). Vores understøttelse af XML er
+begrænset til den del der ligner SGML, og vi håndterer derfor ikke
+namespaces\footnote{\url{http://www.w3.org/TR/REC-xml-names/}},
+DTD'er \footnote{\url{http://www.w3.org/TR/2000/REC-xml-20001006#sec-prolog-dtd}}
+eller andre avancerede features.
+
+\subsection{Analysemetoder}
+\label{analysemetoder}
 For at analysere teksten på siderne valgte vi at benytte to
 analysemetoder -
 læsbarhedsindeks\footnote{\url{http://www.elkan.dk/lixtal.asp}} og
@@ -498,6 +537,7 @@ den indlæste \textit{robots.txt} tillader at vi må crawle siden, da dette skal
 tjekkes hver gang der skal hentes en side.
 
 \subsection{HTML--Parsing}
+\label{htmlparsing}
 For at kunne udtrække tekst fra en HTML-side er det nødvendigt først
 at parse den. Da vi ikke har været i stand til at finde en HTML--parser
 skrevet i SML har vi valgt at implementere denne selv. Resultatet af
@@ -707,6 +747,117 @@ ikke fuldstændigt, så til en vis grad, implementeres som en SML
 modulsignatur og struktur.
 
 \chapter{Implementation}
+
+\section{Parsing af HTML}
+\label{htmlparserimpl}
+For korrekt at udtrække tekst, og information om teksten, fra et
+website, er det nødvendigt at kunne parse HTML, eller have en anden
+måde at adskille tekst fra tags og forbinde informationen i tags til
+den tekst der står under dem. I vores program valgte vi at
+implementere en nogenlunde fuldgyldig HTML parser (se nedenfor for
+dens begrænsninger), da vi mente at det ville være lettere at udtrække
+information fra et parse--træ, end hvad søgning med f.eks. regulære
+udtryk ville resultere i. Blandt andet på grund af vores begrænsede
+tidsresurser var der en række krav til parseren og dens
+implementation:
+
+\begin{itemize}
+\item Den skal kunne håndtere både HTML og XHTML (se sektion
+  \ref{begraensning}), idet vi ikke har tid til at implementere to
+  forskellige parsere. Heldigvis minder HTML og XHTML meget om
+  hinanden, og XHTML-sider udnytter sjældent XML's mere avancerede
+  features, så vi valgte ikke at understøtte disse.
+\item Vi valgte at undlade at forsøge at håndtere indholdet af
+  \texttt{script} og \texttt{style}-tags korrekt, til trods for at
+  indholdet af disse kan indeholde tekst der kan forvirre
+  parseren. Grundet tidsnød valgte vi at undlade at implementere denne
+  håndtering, et problem der er begrænset i omfang idet størsteparten
+  af moderne sider specificerer eksterne scripts og
+  \textit{CSS--stylesheets}, hvis indhold altså ikke ligger direkte i
+  HTML-dokumentet, og som derfor ikke kan forvirre
+  parseren. \textbf{Dette er en afvigelse i forhold til vores
+    kravspecifikation}. Det kan også nævnes at vi under alle
+  omstændigheder ikke have tænkt os at foretage os noget med
+  indlejrede scripts eller stylesheets (se sektion
+  \ref{begraensning}).
+\item Vi garanterer kun at vi kan håndtere korrekt HTML, men vi
+  ønskede også at parseren skulle kunne håndtere visse typiske fejl,
+  såsom at glemme at lukke tags.
+\end{itemize}
+
+Idet ingen i gruppen havde erfaring med brug af parser--generatorer
+blev det vurderet at det mest effektive ville være at skrive
+HTML--parseren i hånden. Af simplicitetshensyn valgte vi at dele den
+op i to dele --- en lexer der behandler bogstaver direkte, og en
+parser, der behandler de leksikalske enheder der produceres af lexeren
+(se vores design, sektion \ref{htmlparsing}).
+
+\subsection{HTML--lexer}
+\label{htmllexerimpl}
+Lexer--algoritmen er baseret på en simpel tilstandmaskine. Overordnet
+findes der en funktion, \texttt{lexer}, der tager et tegn og en
+\textit{tilstands--værdi} som argumenter, og returnerer en ny
+tilstandsværdi. Funktionen bliver gentagne gange kaldt med tegnene fra
+HTML-dokumentet, samt den tilstandsværdi som blev returneret ved
+sidste kald, indtil der ikke er flere tegn tilbage i
+HTML-dokumentet. En af disse tilstandsværdier er speciel og angiver at
+lexeren er færdig med at lexe en leksikalsk enhed. Den producerede
+leksikalske enhed er en del af denne tilstandsværdi, og ``samles op''
+af den omkringliggende kode, hvorefter \texttt{lexer}--funktionen
+kaldes igen med en særligt ``ny start'' tilstands--værdi, der også
+bruges ved første kald til funktionen. De andre tilstands--værdier
+indeholder information om hvor langt lexeren er nået med at lexe en
+given leksikalsk enhed, og deres indhold undersøges ikke af den
+omkringliggende kode, men bruges udelukkende til at foretage et nyt
+kald til \texttt{lexer}. Lexeren producerer tre forskellige typer af
+leksikalske enheder: Start--tags, slut--tags og tekst, der ikke er et
+tag. De leksikalske enheder for tags indeholder også information om de
+attributter de relevante tags har, noget man normalt ville placere i
+selve parser--delen. På den måde producerer vores HTML--lexer relativt
+detaljeret leksikalske enheder i forhold til hvad man normalt ville
+forvente af en lexer.
+
+Funktionen \texttt{lexer} er implementeret som en stor
+mønstergenkendende (\textit{pattern--matching}) funktion der baseret
+på lexertilstanden, og det leverede tegn, genererer en ny
+lexertilstand. Funktionen er deklarativt implementeret, idet der
+næsten ingen logik er i funktionen, med undtagelse af
+mønstergenkendelsen. Dette resulterer i at funktionen ganske vist
+fylder mange linjer, men til gengæld nærmest kan læses som en tabel
+over lexing af HTML, noget der gør det relativt nemt at bedømme hvad
+den gør, og som har resulteret i at den gennem programmets udvikling
+har haft meget få fejl i forhold til resten af koden. Lexeren er
+implementeret således at den kan fungere med vilkårligt stort input,
+så længe der er tilstrækkeligt med hukommelse. Dette fandt vi
+nødvendigt, idet et HTML-dokument let kan indeholde flere tusinde
+tegn. \fixme{Figur der beskriver lexing af et tag?}
+
+\subsection{HTML--parser}
+
+Grundet HTML--lexerens detaljerede output (se sektion
+\ref{htmllexerimpl}) er parseren relativt simpel --- dens opgave er at
+finde ud af hvilke børn et tag har (se sektion \ref{htmlparsing}), og
+sætte det sammen til et træ.
+
+Den overordnede algoritme er som følger: Parseren ser en leksikalsk
+enhed. Er denne ikke et tag, gemmes den, og næste leksikalsk enhed
+analyseres. Hvis enheden dog er et tag findes alle leksikalske enheder
+op til et matchende slut-tag, og disse indsættes som børne--elementer
+til det fundne tag. Parsingen går videre med den leksikalske enhed
+efter slut--tagget. Børne--elementerne parses naturligvis også, så de
+også får træstrukturen.
+
+Parseren er, i modsætning til lexeren, \textit{ikke} skrevet således
+at den kan håndtere arbitrært stort input. Den primære parserfunktion
+er en rekursiv, men ikke hale-rekursiv, funktion som kalder sig selv
+for at finde både børne--elementer og efterfølgende elementer. Den er
+derfor begrænset i hvor ``dybe'' og ``lange'' dokumenter den kan
+håndtere, hvor grænsen er sat ved SML--implementationens maksimale
+kaldstak--dybde. Da parseren dog opererer på leksikalske enheder, som
+der ofte er relativt få af i forhold til tegn i dokumentet, opfatter
+vi dog ikke dette som et problem i praksis. Det er mere sandsynligt at
+computeren løber tør for hukommelse under indlæsning af et for stort
+HTML--dokument end at parseren laver stakoverløb.
 
 \section{Robots.txt}
 \label{Robots} \fixme{Forklaring af robots.txt opbygning og syntaks?}
