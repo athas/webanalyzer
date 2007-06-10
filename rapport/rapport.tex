@@ -99,9 +99,6 @@ kompetence, har erfaring med programmering og har en overordnet
 forståelse for sproget HTML\footnote{Et sprog der bruges til at
   beskrive struktur og indhold af websites}.
 
-\chapter{Konklusion}
-\label{konklusion}
-
 \chapter{Problemformulering}
 \label{problemformulering}
 Formålet med projektet er at skabe et program der kan bistå med at
@@ -447,6 +444,7 @@ implementere vores program omkring, samt begrundelser for hvorfor
 dette design blev valgt.
 
 \section{Overordnet designfilosofi}
+\label{overordnetdesign}
 Vi har valgt at basere vores programimplementation på et
 \textit{dataflow}--design, hvori fokus er hvorledes data bliver ført
 rundt i programmets moduler. Idet vores program ikke er interaktivt,
@@ -1188,5 +1186,52 @@ Vi har fundet 3 brugervenlighedsproblemer i vores projekt.
 \item I manualen var forklaringen af dybdeangivelsen tvetydig. Dette
   er rettet i den endelige manual.
 \end{enumerate}
+
+\chapter{Konklusion}
+\label{konklusion}
+
+Projektudviklingen forløb uden større komplikationer --- den største
+var skiftet af SML--implementation kort efter afleveringen af
+baseline--implementationen --- og det endelige program opfylder, som
+nævnt i indledningen, næsten alle vores krav. De krav, der ikke blev
+opfyldt, bærer især præg af ikke at have været færdigudviklede da
+kravspecifikationen blev afleveret, idet vi under implementationen
+fandt ud af at de i bedste fald var ligegyldige, og i værste fald
+``støj'' der forstyrrede resultatet. Under skrivning af
+testspecifikationen opdagede vi også at vores kravspecifikation ikke
+var helt egnet til den systematiske afprøvning som var krævet af os,
+idet visse af kravene (platformsunderstøttelse) var yderst svære at
+teste på en meningsfyldt måde.
+
+Valget af programmeringssproget Standard ML, et valg som mange af
+vores medstuderende åbenbart fandt underligt, viste sig at være et
+godt valg. De primære problemer vi oplevede med det var håndtering af
+tekstindkodning (hvilket er årsagen til at vi begrænser os til
+ISO-8859-1 i vores kravspecifikation) og den relative mangel på
+programbiblioteker. Det sidste viste sig dog ikke at være et stort
+problem - kun manglen på en HTML--parser gjorde det nødvendigt for os
+at skrive en større mængde kode som ikke ville have været nødvendigt i
+andre sprog. Til gengæld passede Standard ML's features, især
+mønstergenkendelse og højere--ordensfunktioner, ganske vel til
+dataflowet i programmet, der som nævnt i sektion
+\ref{overordnetdesign} går ud på at skabe gradvist mere detaljeret og
+raffineret data ud fra tidligere data, uden dog at ændre den
+tidligere, og immutérbare, data.
+
+Vi er selv af den opfattelse at vores program er i stand til at blive
+brugt i praksis i forbindelse med forbedring af læsbarheden på et
+website, af den målgruppe (se sektion \ref{målgruppe}) som vi
+designede programmet til. Flere analysemetoder kunne naturligvis være
+praktiske, men uformelle afprøvninger viser at de nuværende
+analyseresultater er brugbare --- sider som mennesker vurderer som
+svære bliver generelt også opfattet som svære af programmet. Om
+programmet producerer ``brugbare resultater'' er desværre noget som
+ikke kunne testes i funktionsafprøvningen - vi har verificeret at de
+forskellige analysemetoder fungerer korrekt og giver de rigtige
+resultater (se testspecifikationen), men dette siger jo ikke
+nødvendigvis noget om hvorvidt de er brugbare. I sidste ende er det så
+svært at give en objektiv vurdering af kvaliteten af et program, med
+mindre det kan gøres baseret på antallet af fejl, at vi vil undlade at
+forsøge på det.
 
 \end{document}
