@@ -962,8 +962,21 @@ gemmes det angivne tids værdi i Config modulet.
 
 \section{TextAnalyser}
 \label{TextAnalyser}
+\fixme{hvad skal beholdes? new eller old?}
+new:
 
-Analyserer et \texttt{Sentencifyer.document} ved at:
+Analyserer et \texttt{Sentencifyer.document} og finder ord, lange ord (over 6
+karakterer) of vokaler pr sætning og antallet af sætninger pr afsnit. og samlet
+antal for hele dokumentet. Derefter bliver de foreløbige analyseresultater
+givet til de forskellige analyse metoder LIX, FRE og FKGL som returnerer de
+individuelle analyse resultater for sætninger, afsnit og hele dokumentet.
+Indet den analyserede tekst bliver vist til brugeren bliver analyse resultater
+med FRE værier mellem -50 og 200 filtreret fra hvis ikke disse indeholder
+stavefejl\footnote{Grunden til at elementerne ikke bliver filtreret fra er
+fordi det stadig er relavant at vise stavefejl iht. analysen. Se kravspec, krav
+2.3 Stavekontrol}
+
+old:
 \begin{itemize}
  \item Fjerne elementer der ikke indeholder ord.
  \item Tæller sætninger, org, lange ord og vokaler i paragraffer
