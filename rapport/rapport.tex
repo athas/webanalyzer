@@ -889,20 +889,25 @@ findes udregnes først den mente delay ud fra $sekunder / sider$
 
 HTMLFilteret implementerer en filter datastruktur som bruges til at
 konstruere en liste over HTML tags eller attributes som skal filtreres
-fra eller ikke filtreres fra.  Standard filteret beskriver at html,
-head og body HTML tags ikke skal filtreres fra men script, style,
-colgroup og col HTML tags skal.
+fra eller ikke filtreres fra.  Standard filteret beskriver at
+\texttt{html}--, \texttt{head}-- og \texttt{body}--tags ikke må filtreres
+fra, da det er temmelig sikkert at brugeren ikke har lyst til at
+fjerne så meget indhold som disse 3 tags normalt indeholder. Derudover
+fortæller filteret at \texttt{script}, \texttt{style},
+\texttt{colgroup} og \texttt{col} tags altid skal frasorteres. Grunden
+er at alle disse tags ikke indeholder tekstinformation eller
+information om dokumentstrukturen.
 
-Filter strukture implementere at filtre kan sættes sammen med
-\texttt{And}, \texttt{Or} og tags eller attributes kan vælges ikke
-filtreret fra ved \texttt{Not}. Se neden under.
+Filterstrukturen implementerer at filtre kan sættes sammen med
+\texttt{And} og \texttt{Or}, samt negering af filtre med \texttt{Not},
+så man kan angive at noget \textit{ikke} må filtreres fra.
 
-Ud fra dette \texttt{Or}'es standard filteret sammen med et eventuelle
-tag filtere og id filter som brugeren har mulighed for at angive via
-komandolinje parametrene \texttt{-ignore-tag} og
-\texttt{-ignore-id}. Grunden til at disse \texttt{Or}'es sammen er for
-at garantare at standard filteret ikke kan overskrives og man derved
-ikke kan filtrere html, head, og body HTML tagsne fra.
+Ud fra dette \texttt{Or}'es standardfilteret sammen med et eventuelle
+tagfiltre og idfiltre som brugeren har mulighed for at angive via
+kommandolinje parametrene \texttt{--ignore--tag} og
+\texttt{--ignore--id}. Grunden til at disse \texttt{Or}'es sammen er for
+at garantare at standardfilteret ikke kan overskrives og man derved
+ikke kan filtrere \texttt{html}--, \texttt{head}--, og \texttt{body}--tags fra.
 
 \begin{lstlisting}
  datatype Filter = ByTagName of string
@@ -912,7 +917,6 @@ ikke kan filtrere html, head, og body HTML tagsne fra.
                  | Not of Filter
                  | None;
 \end{lstlisting}
-
 
 \section{TextAnalyser}
 \label{TextAnalyser}
