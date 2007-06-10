@@ -514,16 +514,21 @@ Da de brugerleverede indstillinger skal kunne tilgås fra vidt spredte
 dele af programmet har vi fundet det bedst at lagre disse på et
 centralt, løst koblet sted, i modsætning til programmets egentligt
 arbejds--data, der i højere grad fører data rundt gennem tæt koblede
-moduler og typestærke interfaces. Dette sikrer også at det er
-let at tilføje nye indstillingsmuligheder --- idet der kun skal ændres
-i den kode der rent faktisk udnytter den nye indstillingsmulighed ---
-hvor ændringer i det primære dataflow kan resultere i en kaskade af
-ændringer over det meste af programmet. \fixme{Tekst der følger her giver ikke meget mening} Den uafhængige plads
-indstillings---informationen har ville dog ikke være nær så passende
+moduler og typestærke interfaces. Dette sikrer også at det er let at
+tilføje nye indstillingsmuligheder --- idet der kun skal ændres i den
+kode der rent faktisk udnytter den nye indstillingsmulighed --- hvor
+ændringer i det primære dataflow kan resultere i en kaskade af
+ændringer over det meste af programmet. \fixme{Tekst der følger her
+  giver ikke meget mening} Den uafhængige plads som
+indstillings---informationen har, ville dog ikke være nær så passende
 til den primære data, idet det ville gøre det sværere at kontrollere
 hvor og hvornår den blev ændret, og ville svække muligheden for at
 garantere den sekventielt løbende raffinering af arbejdsdata som
 programmet er bygget op omkring.
+
+\subsubsection{Krav}
+Dette modul gør det --- sammen med Brugerinput--modulet --- muligt at
+opfylde krav 4 vedr. konfiguration af analyse.
 
 \subsection{Domæne check, indlæsning af robots.txt}
 Dette modul skal tjekke om det domæne brugeren har angivet kan tilgås
@@ -536,6 +541,11 @@ og hvis det er tilfældet så skal den parses. Informationerne i
 \textit{robots.txt} skal gøres tilgængeligt for \textit{Hent
   side}--modulet, så det kan se hvilke dele af webstedet det må crawle.
 
+\subsubsection{Krav}
+Dette modul gør at vi kan opfylde første halvdel krav 1.2
+\textit{``Programmet skal respektere eventuelle robots.txt filer. Det
+  skal være muligt at slå dette fra.''}.
+
 \subsection{Hent Side}
 Hent side modulet skal kunne hente en side fra en webserver via
 HTTP--protokollen. Da vores behov er små og vi ikke har for meget tid
@@ -547,7 +557,7 @@ tjekkes hver gang der skal hentes en side.
 
 \subsection{HTML--Parsing}
 \label{htmlparsing}
-For at kunne udtrække tekst fra en HTML-side er det nødvendigt først
+For at kunne udtrække tekst fra en HTML--side er det nødvendigt først
 at parse den. Da vi ikke har været i stand til at finde en HTML--parser
 skrevet i SML har vi valgt at implementere denne selv. Resultatet af
 HTML--parsingen er et ordinært parsetræ som så i senere moduler bruges
@@ -644,6 +654,10 @@ cyklussen i diagrammet fungerer som programmets primære loop der
 henter og analyserer links, indtil der ikke kan findes flere indenfor
 den angivne maksimaldybde.
 
+\subsubsection{Krav}
+At vi kan finde links på en hjemmeside gør at vi kan opfylde krav 1
+der siger at man skal kunne foretage en analyse af et helt websted.
+
 \subsection{HTML--filtrering}
 For at gøre det muligt at angive at nogle dele af en hjemmeside ikke
 skal analyseres er det nødvendigt med et modul der kan frasortere de
@@ -654,7 +668,12 @@ kunne påvirke analysen, på en måde så resultatet bliver
 misvisende. Beregningen af læsbarhedsindekset kan eksempelvis blive
 påvirket af at der i menuer ofte er en stor andel lange ord.
 
+\subsubsection{Krav}
+HTML--filtreringen er medvirkende til at vi kan opfylde krav 4
+vedr. konfiguration af analysen.
+
 \subsection{Tekstudtrækker}
+\label{tekstudtraekkerdesign}
 Når et HTML--dokument er parset kan vi udtage teksten, det er dette
 moduls job at læse parsetræet for et HTML--dokument og omdanne det til
 afsnit, sætninger, overskrifter osv, som \textit{Tekstanalyse}--modulet
@@ -700,7 +719,13 @@ alle dokumenter. Dette inkluderer adskillelse af ord og punktuering
 delmodul kan på denne måde let udvides så det også kan håndtere andre
 dokumentformater.
 
+\subsubsection{Krav}
+Tekstudtrækkeren giver os muligeheden for at opfylde krav 3 og alle
+dets underkrav, ved at hente den semantiske information fra
+HTML--tags.
+
 \subsection{Tekstanalyse}
+\label{tekstanalysedesign}
 Her skal de egentlige analyser foretages, modulet får teksten fra
 \textit{Tekstudtrækkeren} og udfører de af brugeren valgte
 tekstanalyser.
@@ -732,6 +757,10 @@ funktionalitet er adskilt så meget fra resten af programmet som
 muligt. Vi vil derfor indkapsle stavekontrollen i sit eget delmodul,
 som det egentlige tekstanalyse--modul kan forespørge.
 
+\subsubsection{Krav}
+Dette modul gør at vi kan opfylde krav 2 (vedr. analysemetoder) og
+alle dets underkrav.
+
 \subsection{Generer individuelle HTML--sider}
 Dette modul skal lave de HTML--filer der skal præsentere
 analyseresultaterne for brugeren. Givet analyse resultaterne for en
@@ -741,6 +770,11 @@ websitet, således at der kan skabes links til den genererede HTML--fil
 fra analyseindekset. Til at generere HTML'en bruger vi et modul
 baseret på Msp (ML Serverpages), dette er en del af Moscow ML's
 standardbibliotek\footnote{\url{http://www.dina.kvl.dk/~sestoft/mosmllib/Msp.html}}.
+
+\subsubsection{Krav}
+Dette modul er medvirkende til at vi kan opfylde krav 6, der
+bl.a. siger at programmet skal generere HTML--filer der viser
+resultatet.
 
 \subsection{Resultatopsamling}
 For hver side udregnes en sidesværhedsgrad som skal vises på
@@ -754,25 +788,28 @@ generere en index fil. Dette skridt er det absolut sidste der tages i
 programmet, og først når alle websitets undersider er blevet
 analyseret.
 
+\subsubsection{Krav}
+Dette modul er sammen med resultatopsamleren og modulet til generering
+af individuelle HTML--sider med til at opfylde krav 6.
+
 \section{Redegørelse for designets kvaliteter}
 Ved at bruge dette design vil vi kunne indfri alle de krav der er
-stillet i kravspecifikationen. Derudover vil designet gøre det nemt at
-udvide programmet til at understøtte flere tekstformater og flere
-analysemetoder.
+stillet i kravspecifikationen. Som omtalt ved Tekstudtrækkeren
+(sektion \ref{tekstudtraekkerdesign}) og tekstanalyse-modulet
+(sektion \ref{tekstanalysedesign}) gør dette design det nemt at udvide
+programmet med yderligere tekstformater og analysemetoder.
 
-Alle modulerne kan testes systematisk \fixme{Unit testing?}, måske med
-undtagelse af
-\textit{Hent side} modulet, da testen af dette modul kræver en
-forbindelse til en webserver, som vi kan være sikker på ikke ændrer
-indhold. Men fordi det at hente en side er meget veldefineret vil det
-sandsynligvis ikke være et problem.
+Alle modulerne kan testes automatisk. Dog er det ikke muligt at lave
+en decideret Unit--testing af alle modulerne, da de er så tæt koblede
+som de er. Hvis man vil teste Tekstudtrækkeren skal man f.eks. bruge
+et parsetræ som kun kan genereres af HTML--parseren.
 
 Den klare opdeling i moduler som udveksler data gør det muligt at
 parallelisere udviklingen, således at de enkelte moduler kan
-implementeres og testes for sig selv, uden at afhænge af en færdig
-implementation af de andre moduler. Hvert konceptuelt modul kan, om
-ikke fuldstændigt, så til en vis grad, implementeres som en SML
-modulsignatur og struktur.
+implementeres for sig selv, uden at afhænge af en færdig
+implementation af de andre moduler (deres signaturer skal dog være
+lagt på plads). Hvert konceptuelt modul kan, om ikke fuldstændigt, så
+til en vis grad, implementeres som en SML modulsignatur og struktur.
 
 \chapter{Implementation}
 
