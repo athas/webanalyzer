@@ -309,7 +309,7 @@ website, mener vi ikke at dette er et problem.
 \subsection{Indgrænsning af analysen}
 \label{begraensning}
 Der er mange faktorer der har indflydelse på læsbarheden af en
-hjemmeside - fra tekstens indhold over de typografien og det visuelle
+hjemmeside - fra tekstens indhold, typografier og det visuelle
 design, og selv valget af teknologi kan have indflydelse på
 læsbarheden for visse brugere --- en side skrevet i Flash eller Java
 kan f.eks. ikke benyttes af blinde der bruger netoplæsere. Indenfor
@@ -326,8 +326,9 @@ under visningen af siden indsætte yderligere indhold på siden, ofte
 som respons på brugerinput. For tiden er det faktisk moderne at
 opbygge et helt website som en enkelt side, der baseret på input fra
 brugeren dynamisk ændrer indhold uden at genindlæse hele siden fra
-webserveren. Igen vurderede vi at vores program ikke ville være i
-stand til at understøtte denne form for sider, idet den eneste
+webserveren\footnote{\texttt{AJAX} (Asynchronous JavaScript and XML) Se:
+\url{http://en.wikipedia.org/wiki/AJAX}}. Igen vurderede vi at vores program
+ikke ville være i stand til at understøtte denne form for sider, idet den eneste
 korrekte implementation ville være en komplet
 \textit{JavaScript}-fortolker, kombineret med simuleret brugerinput,
 en opgave som vi anslog til alene at ville tage \textit{væsentligt}
