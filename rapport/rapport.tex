@@ -1021,13 +1021,7 @@ angives som \#SIDER/\#SEKUNDER og laves derfor om og udregnes som
 $\dfrac{sekunder}{sider}$ så der fås et \#delay pr side} statement
 gemmes det angivne tids værdi i Config modulet.
 
-\section{Dybdte håndtering}
-
-\begin{figure}
-  \includegraphics[width=\textwidth]{depthtreeill.pdf}
-  \caption{Ekseml på dybden af links på et simpelt websted}
-  \label{depthtree}
-\end{figure}
+\section{Dybde håndtering}
 
 Når sider bliver analyseret og links fundet, gemmes disse med den pågældende
 dybde de ligger i. Når der herefter skal trækkes ud fra denne liste bruges
@@ -1043,6 +1037,14 @@ analyseret og bliver ignoret ved alle fremtidig referencer pånær den første,
 grundet caschen \fixme{ref til forklarende tekst omkring caschen}.
 På baggrundt af dette bruges bredte først søgning hvorved dette problem
 ikke opstår.
+
+\begin{figure}
+\begin{center}
+  \includegraphics[width=0.5\textwidth]{depthtreeill.pdf}
+  \caption{Ekseml på dybden af links på et simpelt websted}
+  \label{depthtree}
+\end{center}
+\end{figure}
 
 \section{TextAnalyser}
 \label{TextAnalyser}
