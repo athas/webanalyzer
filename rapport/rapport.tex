@@ -559,6 +559,7 @@ Dette modul gør at vi kan opfylde første halvdel krav 1.2
   skal være muligt at slå dette fra.''}.
 
 \subsection{Hent Side}
+\label{hentside}
 Hent side modulet skal kunne hente en side fra en webserver via
 HTTP--protokollen. Da vores behov er små og vi ikke har for meget tid
 vil vi bruge et eksternt produceret
@@ -1023,25 +1024,23 @@ gemmes det angivne tids værdi i Config modulet.
 
 \section{Dybde håndtering}
 
-Når sider bliver analyseret og links fundet, gemmes disse med den pågældende
-dybde de ligger i. Når der herefter skal trækkes ud fra denne liste bruges
-bredte først
-søgning\footnote{\url{http://en.wikipedia.org/wiki/Breadth-first_search}}. Da
-hvis man havde brugt dybdte
-førstsøgning\footnote{\url{http://en.wikipedia.org/wiki/Depth-first_search}}
-på figur \ref{depthtree} og med maks crawl dybdte på 2, ville man ende med at
-startside, underside X, underside Y blev analyseret, da hovedsiden også linker
-direkte til underside Y bør underside Z også komme med i analysen da den ved
-denne vej har dybte 2, men dette sker ikke da underside Y allerede er
-analyseret og bliver ignoret ved alle fremtidig referencer pånær den første,
-grundet caschen \fixme{ref til forklarende tekst omkring caschen}.
-På baggrundt af dette bruges bredte først søgning hvorved dette problem
+Når sider bliver analyseret og links fundet, gemmes disse med den
+pågældende dybde de ligger i. Når der herefter skal trækkes ud fra
+denne liste bruges bredde--først søgning. Da hvis man havde brugt
+dybde--først søgning på figur \ref{depthtree} og maksimal crawl--dybde
+på 2, ville man ende med at startside, underside X, underside Y blev
+analyseret, da hovedsiden også linker direkte til underside Y bør
+underside Z også komme med i analysen da den ved denne vej har dybde
+2, men dette sker ikke da underside Y allerede er analyseret og bliver
+ignoreret ved alle fremtidig referencer på nær den første, grundet
+vores liste over allerede analyserede sider \ref{hentside}. På
+baggrund af dette bruges bredde--først søgning hvorved dette problem
 ikke opstår.
 
 \begin{figure}[h]
   \centering
   \includegraphics[width=0.5\textwidth]{depthtreeill.pdf}
-  \caption{Ekseml på dybden af links på et simpelt websted}
+  \caption{Eksempel på dybden af links på et simpelt websted}
   \label{depthtree}
 \end{figure}
 
