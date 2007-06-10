@@ -347,7 +347,7 @@ alle features i XML, idet disse sjældent bruges i XHTML-sider (se
 sektion \ref{htmlparserimpl}). Vores understøttelse af XML er
 begrænset til den del der ligner SGML, og vi håndterer derfor ikke
 namespaces\footnote{\url{http://www.w3.org/TR/REC-xml-names/}},
-DTD'er \footnote{\url{http://www.w3.org/TR/2000/REC-xml-20001006#sec-prolog-dtd}}
+DTD'er \footnote{\url{http://www.w3.org/TR/2000/REC-xml-20001006\#sec-prolog-dtd}}
 eller andre avancerede features.
 
 \subsection{Analysemetoder}
@@ -667,19 +667,6 @@ afsnit, sætninger, overskrifter osv, som \textit{Tekstanalyse}--modulet
 kan analysere. Udover at opdele teksten skal de enkelte tekstpassagers
 semantiske betydning bibeholdes.
 
-Resultatet er en datastruktur indeholdende en liste af tekstafsnit
-(hvor ``afsnit'' er løst defineret og kan indeholde hvad der
-oprindeligt var tabeller, eller lister, i HTML), hvert indeholdende
-sætninger, og disse indeholdende ord. Hvert ord har semantisk
-information fra HTML'en tilknyttet, som f.eks. information om hvorvidt
-ordet er en forkortelse, eller oprindeligt har været inde i et
-\texttt{em}--tag. For hvert afsnit er der også en liste over
-``ekstra'' sætninger, som er den tekst der ikke umiddelbart optræder
-på HTML--siden, men som alligevel er interessant --- såsom
-\texttt{title} og \texttt{alt}--tekst for links og billeder.
-
-På figur \ref{dokument}
-
 \begin{figure}
   \includegraphics[width=\textwidth]{documentill.pdf}
   \caption{Resulterende dokument--struktur for parsetræet på figur
@@ -687,14 +674,32 @@ På figur \ref{dokument}
   \label{dokument}
 \end{figure}
 
+På figur \ref{dokument} er vist et eksempel på den resulterende
+datastruktur. Dokumentet består af en titel, et sprog og en liste af
+tekstelementer. Et tekstelement er enten en overskrift, et citat eller
+et afsnit. Afsnittene er de mest interessante, da overskrifter og
+citater i sig selv blot består af en liste afsnit. I HTML angives
+afsnit med \texttt{P}--tagget, men der er også en række andre tags der
+adskiller teksten i afsnit, f.eks. startes der et nyt afsnit efter et
+billede, en tabel, faktisk sker det ved alle tags der er
+``block--elementer''. Et afsnit består af en række sætninger og en
+række ``ekstra'' sætninger som er den tekst der ikke umiddelbart
+optræder på HTML--siden, men som alligevel er interessant --- såsom
+\texttt{title} og \texttt{alt}--tekst for links og
+billeder. Sætningerne er opdelt i ord og punktuering (tegnsætning,
+mellemrum mv.) og hver sætning slutter ved et eller flere punktummer,
+spørgsmålstegn eller udråbstegn. Hvert ord har semantisk
+information fra HTML'en tilknyttet, som f.eks. information om hvorvidt
+ordet er en forkortelse, eller oprindeligt har været inde i et
+\texttt{em}--tag.
+
 For ikke at låse programmet fuldstændig fast til HTML er dette modul
 delt i to delmoduler. Det ene modul (den egentlige tekstudtrækker)
 kender til selve HTML--formatet og omdanner det til en mere generisk
 datastruktur der symboliserer et dokument. Denne datastruktur
 indeholder information om tekstens inddeling i afsnit, overskrifter,
 citater mm. Datastrukturen viderebehandles af det andet delmodul
-(``sætningsifikatoren'')\fixme{sætningsifi hvad for noget ?}, som udfører de
-beregninger der er ens for
+(``sætningsifikatoren''), som udfører de beregninger der er ens for
 alle dokumenter. Dette inkluderer adskillelse af ord og punktuering
 (mellemrum, tegnsætning mv.) og opdeling i sætninger.  Det første
 delmodul kan på denne måde let udvides så det også kan håndtere andre
