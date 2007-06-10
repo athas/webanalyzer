@@ -23,12 +23,13 @@
 
 \lstloadlanguages{HTML}
 \lstset{language     = ML,
-        extendedchars= false,
+        extendedchars= true,
         breaklines   = false,
         tabsize      = 2,
         showstringspaces = false,
         basicstyle   = \small\ttfamily,
-        commentstyle = \em
+        commentstyle = \em,
+        inputencoding= utf8
       }
 
 
@@ -595,12 +596,13 @@ I parsetræet er der også en del mellemrums--tegn der er ikke er
 medtaget for at simplificere figuren.
 
 \begin{figure}
-\begin{lstlisting}[language=HTML]
+\begin{lstlisting}[language=HTML,
+                   escapechar=\@]
 <HTML>
 <HEAD><TITLE>Sidetitel</TITLE></HEAD>
 <BODY> <!-- En kommentar -->
-  <P>Et afsnit med adskillige sætninger.
-  Dette er 'den anden sætning'.</P>
+  <P>Et afsnit med adskillige s@\ae@tninger.
+  Dette er 'den anden s@\ae@tning'.</P>
   <BLOCKQUOTE lang="en">
     <A href="http://en.wikipedia.org/wiki/Hovercraft">My hovercraft</A>
     is full of eels!</BLOCKQUOTE>
