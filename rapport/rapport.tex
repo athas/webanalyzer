@@ -347,7 +347,7 @@ alle features i XML, idet disse sjældent bruges i XHTML-sider (se
 sektion \ref{htmlparserimpl}). Vores understøttelse af XML er
 begrænset til den del der ligner SGML, og vi håndterer derfor ikke
 namespaces\footnote{\url{http://www.w3.org/TR/REC-xml-names/}},
-DTD'er \footnote{\url{http://www.w3.org/TR/2000/REC-xml-20001006\#sec-prolog-dtd}}
+DTD'er \footnote{\url{http://www.w3.org/TR/2000/REC-xml-20001006#sec-prolog-dtd}}
 eller andre avancerede features.
 
 \subsection{Analysemetoder}
@@ -806,12 +806,12 @@ implementation:
   \texttt{script} og \texttt{style}-tags korrekt, til trods for at
   indholdet af disse kan indeholde tekst der kan forvirre
   parseren. Grundet tidsnød valgte vi at undlade at implementere denne
-  håndtering, et problem der er begrænset i omfang idet størsteparten
+  håndtering, et problem der er begrænset i omfang, idet størsteparten
   af moderne sider specificerer eksterne scripts og
   \textit{CSS--stylesheets}, hvis indhold altså ikke ligger direkte i
   HTML-dokumentet, og som derfor ikke kan forvirre
   parseren. \textbf{Dette er en afvigelse i forhold til vores
-    kravspecifikation}. Det kan også nævnes at vi under alle
+  kravspecifikation}. Det kan også nævnes at vi under alle
   omstændigheder ikke have tænkt os at foretage os noget med
   indlejrede scripts eller stylesheets (se sektion
   \ref{begraensning}).
@@ -820,7 +820,8 @@ implementation:
   såsom at glemme at lukke tags.
 \end{itemize}
 
-Idet ingen i gruppen havde erfaring med brug af parser--generatorer
+Idet ingen i gruppen havde erfaring med brug af
+parser--generatorer\footnote{Fx SML-YACC og SML-Lex.}
 blev det vurderet at det mest effektive ville være at skrive
 HTML--parseren i hånden. Af simplicitetshensyn valgte vi at dele den
 op i to dele --- en lexer der behandler bogstaver direkte, og en
@@ -904,11 +905,11 @@ HTML--dokument end at parseren laver stakoverløb.
 \texttt{The robots exclusion standard} eller \texttt{Robots Exclusion Protocol}
 er en meget simpel standard som dog ikke er godkendt af nogle officielle
 organisationer. 
-Filens format\footnote{\url{http://www.robotstxt.org/wc/norobots.html#format}}
+Filens format\footnote{\url{http://www.robotstxt.org/wc/norobots.html\#format}}
 består af en eller flere statements sepereret af et eller flere tomme linjer.
-Hver linje indeholder statements på formen:
+Hver linje indeholder statements på formen:\\
 ``<field>:<optionalspace><value><optionalspace>'' hvoraf \texttt{field} er case
-insensitive og ``#'' indikerer at det efterfølgende mellemrum (hvis der er et)
+insensitive og ``\#'' indikerer at det efterfølgende mellemrum (hvis der er et)
 og alt til og med linjens afslutning skal ignoreres (fortolkes som kommentarer).
 
 Filen starter med en eller flere \texttt{user-agent}\footnote{Værdien af dette
