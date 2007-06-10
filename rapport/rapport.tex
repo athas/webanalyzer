@@ -903,7 +903,7 @@ HTML--dokument end at parseren laver stakoverløb.
 
 \subsection{Forklaring, ogbygning og syntaks af robots.txt}
 
-\texttt{The robots exclusion standard} eller \texttt{Robots Exclusion Protocol}
+\textit{The robots exclusion standard} eller \textit{Robots Exclusion Protocol}
 er en meget simpel standard som dog ikke er godkendt af nogle officielle
 organisationer. 
 Filens format\footnote{\url{http://www.robotstxt.org/wc/norobots.html\#format}}
@@ -950,15 +950,15 @@ Parseren kan forstå det almindelige \texttt{disallow} statement men
 ydermere har vi også implementeret \texttt{request-rate} fra den udvidede
 standard\footnote{\url{http://en.wikipedia.org/wiki/Robots.txt}} og
 \texttt{crawl-delay} som ikke er en del af den udvidede standard men blot et
-forslag af mange som kompliment til \texttt{request-rate}'s kontroversielle
-syntaks'.
+forslag af mange som kompliment til \texttt{request-rate}'s besynderlige
+syntaks. 
 
 Vi har explicit valgt ikke at implementere andre statements fra den
 udvidede standard da disse ikke har nogen praktisk betydning for vores
 program.
 
 Når \texttt{robots.txt} er parset kan man query Robots modulet om en given
-relativ \texttt{url} må crawles eller ej. Dette gøres ved at løbe listen igennem
+relativ URL må crawles eller ej. Dette gøres ved at løbe listen igennem
 og se om der findes et match der prefixer den relative url.
 
 Når parseren finder et \texttt{crawl-delay} statement gemmes værdien i Config
