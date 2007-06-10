@@ -1706,6 +1706,69 @@ vores kravspecifikation i forhold til det endelige program.
   og virker korrekt med vores testdata.
 \end{description}
 
+\section{Kravstatus}
+\label{kravstatus}
+Herpå følger en beskrivelse af slut--status for hvert krav nævnt i
+vores kravspecifikation i forhold til det endelige program.
+
+\begin{description}
+\item[Krav 1 --- Analyse af et helt websted:] Dette krav er fuldt ud
+  implementeret og afprøvet. Se
+  evt. beskrivelsen af dataflow--cyklussen i sektion \ref{cyklus}.
+\item[Krav 1.1 --- Respekter robots.txt:] Dette krav er fuldt ud
+  implementeret og afprøvet.
+\item[Krav 1.2 --- Dybde af crawling:] Dette krav er fuldt ud
+  implementeret og afprøvet.
+\item[Krav 2, 2.1, 2.2 --- Analysemetoder:] De nævnte analysemetoder er
+  implementeret og virker korrekt med vores testdata.
+\item[Krav 2.3 --- Stavekontrol:] Dette krav er fuldt ud implementeret og
+  virker korrekt med vores testdata.
+\item[Krav 2.3.1 --- Flere sprog:] Dette krav er fuldt ud implementeret og
+  virker korrekt med vores testdata.
+\item[Krav 2.4 --- Gentagne ord:] Dette krav er fuldt ud implementeret og
+  virker korrekt med vores testdata.
+\item[Krav 2.5 --- Beregning af sidesværhedsgrad:] Dette krav er fuldt
+  ud implementeret, men er ikke så præcist defineret som vi ønskede i
+  kravspecifikationen, men se testspecifikationen for problemer
+  omkring afprøvning.
+\item[Krav 3 --- Analyse baseret på HTML--tags:] Visse af dette kravs
+  underkrav er blevet implementeret. Se nedenfor.
+\item[Krav 3.1 --- \texttt{em} og \texttt{strong}:] Dette krav blev
+  droppet, se sektion \ref{ejspecialbehandling}.
+\item[Krav 3.2 --- \texttt{hN}:] Dette krav blev droppet, se sektion
+  \ref{ejspecialbehandling}.
+\item[Krav 3.3 --- \texttt{abbr} og \texttt{acronym}:] Dette krav er
+  fuldt ud implementeret og virker korrekt med vores testdata.
+\item[Krav 3.4 --- Citater skal ikke analyseres:] Dette krav er
+  delvist implementeret (se sektion \ref{citater}) og den
+  implementerede del fungerer korrekt med vores testdata.
+\item[Krav 3.5 --- Tekst i andre sprog angivet med (lang):] Dette krav er
+  fuldt ud implementeret og virker korrekt med vores testdata.
+\item[Krav 3.6 --- \texttt{kbd}, \texttt{var} og \texttt{code}:] Dette
+  krav er fuldt ud implementeret og virker korrekt med vores testdata.
+\item[Krav 3.7 --- \texttt{bdo}:] Dette
+  krav er fuldt ud implementeret og virker korrekt med vores testdata.
+\item[Krav 4 --- Konfiguration af analyse:] Dette krav er delvist
+  implementeret og den implementerede del fungerer korrekt med vores
+  testdata.
+\item[Krav 5 --- Kommandobaseret interface:] Dette krav er
+  implementeret, men ikke systematisk afprøvet.
+\item[Krav 6 --- Resultater i HTML--format:] Dette krav er
+  implementeret og afprøvet, men se testspecifikationen og sektion
+  \ref{funktionstests} for forbehold omkring systematisk afprøvning af
+  dette.
+\item[Krav 7 --- Platform:] Dette krav er implementeret og afprøvet,
+  men se testspecifikationen for forbehold omkring systematisk
+  afprøvning af dette.
+\item[Krav 8 --- Håndtering af HTML/XHTML:] Dette krav er fuldt ud
+  implementeret og virker korrekt med vores testdata.
+\item[Krav 8.1 --- Indkodning:] Dette krav er fuldt ud implementeret
+  og virker korrekt med vores testdata.
+\end{description}
+
+\fixme{Uopfyldte krav}
+\fixme{Arbejdsfordeling}
+
 \begin{thebibliography}{9}
 \bibitem{smlbook} Michael R. Hansen og Hans Rischel: {\em
   Introduction to Programming using SML}, Addison-Wesley (1999)
