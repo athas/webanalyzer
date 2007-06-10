@@ -962,38 +962,15 @@ gemmes det angivne tids værdi i Config modulet.
 
 \section{TextAnalyser}
 \label{TextAnalyser}
-\fixme{hvad skal beholdes? new eller old?}
-new:
 
-Analyserer et \texttt{Sentencifyer.document} og finder ord, lange ord (over 6
-karakterer) of vokaler pr sætning og antallet af sætninger pr afsnit. og samlet
-antal for hele dokumentet. Derefter bliver de foreløbige analyseresultater
-givet til de forskellige analyse metoder LIX, FRE og FKGL som returnerer de
-individuelle analyse resultater for sætninger, afsnit og hele dokumentet.
-Indet den analyserede tekst bliver vist til brugeren bliver analyse resultater
-med FRE værier mellem -50 og 200 filtreret fra hvis ikke disse indeholder
+Når teksten er analyseret bliver resultater der har en FRE værdi på under -50
+og over 200 filtreret fra det der vises til brugeren hvis ikke disse indeholder
 stavefejl\footnote{Grunden til at elementerne ikke bliver filtreret fra er
 fordi det stadig er relavant at vise stavefejl iht. analysen. Se kravspec, krav
-2.3 Stavekontrol}
-
-old:
-\begin{itemize}
- \item Fjerne elementer der ikke indeholder ord.
- \item Tæller sætninger, org, lange ord og vokaler i paragraffer
- \item Tæller alle resultaterne sammen til et dokument resultat.
- \item Fjerner individuelle dårlige resultater fra indholds resultat
-   så disse ikke bliver vist til brugeren, men stadig talt med i den
-   samlede analyse. Definitionen på et dårligt resultat er:
-   \begin{itemize}
-   \item FRE > 200 eller FRE <= -50
-   \end{itemize}
-   Hvis resultatet bliver dømt dårligt undersøges der dog om der er
-   stavefejl sætningen og hvis der er dette vælger vi alligevel at
-   vise denne til brugeren så denne kan bliver opmærksom på dette (Se
-   Kravspec 2.3)
- \item Udregner resultat for dokumentet title.
- \item Returnerer title resultatet, det samlede dokument resultat og det filtrerede indholds resultat.
-\end{itemize}
+2.3 Stavekontrol}. Dette gøres for ikke at forstyrre brugeren med dårligere
+resultater. Disse dårlige resultater kommer oftes af meget korte sætninger på
+ under 5-10 ord og korte sætninger med meget lange ord. Det der filtreres fra er
+kun synligt filtreret fra og optræder stadig det samlede dokuments resultat.
 
 \section{Stavekontrol}
 \label{Spellchecker}
@@ -1003,7 +980,7 @@ møder. Til at foretage stavekontrollen har vi implementeret en
 struktur \texttt{SpellChecker} der med funktionerne
 \texttt{spellCheckWord} og \texttt{spellCheckWords} kan angive om ord
 er stavet korrekt. Til at gøre dette bruger vi GNU Aspell, dette er
-væsentligt nemmere end at implementere et stavekontrolsystem i selve
+væsentligt nemmere end at implementere et nyt stavekontrolsystem i selve
 vores program. SpellChecker--strukturen holder et sæt
 \texttt{aspell}--processor i live (et for hvert sprog der er brug for)
 sender forespørgsler til disse processer hver gang et ord ønskes
