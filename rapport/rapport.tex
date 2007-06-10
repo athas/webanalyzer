@@ -381,6 +381,20 @@ den vedlagte kravspecifikation for en mere detaljeret gennemgang.
 
 \chapter{Programdesign}
 
+For at gøre implementationsfasen af projektet så nem og effektiv som
+muligt har vi udformet et design der angiver programmets overordnede
+struktur, dog uden at gå i for mange konkrete detaljer. Dette sikrer
+at designet både fungerer som en vejledning under implementationen,
+men ikke behøver revision hvis der under implementationen opstår
+komplikationer som det oprindelige design ikke tog højde for. Derfor
+vil vi beskrive centrale datastrukturer og algoritmer på et abstrakt
+plan, men ikke angive f.eks. konkrete typer eller beskrive deres
+konkrete implementation eller interface.
+
+Dette afsnit vil beskrive det overordnede design vi valgte at
+implementere vores program omkring, samt begrundelser for hvorfor
+dette design blev valgt.
+
 \section{Overordnet designfilosofi}
 Vi har valgt at basere vores programimplementation på et
 \textit{dataflow}--design, hvori fokus er hvorledes data bliver ført
@@ -396,9 +410,10 @@ dataflow--diagram velegnet til at vise hvorledes den i starten ``rå''
 og ustrukturerede data bliver destilleret ned til den endelige analyse
 via gradvist mere finkornede processer. Programmeringssproget Standard
 ML er velegnet til en sådan opgave --- manglen på objektorienterede
-faciliteter vil ikke blive mærket, og programmets relativt korte og
-simple kørselstid betyder at manglen på mutérbar tilstand ikke vil
-være et problem. \fixme{Der mangler da ikke muterbar tilstand?}
+faciliteter vil ikke blive mærket idet problemet og designet ikke
+passer umiddelbart ind i den objektorienterede filosofi, og
+programmets relativt korte og simple kørselstid betyder at der ikke er
+et så stort behov for mutérbar tilstand.
 
 På figur \ref{dataflowdia} kan vores Dataflow diagram ses. Det primære
 dataflow er angivet med solide linjer. Indstillingerne går uden om det
