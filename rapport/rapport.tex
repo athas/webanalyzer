@@ -64,6 +64,9 @@
 \tableofcontents*
 
 \fixme{forskellig brug af fx os f.eks.}
+\fixme{tjek alle wikipedia links om de kan erstattes og ellers put datoer på}
+\fixme{website eller websted?}
+
 
 \chapter{Indledning}
 \label{indledning}
@@ -1048,9 +1051,11 @@ analyseret, da hovedsiden også linker direkte til underside Y bør
 underside Z også komme med i analysen da den ved denne vej har dybde
 2, men dette sker ikke da underside Y allerede er analyseret og bliver
 ignoreret ved alle fremtidig referencer på nær den første, grundet
-vores liste over allerede analyserede sider \ref{hentside}. På
-baggrund af dette bruges bredde--først søgning hvorved dette problem
-ikke opstår.
+vores liste over allerede analyserede sider (se sektion \ref{hentside}).
+På baggrund af dette bruges bredde--først søgning hvorved dette problem
+ikke opstår, da bredde--først søgning starter med at analysere startsiden,
+underside X, underside y, underside y (linket fra underside x, men bliver
+ignoreret grundet den allerede er besøg) og underside z.
 
 \begin{figure}[h]
   \centering
