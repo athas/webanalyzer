@@ -31,7 +31,7 @@ titel[label="\"Sidetitel\"", shape="none"];
 //EMtekst[label="\"Et\"", shape="none"];
 Ptekst[label="\"Et afsnit med adskillige sætninger. \nDette er 'den anden sætning'.\"", shape="none"];
 //H1tekst[label="\"Overskrift\"", shape="none"];
-Atekst[label="\"My hoovercraft\"", shape="none"];
+Atekst[label="\"My hovercraft\"", shape="none"];
 BLOCKQUOTEtekst[label="\" is full of eels!\"", shape="none"];
 
 

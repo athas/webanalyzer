@@ -17,7 +17,7 @@ digraph G
                         {
                                 label="Afsnit";
 
-                                struct3 [label="My| |hoovercraft| |is| |full| |of| |eels|!", shape=Mrecord];
+                                struct3 [label="My| |hovercraft| |is| |full| |of| |eels|!", shape=Mrecord];
                         }
                 }
 
