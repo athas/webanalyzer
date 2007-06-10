@@ -10,37 +10,41 @@ node[shape=diamond];
 HTML[label="HTML"];
 HEAD[label="HEAD"];
 TITLE[label="TITLE"];
-titel[label="\"Sidens titel\"", shape="none"];
 BODY[label="BODY"];
+//H1[label="H1"];
 P[label="P"];
-EM[label="EM"];
-OL[label="OL"];
-LI1[label="LI"];
-LI2[label="LI"];
+//EM[label="EM"];
+BLOCKQUOTE[label="BLOCKQUOTE"];
+A[label="A"];
 
 HTMLattrs[label="Attributsæt", shape="ellipse"];
 HEADattrs[label="Attributsæt", shape="ellipse"];
 TITLEattrs[label="Attributsæt", shape="ellipse"];
 BODYattrs[label="Attributsæt", shape="ellipse"];
 Pattrs[label="Attributsæt", shape="ellipse"];
-Ptekst[label="\" afsnit\"", shape="none"];
-EMattrs[label="Attributsæt", shape="ellipse"];
-EMtekst[label="\"Et\"", shape="none"];
-OLattrs[label="Attributsæt", shape="ellipse"];
-LI1attrs[label="Attributsæt", shape="ellipse"];
-LI1tekst[label="\"Listeelement 1\"", shape="none"];
-LI2attrs[label="Attributsæt", shape="ellipse"];
-LI2tekst[label="\"Listeelement 2\"", shape="none"];
+BLOCKQUOTEattrs[label="Attributsæt", shape="ellipse"];
+Aattrs[label="Attributsæt", shape="ellipse"];
+//EMattrs[label="Attributsæt", shape="ellipse"];
+//H1attrs[label="Attributsæt", shape="ellipse"];
+
+titel[label="\"Sidetitel\"", shape="none"];
+//EMtekst[label="\"Et\"", shape="none"];
+Ptekst[label="\"Et afsnit med adskillige sætninger. \nDette er 'den anden sætning'.\"", shape="none"];
+//H1tekst[label="\"Overskrift\"", shape="none"];
+Atekst[label="\"My hoovercraft\"", shape="none"];
+BLOCKQUOTEtekst[label="\" is full of eels!\"", shape="none"];
+
+
 
 {rank=same; HTML; HTMLattrs;}
 {rank=same; HEAD; HEADattrs;}
 {rank=same; TITLE; TITLEattrs;}
 {rank=same; BODY; BODYattrs;}
 {rank=same; P; Pattrs;}
-{rank=same; EM; EMattrs;}
-{rank=same; OL; OLattrs;}
-{rank=same; LI1; LI1attrs;}
-{rank=same; LI2; LI2attrs;}
+//{rank=same; EM; EMattrs;}
+//{rank=same; H1; H1attrs;}
+{rank=same; BLOCKQUOTE; BLOCKQUOTEattrs;}
+{rank=same; A; Aattrs;}
 
 HTML-> HTMLattrs [arrowhead="dot"];
 HTML -> HEAD;
@@ -50,20 +54,20 @@ HEAD -> TITLE;
 TITLE -> titel [arrowhead="normal"];
 TITLE -> TITLEattrs [arrowhead="dot"];
 BODY -> BODYattrs [arrowhead="dot"];
+//BODY -> H1;
 BODY -> P;
-BODY -> OL;
+BODY -> BLOCKQUOTE;
+//H1 -> H1attrs [arrowhead="dot"];
+//H1 -> H1tekst [arrowhead="normal"];
 P -> Pattrs [arrowhead="dot"];
-P -> EM;
+//P -> EM;
 P -> Ptekst [arrowhead="normal"];
-EM -> EMattrs [arrowhead="dot"];
-EM -> EMtekst;
-OL -> OLattrs [arrowhead="dot"];
-OL -> LI1;
-OL -> LI2;
-LI1 -> LI1attrs [arrowhead="dot"];
-LI1 -> LI1tekst [arrowhead="normal"];
-LI2 -> LI2attrs [arrowhead="dot"];
-LI2 -> LI2tekst [arrowhead="normal"];
-
+//EM -> EMattrs [arrowhead="dot"];
+//EM -> EMtekst;
+BLOCKQUOTE -> BLOCKQUOTEattrs [arrowhead="dot"];
+BLOCKQUOTE -> A;
+A -> Aattrs [arrowhead="dot"];
+A -> Atekst [arrowhead="normal"];
+BLOCKQUOTE -> BLOCKQUOTEtekst [arrowhead="normal"];
 
 }

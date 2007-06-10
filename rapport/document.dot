@@ -1,42 +1,33 @@
-graph G
+digraph G
 {
         compound=true;
-        Titel;
-        Sprog;
+        Titel[label="Titel: \"Sidetitel\""];
+        Sprog[label="Sprog: Intet"];
+        Titel -> Sprog;
         
         subgraph cluster_tekstelementer
         {
+                labeljust="l"
                 label="Tekstelementer";
+
                 subgraph cluster_citat
                 {
                         label="Citat";
-                        Afsnit;
+                        subgraph cluster_afsnit2
+                        {
+                                label="Afsnit";
+
+                                struct3 [label="My| |hoovercraft| |is| |full| |of| |eels|!", shape=Mrecord];
+                        }
                 }
 
                 subgraph cluster_afsnit
                 {
                         label="Afsnit";
-
-                        subgraph cluster_sentence2
-                        {
-                                labelloc="b";
-                                label="Sætning"
-                                node [shape=Mrecord];
-                                struct1 [label="Ja|\ ."];
-                        }
-                        subgraph cluster_sentence
-                        {
-                                labelloc="b";
-                                label="Sætning"
-                                node [shape=Mrecord];
-                                struct2 [label="Går|\ |det|?"];
-                        }
+                        struct2 [label="Dette| |er| '|den| |anden| |sætning|'.", shape=Mrecord];
+                        struct1 [label="Et|\ |afsnit| |med| |adskillige| |sætninger|.", shape=Mrecord];
+                        struct1 -> struct2 [color="white", len="0.2", arrowhead="none"];
                 }
-
-                subgraph cluster_overskrift
-                {
-                        label="Overskrift";
-                        Sætninger;
-                }
+                struct2 -> struct3 [ltail=cluster_afsnit, lhead=cluster_citat, color="white", arrowhead="none"];
         }
 }

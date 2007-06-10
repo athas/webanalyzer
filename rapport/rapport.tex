@@ -573,29 +573,33 @@ For eksempel vil HTML--dokumentet på figur \ref{htmldoc1} give et
 parsetræ, som det illustreret på figur \ref{parsetree}. På figuren er
 børnene arrangeret så det første barn står længst til venstre og det
 sidste længst til højre. Hvert tag har et sæt attributter, på figuren
-er indholdet af disse dog udeladt.
+er indholdet af disse dog udeladt. De fleste af attributsættene er
+tomme, men som det kan ses i HTML--dokumentet så har
+\texttt{BLOCKQUOTE}-- og \texttt{A}--tagsne en attribut hver.
+I parsetræet er der også en del mellemrums--tegn der er ikke er
+medtaget for at simplificere figuren.
 
 \begin{figure}
 \begin{lstlisting}[language=HTML]
 <HTML>
-<HEAD><TITLE>Sidens titel</TITLE></HEAD>
-<BODY>
-<P><EM>Et</EM> afsnit</P>
-<OL> <!-- En kommentar -->
-  <LI>Listeelement 1</LI>
-  <LI>Listeelement 2</LI>
-</OL>
-</BODY>
+<HEAD><TITLE>Sidetitel</TITLE></HEAD>
+<BODY> <!-- En kommentar -->
+  <P>Et afsnit med adskillige sætninger.
+  Dette er 'den anden sætning'.</P>
+  <BLOCKQUOTE lang="en">
+    <A href="http://en.wikipedia.org/wiki/Hovercraft">My hoovercraft</A>
+    is full of eels!</BLOCKQUOTE>
+  </BODY>
 </HTML>
 \end{lstlisting}
 
-  \caption{HTML--dokument}
+  \caption{Eksempel på HTML--dokument.}
   \label{htmldoc1}
 \end{figure}
 
 \begin{figure}
   \includegraphics[width=\textwidth]{parsetree.pdf}
-  \caption{Parsetræ}
+  \caption{Parsetræ for figur \ref{htmldoc1}.}
   \label{parsetree}
 \end{figure}
 
@@ -667,11 +671,11 @@ kender til selve HTML--formatet og omdanner det til en mere generisk
 datastruktur der symboliserer et dokument. Denne datastruktur
 indeholder information om tekstens inddeling i afsnit, overskrifter,
 citater mm. Datastrukturen viderebehandles af det andet delmodul
-(``sætningsifikatoren''), som udfører de beregninger der er ens for
-alle dokumenter. Dette inkluderer adskillelse af ord og punktuering
-(mellemrum, tegnsætning mv.) og opdeling i sætninger.  Det første
-delmodul kan på denne måde let udvides så det også kan håndtere andre
-dokumentformater.
+(``sætningsifikatoren''), som udfører de operationer der skal gøres
+for alle dokumenter. Dette inkluderer opdeling af teksten i ord og
+punktuering (tegnsætning, mellemrum mv.) og opdeling afsnittene i
+sætninger.  Det første delmodul kan på denne måde lettere udvides så
+det også kan håndtere andre dokumentformater.
 
 \subsection{Tekstanalyse}
 Her skal de egentlige analyser foretages, modulet får teksten fra
