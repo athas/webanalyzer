@@ -1,9 +1,9 @@
 digraph G
 {
-                struct5 [label="Dybde 0:", shape="none"];
-                struct6 [label="Dybde 1:", shape="none"];
-                struct7 [label="Dybde 2:", shape="none"];
-                struct8 [label="Dybde 3:", shape="none"];
+                struct5 [label="Dybde 0", shape="none"];
+                struct6 [label="Dybde 1", shape="none"];
+                struct7 [label="Dybde 2", shape="none"];
+                struct8 [label="Dybde 3", shape="none"];
                 struct5 -> struct6 [color="white", len="0.2", arrowhead="none"];
                 struct6 -> struct7 [color="white", len="0.2", arrowhead="none"];
                 struct7 -> struct8 [color="white", len="0.2", arrowhead="none"];
@@ -16,4 +16,12 @@ digraph G
                 struct1 -> struct3;
                 struct2 -> struct3;
                 struct3 -> struct4;
+
+                struct9 [label="Dybde 0", shape="none"];
+                struct10 [label="", shape="none"];
+                struct11 [label="Dybde 1", shape="none"];
+                struct12 [label="Dybde 2", shape="none"];
+                struct9 -> struct10 [color="white", len="0.2", arrowhead="none"];
+                struct10 -> struct11 [color="white", len="0.2", arrowhead="none"];
+                struct11 -> struct12 [color="white", len="0.2", arrowhead="none"];
 }
