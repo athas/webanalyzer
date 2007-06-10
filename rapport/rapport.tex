@@ -937,16 +937,34 @@ nødvendigt, idet et HTML-dokument let kan indeholde flere tusinde
 tegn. \fixme{Figur der beskriver lexing af et tag?}
 
 \begin{figure}
-  Inddata: <a href=``foo''>
+  Inddata: <a href=``foo''>\\
 
-$\box 3$
-  $\blacksquare$ a href=``foo''>
-  \^LexingTag
-
-  <$\blacksquare$ href=``foo''>
-   $\blacktriangle$ LexingTagName
-
-
+  $\blacksquare$a href=``foo''>\\
+  \hspace*{5pt}$\uparrow$LexingTag\\
+  <$\blacksquare$ href=``foo''>\\
+  \hspace*{10pt}$\uparrow$LexingTagName\\
+  <a$\blacksquare$href=``foo''>\\
+  \hspace*{15pt}$\uparrow$LexingAttributes\\
+  <a $\blacksquare$ref=``foo''>\\
+  \hspace*{20pt}$\uparrow$LexingAttributeName\\
+  <a h$\blacksquare$ef=``foo''>\\
+  \hspace*{25pt}$\uparrow$LexingAttributeName\\
+  <a hr$\blacksquare$f=``foo''>\\
+  \hspace*{30pt}$\uparrow$LexingAttributeName\\
+  <a hre$\blacksquare$=``foo''>\\
+  \hspace*{40pt}$\uparrow$LexingAttributeName\\
+  <a href$\blacksquare$``foo''>\\
+  \hspace*{45pt}$\uparrow$LexingAttributeValueStart\\
+  <a href=$\blacksquare$oo''>\\
+  \hspace*{50pt}$\uparrow$LexingAttributeValue\\
+  <a href=``f$\blacksquare$o''>\\
+  \hspace*{55pt}$\uparrow$LexingAttributeValue\\
+  <a href=``fo$\blacksquare$''>\\
+  \hspace*{60pt}$\uparrow$LexingAttributeValue\\
+  <a href=``foo''$\blacksquare$\\
+  \hspace*{65pt}$\uparrow$LexingAttributes\\
+  <a href=``foo''>$\blacksquare$\\
+  \hspace*{70pt}$\uparrow$Done\\
   \caption{Eksempel genereret data af lexer}
   \label{ekslexeroutput}
 \end{figure}
