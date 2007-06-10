@@ -382,20 +382,79 @@ engelsk tekst, men som også producerer brugbare resultater for dansk
 tekst. Desuden fandt vi det også relevant at foretage stavekontrol af
 de analyserede sider, idet mange sider bliver skrevet med primitive
 værktøjer der ikke indeholder automatisk stavekontrol (se sektion
-\ref{indledning}). Vi har nævnt at det er oplagt at benytte os af den
-information som en sides HTML fortæller om dens tekst (se sektion
-\ref{målgruppe}), og det er i forbindelse med stavekontrollen især
-nærliggende at inddrage HTML's \texttt{lang}--attribut, som angiver en
-teksts sprog, således at vi altid bruger den rigtige ordbog til at
-stavekontrollen. Det gør det muligt for vores program at fungere med
-sider der indeholder tekst skrevet på flere sprog, uden at det
-ukorrekt angiver forkert stavede ord. Slutteligt taler vores egen
-erfaring for at en hændelig skrivefejl er fejlagtig gentagelse af ord,
-så denne fejl valgte vi ligeledes gøre opmærksom på (skriveprogrammer
-med grammatikkontrol fanger denne fejl, men det gør en selvstændig
-stavekontrol, som den i vores program, ikke).
+\ref{indledning}). Vi vil dog ikke forsøge at give bud på hvordan et
+forkert stavet ord skal staves korrekt, og ej heller vil antallet af
+stavefejl på en side eller et afsnit påvirke programmets opfattelse af
+læsbarheden af siden eller afsnittet. Begge disse forbehold har grund
+i den relativt lave kvalitet af vores tilgængelige ordbog (se sektion
+\ref{tekstanalysedesign} for detaljer omkring stavekontrollen) som
+resulterer i et højt antal af korrekt stavede ord der markeres som
+forkert stavede.
 
-\subsection{Overvejelser omkring output}
+\subsection{Udnyttelse af semantisk HTML}
+\label{semantiskhtml}
+I sektion \ref{målgruppe} har vi nævnt at det er oplagt at benytte os
+af den information som en sides HTML fortæller om dens
+tekst. Samtidigt er det også yderst nemt at falde i den fælde hvor man
+for enhver pris forsøger at inddrage den semantiske information om
+teksten, til trods for at dette blot skaber støj og tilføjer et
+pseudotilfældigt element til analyseresultaterne, i modsætning til at
+gøre analyseresultaterne mere brugbare, som jo er det egentlige
+formål.
+
+I denne sektion vil vi beskrive hvordan vi benytter en del af den
+semantiske information, samt forklare hvorfor vi diverterer fra
+kravspecifikationen hvad håndteringen af enkelte tags angår.
+
+\subsubsection{Stavekontrol og \texttt{lang}-attributten}
+\label{stavekontrolsprog}
+Det er i forbindelse med stavekontrollen nærliggende at inddrage
+HTML's \texttt{lang}--attribut, som angiver en teksts sprog, således
+at vi altid bruger den rigtige ordbog til at stavekontrollen. Det gør
+det muligt for vores program at fungere med sider der indeholder tekst
+skrevet på flere sprog, uden at det ukorrekt angiver forkert stavede
+ord. Slutteligt taler vores egen erfaring for at en hændelig
+skrivefejl er fejlagtig gentagelse af ord, så denne fejl valgte vi
+ligeledes gøre opmærksom på (skriveprogrammer med grammatikkontrol
+fanger denne fejl, men det gør en selvstændig stavekontrol, som den i
+vores program, ikke). Se sektion \ref{tekstanalysedesign} og
+\ref{spellchecker} for detaljer omkring hvorledes stavekontrollen
+foregår.
+
+\subsubsection{Citater}
+\label{citater}
+En anden feature vi fandt potentielt brugbar, men som sidenhen har
+vist sig ikke at have overvældende betydning i praksis, er den der i
+kravspecifikationen optræder som krav 3.4, et krav der omhandler at
+citater ikke skal analyseres. Dette endte vi med delvist at
+implementere --- vi filtrerer selvstående citater angivet med
+\texttt{blockquote}--tags fra når vi udregner læsbarheden for en side
+som helhed, men citater indlejret direkte i en sætning med
+\texttt{q}--tags opfatter vi som så integrerede i tekstens
+\textit{flow} at det blot skaber forstyrrelse ikke at tage dem med i
+analysen af sætningen, idet citat-tunge afsnit så vil fremstå som
+ekstremt korte, og derved måske give et forkert billede af læsbarheden
+af afsnittet som helhed. Vores mål med at inddrage information fra de
+omkringliggende tags i vores analyse er at lave en mere intelligent og
+brugbar analyse størsteparten af gangene, og denne feature har for let
+ved at resultere i misvisende resultater til at vi valgte at
+implementere den i vores endelige program. \textbf{Dette er en
+  afvigelse i forhold til vores kravspecifikation}
+
+\subsubsection{Tags der ikke specialbehandles}
+\label{ejspecialbehandling}
+I kravspecifikationen nævner vi i krav 3.1 og 3.2 at vi ønsker at
+vægte overskrifter og sætninger indeholdende \texttt{em}
+(\textit{emphasis}) eller \texttt{strong}--tags højere end anden
+tekst. Under implementationen erfarede vi at denne vægtning ikke gav
+synderligt mere brugbart resultater med mindre vægtningen blev så høj
+at det i mange tilfælde forskubbede resultatet. Vi valgte at
+klassificere specialbehandlingen af disse tags som støj, som
+beskrevet i sektion \ref{semantiskhtml}, og derfor undlod vi at
+implementere dem i det endelige program. \textbf{Dette er en afvigelse
+  i forhold til vores kravspecifikation}
+
+\section{Overvejelser omkring output}
 
 Som nævnt i sektion \ref{brugergraenseflade} består programmets output
 af HTML--filer --- disse filer skal kommunikere resultatet på en
@@ -683,7 +742,7 @@ Det er ikke kun \texttt{a} der skal undersøges, hvis et HTML--dokument
 benytter sig af rammer (frames), så skal deres start--adresser også
 findes. Der er også andre tags der tillader at man specificerer
 adresser til forklaringer ol, disse skal der også tages hån om.
-
+\label{cyklus}
   På dataflowdiagrammet (figur \ref{dataflowdia}) går kun en enkelt pil fra
 ``Find links''--modulet til ``Hent side''--modulet. Reelt bliver denne pil fulgt
 for hvert eneste
@@ -1162,7 +1221,7 @@ indeholder stavefejl\footnote{Grunden til at elementerne ikke bliver
 gøres for ikke at forstyrre brugeren med dårligere resultater.
 
 \section{Stavekontrol}
-\label{Spellchecker}
+\label{spellchecker}
 
 Tekstanalyse strukturen foretager en stavekontrol af hvert ord den
 møder. Til at foretage stavekontrollen har vi implementeret en
@@ -1304,7 +1363,7 @@ for den relevante feature vil afprøve dette generelle scenarie. Det
 testes altså ikke hvad der sker når features \textit{ikke} aktiveres.
 
 \section{Funktionstest}
-
+\label{funktionstests}
 Det optimale ville være hvis funktionstestene kunne automatiseres, men
 i de fleste af testene vil det, grundet vores output i form af
 menneske--orienteret HTML, ikke kunne lade sig gøre uden at bruge mere
@@ -1473,15 +1532,16 @@ at forstå. \fixme{Konklusion?}
 Projektudviklingen forløb uden større komplikationer --- den største
 var skiftet af SML--implementation kort efter afleveringen af
 baseline--implementationen --- og det endelige program opfylder, som
-nævnt i indledningen, næsten alle vores krav. De krav, der ikke blev
-opfyldt, bærer især præg af ikke at have været færdigudviklede da
-kravspecifikationen blev afleveret, idet vi under implementationen
-fandt ud af at de i bedste fald var ligegyldige, og i værste fald bare var
-``støj'' der forstyrrede resultatet. Under skrivning af
-testspecifikationen opdagede vi også at vores kravspecifikation ikke
-var helt egnet til den systematiske afprøvning som var krævet af os,
-idet visse af kravene (platformsunderstøttelse) var yderst svære at
-teste på en meningsfyldt måde.
+nævnt i indledningen, næsten alle vores krav (se sektion
+\ref{kravstatus} nedenfor). De krav, der ikke blev opfyldt, bærer især
+præg af ikke at have været færdigudviklede da kravspecifikationen blev
+afleveret, idet vi under implementationen fandt ud af at de i bedste
+fald var ligegyldige, og i værste fald bare var ``støj'' der
+forstyrrede resultatet. Under skrivning af testspecifikationen
+opdagede vi også at vores kravspecifikation ikke var helt egnet til
+den systematiske afprøvning som var krævet af os, idet visse af
+kravene (platformsunderstøttelse) var yderst svære at teste på en
+meningsfyldt måde.
 
 Valget af programmeringssproget Standard ML, et valg som mange af
 vores medstuderende åbenbart fandt underligt, viste sig at være et
@@ -1514,6 +1574,65 @@ svært at give en objektiv vurdering af kvaliteten af et program, med
 mindre det kan gøres baseret på antallet af fejl, at vi vil undlade at
 forsøge på det.
 
+\section{Kravstatus}
+\label{kravstatus}
+Herpå følger en beskrivelse af slut--status for hvert krav nævnt i
+vores kravspecifikation i forhold til det endelige program.
+
+\begin{description}
+\item[Krav 1 --- Analyse af et helt websted:] Dette krav er fuldt ud
+  implementeret og afprøvet. Se
+  evt. beskrivelsen af dataflow--cyklussen i sektion \ref{cyklus}.
+\item[Krav 1.1 --- Respekter robots.txt:] Dette krav er fuldt ud
+  implementeret og afprøvet.
+\item[Krav 1.2 --- Dybde af crawling:] Dette krav er fuldt ud
+  implementeret og afprøvet.
+\item[Krav 2, 2.1, 2.2 --- Analysemetoder:] De nævnte analysemetoder er
+  implementeret og virker korrekt med vores testdata.
+\item[Krav 2.3 --- Stavekontrol:] Dette krav er fuldt ud implementeret og
+  virker korrekt med vores testdata.
+\item[Krav 2.3.1 --- Flere sprog:] Dette krav er fuldt ud implementeret og
+  virker korrekt med vores testdata.
+\item[Krav 2.4 --- Gentagne ord:] Dette krav er fuldt ud implementeret og
+  virker korrekt med vores testdata.
+\item[Krav 2.5 --- Beregning af sidesværhedsgrad:] Dette krav er fuldt
+  ud implementeret, men er ikke så præcist defineret som vi ønskede i
+  kravspecifikationen, men se testspecifikationen for problemer
+  omkring afprøvning.
+\item[Krav 3 --- Analyse baseret på HTML--tags:] Visse af dette kravs
+  underkrav er blevet implementeret. Se nedenfor.
+\item[Krav 3.1 --- \texttt{em} og \texttt{strong}:] Dette krav blev
+  droppet, se sektion \ref{ejspecialbehandling}.
+\item[Krav 3.2 --- \texttt{hN}:] Dette krav blev droppet, se sektion
+  \ref{ejspecialbehandling}.
+\item[Krav 3.3 --- \texttt{abbr} og \texttt{acronym}:] Dette krav er
+  fuldt ud implementeret og virker korrekt med vores testdata.
+\item[Krav 3.4 --- Citater skal ikke analyseres:] Dette krav er
+  delvist implementeret (se sektion \ref{citater}) og den
+  implementerede del fungerer korrekt med vores testdata.
+\item[Krav 3.5 --- Tekst i andre sprog angivet med (lang):] Dette krav er
+  fuldt ud implementeret og virker korrekt med vores testdata.
+\item[Krav 3.6 --- \texttt{kbd}, \texttt{var} og \texttt{code}:] Dette
+  krav er fuldt ud implementeret og virker korrekt med vores testdata.
+\item[Krav 3.7 --- \texttt{bdo}:] Dette
+  krav er fuldt ud implementeret og virker korrekt med vores testdata.
+\item[Krav 4 --- Konfiguration af analyse:] Dette krav er delvist
+  implementeret og den implementerede del fungerer korrekt med vores
+  testdata.
+\item[Krav 5 --- Kommandobaseret interface:] Dette krav er
+  implementeret, men ikke systematisk afprøvet.
+\item[Krav 6 --- Resultater i HTML--format:] Dette krav er
+  implementeret og afprøvet, men se testspecifikationen og sektion
+  \ref{funktionstests} for forbehold omkring systematisk afprøvning af
+  dette.
+\item[Krav 7 --- Platform:] Dette krav er implementeret og afprøvet,
+  men se testspecifikationen for forbehold omkring systematisk
+  afprøvning af dette.
+\item[Krav 8 --- Håndtering af HTML/XHTML:] Dette krav er fuldt ud
+  implementeret og virker korrekt med vores testdata.
+\item[Krav 8.1 --- Indkodning:] Dette krav er fuldt ud implementeret
+  og virker korrekt med vores testdata.
+\end{description}
 
 \fixme{Uopfyldte krav}
 \fixme{Arbejdsfordeling}
