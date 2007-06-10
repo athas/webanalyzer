@@ -1247,6 +1247,19 @@ leverer \texttt{aspell} som en del af vores program, men derimod
 udnytter en eksisterende installation på systemet (og slår
 stavekontrol fra hvis en sådan ikke kan findes).
 
+\section{Sidesværhedsgrad}
+For at kunne sortere de analyserede sider efter deres sværhedsgrad
+bliver vi nødt til at beregne et entydigt tal for hver side, der
+angiver sidens tekstmæssige sværhedsgrad. Vi har baseret
+sidesværhedsgraden på resultaterne af LIX-- og FRE--analyserne. Begge
+resulterer i en talværdi der angiver tekstens sværhedsgrad. Da disse
+talværdier ikke befinder sig på samme skala, er det nødvendigt at
+finde en vægtningsfaktor som kan sikrer at en af de to algoritmer ikke
+vil have en uforholdsmæssigt stor indflydelse på
+sidesværhedsgraden. Vi har valgt at vægte lix med 100\% også bare
+justere fre værdien derefter.\fixme{Skal de stå mere her?}
+
+
 \section{Repræsentation af URI'er}
 \label{uriimpl}
 Links på en hjemmeside består af
