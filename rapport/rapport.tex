@@ -1050,6 +1050,55 @@ leverer \texttt{aspell} som en del af vores program, men derimod
 udnytter en eksisterende installation på systemet (og slår
 stavekontrol fra hvis en sådan ikke kan findes).
 
+\section{Repræsentation af URI'er}
+\label{uriimpl}
+Links på en hjemmeside består af
+URI'er\footnote{\url{http://www.w3.org/Addressing/}} der angiver en
+resurse beliggende på en angivet server tilgået via en angivet
+protokol. URI'er kan være både relative og absolutte, og førstnævnte
+opfattes på HTML-sider som i forhold til den side der indeholder den
+relative URI. I et program som vores, der skal crawle et helt website,
+er det naturligvis yderst relevant at kunne repræsentere og arbejde
+med URI'er på en fornuftig og effektiv måde. Den grundlæggende
+repræsentation er en type ved navn \texttt{URI} beliggende i
+\texttt{Http}-modulet (internt en tupel indeholdende URI'ens
+komponenter). URI'er oprettes via funktionen \texttt{buildURI}, der som
+argumenter tager en streng indeholdende en URI, samt eventuelt en
+URI--værdi som bliver brugt hvis strengen angiver en relativ URI. Når
+URI--værdien bliver oprettet af \texttt{buildURI} foretages en
+\texttt{HTTP HEAD}--forespørgsel til webserveren. Svaret på denne
+forespørgsel er information om den angivne URI --- om der er en side
+på den angivne placering, om den angivne placering har et andet navn
+som skal bruges i stedet, og hvilken type data URI'en refererer til,
+en såkaldt
+MIME--type\footnote{\url{http://www.iana.org/assignments/media-types/}}. Vores
+program besøger kun URI'er der angiver resurser med MIME--typen
+\texttt{text/html}, den MIME--type der sædvanligvis bruges til at
+angive HTML. Dette er for at analyseresultatet ikke skal blive ødelagt
+af at forsøge at analysere filer der ikke indeholder HTML (som, hvis
+de forsøges analyseret, kan indeholde forstyrrende elementer som tekst
+der bliver fortolket som ekstremt lange sætninger og ord), og for at
+programmet ikke skal spilde sin tid med at hente meget store
+ikke--HTML filer (som f.eks. lydfiler eller CD--billeder).
+
+Det viste sig hurtigt at programmet brugte uacceptabelt meget tid blot
+på at udføre \texttt{HTTP HEAD}-forespørgsler for URI'er på et
+websites forskellige sider. Dette blev identificeret som unødvendigt,
+idet mange sider indeholder de samme URI'er (man kan f.eks. forestille
+sig at alle sider på et website indeholder en række navigations--links
+til en nogle centrale sider). Derfor blev funktionen \texttt{makeURI}
+implementeret. Denne har samme signatur som \texttt{buildURI}, men
+gemmer (``cacher'') resultatet af \text{HTTP HEAD}-forespørgslem,
+således at det kun skal udføres en gang for hver URI. Derved sparer vi
+en voldsom mængde forespørgsler på et typisk website hvori der er en
+stor mængde links som er at finde på mange sider. Cachen er
+implementeret som et binært træ for at gøre det hurtigt at finde den
+cachede værdi. Vi har ikke konkrete tal for hvad denne optimering
+betød for køretiden, men vores oplevelse var at den betød en dramatisk
+mærkbar forskel, og i betragtning af hvor relativt langsomme
+netværksforespørgsler er i forhold til at slå op i en træstruktur,
+siger vores fornuft os også at dette må være tilfældet.
+
 \chapter{Afprøvning}
 
 Et program er lidt simpelt sagt 2--dimensionalt --- det er opdelt i
