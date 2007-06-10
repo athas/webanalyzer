@@ -919,12 +919,13 @@ Ikke genkendte start statements i filen bliver ignoreret.
 
 \begin{figure}
 \begin{verbatim}
-  User-agent: *
-  Disallow: /directory/file.html
-  Disallow: /private
-  # Kommentarer forekommer efter "#" symbolet ved linje start eller
-  User-agent: BadBot  # efter et statement
+  User-agent: BadBot
   Disallow: /
+  # Kommentarer forekommer efter "#" symbolet ved linje start eller
+  User-agent: *     # efter et statement
+  Disallow: /directory/file.html
+  Disallow: /private 
+  Request-rate: 2/10    # Medfører 10sek/2sider = 5sek crawl delay
 \end{verbatim}
 
   \caption{Eksempel på en robots.txt fil}
