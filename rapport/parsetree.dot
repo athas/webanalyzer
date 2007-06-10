@@ -13,6 +13,7 @@ TITLE[label="TITLE"];
 titel[label="\"Sidens titel\"", shape="none"];
 BODY[label="BODY"];
 P[label="P"];
+EM[label="EM"];
 OL[label="OL"];
 LI1[label="LI"];
 LI2[label="LI"];
@@ -22,7 +23,9 @@ HEADattrs[label="Attributsæt", shape="ellipse"];
 TITLEattrs[label="Attributsæt", shape="ellipse"];
 BODYattrs[label="Attributsæt", shape="ellipse"];
 Pattrs[label="Attributsæt", shape="ellipse"];
-Ptekst[label="\"Et afsnit\"", shape="none"];
+Ptekst[label="\" afsnit\"", shape="none"];
+EMattrs[label="Attributsæt", shape="ellipse"];
+EMtekst[label="\"Et\"", shape="none"];
 OLattrs[label="Attributsæt", shape="ellipse"];
 LI1attrs[label="Attributsæt", shape="ellipse"];
 LI1tekst[label="\"Listeelement 1\"", shape="none"];
@@ -34,6 +37,7 @@ LI2tekst[label="\"Listeelement 2\"", shape="none"];
 {rank=same; TITLE; TITLEattrs;}
 {rank=same; BODY; BODYattrs;}
 {rank=same; P; Pattrs;}
+{rank=same; EM; EMattrs;}
 {rank=same; OL; OLattrs;}
 {rank=same; LI1; LI1attrs;}
 {rank=same; LI2; LI2attrs;}
@@ -49,7 +53,10 @@ BODY -> BODYattrs [arrowhead="dot"];
 BODY -> P;
 BODY -> OL;
 P -> Pattrs [arrowhead="dot"];
+P -> EM;
 P -> Ptekst [arrowhead="normal"];
+EM -> EMattrs [arrowhead="dot"];
+EM -> EMtekst;
 OL -> OLattrs [arrowhead="dot"];
 OL -> LI1;
 OL -> LI2;
