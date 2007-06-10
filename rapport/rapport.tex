@@ -545,7 +545,8 @@ filtrering baseret på selve HTML--tagget og
 tid, kunne filtrering baseret på \texttt{class}--attributten
 implementeres meget simpelt, blot ved at kopiere koden for filtrering
 vha. \texttt{id}--attributten og tilpasse det til
-\texttt{class}--attributten.
+\texttt{class}--attributten. \textbf{Dette er en afvigelse i forhold
+  til vores kravspecifikation}
 
 Se brugervejledning for liste over implementerede parametre og deres
 beskrivelse.
@@ -561,11 +562,7 @@ komplikationer som det oprindelige design ikke tog højde for. Derfor
 vil vi beskrive centrale datastrukturer og algoritmer på et abstrakt
 plan, men ikke angive f.eks. konkrete typer eller beskrive deres
 konkrete implementation eller interface. Dette er i stedet til en vis
-grad beskrevet i kapitel \ref{implementation}
-
-Dette afsnit vil beskrive det overordnede design vi valgte at
-implementere vores program omkring, samt begrundelser for hvorfor
-dette design blev valgt.
+grad beskrevet i kapitel \ref{implementation}.
 
 \section{Overordnet designfilosofi}
 \label{overordnetdesign}
@@ -588,9 +585,9 @@ passer umiddelbart ind i den objektorienterede filosofi, og
 programmets relativt korte og simple kørselstid betyder at der ikke er
 et så stort behov for mutérbar tilstande. 
 
-På figur \ref{dataflowdia} kan vores Dataflow diagram ses. Det primære
-dataflow er angivet med solide linjer. Indstillingerne går uden om det
-primære dataflow og er angivet med stiplede linjer.
+På figur \ref{dataflowdia} kan vores dataflow--diagram ses. Det
+primære dataflow er angivet med solide linjer. Indstillingerne går
+uden om det primære dataflow og er angivet med stiplede linjer.
 \begin{figure}
   \includegraphics[width=\textwidth]{endeligtdesignill.pdf}
   \caption{Dataflow diagram}
@@ -620,19 +617,19 @@ programmet skal bruges. Når man starter programmet er der én
 indstilling man \textit{altid} vil skulle angive --- startadressen for
 analysen. Denne indstilling skal, som den eneste, ikke angives med et
 specielt præfiks, netop fordi den er så vigtig. De andre indstillinger
-angives med et præfiks f.eks. ``--l'' for angivelsen af sprog. Måden
-disse indstillinger angives, er valgt ud fra at det skal være let at
-sætte deres navn/præfiks i forbindelse med deres
+angives med et præfiks f.eks. \texttt{--l} for angivelsen af
+sprog. Måden disse indstillinger angives, er valgt ud fra at det skal
+være let at sætte deres navn/præfiks i forbindelse med deres
 betydning. Eksempelvis kan man angive hvor den maksimale dybde for
-analysen med indstillingen ``--d'', hvor \textit{d}'et står for
-\textit{depth}. Udover at det skal være let at huske sammenhængen mellem
-betydning og navn, så skal tvetydigheder helst undgås. Tvetydigheder
-kan gøre at brugeren husker forkert og føler det
+analysen med indstillingen \texttt{--d}, hvor \textit{d}'et står for
+\textit{depth}. Udover at det skal være let at huske sammenhængen
+mellem betydning og navn, så skal tvetydigheder helst
+undgås. Tvetydigheder kan gøre at brugeren husker forkert og føler det
 nødvendigt at slå op i manualen. Når flere indstillinger kunne have
-samme navn, har vi valgt at bruge et længere navn for at undgå
-disse tvetydigheder. F.eks. er der to indstillinger der begge kan
-angive at noget af dokumentet skal ignoreres i analysen, disse
-indstillingers navne er ``--ignore--tag'' og ``--ignore--id''.
+samme navn, har vi valgt at bruge et længere navn for at undgå disse
+tvetydigheder. F.eks. er der to indstillinger der begge kan angive at
+noget af dokumentet skal ignoreres i analysen, disse indstillingers
+navne er \texttt{--ignore--tag} og \texttt{--ignore--id}.
 
 \subsection{Indstillinger}
 Da de brugerleverede indstillinger skal kunne tilgås fra vidt spredte
