@@ -1154,25 +1154,26 @@ analysere. Dette inkluderer opdeling i afsnit, overskrift og citater,
 samt opdeling af afsnit i ord og sætninger.
 
 HTML--dokumenter har ofte dybe indlejringer i form af \texttt{div}--
-og/eller \texttt{table}--tags som bliver brugt til at opsætte
-hjemmesiden som ønsket. I almindelige dokumenter er vi dog ikke
-interesserede i denne slags indlejring. Tekstudtrækkerens job består
-således også af at fladgøre det parsetræ som den får leveret. I vores
-implementering af fladgøringen gennemgår vi træet med ``inorder tree
-walk'', på vej ned igennem træet opsamler vi de semantiske
-informationer (f.eks. om sprog) som er angivet, sådan at vi kan
-klistre dem på det tekst vi møder. Når vi møder et tekstelement
-indsætter vi teksten sammen med de gældende opsamlede informationer i
-den resulterende liste. Når vi møder et tag der kan adskille teksten i
-afsnit, så indsætter vi et symboler der indikerer \textit{``nyt
-  afsnit''} før og efter det rekursivt udtrukne indhold af det
-pågældende tag. Efter fladgøringen har vi så en liste hvor teksten har
-fået klistret semantisk informationer på og hvor der er et symbol hver
+eller \texttt{table}--tags som bliver brugt til at opsætte hjemmesiden
+som ønsket. I almindelige dokumenter er vi dog ikke interesserede i
+denne slags indlejring. Tekstudtrækkerens job består således også i at
+fladgøre det parsetræ som den får leveret. I vores implementering af
+fladgøringen gennemgår vi træet ved at gennemgå parsetræet med
+\textit{inorder tree walk}, på vejen ned igennem træet opsamler vi de
+semantiske informationer (f.eks. om sprog) som er angivet, sådan at vi
+kan klistre dem på det tekst vi møder. Når vi møder et tekstelement
+indsætter vi teksten sammen med de, på daværende tidspunkt, opsamlede
+informationer. Når vi møder et tag der kan adskille teksten i afsnit,
+så indsætter vi et symboler der indikerer \textit{``nyt afsnit''} før
+og efter indholdet af det pågældende tag (der rekursivt er
+fladgjort). Efter fladgøringen har vi så en liste hvor teksten har
+fået klistret semantisk informationer på og hvor der er symboler hver
 gang der starter et nyt afsnit. Som omtalt ovenfor bliver tabeller og
-\texttt{div}--tags ofte brugt til at lave layout med, mange steder i
-forbindelse med den slags tags vil der derfor blive indsat en stor
-dosis \textit{``nyt afsnit''} symboler, dem fjerner vi ved at erstatte
-flere på hinanden følgende symboler med et enkelt.
+\texttt{div}--tags ofte brugt til at lave layout med, og mange steder
+i forbindelse med den slags tags vil der derfor blive indsat en stor
+dosis \textit{``nyt afsnit''}--symboler. For at undgå tomme afsnit
+fjerner vi flere på hinanden følgende \textit{``nyt
+  afsnit''}--symboler og erstatter dem med et enkelt.
 
 \subsection{Ord og Sætningsopdeling}
 Efter HTML--dokumentet er omformet til en mere generisk
@@ -1185,9 +1186,21 @@ man bare opdelte teksten ved alle punktummer ville man kunne komme til
 at dele en sætning midt i en forkortelse. Vi har i stedet adskilt
 teksten i ord og punktuering til at starte med og ved identificeringen
 af ord har vi implementeret en simpel
-forkortelses--genkendelse. Derefter opdeler vi listen af ord i
+forkortelsesgenkendelse (se nedenfor). Derefter opdeler vi listen af ord i
 sætninger ved alle følger af punktuering der indeholder en
 sætningsafslutter (punktum, spørgsmålstegn og udråbstegn).
+
+Den omtalte forkortelsesgenkendelses mekanisme er meget simpel, hvis
+bogstavet der kommer efter et punktum er et lillebogstav, så antager
+vi at punktummet afslutter en forkortelse, det samme sker hvis vi
+finder et bogstav midt i et ord (dvs. uden mellemrum efter
+punktummet). Derudover antager vi at enkeltstående store bogstaver
+efterflugt af et punktum er et initial. Eksempelvis afslutter
+punktummet i ``H. Hansen'' ikke en sætning. Disse antagelser betyder
+dog ikke at vi altid opdeler sætninger korrekt, faktisk kan der opstå
+andre fejl pga. forkortelseshåndteringen. Eksempelvis vil disse 2
+sætninger ikke blive adskilt: \textit{``Hun stemte på liste O. Det var jo en
+ren fadæse!''}.
 
 \section{Tekstanalyse}
 \label{Tekstanalyse}
