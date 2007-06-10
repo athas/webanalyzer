@@ -125,9 +125,9 @@ problemet, og de forskellige løsningsmuligheder vi vurderede.
 
 \section{Målgruppe}
 \label{målgruppe}
-Der er adskillige mulige målgrupper og en løsning på problemet kunne
-være orienteret imod --- fra hjemmebrugere der skriver personlige
-sider, over de individuelle skribenter på et større website til selve
+Der er adskillige mulige målgrupper en løsning på problemet kunne være
+orienteret imod --- fra hjemmebrugere der skriver personlige sider,
+over individuelle skribenter på et større website til selve
 webmasteren på en stor side. Ydermere kan et websites indhold
 fortolkes på flere forskellige måder --- enten som almindelig tekst
 omgivet af HTML--data uden betydning, eller med et forsøg på at
@@ -138,21 +138,24 @@ udtrykket i sidernes kode, i stedet for at programmet skal
 ``gætte''. Dette har også relevans i forhold til målgruppen, idet
 HTML's avancerede features for at udtrykke semantisk information
 omkring teksten (information om sprog, forkortelser, osv) primært
-benyttes af tekniske brugere, og det virkede paradoksalt at lave en
-løsning til ikke-tekniske brugere der virker bedst med data produceret
-af tekniske brugere. Vi besluttede os for at det ville være et spild
-at undlade at udnytte HTML's muligheder for at angive semantisk
-information omkring teksten, men da en så lille del af verdens
-websites benytter sig af HTML's muligheder indenfor dette område,
-ville det heller ikke være hensigtsmæssigt at handikappe programmet
-til kun at virke acceptabelt på denne form for HTML. Vores endelige
-målgruppe endte med at blive todelt --- webmastere og
-(semi--)professionelle skribenter. Dette valg baserer vi på at både
-webmastere og skribenter har en stor interesse i at deres sider eller
-tekst er let at læse, og har motivation til at sætte sig ind i
-hvorledes man skriver god HTML, og derved gør det muligt for et
-program at foretage en så god undersøgelse af websitet som
-muligt.\footnote{Det kan nævnes at HTML-sider rig på semantisk
+benyttes af tekniske brugere, og det virker paradoksalt at lave en
+løsning til ikke-tekniske brugere der fungerer bedst med data
+produceret af tekniske brugere. Idéen er jo ikke blot at brugeren skal
+kunne køre en analyse, men også derefter foretage rettelser på
+baggrund af analyseresultatet, og derfor går vi ud fra at brugeren
+kører programmet på websites som vedkommende selv har mulighed for at
+ændre. Vi besluttede os for at det ville være et spild at undlade at
+udnytte HTML's muligheder for at angive semantisk information omkring
+teksten, men da en så lille del af verdens websites benytter sig af
+HTML's muligheder indenfor dette område, ville det heller ikke være
+hensigtsmæssigt at handikappe programmet til kun at virke acceptabelt
+på denne form for HTML. Vores endelige målgruppe endte med at blive
+todelt --- webmastere og (semi--)professionelle skribenter. Dette valg
+baserer vi på at både webmastere og skribenter har en stor interesse i
+at deres sider eller tekst er let at læse, og har motivation til at
+sætte sig ind i hvorledes man skriver god HTML, og derved gør det
+muligt for et program at foretage en så god undersøgelse af websitet
+som muligt.\footnote{Det kan nævnes at HTML-sider rig på semantisk
   information også gør det lettere for brugere af alternative
   weblæsere, som f.eks. blinde der benytter sig at netoplæsere, at
   benytte sig af siden} De, der ikke har interesse eller motivation
@@ -174,43 +177,47 @@ brugergrupper.
 Vi blev hurtigt enige om at det er langt mere interessant at analysere
 et website som helhed, end kun at analysere en specifik HTML--side, og
 samtidigt at det er en nødvendighed at løsningen kan gennemgå
-(``crawle''\footnote{\url{http://en.wikipedia.org/wiki/Web_crawler}}) et online website, og ikke være afhængig af at det i
-forvejen er hentet og er beliggende som filer på brugerens
-harddisk. Hvor det er relativt nemt at få et program, der kan
-analysere et helt website, til kun at analysere en enkelt side, er det
-omvendte langt sværere, idet man så skal implementere crawling seperat
-fra programmet. Ydermere er især den ene del af vores målgruppe ---
-webmastere --- sandsynligvis langt mere interesserede i at
-analysere hele det website de er ansvarlige for, for at finde ud af
-hvilke undersider der er uacceptabelt svære at læse, end at analysere
-enkeltsider. Idet vi let kan forestille os at det kan tage lang
-tid at analysere alle undersider på et stort website, forestiller vi
-os også et brugsmønster hvori programmet automatisk bliver kørt med et
-fast interval, og producerer et resultat som er tilgængeligt for alle
-der arbejder på siden. Dette er langt mere effektivt end at alle
-skribenter hver især skal køre tidskrævende analyser hver for sig. Dog
-opfatter vi det også som sandsynligt at skribenter, der arbejder på at
-forbedre læsbarheden af en specifik underside, vil have en mulighed
-for hurtigt at analysere denne side for at se resultatet af deres
-ændringer, i stedet for at de skal vente på at den automatiske analyse
-bliver kørt (og bliver færdig igen).
+(``crawle''\footnote{\url{http://en.wikipedia.org/wiki/Web_crawler}})
+et online website, og ikke være afhængig af at det i forvejen er
+hentet og er beliggende som filer på brugerens harddisk. Årsagen til
+denne beslutning er bl.a. at hvor det er relativt nemt at få et
+program, der kan analysere et helt website, til kun at analysere en
+enkelt side, er det omvendte langt sværere, idet man så skal
+implementere crawling separat fra programmet. Ydermere er især den ene
+del af vores målgruppe --- webmastere --- sandsynligvis langt mere
+interesserede i at analysere hele det website de er ansvarlige for,
+for at finde ud af hvilke undersider der er uacceptabelt svære at
+læse, end at analysere enkeltsider. Idet vi let kan forestille os at
+det kan tage lang tid at analysere alle undersider på et stort
+website, forestiller vi os også et brugsmønster hvori programmet
+automatisk bliver kørt med et fast interval, og producerer et resultat
+som er tilgængeligt for alle der arbejder på siden. Dette er langt
+mere effektivt end at alle skribenter hver især skal køre tidskrævende
+analyser hver for sig. Dog opfatter vi det også som sandsynligt at
+skribenter, der arbejder på at forbedre læsbarheden af en specifik
+underside, vil have en mulighed for hurtigt at analysere denne side
+for at se resultatet af deres ændringer, i stedet for at de skal vente
+på at den automatiske analyse bliver kørt (og bliver færdig
+igen). Dette implementerede vi som en mulighed for at indstille hvor
+dybt programmet skal crawle når det analyserer et website. Ved at
+angive den ønskede side som URI, og begrænse dybden til 0, kan man
+således få en analyse af blot én side.
 
 \section{Brugergrænseflade og resultatpræsentation}
 \label{brugergraenseflade}
 En løsning på opgavens overordnede problem kan formuleres som at
-analysere et website og producere en eller anden form for resultat,
-der indeholder information om dets læsbarhed. Der er flere forskellige
-muligheder for hvorledes brugeren skal kunne sætte en analyse i gang,
-og hvorledes brugeren skal præsenteres for resultatet, og det rette
-valg afhænger primært af den valgte målgruppe. Valget af
-resultatpræsentation har stor betydning for løsningen, idet både valg
-af teknologi, udformning af design og strategien for den endelige
-implementation bliver påvirket hvorledes brugeren skal præsenteres for
-resultatet. Der er også forskel på hvor godt forskellige
-brugergrænseflader gør det muligt at analysere hele websites,
-automatisere kørsel af programmet eller dele resultatet med andre
-brugere (så hver bruger ikke skal køre en ny analyse fra start
-af). Forskellige muligheder blev overvejet:
+analysere et website og producere et resultat der indeholder
+information om dets læsbarhed. Der er flere forskellige muligheder for
+hvorledes brugeren skal kunne sætte en analyse i gang, og hvorledes
+brugeren skal præsenteres for resultatet, og det rette valg afhænger
+primært af den valgte målgruppe. Valget af resultatpræsentation har
+stor betydning for løsningen, idet både valg af teknologi, udformning
+af design og strategien for den endelige implementation bliver
+påvirket hvorledes brugeren skal præsenteres for resultatet. Der er
+også forskel på hvor godt forskellige brugergrænseflader gør det
+muligt at analysere hele websites, automatisere kørsel af programmet
+eller dele resultatet med andre brugere (så hver bruger ikke skal køre
+en ny analyse fra start af). Forskellige muligheder blev overvejet:
 
 \begin{description}
 \item[Integreret med webbrowser:]
