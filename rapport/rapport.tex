@@ -1020,14 +1020,26 @@ gemmes det angivne tids værdi i Config modulet.
 \section{TextAnalyser}
 \label{TextAnalyser}
 
-Når teksten er analyseret bliver resultater der har en FRE værdi på under -50
-og over 200 filtreret fra det der vises til brugeren hvis ikke disse indeholder
-stavefejl\footnote{Grunden til at elementerne ikke bliver filtreret fra er
-fordi det stadig er relavant at vise stavefejl iht. analysen. Se kravspec, krav
-2.3 Stavekontrol}. Dette gøres for ikke at forstyrre brugeren med dårligere
-resultater. Disse dårlige resultater kommer oftes af meget korte sætninger på
- under 5-10 ord og korte sætninger med meget lange ord. Det der filtreres fra er
-kun synligt filtreret fra og optræder stadig det samlede dokuments resultat.
+\fixme{Skriv herremeget her.}
+
+Udover selve brødteksten indeholder hjemmesider også en masse ``støj''
+i form a navigationstekst, og andre minisætninger rundt omkring. Disse
+er alt for små til at fungere ordentligt med analysemetoderne og
+resulterer i at der optræder forstyrrende information i
+analyseresultatet. Især er enkeltstående lange ord et problem ---
+ordet ``rejseomkostninger'' stående alene vil, når det bliver
+analyseret, ende med et resultat der er helt hen i vejret, og selvom
+det ikke har stor betydning for vurderingen af siden som helhed,
+skaber støj på analyseresultat--siden. At løse det generelle problem,
+at filtrere ``uinteressant'' sidetekst fra, har vi ikke løst, idet vi
+vurderede det som for svært. I stedet har vi indsat en nødløsning,
+hvori afsnit der har en FRE værdi på under -50 og over 200 (normalt
+siger man at skalaen går fra 0 til 100 for almindelig tekst) filtreres
+fra det resultat der vises til brugeren, såfremt disse afsnit ikke
+indeholder stavefejl\footnote{Grunden til at elementerne ikke bliver
+  filtreret fra er fordi det stadig er relavant at vise stavefejl
+  iht. analysen. Se kravspecifikationen, krav 2.3 Stavekontrol}. Dette
+gøres for ikke at forstyrre brugeren med dårligere resultater.
 
 \section{Stavekontrol}
 \label{Spellchecker}
