@@ -406,6 +406,7 @@ overordnet indeks-fil der indeholder en liste over alle de besøgte
 sider samt links til de filer, der indeholder detaljerne omkring
 analysen af siderne. Disse sider indeholder den relevante sides tekst,
 samt talværdier der angiver sidens læsbarhed (LIX--tal, FRE--tal og
+\fixme{Note om FRE, da det ikke er omtalt før}
 FKGL--tal). Teksten på siden er opdelt i afsnit\footnote{I vores
   program dækker begrebet ``afsnit'' både over HTML's koncept om
   afsnit, adskilt af \texttt{p}-tags, samt over anden selvstændig
@@ -735,13 +736,13 @@ billede, en tabel, faktisk sker det ved alle tags der er
 ``block--elementer''. Et afsnit består af en række sætninger og en
 række ``ekstra'' sætninger som er den tekst der ikke umiddelbart
 optræder på HTML--siden, men som alligevel er interessant --- såsom
-\texttt{title} og \texttt{alt}--tekst for links og
-billeder. Sætningerne er opdelt i ord og punktuering (tegnsætning,
-mellemrum mv.) og hver sætning slutter ved et eller flere punktummer,
-spørgsmålstegn eller udråbstegn. Hvert ord har semantisk
-information fra HTML'en tilknyttet, som f.eks. information om hvorvidt
-ordet er en forkortelse, eller oprindeligt har været inde i et
-\texttt{em}--tag.
+\texttt{title} og \texttt{alt}--tekst for links og billeder (disse er
+ikke vist på figuren). Sætningerne er opdelt i ord og punktuering
+(tegnsætning, mellemrum mv.) og hver sætning slutter ved et eller
+flere punktummer, spørgsmålstegn eller udråbstegn. Hvert ord har
+semantisk information fra HTML'en tilknyttet, som f.eks. information
+om hvorvidt ordet er en forkortelse, eller oprindeligt har været inde
+i et \texttt{em}--tag.
 
 For ikke at låse programmet fuldstændig fast til HTML er dette modul
 delt i to delmoduler. Det ene modul (den egentlige tekstudtrækker)
@@ -749,7 +750,7 @@ kender til selve HTML--formatet og omdanner det til en mere generisk
 datastruktur der symboliserer et dokument. Denne datastruktur
 indeholder information om tekstens inddeling i afsnit, overskrifter,
 citater mm. Datastrukturen viderebehandles af det andet delmodul
-(``sætningsifikatoren'')\fixme{sætningsifi hvad for noget ?}, som udfører de
+sætnings--opdeleren, som udfører de
 beregninger der er ens for
 alle dokumenter. Dette inkluderer adskillelse af ord og punktuering
 (mellemrum, tegnsætning mv.) og opdeling i sætninger.  Det første
@@ -1075,8 +1076,51 @@ ignoreret grundet den allerede er besøg) og underside z.
   \label{depthtree}
 \end{figure}
 
-\section{TextAnalyser}
-\label{TextAnalyser}
+\section{Tekstudtrækker}
+Tekstudtrækkerens job er som beskrevet i designet (sektion
+\ref{tekstudtraekkerdesign}), at omdanne HTML--dokumenter til en
+generisk dokumentstruktur som tekstanalyse--modulet kan
+analysere. Dette inkluderer opdeling i afsnit, overskrift og citater,
+samt opdeling af afsnit i ord og sætninger.
+
+HTML--dokumenter har ofte dybe indlejringer i form af \texttt{div}--
+og/eller \texttt{table}--tags som bliver brugt til at opsætte
+hjemmesiden som ønsket. I almindelige dokumenter er vi dog ikke
+interesserede i denne slags indlejring. Tekstudtrækkerens job består
+således også af at fladgøre det parsetræ som den får leveret. I vores
+implementering af fladgøringen gennemgår vi træet med ``inorder tree
+walk'', på vej ned igennem træet opsamler vi de semantiske
+informationer (f.eks. om sprog) som er angivet, sådan at vi kan
+klistre dem på det tekst vi møder. Når vi møder et tekstelement
+indsætter vi teksten sammen med de gældende opsamlede informationer i
+den resulterende liste. Når vi møder et tag der kan adskille teksten i
+afsnit, så indsætter vi et symboler der indikerer \textit{``nyt
+  afsnit''} før og efter det rekursivt udtrukne indhold af det
+pågældende tag. Efter fladgøringen har vi så en liste hvor teksten har
+fået klistret semantisk informationer på og hvor der er et symbol hver
+gang der starter et nyt afsnit. Som omtalt ovenfor bliver tabeller og
+\texttt{div}--tags ofte brugt til at lave layout med, mange steder i
+forbindelse med den slags tags vil der derfor blive indsat en stor
+dosis \textit{``nyt afsnit''} symboler, dem fjerner vi ved at erstatte
+flere på hinanden følgende symboler med et enkelt.
+
+\subsection{Ord og Sætningsopdeling}
+Efter HTML--dokumentet er omformet til en mere generisk
+dokument--struktur, skal teksten opdeles i ord og sætninger. Intuitivt
+ville det måske være mest naturligt først at opdele teksten i
+sætninger og derefter i ord, da man på den måde gradvist opdeler i
+mindre og mindre dele. Sætninger opdeles primært af punktummer, men
+punktummer bliver også brugt i forbindelse med forkortelser og hvis
+man bare opdelte teksten ved alle punktummer ville man kunne komme til
+at dele en sætning midt i en forkortelse. Vi har i stedet adskilt
+teksten i ord og punktuering til at starte med og ved identificeringen
+af ord har vi implementeret en simpel
+forkortelses--genkendelse. Derefter opdeler vi listen af ord i
+sætninger ved alle følger af punktuering der indeholder en
+sætningsafslutter (punktum, spørgsmålstegn og udråbstegn).
+
+\section{Tekstanalyse}
+\label{Tekstanalyse}
 
 \fixme{Skriv herremeget her.}
 
@@ -1375,7 +1419,7 @@ hellere ville rette fokus mod funktionstesten. Brugertest er på den
 ene side ikke så væsentligt for os da det er begrænset hvor mange af
 den slags forbedringer man kan lave på et kommandolinjeprogram, på den
 anden side er det vigtigt at de genererede HTML--dokumenter er nemme
-at forstå.
+at forstå. \fixme{Konklusion?}
 
 \chapter{Konklusion}
 \label{konklusion}
@@ -1423,5 +1467,9 @@ nødvendigvis noget om hvorvidt de er brugbare. I sidste ende er det så
 svært at give en objektiv vurdering af kvaliteten af et program, med
 mindre det kan gøres baseret på antallet af fejl, at vi vil undlade at
 forsøge på det.
+
+
+\fixme{Uopfyldte krav}
+\fixme{Arbejdsfordeling}
 
 \end{document}

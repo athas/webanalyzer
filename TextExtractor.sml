@@ -312,4 +312,3 @@ fun extractFromHTML (alltags as ((tagx as (Tag (tag, subtrees))) :: tags)) =
                           languagecode = NONE,
                           content = []};
 end;
- 
