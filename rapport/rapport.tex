@@ -995,39 +995,30 @@ så længe der er tilstrækkeligt med hukommelse. Dette fandt vi
 nødvendigt, idet et HTML-dokument let kan indeholde flere tusinde
 tegn. \fixme{Figur der beskriver lexing af et tag?}
 
-\begin{figure}
-  Inddata: <a href=``foo''>\\
+\begin{figure}[h]
+  \begin{tabular}{lll}
+\textbf{Inddata} &
+\textbf{Lexeme} & 
+\textbf{Status}\\
 
-  $\blacksquare$a href=``foo''>\\
-  \hspace*{5pt}$\uparrow$LexingTag\\
-  <$\blacksquare$ href=``foo''>\\
-  \hspace*{10pt}$\uparrow$LexingTagName\\
-  <a$\blacksquare$href=``foo''>\\
-  \hspace*{15pt}$\uparrow$LexingAttributes\\
-  <a $\blacksquare$ref=``foo''>\\
-  \hspace*{20pt}$\uparrow$LexingAttributeName\\
-  <a h$\blacksquare$ef=``foo''>\\
-  \hspace*{25pt}$\uparrow$LexingAttributeName\\
-  <a hr$\blacksquare$f=``foo''>\\
-  \hspace*{30pt}$\uparrow$LexingAttributeName\\
-  <a hre$\blacksquare$=``foo''>\\
-  \hspace*{40pt}$\uparrow$LexingAttributeName\\
-  <a href$\blacksquare$``foo''>\\
-  \hspace*{45pt}$\uparrow$LexingAttributeValueStart\\
-  <a href=$\blacksquare$oo''>\\
-  \hspace*{50pt}$\uparrow$LexingAttributeValue\\
-  <a href=``f$\blacksquare$o''>\\
-  \hspace*{55pt}$\uparrow$LexingAttributeValue\\
-  <a href=``fo$\blacksquare$''>\\
-  \hspace*{60pt}$\uparrow$LexingAttributeValue\\
-  <a href=``foo''$\blacksquare$\\
-  \hspace*{65pt}$\uparrow$LexingAttributes\\
-  <a href=``foo''>$\blacksquare$\\
-  \hspace*{70pt}$\uparrow$Done\\
-  \caption{Eksempel genereret data af lexer}
+$\blacksquare$<a href=``foo''> & & START  \\
+\hspace*{10pt}$\blacksquare$a href=``foo''> & LexingTag & \\
+\hspace*{10pt}<$\blacksquare$ href=``foo''> & LexingTagName & \\
+\hspace*{10pt}<a$\blacksquare$href=``foo''> & LexingAttributes & \\
+\hspace*{10pt}<a $\blacksquare$ref=``foo''> & LexingAttributeName & \\
+\hspace*{10pt}<a h$\blacksquare$ef=``foo''> & LexingAttributeName & \\
+\hspace*{10pt}<a hr$\blacksquare$f=``foo''> & LexingAttributeName & \\
+\hspace*{10pt}<a hre$\blacksquare$=``foo''> & LexingAttributeName & \\
+\hspace*{10pt}<a href$\blacksquare$``foo''> & LexingAttributeValueStart & \\
+\hspace*{10pt}<a href=``$\blacksquare$oo''> & LexingAttributeValue & \\
+\hspace*{10pt}<a href=``f$\blacksquare$o''> & LexingAttributeValue & \\
+\hspace*{10pt}<a href=``fo$\blacksquare$''> & LexingAttributeValue & \\
+\hspace*{10pt}<a href=``foo''$\blacksquare$ & LexingAttributes & \\
+\hspace*{10pt}<a href=``foo''>$\blacksquare$ & & FÆRDIG\\
+\end{tabular}
+  \caption{Eksempel af genereret data af lexer}
   \label{ekslexeroutput}
 \end{figure}
-
 
 \subsection{HTML--parser}
 
@@ -1084,7 +1075,7 @@ udvidelser til standarden som udervider funktionaliteten med flere statements,
 se: \url{http://en.wikipedia.org/wiki/Robots.txt}} 
 Ikke genkendte start statements i filen bliver ignoreret.
 
-\begin{figure}
+\begin{figure}[h]
 \begin{lstlisting}[language=csh,
                    escapechar=\@]
   User-agent: BadBot
