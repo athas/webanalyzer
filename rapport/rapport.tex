@@ -56,8 +56,8 @@
 }
 
 
-\setcounter{tocdepth}{2}
-\setcounter{secnumdepth}{2}
+\setcounter{tocdepth}{3}
+\setcounter{secnumdepth}{3}
 
 \pagestyle{plain}
 \chapterstyle{hangnum}
@@ -664,7 +664,7 @@ ville gøre det sværere at kontrollere hvor og hvornår den blev ændret,
 og ville svække muligheden for at garantere den sekventielt løbende
 raffinering af arbejdsdata som programmet er bygget op omkring.
 
-\subsubsection{Krav}
+\subsubsection*{Krav}
 Dette modul gør det --- sammen med Brugerinput--modulet --- muligt at
 opfylde krav 4 vedr. konfiguration af analyse.
 
@@ -679,8 +679,8 @@ og hvis det er tilfældet så skal den parses. Informationerne i
 \textit{robots.txt} skal gøres tilgængeligt for \textit{Hent
   side}--modulet, så det kan se hvilke dele af webstedet det må crawle.
 
-\subsubsection{Krav}
-Dette modul gør at vi kan opfylde første halvdel krav 1.2
+\subsubsection*{Krav}
+Dette modul gør at vi kan opfylde første halvdel af krav 1.2
 \textit{``Programmet skal respektere eventuelle robots.txt filer. Det
   skal være muligt at slå dette fra.''}.
 
@@ -804,7 +804,7 @@ cyklussen i diagrammet fungerer som programmets primære loop der
 henter og analyserer links, indtil der ikke kan findes flere indenfor
 den angivne maksimaldybde.
 
-\subsubsection{Krav}
+\subsubsection*{Krav}
 At vi kan finde links på en hjemmeside gør at vi kan opfylde krav 1
 der siger at man skal kunne foretage en analyse af et helt websted.
 
@@ -818,7 +818,7 @@ kunne påvirke analysen, på en måde så resultatet bliver
 misvisende. Beregningen af læsbarhedsindekset kan eksempelvis blive
 påvirket af at der i menuer ofte er en stor andel lange ord.
 
-\subsubsection{Krav}
+\subsubsection*{Krav}
 HTML--filtreringen er medvirkende til at vi kan opfylde krav 4
 vedr. konfiguration af analysen.
 
@@ -869,7 +869,7 @@ alle dokumenter. Dette inkluderer adskillelse af ord og punktuering
 delmodul kan på denne måde let udvides så det også kan håndtere andre
 dokumentformater.
 
-\subsubsection{Krav}
+\subsubsection*{Krav}
 Tekstudtrækkeren giver os muligeheden for at opfylde krav 3 og alle
 dets underkrav, ved at hente den semantiske information fra
 HTML--tags.
@@ -907,7 +907,7 @@ funktionalitet er adskilt så meget fra resten af programmet som
 muligt. Vi vil derfor indkapsle stavekontrollen i sit eget delmodul,
 som det egentlige tekstanalyse--modul kan forespørge.
 
-\subsubsection{Krav}
+\subsubsection*{Krav}
 Dette modul gør at vi kan opfylde krav 2 (vedr. analysemetoder) og
 alle dets underkrav.
 
@@ -921,7 +921,7 @@ fra analyseindekset. Til at generere HTML'en bruger vi et modul
 baseret på Msp (ML Serverpages), dette er en del af Moscow ML's
 standardbibliotek\footnote{\url{http://www.dina.kvl.dk/~sestoft/mosmllib/Msp.html}}.
 
-\subsubsection{Krav}
+\subsubsection*{Krav}
 Dette modul er medvirkende til at vi kan opfylde krav 6, der
 bl.a. siger at programmet skal generere HTML--filer der viser
 resultatet.
@@ -938,7 +938,7 @@ generere en index fil. Dette skridt er det absolut sidste der tages i
 programmet, og først når alle webstedets undersider er blevet
 analyseret.
 
-\subsubsection{Krav}
+\subsubsection*{Krav}
 Dette modul er sammen med resultatopsamleren og modulet til generering
 af individuelle HTML--sider med til at opfylde krav 6.
 
