@@ -634,16 +634,18 @@ programmet skal bruges. Når man starter programmet er der én
 indstilling man \textit{altid} vil skulle angive --- startadressen for
 analysen. Denne indstilling skal, som den eneste, ikke angives med et
 specielt præfiks, fordi det alligevel altid er nødvendigt at give den
-med. De andre indstillinger angives med et præfiks f.eks. \texttt{--l}
-for angivelsen af sprog. Måden disse indstillinger angives, er valgt
-ud fra at det skal være let at sætte deres navn/præfiks i forbindelse
-med deres betydning. Eksempelvis kan man angive hvor den maksimale
-dybde for analysen med indstillingen \texttt{--d}, hvor \textit{d}'et
-står for \textit{depth}. Udover at det skal være let at huske
+med. De andre indstillinger angives med et præfiks f.eks. \texttt{--l
+  <sprogkode>} for angivelsen af sprog. Måden disse indstillinger
+angives, er valgt ud fra at det skal være let at sætte deres
+navn/præfiks i forbindelse med deres betydning. Eksempelvis kan man
+angive hvor den maksimale dybde for analysen med indstillingen
+\texttt{--d <maks. dybde>}, hvor \textit{d}'et står for \textit{depth}
+eller \textit{dybde}. Udover at det skal være let at huske
 sammenhængen mellem betydning og navn, så skal tvetydigheder helst
-undgås. Tvetydigheder kan gøre at brugeren husker forkert og føler det
-nødvendigt at slå op i manualen. Når flere indstillinger kunne have
-samme navn, har vi valgt at bruge et længere navn for at undgå disse
+undgås. Tvetydigheder kan gøre at brugeren husker indstillingsnavnene
+forkert og føler det nødvendigt at slå op i manualen (hvilket skaber
+irritation. Når flere indstillinger kunne have samme navn, har vi
+valgt at bruge et længere navn for at undgå disse
 tvetydigheder. F.eks. er der to indstillinger der begge kan angive at
 noget af dokumentet skal ignoreres i analysen, disse indstillingers
 navne er \texttt{--ignore--tag} og \texttt{--ignore--id}.
@@ -682,7 +684,9 @@ og hvis det er tilfældet så skal den parses. Informationerne i
 \subsubsection*{Krav}
 Dette modul gør at vi kan opfylde første halvdel af krav 1.2
 \textit{``Programmet skal respektere eventuelle robots.txt filer. Det
-  skal være muligt at slå dette fra.''}.
+  skal være muligt at slå dette fra.''}. Anden halvdel kan
+indstillingsmodulet medvirke til at opfylde, bemærk dog at vi ikke har
+opfyldt dette i den endelige implementation (se \ref{kravstatus})
 
 \subsection{Hent Side}
 \label{hentside}
@@ -1677,9 +1681,11 @@ Herpå følger en beskrivelse af slut--status for hvert krav nævnt i
 vores kravspecifikation i forhold til det endelige program.
 
 \begin{description} \item[Krav 1 --- Analyse af et helt websted (med
-underkrav):] Dette krav og dets underkrav er fuldt ud implementeret og
-afprøvet. Se evt. beskrivelsen af dataflow--cyklussen i sektion
-\ref{cyklus}.
+  underkrav):] Dette krav og i store træk dets underkrav er fuldt ud
+  implementeret og afprøvet. Se evt. beskrivelsen af
+  dataflow--cyklussen i sektion \ref{cyklus}.
+  En del af krav 1.2 er at man skal kunne slå robots.txt håndteringen
+  fra, dette har vi ikke implementeret.
 \item[Krav 2 --- Analysemetoder (med underkrav):] Dette krav og dets
   underkrav er fuldt ud implementeret og virker korrekt
   med vores testdata.
