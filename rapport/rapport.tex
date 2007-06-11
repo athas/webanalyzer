@@ -1235,7 +1235,7 @@ ignoreret grundet den allerede er besøg) og underside z.
 
 \section{Tekstudtrækker}
 Tekstudtrækkerens job er som beskrevet i designet (sektion
-\ref{tekstudtraekkerdesign}), at omdanne HTML--dokumenter til en
+\ref{tekstudtraekkerdesign}), at omdanne HTML--do\-ku\-men\-ter til en
 generisk dokumentstruktur som tekstanalyse--modulet kan
 analysere. Dette inkluderer opdeling i afsnit, overskrift og citater,
 samt opdeling af afsnit i ord og sætninger.
@@ -1328,14 +1328,12 @@ gøres for ikke at forstyrre brugeren med dårligere resultater.
 \section{Stavekontrol}
 \label{spellchecker}
 
-
 Tekstanalyse strukturen foretager en stavekontrol af hvert ord den
 møder. Til at foretage stavekontrollen har vi implementeret en
-struktur \texttt{SpellChecker} der med funktionerne
-\texttt{spellCheckWord} og \texttt{spellCheckWords} kan angive om ord
+struktur \texttt{SpellChecker} hvis formål er at kunne angive om ord
 er stavet korrekt. Til at gøre dette bruger vi GNU Aspell, dette er
-væsentligt nemmere end at implementere et nyt stavekontrolsystem i selve
-vores program. SpellChecker--strukturen holder et sæt
+væsentligt nemmere end at implementere et nyt stavekontrolsystem i
+selve vores program. SpellChecker--strukturen holder et sæt
 \texttt{aspell}--processor i live (et for hvert sprog der er brug for)
 sender forespørgsler til disse processer hver gang et ord ønskes
 kontrolleret.
@@ -1621,7 +1619,7 @@ at forstå.
 \label{konklusion}
 
 Projektudviklingen forløb uden større komplikationer --- den største
-var skiftet af SML--implementation kort efter afleveringen af
+var skiftet af SML--im\-ple\-men\-ta\-tion kort efter afleveringen af
 baseline--implementationen --- og det endelige program opfylder, som
 nævnt i indledningen, næsten alle vores krav (se sektion
 \ref{kravstatus} nedenfor). De krav, der ikke blev opfyldt, bærer især
