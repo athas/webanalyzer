@@ -103,7 +103,7 @@ løsning af problemet, en arbejdsproces der blev udført i forbindelse
 med Førsteårsprojektet på DIKU i blok 4, 2007.
 
 Vores program endte med at opfylde alle de vigtigste krav nævnt i
-vores kravspecifikation, og tests og eksperimenter viste at det er i
+vores kravspecifikation, og afprøvning viste at det er i
 stand til at udføre de opgaver vi kom frem til i vores analyse (se
 sektion \ref{analyse}). For nærmere detaljer omkring programmets
 endelige tilstand, se konklusionen i sektion \ref{konklusion}.
@@ -163,7 +163,7 @@ problemet, og de forskellige løsningsmuligheder vi vurderede.
 Der er adskillige mulige målgrupper en løsning på problemet kunne være
 orienteret imod --- fra hjemmebrugere der skriver personlige sider,
 over individuelle skribenter på et større websted til selve
-webmasteren på en stor side. Ydermere kan et websteder indhold
+webmasteren på en stort websted. Ydermere kan et websteder indhold
 fortolkes på flere forskellige måder --- enten som almindelig tekst
 omgivet af HTML--data uden betydning, eller med et forsøg på at
 benytte den information som HTML--strukturen udtrykker. Sidstnævnte
@@ -227,9 +227,9 @@ undersider på et stort websted, forestiller vi os også et brugsmønster
 hvori programmet automatisk bliver kørt med et fast interval, og
 producerer et resultat som er tilgængeligt for alle der arbejder på
 siden. Dette er langt mere effektivt end at alle skribenter hver især
-skal køre tidskrævende analyser hver for sig. Dog opfatter vi det også
+skal køre de samme tidskrævende analyser. Dog opfatter vi det også
 som sandsynligt at skribenter, der arbejder på at forbedre læsbarheden
-af en specifik underside, vil have en mulighed for hurtigt at
+af en specifik underside, kan ønske en mulighed for hurtigt at
 analysere denne side for at se resultatet af deres ændringer, i stedet
 for at de skal vente på at den automatiske analyse bliver kørt (og
 bliver færdig igen). Dette implementerede vi som en mulighed for at
@@ -394,9 +394,9 @@ eksisterende versioner af HTML og XHTML (HTML skrevet i XML), dog ikke
 alle features i XML, idet disse sjældent bruges i XHTML-sider (se
 sektion \ref{htmlparserimpl}). Vores understøttelse af XML er
 begrænset til den del der ligner
-SGML\footnote{http://www.w3.org/MarkUp/SGML/}, og vi håndterer derfor
-ikke namespaces\footnote{\url{http://www.w3.org/TR/REC-xml-names/}},
-DTD'er
+SGML\footnote{\url{http://www.w3.org/MarkUp/SGML/}}, og vi håndterer
+derfor ikke
+namespaces\footnote{\url{http://www.w3.org/TR/REC-xml-names/}}, DTD'er
 \footnote{\url{http://www.w3.org/TR/2000/REC-xml-20001006\#sec-prolog-dtd}}
 eller andre avancerede features.
 
@@ -551,9 +551,9 @@ kommandolinje parametre (se \cite{artofunixbook}). Dette skyldes at
 man for det meste vil køre programmet med forskellige parametre for
 forskellige websteder, og i de tilfælde hvor man kører programmet med
 de samme parametre (begribeligvis til at analysere det samme websted
-hver gang) vil man normalt lave et \texttt{shell script} til starte
+hver gang) vil man normalt lave et \textit{shell script} til starte
 programmet med, hvilket også gør det nemmere at bruge programmet i et
-\texttt{batch job}. Dette passer fint med vores overvejelser omkring
+\textit{batch job}. Dette passer fint med vores overvejelser omkring
 automatisk kørsel af programmet, som nævnt i afsnit
 \ref{brugsovervejelser}.
 
@@ -678,7 +678,7 @@ og ville svække muligheden for at garantere den sekventielt løbende
 raffinering af arbejdsdata som programmet er bygget op omkring.
 
 \subsubsection*{Krav}
-Dette modul gør det --- sammen med Brugerinput--modulet --- muligt at
+Dette modul gør det, sammen med Brugerinput--modulet, muligt at
 opfylde krav 4 vedr. konfiguration af analyse.
 
 \subsection{Domæne check, indlæsning af robots.txt}
@@ -809,15 +809,15 @@ funktioner \texttt{javascript:}
 Det er ikke kun \texttt{a} der skal undersøges, hvis et HTML--dokument
 benytter sig af rammer (frames), så skal deres start--adresser også
 findes. Der er også andre tags der tillader at man specificerer
-adresser til forklaringer ol, disse skal der også tages hån om.
+adresser til forklaringer ol, disse skal der også tages hånd om.
 \label{cyklus}
-  På dataflowdiagrammet (figur \ref{dataflowdia}) går kun en enkelt pil fra
-``Find links''--modulet til ``Hent side''--modulet. Reelt bliver denne pil fulgt
-for hvert eneste
-fundet link som ikke allerede er blevet besøgt --- resultatet bliver at
-cyklussen i diagrammet fungerer som programmets primære loop der
-henter og analyserer links, indtil der ikke kan findes flere indenfor
-den angivne maksimaldybde.
+
+På dataflowdiagrammet (figur \ref{dataflowdia}) går kun en enkelt pil
+fra ``Find links''--modulet til ``Hent side''--modulet. Reelt bliver
+denne pil fulgt for hvert eneste fundet link som ikke allerede er
+blevet besøgt --- resultatet bliver at cyklussen i diagrammet fungerer
+som programmets primære loop der henter og analyserer links, indtil
+der ikke kan findes flere indenfor den angivne maksimaldybde.
 
 \subsubsection*{Krav}
 At vi kan finde links på en hjemmeside gør at vi kan opfylde krav 1
@@ -841,7 +841,7 @@ vedr. konfiguration af analysen.
 \label{tekstudtraekkerdesign}
 Når et HTML--dokument er parset kan vi udtage teksten, det er dette
 moduls job at læse parsetræet for et HTML--dokument og omdanne det til
-afsnit, sætninger, overskrifter osv, som \textit{Tekstanalyse}--modulet
+afsnit, sætninger, overskrifter osv, som \textit{Tekst\-analyse}--modulet
 kan analysere. Udover at opdele teksten skal de enkelte tekstpassagers
 semantiske betydning bibeholdes.
 
@@ -859,17 +859,17 @@ et afsnit. Afsnittene er de mest interessante, da overskrifter og
 citater i sig selv blot består af en liste afsnit. I HTML angives
 afsnit med \texttt{P}--tagget, men der er også en række andre tags der
 adskiller teksten i afsnit, f.eks. startes der et nyt afsnit efter et
-billede, en tabel, faktisk sker det ved alle tags der er
-``block--elementer''. Et afsnit består af en række sætninger og en
-række ``ekstra'' sætninger som er den tekst der ikke umiddelbart
-optræder på HTML--siden, men som alligevel er interessant --- såsom
-\texttt{title} og \texttt{alt}--tekst for links og billeder (disse er
-ikke vist på figuren). Sætningerne er opdelt i ord og punktuering
-(tegnsætning, mellemrum mv.) og hver sætning slutter ved et eller
-flere punktummer, spørgsmålstegn eller udråbstegn. Hvert ord har
-semantisk information fra HTML'en tilknyttet, som f.eks. information
-om hvorvidt ordet er en forkortelse, eller oprindeligt har været inde
-i et \texttt{em}--tag.
+billede, en tabel, faktisk sker det ved alle tags der er kategoriseret
+som ``block--elementer'' i HTML--standarden (se \cite{html4book}). Et
+afsnit består af en række sætninger og en række ``ekstra'' sætninger
+som er den tekst der ikke umiddelbart optræder på HTML--siden, men som
+alligevel er interessant --- såsom \texttt{title} og
+\texttt{alt}--tekst for links og billeder (disse er ikke vist på
+figuren). Sætningerne er opdelt i ord og punktuering (tegnsætning,
+mellemrum mv.) og hver sætning slutter ved et eller flere punktummer,
+spørgsmålstegn eller udråbstegn. Hvert ord har semantisk information
+fra HTML'en tilknyttet, som f.eks. information om hvorvidt ordet er en
+forkortelse, eller oprindeligt har været inde i et \texttt{em}--tag.
 
 For ikke at låse programmet fuldstændig fast til HTML er dette modul
 delt i to delmoduler. Det ene modul (den egentlige tekstudtrækker)
@@ -1561,7 +1561,7 @@ En person i vores målgruppe er en hjemmesideskribent der er bekendt
 med HTML. Personen har en professionel interessere i at teksten er
 læsbar, således at vedkommende selv vil sætte sig ind i betydningen af
 de udførte analysers resultater.
-\end{quote}
+\end{quote}\footnote{Se også sektion \ref{målgruppe}}
 
 I kravspecifikationen står der også at programmet skal være udformet
 som et kommandolinjeværktøj og at det skal kunne køre på GNU--baserede
