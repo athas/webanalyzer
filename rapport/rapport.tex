@@ -1285,7 +1285,19 @@ ren fadæse!''}.
 \section{Tekstanalyse}
 \label{tekstanalyse}
 
-\fixme{Skriv herremeget her.}
+For at kunne beregne LIX og FKRT værdierne, skal man have talt antal
+ord, sætninger, vokaler og ``lange ord'' (ord på over 6 bogstaver).
+I vores analyse starter vi med at optælle alle disse værdier og
+associere dem med sætninger og afsnit samt en enkelt værdi for hele
+dokumentet. Først tæller vi antallet af ord, vokaler og lange ord i
+hver eneste sætning og associerer resultaterne med sætningerne. For at
+lave optællingen for hvert afsnit er det blot at lægge resultaterne
+for sætningerne i afsnittet sammen og tælle antallet af sætninger.
+At udregne antallet for hele siden er ligeså simpelt, her skal
+resultaterne for hvert enkelt afsnit blot lægges sammen.
+
+Efter værdierne er optalt er der blot tilbage at beregne
+analyseresultaterne for sætninger, afsnit og hele dokumentet.
 
 Udover selve brødteksten indeholder hjemmesider også en masse ``støj''
 i form a navigationstekst, og andre minisætninger rundt omkring. Disse
@@ -1596,7 +1608,7 @@ hellere ville rette fokus mod funktionstesten. Brugertest er på den
 ene side ikke så væsentligt for os da det er begrænset hvor mange af
 den slags forbedringer man kan lave på et kommandolinjeprogram, på den
 anden side er det vigtigt at de genererede HTML--dokumenter er nemme
-at forstå. \fixme{Konklusion?}
+at forstå.
 
 \chapter{Konklusion}
 \label{konklusion}
