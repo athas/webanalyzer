@@ -14,6 +14,7 @@
 \usepackage{listings}
 \usepackage{amsmath}
 \usepackage{pdfpages}
+\usepackage{lettrine}
 
 \DeclareTextFontCommand{\textfleur}
 {\fontencoding{T1}\fontfamily{FleurCornerCaps}\selectfont}
@@ -22,6 +23,11 @@
 \renewcommand{\ttdefault}{pcr} % bedre typewriter font
 \renewcommand{\rmdefault}{ugm} % garamond
 
+%\overfullrule=5pt
+%\setsecnumdepth{part}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Rettelse af margin
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %\oddsidemargin  0.0in
 %\evensidemargin 0.0in
@@ -30,11 +36,10 @@
 %\topmargin      0.0in
 %\textheight     9.0in
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
 \textheight = 625pt
 \textwidth = 400pt
 \oddsidemargin = 25pt
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \lstloadlanguages{HTML}
 \lstset{language     = ML,
@@ -47,12 +52,6 @@
         inputencoding= utf8
       }
 
-
-\usepackage{lettrine}
-
-%\overfullrule=5pt
-
-%\setsecnumdepth{part}
 
 \title{Hjemmesideanalyse  \\ \small{Førsteårsprojekt}}
 
@@ -76,8 +75,11 @@
 
 \begin{document}
 \maketitle
+
 \newpage
+
 \tableofcontents*
+
 
 \chapter{Indledning}
 \label{indledning}
