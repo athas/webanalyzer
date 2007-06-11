@@ -13,6 +13,7 @@
 \usepackage{memhfixc}
 \usepackage{listings}
 \usepackage{amsmath}
+\usepackage{pdfpages}
 
 \DeclareTextFontCommand{\textfleur}
 {\fontencoding{T1}\fontfamily{FleurCornerCaps}\selectfont}
@@ -1742,5 +1743,22 @@ vores kravspecifikation i forhold til det endelige program.
 \bibitem{crapbook} Douglas Bell: {\em Software Engineering for Students},
   Addison-Wesley (2005)
 \end{thebibliography}
+
+\appendix
+
+\chapter{Kravspecifikation}
+\includepdf[pages=-, rotateoversize=true]{afleveret/krav2.pdf}
+
+\chapter{Endeligt design}
+\includepdf[pages=-, rotateoversize=true]{afleveret/endeligtdesign.pdf}
+
+\chapter{Testspecifikation}
+\includepdf[pages=-, rotateoversize=true]{afleveret/testspec.pdf}
+
+\chapter{Installations-- og brugsvejledning}
+\includepdf[pages=-, rotateoversize=true]{afleveret/manual.pdf}
+
+\chapter{Mødereferater}
+\includepdf[pages=-, rotateoversize=true]{afleveret/referat.pdf}
 
 \end{document}
