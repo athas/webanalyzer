@@ -6,7 +6,7 @@
 \usepackage[garamond]{mathdesign}
 \usepackage{url}
 \usepackage{listings}
-%\usepackage{beamerthemesplit}
+\usepackage{graphicx}
 
 \renewcommand{\ttdefault}{pcr} % bedre typewriter font
 \renewcommand{\rmdefault}{ugm} % garamond
@@ -15,21 +15,24 @@
 \subtitle{Førsteårsprojekt}
 
 \author{Martin Dybdal \and Troels Henriksen \and Jesper Reenberg}
-\institute{Datalogisk Institut, København Universitet}
+% textsc
+\institute{\textrm{Datalogisk Institut, Københavns Universitet}}
 \date{\today}
 
 \mode<presentation>
 {
-  \usetheme{Frankfurt}
+  \usetheme{Frankfurt} % eller Warsaw
   \definecolor{uofsgreen}{rgb}{.125,.5,.25}
+  \definecolor{natvidgreen}{rgb}{.196,.364,.239}
+  \definecolor{kugrey}{rgb}{.4,.4,.4}
   \usecolortheme[named=uofsgreen]{structure}
   \usefonttheme[onlylarge]{structuresmallcapsserif}
   \usefonttheme[onlysmall]{structurebold}
 }
 
+\logo{\includegraphics[height=2cm]{kulogo.pdf}}
+
 \usenavigationsymbolstemplate{} % fjern navigation
-
-
 
 \lstloadlanguages{HTML}
 \lstset{language     = ML,
@@ -42,16 +45,23 @@
         inputencoding= utf8
       }
 
+\setcounter{tocdepth}{1}
+
 \begin{document}
 
 \frame{\titlepage}
 
-\section[Outline]{}
-\frame{\tableofcontents}
 
 \section{Introduktion}
+\subsection{Agenda}
 \begin{frame}
-  \frametitle{Features of the Beamer Class}
+  \frametitle{Agenda}
+  \tableofcontents
+\end{frame}
+
+\subsection{Problemstilling}
+\begin{frame}
+  \frametitle{Problemstilling}
 
   \begin{itemize}
   \item<1-> Normal LaTeX class.
@@ -60,15 +70,38 @@
   \end{itemize}
 \end{frame}
 
+\section{Analyse} % anden overskrift evt. ?
+\subsection{Målgruppe}
+\begin{frame}
+  \frametitle{Målgruppe}
+asd
 
-\section{Design}
+\end{frame}
+
+\subsection{Præsentationsform}
+\begin{frame}
+  \frametitle{Præsentationsform}
+  \begin{itemize}
+    \item<1->HTML--dokumenter
+      \begin{itemize}
+      \item<2-> Kan deles.
+      \item<2-> Intet behov for specifikt fremvisningsprogram.
+      \end{itemize}  
+
+    \item<3->Kommandolinjeprogram
+      \begin{itemize}
+      \item<4-> Let at automatisere.
+      \item<4-> Webapplikation kan bygges ovenpå.
+      \end{itemize}  
+    \end{itemize}
+\end{frame}
+
+\section{Programdesign}
 \subsection{Dataflow}
 \begin{frame}
   \frametitle{Dataflow}
-
   \begin{figure}
     \includegraphics[width=0.55\textwidth]{endeligtdesignill.pdf}
-    \caption{Dataflow--diagram}
   \end{figure}
 \end{frame}
 
@@ -91,7 +124,8 @@
       Dette er 'den anden s@\ae@tning'.</P>
     <BLOCKQUOTE lang="en">
       <A href="http://en.wikipedia.org/wiki/Hovercraft">
-      My hovercraft</A> is full of eels!</BLOCKQUOTE>
+      My hovercraft</A> is full of eels!
+    </BLOCKQUOTE>
   </BODY>
 </HTML>
 \end{lstlisting}
@@ -131,6 +165,26 @@
   \end{columns}
 \end{frame}
 
+
+\section{Demonstration}
+\subsection{Demonstration}
+\begin{frame}
+  \frametitle{Demonstration}
+  (screenshot af output)
+
+\end{frame}
+
+
+\section{Konklusion}
+\subsection{Konklusion}
+\begin{frame}
+  \frametitle{Konklusion}
+
+\end{frame}
+
+
+
+\section{Beamer--stuff}
 \begin{frame}
   \frametitle{What's Still To Do?}
   \begin{block}{Answered Questions}
@@ -155,6 +209,16 @@
         Is every even number the sum of two primes?
       \end{block}
   \end{columns}
+\end{frame}
+
+\begin{frame}
+  \begin{itemize}
+  \item<1-> Eggs
+  \item<2-> Plants
+    \note[item]<2>{Tell joke about plants.}
+    \note[item]<2>{Make it short.}
+  \item<3-> Animals
+  \end{itemize}
 \end{frame}
 
 
