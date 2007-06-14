@@ -10,18 +10,20 @@
 
 \renewcommand{\ttdefault}{pcr} % bedre typewriter font
 \renewcommand{\rmdefault}{ugm} % garamond
+\renewcommand{\sfdefault}{phv} % sans-serif font
 
 \title{Hjemmesideanalyse}
 \subtitle{Førsteårsprojekt}
 
 \author{Martin Dybdal \and Troels Henriksen \and Jesper Reenberg}
-% textsc
+
 \institute{\textrm{Datalogisk Institut, Københavns Universitet}}
 \date{\today}
 
 \mode<presentation>
 {
-  \usetheme{Frankfurt} % eller Warsaw
+  \usetheme{Frankfurt}
+  %\usetheme{Warsaw} 
   \definecolor{uofsgreen}{rgb}{.125,.5,.25}
   \definecolor{natvidgreen}{rgb}{.196,.364,.239}
   \definecolor{kugrey}{rgb}{.4,.4,.4}
@@ -30,7 +32,7 @@
   \usefonttheme[onlysmall]{structurebold}
 }
 
-\logo{\includegraphics[height=2cm]{kulogo.pdf}}
+\logo{\includegraphics[height=1.5cm]{diku.jpg}}
 
 \usenavigationsymbolstemplate{} % fjern navigation
 
@@ -120,11 +122,13 @@ asd
   </HEAD>
   <!-- En kommentar -->
   <BODY>
-    <P>Et afsnit med adskillige s@\ae@tninger.
-      Dette er 'den anden s@\ae@tning'.</P>
+    <P>
+     Et afsnit med adskillige s@\ae@tninger.
+     Dette er 'den anden s@\ae@tning'.
+     </P>
     <BLOCKQUOTE lang="en">
-      <A href="http://en.wikipedia.org/wiki/Hovercraft">
-      My hovercraft</A> is full of eels!
+     <A href="http://en.wikipedia.org/wiki/Hovercraft">
+     My hovercraft</A> is full of eels!
     </BLOCKQUOTE>
   </BODY>
 </HTML>
@@ -144,9 +148,9 @@ asd
   \end{columns}
 \end{frame}
 
-
+\subsection{Tekstudtrækker}
 \begin{frame}
-  \frametitle{Dokument struktur}
+  \frametitle{Udtræk af tekst}
 
   \begin{columns}[t]
     \column{.5\textwidth}
