@@ -44,11 +44,15 @@ fun reportSentenceElem (WordResult (text, correct, repetition)) =
 fun colorByResults results = 
     let
         (* use only 0-120 degree of the hue scale to show red-yellow-green *)
-        val lowerlimit = 20.0
+        val lowerlimit = 20.0   (* input *)
         val upperlimit = 65.0
+
+        val minLevel = 0.0;       (* output *)
+        val maxLevel = 120.0;
+                         
         val multiplier = 100.0 / (upperlimit - lowerlimit)
         val factor = Real.max(lowerlimit, Real.min(getBadnessFactor results, upperlimit))
-        val level = trunc (0.80 * (100.0 - (factor - lowerlimit) * multiplier)) + 20
+        val level = trunc ((((maxLevel - minLevel)/100.0) * (100.0 - (factor - lowerlimit) * multiplier)) - minLevel);
     in
         Util.hueToHEX level
     end;
