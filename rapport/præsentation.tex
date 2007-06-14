@@ -7,6 +7,7 @@
 \usepackage{url}
 \usepackage{listings}
 \usepackage{graphicx}
+\usepackage{soul}
 
 \renewcommand{\ttdefault}{pcr} % bedre typewriter font
 \renewcommand{\rmdefault}{ugm} % garamond
@@ -80,8 +81,23 @@
 \subsection{Målgruppe}
 \begin{frame}
   \frametitle{Målgruppe}
-asd
+  \begin{itemize}
+  \item<1-> Webmastere
+  \item<2-> Webside-skribenter
+  \item<3-> \textbf{Mere generelt, brugbart for HTML-kyndige}
+  \end{itemize}
 
+\end{frame}
+
+\subsection{Målgruppens behov}
+\begin{frame}
+  \frametitle{Målgruppens behov}
+  \begin{itemize}
+  \item<1-> Hele sider skal analyseres
+  \item<2-> Skal være let at finde læsbarhedsproblemer
+  \item<3-> Store sider, analyseresultater skal kunne deles
+  \item<4-> Automatiseret programkørsel (via \texttt{cron} mfl.)
+  \end{itemize}
 \end{frame}
 
 \subsection{Præsentationsform}
@@ -92,12 +108,13 @@ asd
       \begin{itemize}
       \item<2-> Kan deles.
       \item<2-> Intet behov for specifikt fremvisningsprogram.
+      \item<3-> Webapplikation kan bygges ovenpå.
       \end{itemize}  
 
-    \item<3->Kommandolinjeprogram
+    \item<4->Kommandolinjeprogram
       \begin{itemize}
       \item<4-> Let at automatisere.
-      \item<4-> Webapplikation kan bygges ovenpå.
+      \item<5-> \st{Let} Overkommeligt at skrive grafisk interface.
       \end{itemize}  
     \end{itemize}
 \end{frame}
