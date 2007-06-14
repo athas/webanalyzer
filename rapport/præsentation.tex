@@ -70,8 +70,8 @@
   \item<1-> Hjemmesider forfattet uden omtanke for læsbarhed
   \item<2-> Hjemmesider forfattet med primitive værktøjer
     \begin{itemize}
-      \item<1-> Ingen stavekontrol
-      \item<1-> Ingen grammatikkontrol
+      \item<2-> Ingen stavekontrol
+      \item<2-> Ingen grammatikkontrol
     \end{itemize}
   \item<3-> Store sider kan være uoverskuelige at læsbarheds-vurdere manuelt
   \end{itemize}
@@ -83,7 +83,7 @@
   \frametitle{Målgruppe}
   \begin{itemize}
   \item<1-> Webmastere
-  \item<2-> Webside-skribenter
+  \item<2-> Hjemmeside--skribenter
   \item<3-> \textbf{Mere generelt, brugbart for HTML-kyndige}
   \end{itemize}
 
@@ -93,9 +93,9 @@
 \begin{frame}
   \frametitle{Målgruppens behov}
   \begin{itemize}
-  \item<1-> Hele sider skal analyseres
+  \item<1-> Hele websteder skal analyseres
   \item<2-> Skal være let at finde læsbarhedsproblemer
-  \item<3-> Store sider, analyseresultater skal kunne deles
+  \item<3-> Store websteder, analyseresultater skal kunne deles
   \item<4-> Automatiseret programkørsel (via \texttt{cron} mfl.)
   \end{itemize}
 \end{frame}
@@ -106,7 +106,7 @@
   \begin{itemize}
     \item<1->HTML--dokumenter
       \begin{itemize}
-      \item<2-> Kan deles.
+      \item<1-> Kan deles.
       \item<2-> Intet behov for specifikt fremvisningsprogram.
       \item<3-> Webapplikation kan bygges ovenpå.
       \end{itemize}  
@@ -230,7 +230,7 @@
 
 \begin{frame}
   \frametitle{Funktionstest}
-  Fundne fejl
+  \textbf{Fundne fejl}
     \begin{itemize}
     \item Det \textit{uundværlige} krav om håndtering af robots.txt
       (1.1), er kun delvist implementeret. Det er ikke muligt at slå
@@ -262,7 +262,7 @@
   \end{block}
 \pause
 
-Udførelse af test
+\textbf{Udførelse af test}
   \begin{itemize}
   \item Udført som tænk--højt forsøg.
   \item Vi valgte en person fra DIKU, da de fleste på DIKU har de 3
@@ -273,7 +273,7 @@ Udførelse af test
 
 \begin{frame}
   \frametitle{Brugertest}
-  Resultater
+  \textbf{Resultater}
   \begin{itemize}
   \item Det er svært at se om programmet arbejder, om det er færdigt
     eller er gået i stå.
@@ -294,25 +294,28 @@ Udførelse af test
 
   \begin{itemize}
   \item<1-> Alle vigtige krav opfyldt
-  \item<1-> Kun få krav ikke implementeret pga. tidsnød
-  \item<2-> Programmet ``brugbart''
-  \item<2-> Mega sukse alt i alt.
+  \item<2-> Kun få krav ikke implementeret pga. tidsnød
+  \item<3-> Programmet ``brugbart''
+  \item<4-> Mega sukse alt i alt.
   \end{itemize}
 
+\pause
+\pause
+\pause
+\pause
   \textbf{Problemer}
 
   \begin{itemize}
-  \item<3-> Dårlig håndtering af tekstindkodning (indbefattet i krav).
-  \item<4-> Sætningsopdeler ikke helt perfekt.
+  \item<5-> Dårlig håndtering af tekstindkodning (indbefattet i krav).
+  \item<6-> Sætningsopdeler ikke helt perfekt.
     \begin{itemize}
-    \item<4-> Kan let narres af forkortelser fulgt af navne.
-    \item<5-> Ingen egentlig dybdegående grammatisk forståelse.
+    \item<6-> Kan let narres af forkortelser fulgt af navne.
+    \item<6-> Ingen egentlig dybdegående grammatisk forståelse.
     \item<6-> Taber fælt over for ikke-anglisk/nordiske sprog.
     \end{itemize}
   \item<7-> Respekt for \texttt{robots.txt} kan ikke slås fra (\textit{skidt}).
+  \item<8-> Indeks--siden mangler forklaring af farver.
   \end{itemize}
-  
-  \pause
 \end{frame}
 
 \end{document}
