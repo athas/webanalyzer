@@ -157,7 +157,7 @@ fun writeIndex starturi outputDir outputFilename analysedPages =
                                       (h3 ($ "V&aelig;lg en underside for detaljer")) &&
                                       (wltable ((List.map
                                                      (fn (uri, result) =>
-                                                         let val style = ("style=\"color:white; background-color: "
+                                                         let val style = ("style=\"color:black; background-color: "
                                                                           ^ (TextAnalysisReporter.colorByResults
                                                                                  (TextAnalyser.documentResults result))
                                                                           ^ "\"");
