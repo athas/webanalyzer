@@ -212,6 +212,65 @@
   \end{figure}
 \end{frame}
 
+\section{Afprøvning}
+\subsection{Funktionstest}
+\begin{frame}
+  \frametitle{Funktionstest}
+
+  \begin{block}{Skal afsløre\dots}
+    \begin{itemize}
+    \item \dots uopfyldte krav.
+    \item \dots funktionalitet der ikke virker korrekt.
+    \end{itemize}
+  \end{block}
+
+  Test kan ikke automatiseres, pga. uddatas format.
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{Funktionstest}
+  Fundne fejl
+    \begin{itemize}
+    \item Det \textit{uundværlige} krav om håndtering af robots.txt
+      (1.1), er kun delvist implementeret. Det er ikke muligt at slå
+      robots.txt--behandlingen fra.
+
+    \item \textbf{De resterende \textit{uundværlige} og \textit{vigtige}
+      krav er implementeret korrekt.}
+
+    \item Det \textit{mindre vigtige} krav (3) vedr. analysebaseret på
+      HTML--tags er delvist implementeret.
+
+    \item Det \textit{mindre vigtige} krav (4) om konfiguration af
+      analyse er delvist implementeret. Filtrering på basis af
+      \texttt{class}--attributer virker ikke.
+    \end{itemize}
+\end{frame}
+
+
+\subsection{Brugertest}
+\begin{frame}
+  \frametitle{Brugertest}
+
+  \begin{block}{Krav til forsøgsperson}
+    \begin{itemize}
+    \item Skal kende til elementær HTML.
+    \item Skal kende til GNU/Linux, vores målplatformen.
+    \item Skal have erfaring med kommandolinje programmer.
+    \end{itemize}
+  \end{block}
+\pause
+
+Udførelse af test
+  \begin{itemize}
+  \item Udført som tænk--højt forsøg.
+  \item Vi valgte en person fra DIKU, da de fleste på DIKU har de 3
+    ovenfor nævnte egenskaber.
+  \item Vi stillede ham 3 opgaver og gav ham brugermanualen.
+  \end{itemize}
+\end{frame}
+
 
 \section{Konklusion}
 \subsection{Konklusion}
