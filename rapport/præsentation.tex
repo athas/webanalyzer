@@ -201,28 +201,35 @@
   \frametitle{Tekstanalyse}
   \framesubtitle{Analysemetoder}
 
-\begin{block}{Beregning af læsbarhedsindeks}
-  \begin{displaymath}
-    \frac{\text{antal ord}}{\text{sætninger}} +
-    100\frac{\text{lange ord}}{\text{antal ord}}
-  \end{displaymath}
-\end{block}
+  \begin{columns}[t]
+    \column{.9\textwidth}
+
+    \begin{block}{Beregning af Læsbarhedsindeks}
+      \begin{displaymath}
+        \frac{\text{antal ord}}{\text{antal sætninger}} +
+        100\frac{\text{antal lange ord}}{\text{antal ord}}
+      \end{displaymath}
+    \end{block}
 
 
-\begin{block}{Beregning af Flesch Reading Ease}
-  \begin{displaymath}
-    206.835 - 1.015 \left ( \frac{\text{antal ord}}{\text{antal
-          sætninger}} \right ) - 84.6 \left ( \frac{\text{antal stavelser}}{\text{antal ord}} \right )
-  \end{displaymath}
-\end{block}
+    \begin{block}{Beregning af Flesch Reading Ease}
+      \begin{displaymath}
+        206.835 - 1.015 \left ( \frac{\text{antal ord}}{\text{antal
+              sætninger}} \right ) - 84.6 \left (
+          \frac{\text{antal stavelser}}{\text{antal ord}} \right )
+      \end{displaymath}
+    \end{block}
 
-\begin{block}{Beregning af Flesch--Kincaid Grade Level}
-  \begin{displaymath}
-    0.39 \left ( \frac{\text{antal ord}}{\text{sætninger}} \right
-    ) + 11.8 \left ( \frac{\text{antal stavelser}}{\text{antal ord}}
-    \right ) - 15.59
-  \end{displaymath}
-\end{block}
+    \begin{block}{Beregning af Flesch--Kincaid Grade Level}
+      \begin{displaymath}
+        0.39 \left ( \frac{\text{antal ord}}{\text{antal sætninger}} \right
+        ) + 11.8 \left ( \frac{\text{antal stavelser}}{\text{antal ord}}
+        \right ) - 15.59
+      \end{displaymath}
+    \end{block}
+
+    \column{.1\textwidth}
+    \end{columns}
 
 \end{frame}
 
@@ -230,22 +237,19 @@
   \frametitle{Tekstanalyse}
 
   \begin{columns}[t]
-    \column{.5\textwidth}
+    \column{.55\textwidth}
     \begin{figure}
       \includegraphics[width=\textwidth]{documentCount.pdf}
-      \caption{Parsetræ}
+      \caption{Optælling}
     \end{figure}
 
-    \pause
-
-    \column{.5\textwidth}
+    \column{.55\textwidth}
     \begin{figure}
       \includegraphics[width=\textwidth]{documentAnalyse.pdf}
-      \caption{Dokument--struktur}
+      \caption{Analyseresultat}
     \end{figure}
   \end{columns}
 \end{frame}
-
 
 % \subsection{Crawling}
 % \begin{frame}
