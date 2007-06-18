@@ -196,17 +196,68 @@
   \end{columns}
 \end{frame}
 
-\subsection{Crawling}
+\subsection{Tekstanalyse}
 \begin{frame}
-  \frametitle{Crawling}
-  \begin{itemize}
-  \item<1-> Dybde--først crawling kan give forkert resultat
-  \item<2-> Brug bredde--først og alt er vel
-  \end{itemize}
-  \begin{figure}
-    \includegraphics[width=0.55\textwidth]{depthtreeill.pdf}
-  \end{figure}
+  \frametitle{Tekstanalyse}
+  \framesubtitle{Analysemetoder}
+
+\begin{block}{Beregning af læsbarhedsindeks}
+  \begin{displaymath}
+    \frac{\text{antal ord}}{\text{sætninger}} +
+    100\frac{\text{lange ord}}{\text{antal ord}}
+  \end{displaymath}
+\end{block}
+
+
+\begin{block}{Beregning af Flesch Reading Ease}
+  \begin{displaymath}
+    206.835 - 1.015 \left ( \frac{\text{antal ord}}{\text{antal
+          sætninger}} \right ) - 84.6 \left ( \frac{\text{antal stavelser}}{\text{antal ord}} \right )
+  \end{displaymath}
+\end{block}
+
+\begin{block}{Beregning af Flesch--Kincaid Grade Level}
+  \begin{displaymath}
+    0.39 \left ( \frac{\text{antal ord}}{\text{sætninger}} \right
+    ) + 11.8 \left ( \frac{\text{antal stavelser}}{\text{antal ord}}
+    \right ) - 15.59
+  \end{displaymath}
+\end{block}
+
 \end{frame}
+
+\begin{frame}
+  \frametitle{Tekstanalyse}
+
+  \begin{columns}[t]
+    \column{.5\textwidth}
+    \begin{figure}
+      \includegraphics[width=\textwidth]{documentCount.pdf}
+      \caption{Parsetræ}
+    \end{figure}
+
+    \pause
+
+    \column{.5\textwidth}
+    \begin{figure}
+      \includegraphics[width=\textwidth]{documentAnalyse.pdf}
+      \caption{Dokument--struktur}
+    \end{figure}
+  \end{columns}
+\end{frame}
+
+
+% \subsection{Crawling}
+% \begin{frame}
+%   \frametitle{Crawling}
+%   \begin{itemize}
+%   \item<1-> Dybde--først crawling kan give forkert resultat
+%   \item<2-> Brug bredde--først og alt er vel
+%   \end{itemize}
+%   \begin{figure}
+%     \includegraphics[width=0.55\textwidth]{depthtreeill.pdf}
+%   \end{figure}
+% \end{frame}
 
 
 \section{Demonstration}

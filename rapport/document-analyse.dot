@@ -1,0 +1,46 @@
+graph G
+{
+        compound=true;
+        Titel[label="Titel: \"Sidetitel\""];
+        Sprog[label="Sprog: Ikke angivet"];
+        
+        Titel -- Sprog [color="white"];
+        Sprog -- "LIX: 35,0 ; FRE: 41,02 ; .. " [color="white"];
+
+        subgraph cluster_tekstelementer
+        {
+                labeljust="l"
+                label="Tekstelementer";
+
+                subgraph cluster_citat
+                {
+                        label="Citat";
+                        subgraph cluster_afsnit2
+                        {
+                                label="Afsnit";
+
+                                struct3 [label="My| |hovercraft| |is| |full| |of| |eels|!", shape=Mrecord];
+                        }
+                }
+
+                subgraph cluster_afsnit
+                {
+                        label="Afsnit";
+                        struct2 [label="Dette| |er| '|den| |anden| |sætning|'.", shape=Mrecord];
+                        struct1 [label="Et|\ |afsnit| |med| |adskillige| |sætninger|.", shape=Mrecord];
+                        struct1 -- struct2 [color="white", len="0.2", arrowhead="none"];
+
+                        {rank="same"; struct1 -- "LIX: 45,0 ; FRE: 15,64 ; .. ";}
+                        {rank="same"; struct2 -- "LIX: 25,0 ; FRE: 66,40 ; .. ";}
+                }
+
+
+                {afsnitCount[label="LIX: 35,0 ; FRE: 41,02 ; .. "]
+                        //rank="same";
+                        
+                        afsnitCount -- struct1 [lhead=cluster_afsnit, arrowhead="none"];
+                }
+
+                struct2 -- struct3 [ltail=cluster_afsnit, lhead=cluster_citat, color="white", arrowhead="none"];
+        }
+}
